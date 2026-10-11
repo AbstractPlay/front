@@ -4,6 +4,7 @@ import React, {
   Fragment,
   useCallback,
   useRef,
+  useMemo,
 } from "react";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -14,6 +15,11 @@ import GamePickerTrigger from "./GamePickerTrigger";
 import { useStore } from "../stores";
 import { validateChallengeVariantSelection } from "../lib/variantChallengeValidation";
 import { useVariantSelectionValidity } from "../hooks/useVariantSelectionValidity";
+import {
+  isTeachingChallengeEligible,
+  challengeRatedForPayload,
+  challengeTeachingModeForPayload,
+} from "../lib/teachingModeChallenge";
 
 const stringArraysEqual = (lst1, lst2) => {
   if (lst1.length !== lst2.length) {
@@ -67,6 +73,10 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
     "new-challenge-noExplore",
     false
   );
+  const [teachingMode, teachingModeSetter] = useStorageState(
+    "new-challenge-teachingMode",
+    false
+  );
   const [selectedVariants, setSelectedVariants] = useState([]);
   const { variantsValid, onValidityChange, resetVariantValidity } =
     useVariantSelectionValidity();
@@ -78,6 +88,29 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
       errorRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   }, [error]);
+
+  const teachingEligible = useMemo(
+    () => isTeachingChallengeEligible(metaGame, playerCount, selectedVariants),
+    [metaGame, playerCount, selectedVariants]
+  );
+
+  useEffect(() => {
+    if (!show) {
+      return;
+    }
+    if (!teachingEligible) {
+      teachingModeSetter(false);
+    }
+  }, [show, teachingEligible, teachingModeSetter]);
+
+  useEffect(() => {
+    if (!show) {
+      return;
+    }
+    if (teachingMode === true) {
+      ratedSetter(false);
+    }
+  }, [show, teachingMode, ratedSetter]);
 
   const setPlayerCount = useCallback(
     (cnt) => {
@@ -194,6 +227,10 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
     noExploreSetter(!noExplore);
   };
 
+  const handleTeachingModeChange = (event) => {
+    teachingModeSetter(event.target.checked);
+  };
+
   const handleLimitChange = (event) => {
     isNonNegativeInteger(event.target.value, t("ChooseLimit"));
     challengeLimitSetter(event.target.value);
@@ -251,8 +288,16 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
       clockInc: clockInc,
       clockMax: clockMax,
       clockHard: clockHard,
-      rated: rated,
+      rated: challengeRatedForPayload({
+        rated,
+        forceUnrated: false,
+        teachingMode: teachingEligible && teachingMode,
+      }),
       noExplore: noExplore,
+      teachingMode: challengeTeachingModeForPayload(
+        teachingMode,
+        teachingEligible
+      ),
       limit: challengeLimit,
       sensitivity,
     });
@@ -546,6 +591,26 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
                 {noExplore ? t("HelpNoExploreTrue") : t("HelpNoExploreFalse")}
               </p>
             </div>
+            {teachingEligible ? (
+              <div className="field">
+                <div className="control">
+                  <label className="checkbox">
+                    <input
+                      type="checkbox"
+                      id="teachingMode"
+                      checked={teachingMode === true}
+                      onChange={handleTeachingModeChange}
+                    />
+                    {t("ChooseTeachingMode")}
+                  </label>
+                </div>
+                <p className="help">
+                  {teachingMode
+                    ? t("HelpTeachingModeTrue")
+                    : t("HelpTeachingModeFalse")}
+                </p>
+              </div>
+            ) : null}
           </Fragment>
         )}
         {metaGame === null || playerCount !== 2 ? null : (
@@ -557,11 +622,18 @@ const StandingChallengeModal = React.memo(function StandingChallengeModal({
                   id="rated"
                   checked={rated}
                   onChange={handleRatedChange}
+                  disabled={teachingMode}
                 />
                 {t("ChooseRated")}
               </label>
             </div>
-            <p className="help">{rated ? t("HelpRated") : t("HelpUnRated")}</p>
+            <p className="help">
+              {teachingMode
+                ? t("ForcedTeachingUnrated")
+                : rated
+                ? t("HelpRated")
+                : t("HelpUnRated")}
+            </p>
           </div>
         )}
       </div>

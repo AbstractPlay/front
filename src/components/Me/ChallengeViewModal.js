@@ -190,6 +190,11 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
             <p>{challenge.clockHard ? t("HardTime") : t("SoftTime")}</p>
             <p>{challenge.rated ? t("RatedGame") : t("UnratedGame")}</p>
             <p>
+              <strong>
+                {challenge.teachingMode ? t("TeachingGameLabel") : ""}
+              </strong>
+            </p>
+            <p>
               <strong>{challenge.noExplore ? t("NoExploreTrue") : ""}</strong>
             </p>
             <p>{players}</p>

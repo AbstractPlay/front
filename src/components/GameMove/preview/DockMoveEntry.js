@@ -3,6 +3,8 @@ import { useDockMoveEntry } from "./useDockMoveEntry";
 import ExplorationToolbar from "./ExplorationToolbar";
 import { NoMoves, safeGetButtons, sortLenAlpha } from "./moveEntryUtils";
 import { resolveCustomButtonLabel } from "../../../lib/customButtonLabel";
+import TeachingMoveControls from "../TeachingMoveControls";
+import { showPieSeatSwapNotice } from "../../../lib/teachingModeChallenge";
 
 function TurnIndicator({ img, mover, isMyTurn, className = "" }) {
   return (
@@ -42,6 +44,9 @@ function DockMoveEntry(props) {
     focus,
     engine,
     submitting,
+    teachingBusy,
+    teachingMoveHandlers,
+    globalMe,
     uiState,
     mover,
     img,
@@ -57,13 +62,15 @@ function DockMoveEntry(props) {
     handlers,
     showDrawOfferConfirm,
     drawOffered,
+    teachingReview,
   } = state;
 
-  const isMyTurn = game.canSubmit && uiState === 0;
+  const isMyTurn = game.canSubmit && uiState === 0 && !teachingReview;
   const showInlineTurn = uiState === 0 && mover;
-  const showPrimaryRow = focus.canExplore;
+  const showPrimaryRow = focus.canExplore && !teachingReview;
   const showExplorationToolbar =
-    (focus.exPath.length > 0 && game.canExplore) || uiState !== 0;
+    !teachingReview &&
+    ((focus.exPath.length > 0 && game.canExplore) || uiState !== 0);
 
   const explorationToolbar = showExplorationToolbar ? (
     <ExplorationToolbar
@@ -99,7 +106,7 @@ function DockMoveEntry(props) {
         <TurnIndicator img={img} mover={mover} isMyTurn={isMyTurn} />
       ) : null}
 
-      {moveToSubmit !== null ? (
+      {!teachingReview && moveToSubmit !== null ? (
         <p className="game-move-dock-entry__pending">{t("PendingSubmit")}</p>
       ) : null}
 
@@ -156,6 +163,21 @@ function DockMoveEntry(props) {
           </div>
         ) : null}
 
+        {teachingMoveHandlers ? (
+          <TeachingMoveControls
+            game={game}
+            globalMe={globalMe}
+            uiState={uiState}
+            submitting={submitting}
+            teachingBusy={teachingBusy}
+            onGrant={teachingMoveHandlers.grant}
+            onKeep={teachingMoveHandlers.keep}
+            onUndo={teachingMoveHandlers.undo}
+            t={t}
+          />
+        ) : null}
+
+        {teachingReview ? null : (
         <div className="game-move-dock-entry__actions submitOrMark">
           {moveToSubmit !== null && focus.exPath.length === 1 && !submitting ? (
             <button
@@ -220,19 +242,16 @@ function DockMoveEntry(props) {
             </button>
           ) : null}
         </div>
+        )}
       </div>
 
       {pinExplorationToolbar ? explorationToolbar : null}
 
-      {expanded ? (
+      {expanded && !teachingReview ? (
         <div className="game-move-dock-entry__expanded">
-          {!game.pie ||
-          (typeof engine?.isPieTurn === "function" && !engine?.isPieTurn()) ||
-          (typeof engine?.isPieTurn !== "function" &&
-            engine?.stack?.length !== 2) ||
-          game.pieInvoked ? null : (
+          {showPieSeatSwapNotice(game, engine) ? (
             <p className="game-move-dock-entry__note">{t("CanPie")}</p>
-          )}
+          ) : null}
 
           {showMoveControls && moves !== null ? (
             <div className="game-move-dock-entry__chooser">

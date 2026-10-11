@@ -17,6 +17,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Playground (Lab):** God vs Live view for games with hidden information — board and status use the current player’s stripped view in Live mode; exploration and saves keep full state.
 - **Playground (Lab):** simultaneous games in seat mode — per-seat move entry, round buffer until all active seats submit, eliminated-seat handling, and active-seat picker for board perspective.
 - **Move tree exploration:** mark an explored line as an explicit draw (½) or clear an outcome back to undecided (?), alongside player win markers; annotations propagate up the tree like win/loss markers.
+- **Teaching mode:** optional cooperative undo on 2-player, non-simultaneous challenges (new challenge and standing challenge modals); grant / keep / undo controls on the move page (all four layouts); during review, only keep/undo are offered; challenge cards show a teaching label.
 
 ### Changed
 
@@ -29,6 +30,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Teaching mode:** seat swap (pie rule) and the preemptive swap notice are hidden and blocked on teaching games; accepting an undo no longer throws when move-tree exploration is enabled (skip branch merge when the main line shortens after `teaching_undo_move`).
 - **Export to Playground:** disabled on live games when exploration is off (metagame `no-explore` flag or in-progress challenge with no exploration), matching move-tree exploration rules.
 - **Live simultaneous play:** while waiting for opponents, your own submitted sub-moves stay visible on the board, move list, and event log (e.g. Entropy; requires gameslib with partial-round chat log lines).
 - **Board export:** animated GIF dialog on strip/card/narrative layouts (modal mounted in game-move shell); GIF button disabled when no exportable move line; PNG/GIF export uses the last renderrep for multi-board games (e.g. Bao).

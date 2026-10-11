@@ -231,6 +231,10 @@
     "src": "Rated?",
     "out": "¿Con clasificación?"
   },
+  "ChooseTeachingMode": {
+    "src": "Teaching mode?",
+    "out": "¿Modo de enseñanza?"
+  },
   "Claim": {
     "src": "Claim",
     "out": "Reclamar"
@@ -1043,6 +1047,10 @@
     "src": "Only show starred games",
     "out": "Solo mostrar juegos destacados"
   },
+  "ForcedTeachingUnrated": {
+    "src": "Teaching games are always unrated.",
+    "out": "Las partidas de enseñanza siempre son sin clasificación."
+  },
   "ForcedUnrated": {
     "src": "This game will not be rated due to selected variants.",
     "out": "Este juego no será evaluado debido a las variantes seleccionadas."
@@ -1174,6 +1182,14 @@
   "HelpRated": {
     "src": "This game will be rated.",
     "out": "Este juego será evaluado."
+  },
+  "HelpTeachingModeFalse": {
+    "src": "Standard play without teaching undo.",
+    "out": "Juego estándar sin la opción de deshacer de enseñanza."
+  },
+  "HelpTeachingModeTrue": {
+    "src": "Cooperative undo: either player can let the opponent review, keep, or rewind the last move.",
+    "out": "Deshacer cooperativo: cualquier jugador puede permitir que su oponente revise, mantenga o deshaga la última jugada."
   },
   "HelpUnRated": {
     "src": "This game will not be rated.",
@@ -1914,6 +1930,30 @@
   "TableView": {
     "src": "Table",
     "out": "Tabla"
+  },
+  "TeachingGameLabel": {
+    "src": "Teaching (unrated)",
+    "out": "Enseñanza (sin clasificación)"
+  },
+  "TeachingGrantUndo": {
+    "src": "Allow opponent to undo and reselect",
+    "out": "Permitir al oponente deshacer y volver a elegir"
+  },
+  "TeachingKeepMove": {
+    "src": "Keep my move",
+    "out": "Mantener mi jugada"
+  },
+  "TeachingReviewPrompt": {
+    "src": "Your opponent offered a teaching review. Keep the move or undo and play again.",
+    "out": "Tu oponente te ofreció una revisión instructiva. Mantén la jugada o deshazla y vuelve a jugar."
+  },
+  "TeachingUndoMove": {
+    "src": "Undo and choose again",
+    "out": "Deshacer y volver a elegir"
+  },
+  "TeachingWaitingReview": {
+    "src": "Waiting for your opponent to review your undo offer.",
+    "out": "Esperando a que tu oponente revise tu oferta para deshacer."
   },
   "Time": {
     "src": "Time",
@@ -4858,6 +4898,10 @@
   "gameMove.moveTree.legendMainline": {
     "src": "Played moves",
     "out": "Jugadas realizadas"
+  },
+  "gameMove.teaching": {
+    "src": "teaching",
+    "out": "enseñanza"
   },
   "gameMove.tournamentLink": {
     "src": "tournament",

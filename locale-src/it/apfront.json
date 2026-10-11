@@ -231,6 +231,10 @@
     "src": "Rated?",
     "out": "Con punteggio?"
   },
+  "ChooseTeachingMode": {
+    "src": "Teaching mode?",
+    "out": "Modalità didattica?"
+  },
   "Claim": {
     "src": "Claim",
     "out": "Reclama"
@@ -1043,6 +1047,10 @@
     "src": "Only show starred games",
     "out": "Mostra solo le partite preferite"
   },
+  "ForcedTeachingUnrated": {
+    "src": "Teaching games are always unrated.",
+    "out": "Le partite didattiche sono sempre non classificate."
+  },
   "ForcedUnrated": {
     "src": "This game will not be rated due to selected variants.",
     "out": "Questa partita non assegnerà punteggio a causa delle varianti selezionate."
@@ -1174,6 +1182,14 @@
   "HelpRated": {
     "src": "This game will be rated.",
     "out": "Questa partita sarà valida per il punteggio."
+  },
+  "HelpTeachingModeFalse": {
+    "src": "Standard play without teaching undo.",
+    "out": "Partita standard senza annullamento didattico."
+  },
+  "HelpTeachingModeTrue": {
+    "src": "Cooperative undo: either player can let the opponent review, keep, or rewind the last move.",
+    "out": "Annullamento cooperativo: ciascun giocatore può permettere all'avversario di esaminare, mantenere o annullare l'ultima mossa."
   },
   "HelpUnRated": {
     "src": "This game will not be rated.",
@@ -1914,6 +1930,30 @@
   "TableView": {
     "src": "Table",
     "out": "Tabella"
+  },
+  "TeachingGameLabel": {
+    "src": "Teaching (unrated)",
+    "out": "Didattica (non classificata)"
+  },
+  "TeachingGrantUndo": {
+    "src": "Allow opponent to undo and reselect",
+    "out": "Consenti all'avversario di annullare e scegliere di nuovo"
+  },
+  "TeachingKeepMove": {
+    "src": "Keep my move",
+    "out": "Mantieni la mia mossa"
+  },
+  "TeachingReviewPrompt": {
+    "src": "Your opponent offered a teaching review. Keep the move or undo and play again.",
+    "out": "Il tuo avversario ha offerto una revisione didattica. Mantieni la mossa o annulla e gioca di nuovo."
+  },
+  "TeachingUndoMove": {
+    "src": "Undo and choose again",
+    "out": "Annulla e scegli di nuovo"
+  },
+  "TeachingWaitingReview": {
+    "src": "Waiting for your opponent to review your undo offer.",
+    "out": "In attesa che l'avversario valuti la tua richiesta di annullamento."
   },
   "Time": {
     "src": "Time",
@@ -4858,6 +4898,10 @@
   "gameMove.moveTree.legendMainline": {
     "src": "Played moves",
     "out": "Mosse giocate"
+  },
+  "gameMove.teaching": {
+    "src": "teaching",
+    "out": "didattica"
   },
   "gameMove.tournamentLink": {
     "src": "tournament",

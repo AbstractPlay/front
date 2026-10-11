@@ -36,6 +36,52 @@ describe("game session sync", () => {
     expect(game.canSubmit).to.be.true;
   });
 
+  it("applyPlayerSessionFields disables pie in teaching mode games", () => {
+    const game = {
+      simultaneous: false,
+      toMove: 0,
+      players,
+      me: 0,
+      canSubmit: true,
+      canExplore: false,
+      canPie: true,
+      noExplore: false,
+      teachingMode: true,
+    };
+    const me = { id: "user-a", settings: { all: { exploration: 0 } } };
+
+    applyPlayerSessionFields(game, me, false);
+
+    expect(game.canPie).to.be.false;
+    expect(game.canSubmit).to.be.true;
+  });
+
+  it("applyPlayerSessionFields clears move affordances during teaching review", () => {
+    const game = {
+      simultaneous: false,
+      toMove: 0,
+      players,
+      me: -1,
+      canSubmit: false,
+      canExplore: true,
+      canPie: true,
+      noExplore: false,
+      teachingUndo: {
+        grantorSeat: 1,
+        reviewerSeat: 0,
+        stackAtGrant: 3,
+        grantorSeatAfterKeep: 1,
+      },
+    };
+    const me = { id: "user-a", settings: { all: { exploration: 0 } } };
+
+    applyPlayerSessionFields(game, me, true);
+
+    expect(game.canSubmit).to.be.false;
+    expect(game.canExplore).to.be.false;
+    expect(game.canPie).to.be.false;
+  });
+
   it("syncGameSessionFromApi restores focus.canExplore when globalMe loads late", () => {
     const game = {
       id: "g1",
