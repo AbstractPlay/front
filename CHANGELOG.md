@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0.0-beta`. Production and dev deploys stamp `1.0.0-ci-<GitHub Actions run id>.0` during the workflow (see `.github/workflows/deploy-prod.js.yml` and `deploy-dev.js.yml`). Entries below are grouped by theme and approximate ship window on **main** (what runs at abstractplay.com); they are not a per-commit log.
 
-## [1.0.0-ci] - 2026-10-11
+## [1.0.0-ci] - 2026-10-12
 
 ### Added
 
@@ -30,6 +30,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Hex move-table integration tests:** use committed `hex-b058` replay fixture instead of live prod `get_game` (CI no longer flakes when that game advances).
 - **Teaching mode:** seat swap (pie rule) and the preemptive swap notice are hidden and blocked on teaching games; accepting an undo no longer throws when move-tree exploration is enabled (skip branch merge when the main line shortens after `teaching_undo_move`).
 - **Export to Playground:** disabled on live games when exploration is off (metagame `no-explore` flag or in-progress challenge with no exploration), matching move-tree exploration rules.
 - **Live simultaneous play:** while waiting for opponents, your own submitted sub-moves stay visible on the board, move list, and event log (e.g. Entropy; requires gameslib with partial-round chat log lines).
