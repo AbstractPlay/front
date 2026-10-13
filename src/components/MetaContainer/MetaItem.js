@@ -32,6 +32,8 @@ import SoloSeedLeaderboard from "../Stats/SoloSeedLeaderboard";
 import { soloPlaySupported } from "../../lib/soloPlay";
 import { compareStrings } from "../../lib/compareStrings";
 import { compareCategoryTagEntries } from "../../lib/gameOptions";
+import { useRulesMirrorManifest } from "../../hooks/useRulesMirrorManifest";
+import { rulesMirrorOk, rulesMirrorPdfUrl } from "../../lib/rulesMirror";
 
 const MetaItem = React.forwardRef(
   (
@@ -59,6 +61,7 @@ const MetaItem = React.forwardRef(
     const { t, i18n } = useTranslation();
     const { t: tCat } = useTranslation("apgames");
     const localeBundleKey = getUiLocaleBundleKey(i18n);
+    const rulesMirrorManifest = useRulesMirrorManifest();
 
     const activeTab = syncTabToUrl ? metaTabFromHash(location.hash) : localTab;
 
@@ -276,6 +279,18 @@ const MetaItem = React.forwardRef(
                           </a>
                         </li>
                       ))}
+                      {rulesMirrorManifest !== null &&
+                      rulesMirrorOk(rulesMirrorManifest, game.uid) ? (
+                        <li key="_rules_mirror">
+                          <a
+                            href={rulesMirrorPdfUrl(game.uid)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {t("meta.rulesMirrorLink")}
+                          </a>
+                        </li>
+                      ) : null}
                       <li key="_wiki">
                         <a
                           href={`https://abstractplay.com/wiki/doku.php?id=games:${game.uid}`}

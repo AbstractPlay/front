@@ -18,6 +18,7 @@ describe("csp-policy board export", () => {
     expect(connect).toContain("https://*.googleapis.com");
     expect(connect).toContain("https://fonts.gstatic.com");
     expect(connect).toContain("https://thumbnails.abstractplay.com");
+    expect(connect).toContain("https://rules.abstractplay.com");
     expect(connect).toContain("blob:");
   });
 
