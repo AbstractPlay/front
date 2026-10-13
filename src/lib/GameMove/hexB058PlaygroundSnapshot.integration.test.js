@@ -1,6 +1,6 @@
 /**
- * Public prod get_game + DDB-snapshot exploration branches → Lab paste JSON.
- * No auth. Run once to refresh committed fixture:
+ * Lab playground export from hex-b058 replay fixture + exploration tip tree.
+ * Refresh committed bin snapshot (manual only):
  *
  *   AP_WRITE_HEX_B058_SNAPSHOT=1 npx vitest run src/lib/GameMove/hexB058PlaygroundSnapshot.integration.test.js
  */
@@ -16,18 +16,12 @@ import {
 } from "../Lab/export";
 import { materializeMainLineSpineStates } from "../Lab/exploration";
 import { applyExplorationMove } from "./explorationMoves";
+import hexB058 from "./fixtures/replays/hex-b058.json";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const frontRoot = path.resolve(__dirname, "../../..");
 
-const GAME_ID = "8a8e2d42-a0ae-4366-834d-fc476f52adca";
-const API = "https://7n1lziet28.execute-api.us-east-1.amazonaws.com/prod/query";
-
-/** Prod private exploration at move 24 (2026-10-11 snapshot). */
-const TIP_TREE_CHILDREN = [
-  { move: "f9", children: [{ move: "e10", children: [], premove: true }] },
-  { move: "i3", children: [{ move: "i2", children: [], premove: true }] },
-];
+const TIP_TREE_CHILDREN = hexB058.explorationRows[0].tree;
 
 function buildMainLineHistory(metaGame, stateStr, gameOver, winner) {
   const tmpEngine = GameFactory(metaGame, stateStr);
@@ -73,16 +67,8 @@ function attachTipBranches(history, metaGame) {
 }
 
 describe("hex b058 playground snapshot", () => {
-  it("matches prod tip branch layout for move table checks", async () => {
-    const res = await fetch(API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: "get_game",
-        pars: { metaGame: "hex", id: GAME_ID, cbit: 0 },
-      }),
-    });
-    const { game } = await res.json();
+  it("matches tip branch layout for move table checks", () => {
+    const game = hexB058.game;
     expect(game?.state).toBeTruthy();
 
     const engine = GameFactory(game.metaGame, game.state);

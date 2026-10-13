@@ -1,14 +1,17 @@
+/**
+ * Move-table path from stack spine + inline tip branches (hex-b058 replay fixture).
+ */
 import { describe, expect, it } from "vitest";
+import { applyPlayerSessionFields } from "./gameStuff";
 import {
   filterPathCellsForSeat,
   resolveMoveTablePlayerSeats,
 } from "./moveTablePathCells";
 import { resolveMoveTableLayout } from "./moveTableLayout";
 import { isIdleMainlineExplorationTip } from "./moveTreeVariations";
+import hexB058 from "./fixtures/replays/hex-b058.json";
 
-const GAME_ID = "8a8e2d42-a0ae-4366-834d-fc476f52adca";
 const REPORTER_ID = "328adc5c-9832-4c7e-869c-46f67a116939";
-const API = "https://7n1lziet28.execute-api.us-east-1.amazonaws.com/prod/query";
 
 function buildExplorationSpineFromStack(state) {
   return state.stack.map((frame, i) => ({
@@ -58,24 +61,17 @@ function buildPathAtTip(exploration, focus, gameOver) {
   return path;
 }
 
-describe("prod hex b058a884 exploration move table", () => {
-  it("loads prod game and splits tip branches into correct player columns", async () => {
-    const res = await fetch(API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: "get_game",
-        pars: { metaGame: "hex", id: GAME_ID, cbit: 0 },
-      }),
-    });
-    const { game } = await res.json();
-    const state = JSON.parse(game.state);
+describe("hex b058 stack-spine exploration move table", () => {
+  it("splits tip branches into correct player columns", () => {
+    const game = { ...hexB058.game };
+    applyPlayerSessionFields(
+      game,
+      { id: REPORTER_ID, settings: { all: { exploration: 1 } } },
+      false
+    );
 
-    // Prod DDB snapshot (move 24) for game 8a8e2d42-… on 2026-10-11
-    const tipChildren = [
-      { move: "f9", children: [{ move: "e10", children: [], premove: true }] },
-      { move: "i3", children: [{ move: "i2", children: [], premove: true }] },
-    ];
+    const state = JSON.parse(game.state);
+    const tipChildren = hexB058.explorationRows[0].tree;
 
     const exploration = buildExplorationSpineFromStack(state);
     exploration[exploration.length - 1].children = tipChildren;
