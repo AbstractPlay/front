@@ -6,6 +6,7 @@ import RenderOptionsModal from "../../RenderOptionsModal";
 import Modal from "../../Modal";
 import ClipboardCopy from "../../../lib/ClipboardCopy";
 import { getFocusNode } from "../../../lib/GameMove/exploration";
+import MetaGameLinks from "../../shared/MetaGameLinks";
 
 export default function GameMoveLayoutModals({ session }) {
   const {
@@ -163,24 +164,7 @@ export default function GameMoveLayoutModals({ session }) {
               (designerString === undefined ? "" : "\n\n" + designerString) +
               (coderString === undefined ? "" : "\n\n" + coderString)}
           </ReactMarkdown>
-          <ul className="contained">
-            {gameDeets.urls.map((l, i) => (
-              <li key={`gameDeets|url|` + i}>
-                <a href={l} target="_blank" rel="noopener noreferrer">
-                  {l}
-                </a>
-              </li>
-            ))}
-            <li key="_wiki">
-              <a
-                href={`https://abstractplay.com/wiki/doku.php?id=games:${metaGame}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Abstract Play Wiki
-              </a>
-            </li>
-          </ul>
+          <MetaGameLinks metaGame={metaGame} urls={gameDeets.urls} />
           {gameEngine.notes() === undefined ? null : (
             <>
               <h2>{t("ImplementationNotes")}</h2>
