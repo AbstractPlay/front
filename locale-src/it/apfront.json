@@ -5443,6 +5443,10 @@
     "src": "Recommended games",
     "out": "Partite consigliate"
   },
+  "meta.rulesMirrorLink": {
+    "src": "Local rules mirror (PDF)",
+    "out": "Mirror locale del regolamento (PDF)"
+  },
   "meta.tabs.challenges": {
     "src": "Challenges",
     "out": "Sfide"

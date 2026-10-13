@@ -5443,6 +5443,10 @@
     "src": "Recommended games",
     "out": "Parties recommandées"
   },
+  "meta.rulesMirrorLink": {
+    "src": "Local rules mirror (PDF)",
+    "out": "Miroir local des règles (PDF)"
+  },
   "meta.tabs.challenges": {
     "src": "Challenges",
     "out": "Défis"
