@@ -7,10 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0.0-beta`. Production and dev deploys stamp `1.0.0-ci-<GitHub Actions run id>.0` during the workflow (see `.github/workflows/deploy-prod.js.yml` and `deploy-dev.js.yml`). Entries below are grouped by theme and approximate ship window on **main** (what runs at abstractplay.com); they are not a per-commit log.
 
-## [1.0.0-ci] - 2026-10-12
+## [1.0.0-ci] - 2026-10-13
 
 ### Added
 
+- **Rules PDF mirrors:** link to hosted rules PDFs (when available) on game Summary and in the in-play game info (i) dialog, via shared `MetaGameLinks`.
 - **Feedback:** attach SVG and Markdown (`.md`) files on bug reports, features, and comments (with PNG/JPEG/WebP, `.txt`, and `.json`).
 - **In-app notifications:** WebSocket `notification` hint debounces `list_notifications` for the navbar bell; home dashboard refetches notifications in parallel with `me_dashboard` (gap filler).
 - **Multi-frame board chrome:** jump to first/last frame buttons (double chevrons) beside step prev/next when a game returns multiple render reps.

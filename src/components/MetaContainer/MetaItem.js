@@ -32,8 +32,7 @@ import SoloSeedLeaderboard from "../Stats/SoloSeedLeaderboard";
 import { soloPlaySupported } from "../../lib/soloPlay";
 import { compareStrings } from "../../lib/compareStrings";
 import { compareCategoryTagEntries } from "../../lib/gameOptions";
-import { useRulesMirrorManifest } from "../../hooks/useRulesMirrorManifest";
-import { rulesMirrorOk, rulesMirrorPdfUrl } from "../../lib/rulesMirror";
+import MetaGameLinks from "../shared/MetaGameLinks";
 
 const MetaItem = React.forwardRef(
   (
@@ -61,8 +60,6 @@ const MetaItem = React.forwardRef(
     const { t, i18n } = useTranslation();
     const { t: tCat } = useTranslation("apgames");
     const localeBundleKey = getUiLocaleBundleKey(i18n);
-    const rulesMirrorManifest = useRulesMirrorManifest();
-
     const activeTab = syncTabToUrl ? metaTabFromHash(location.hash) : localTab;
 
     const handleTabChange = useCallback(
@@ -271,36 +268,7 @@ const MetaItem = React.forwardRef(
                         : "\n\n" + designerString) +
                         (coderString === undefined ? "" : "\n\n" + coderString)}
                     </ReactMarkdown>
-                    <ul className="contained">
-                      {game.urls.map((l, i) => (
-                        <li key={i}>
-                          <a href={l} target="_blank" rel="noopener noreferrer">
-                            {l}
-                          </a>
-                        </li>
-                      ))}
-                      {rulesMirrorManifest !== null &&
-                      rulesMirrorOk(rulesMirrorManifest, game.uid) ? (
-                        <li key="_rules_mirror">
-                          <a
-                            href={rulesMirrorPdfUrl(game.uid)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {t("meta.rulesMirrorLink")}
-                          </a>
-                        </li>
-                      ) : null}
-                      <li key="_wiki">
-                        <a
-                          href={`https://abstractplay.com/wiki/doku.php?id=games:${game.uid}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {t("meta.wikiLink")}
-                        </a>
-                      </li>
-                    </ul>
+                    <MetaGameLinks metaGame={game.uid} urls={game.urls} />
                   </Fragment>
                 )}
                 <div>
