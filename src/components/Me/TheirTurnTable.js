@@ -15,7 +15,7 @@ import { useStore } from "../../stores";
 import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 import BotAwareName from "../Bots/BotAwareName";
-import { tickActivePlayerRemainingMs } from "../../lib/gameClockDisplay";
+import { minOpponentOnClockRemainingMs } from "../../lib/gameClockDisplay";
 import { useTranslation } from "react-i18next";
 import {
   compareStrings,
@@ -68,16 +68,7 @@ function TheirTurnTable(props) {
   const data = useMemo(
     () =>
       props.games.map((g) => {
-        let them = undefined;
-        if (
-          g.toMove !== null &&
-          g.toMove !== undefined &&
-          g.toMove !== "" &&
-          !Array.isArray(g.toMove)
-        ) {
-          const idx = parseInt(g.toMove);
-          them = g.players[idx];
-        }
+        const myIndex = g.players.findIndex((p) => p.id === globalMe.id);
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
@@ -86,17 +77,11 @@ function TheirTurnTable(props) {
           lastMove: g.lastMoveTime,
           opponents: g.players.filter((item) => item.id !== globalMe.id),
           numMoves: g.numMoves || 0,
-          myTime: them === undefined ? undefined : them.time,
-          timeRemaining:
-            them === undefined
-              ? undefined
-              : tickActivePlayerRemainingMs(
-                  them,
-                  g,
-                  g.toMove,
-                  g.players.indexOf(them),
-                  Date.now()
-                ),
+          timeRemaining: minOpponentOnClockRemainingMs(
+            g,
+            myIndex,
+            Date.now()
+          ),
           opponentOnVacation: g.players.some(
             (p) => p.id !== globalMe.id && p.onVacation === true
           ),

@@ -61,3 +61,37 @@ export function anyOnClockPlayerTimedOut(game, now = Date.now()) {
   }
   return game.players.some((p, i) => isPlayerTimedOut(p, game, game.toMove, i, now));
 }
+
+/**
+ * Minimum ticking clock among opponents still to move (sequential or simultaneous).
+ * @param {number} myPlayerIndex seat index of the viewer; excluded from the scan
+ * @returns {number | undefined} undefined when no opponent is on the clock
+ */
+export function minOpponentOnClockRemainingMs(game, myPlayerIndex, now = Date.now()) {
+  if (!game?.players?.length) {
+    return undefined;
+  }
+  if (game.toMove === "" || game.toMove === undefined || game.toMove === null) {
+    return undefined;
+  }
+  let min = undefined;
+  for (let i = 0; i < game.players.length; i++) {
+    if (i === myPlayerIndex) {
+      continue;
+    }
+    if (!isPlayerIndexOnMove(i, game.toMove)) {
+      continue;
+    }
+    const ms = tickActivePlayerRemainingMs(
+      game.players[i],
+      game,
+      game.toMove,
+      i,
+      now,
+    );
+    if (min === undefined || ms < min) {
+      min = ms;
+    }
+  }
+  return min;
+}

@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { isPlayerTimedOut } from "./gameClockDisplay";
+import {
+  isPlayerTimedOut,
+  minOpponentOnClockRemainingMs,
+} from "./gameClockDisplay";
 
 const T0 = Date.parse("2026-06-15T12:00:00.000Z");
 
@@ -43,5 +46,41 @@ describe("isPlayerTimedOut", () => {
       clockPaused: true,
     };
     expect(isPlayerTimedOut(player, game, game.toMove, 0, T0)).toBe(false);
+  });
+});
+
+describe("minOpponentOnClockRemainingMs", () => {
+  it("returns the sole opponent clock for sequential toMove", () => {
+    const game = onClockGame({
+      toMove: "1",
+      players: [
+        { id: "me", effectiveRemainingMs: 9_000_000, clockPaused: false },
+        { id: "them", effectiveRemainingMs: 120_000, clockPaused: false },
+      ],
+    });
+    expect(minOpponentOnClockRemainingMs(game, 0, T0 + 30_000)).toBe(90_000);
+  });
+
+  it("returns the minimum among simultaneous opponents still to move", () => {
+    const game = onClockGame({
+      toMove: [false, true, true],
+      players: [
+        { id: "me", effectiveRemainingMs: 5_000_000, clockPaused: false },
+        { id: "a", effectiveRemainingMs: 200_000, clockPaused: false },
+        { id: "b", effectiveRemainingMs: 80_000, clockPaused: false },
+      ],
+    });
+    expect(minOpponentOnClockRemainingMs(game, 0, T0 + 10_000)).toBe(70_000);
+  });
+
+  it("is undefined when no opponent is on the clock", () => {
+    const game = onClockGame({
+      toMove: [false, false],
+      players: [
+        { id: "me", effectiveRemainingMs: 1_000, clockPaused: false },
+        { id: "them", effectiveRemainingMs: 2_000, clockPaused: false },
+      ],
+    });
+    expect(minOpponentOnClockRemainingMs(game, 0, T0)).toBeUndefined();
   });
 });
