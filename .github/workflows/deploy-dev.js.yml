@@ -129,6 +129,9 @@ jobs:
     - name: Deploy
       run: npx serverless client deploy --no-confirm
 
+    - name: Apply S3 cost allocation tags
+      run: node bin/apply-s3-cost-allocation-tags.mjs --stage dev
+
     - name: Sync CloudFront CSP
       run: node bin/sync-cloudfront-csp.mjs --stage dev
 
