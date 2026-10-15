@@ -33,6 +33,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Deploy:** S3 cost-allocation tagging no longer uses serverless-finch `client.tags` (full `putBucketTagging` removed AWS system tags and failed with “System tags cannot be removed by requester”); tags are merged via `bin/apply-s3-cost-allocation-tags.mjs` after upload.
 - **Dashboard (opponent’s turn):** time remaining shows the shortest opponent clock for simultaneous games (after you have submitted for the round).
 - **Hex move-table integration tests:** use committed `hex-b058` replay fixture instead of live prod `get_game` (CI no longer flakes when that game advances).
 - **Teaching mode:** seat swap (pie rule) and the preemptive swap notice are hidden and blocked on teaching games; accepting an undo no longer throws when move-tree exploration is enabled (skip branch merge when the main line shortens after `teaching_undo_move`).

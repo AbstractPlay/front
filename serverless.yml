@@ -56,7 +56,6 @@ custom:
   client:
     bucketName: ${self:custom.rootName}
     distributionFolder: build
-    tags: ${self:custom.apCostAllocationTags}
 
     objectHeaders:
       # Cache-bustable assets (fingerprinted)
