@@ -45,7 +45,9 @@ function BotsModal({ show, onClose }) {
       latest.pendingSecretId !== editingBot.pendingSecretId ||
       latest.name !== editingBot.name ||
       latest.endpoint !== editingBot.endpoint ||
-      latest.description !== editingBot.description
+      latest.description !== editingBot.description ||
+      JSON.stringify(latest.supported ?? []) !==
+        JSON.stringify(editingBot.supported ?? [])
     ) {
       editingBotSetter(latest);
     }

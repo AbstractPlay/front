@@ -1,70 +1,25 @@
 import { callAuthApi } from "../../lib/api";
 import { fetchProfile } from "../../lib/globalMeBootstrap";
-
-async function parseAuthResponse(res) {
-  if (!res) {
-    return { ok: false, error: "Not authenticated" };
-  }
-  if (res.status === 200) {
-    try {
-      const text = await res.text();
-      if (!text) return { ok: true, data: null };
-      const parsed = JSON.parse(text);
-      if (
-        parsed !== null &&
-        typeof parsed === "object" &&
-        Object.prototype.hasOwnProperty.call(parsed, "statusCode")
-      ) {
-        if (parsed.statusCode !== 200) {
-          let message = `Request failed (${parsed.statusCode})`;
-          try {
-            const body = JSON.parse(parsed.body);
-            if (body?.error) message = body.error;
-            else if (typeof body === "string") message = body;
-          } catch {
-            if (parsed.body) message = parsed.body;
-          }
-          return { ok: false, error: message };
-        }
-        const data =
-          parsed.body === undefined || parsed.body === null
-            ? null
-            : JSON.parse(parsed.body);
-        return { ok: true, data };
-      }
-      return { ok: true, data: parsed };
-    } catch (err) {
-      return { ok: false, error: err.message || "Failed to parse response" };
-    }
-  }
-  let error = `Request failed (${res.status})`;
-  try {
-    const parsed = await res.json();
-    if (parsed?.body) {
-      try {
-        const body = JSON.parse(parsed.body);
-        if (body?.error) error = body.error;
-      } catch {
-        error = parsed.body;
-      }
-    }
-  } catch {
-    // keep default error
-  }
-  return { ok: false, error };
-}
+import { parseAuthResponse } from "../../lib/parseAuthResponse";
 
 export async function createBot({ name, endpoint }) {
   const res = await callAuthApi("create_bot", { name, endpoint });
   return parseAuthResponse(res);
 }
 
-export async function updateBot({ clientId, name, endpoint, description }) {
+export async function updateBot({
+  clientId,
+  name,
+  endpoint,
+  description,
+  supported,
+}) {
   const res = await callAuthApi("update_bot", {
     clientId,
     name,
     endpoint,
     description,
+    supported,
   });
   return parseAuthResponse(res);
 }

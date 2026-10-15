@@ -1726,6 +1726,12 @@
     "newSecretTitle": "New bot secret",
     "editTitle": "Edit bot: {{name}}",
     "description": "Description",
+    "supportedGames": "Supported games",
+    "supportedGamesHelp": "Games and variant combinations your bot accepts. An empty list means the bot does not declare any supported games.",
+    "supportedGamesEmpty": "No supported games listed.",
+    "addSupportedGame": "Add supported game",
+    "removeSupportedGame": "Remove",
+    "supportedNoVariants": "Default variants",
     "rotationInProgress": "Secret rotation is in progress. Deploy the new secret to your bot, verify it works, then finalize the rotation.",
     "rotateSecret": "Rotate secret",
     "finalizeRotation": "Finalize rotation",
@@ -1752,7 +1758,10 @@
       "noSecretReturned": "Server did not return a new client secret.",
       "rotationRefreshFailed": "Secret rotation started but failed to refresh bot status.",
       "finalizeFailed": "Failed to finalize secret rotation.",
-      "finalizeRefreshFailed": "Rotation finalized but failed to refresh bot status."
+      "finalizeRefreshFailed": "Rotation finalized but failed to refresh bot status.",
+      "supportedMetaRequired": "Choose a game to add.",
+      "supportedVariantsInvalid": "Fix the variant selection before adding this game.",
+      "supportedDuplicate": "This game and variant combination is already listed."
     }
   },
   "gameMove": {
