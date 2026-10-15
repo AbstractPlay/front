@@ -162,12 +162,17 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
 
   useEffect(() => {
     if (allUsers !== null && metaGame !== null) {
-      const info = gameinfo.get(metaGame);
-      if (info && !info.flags.includes("aiai")) {
-        usersSetter([...allUsers].filter((u) => u.id !== AIAI_USER_ID));
-      } else if (info) {
-        usersSetter([...allUsers]);
-      }
+      usersSetter(
+        allUsers.filter((u) => {
+          if (u.id === AIAI_USER_ID) {
+            return false;
+          }
+          if (u.bot === true) {
+            return Array.isArray(u.stars) && u.stars.includes(metaGame);
+          }
+          return true;
+        })
+      );
     }
   }, [allUsers, metaGame]);
 

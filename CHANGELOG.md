@@ -24,6 +24,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Changed
 
+- **Challenges:** direct opponent picker always hides legacy embedded AiAi user id; registered bots appear when their `stars` include the selected game (no `aiai` flag gate).
 - **Tournaments:** automated tournaments help text reflects 120-hour starting clock (full max bank).
 - **Board toolbar:** rotate clockwise/counterclockwise and “back to current position” exploration controls use Unicode arrow glyphs (↳ / ↲ / ↩) instead of Font Awesome icons.
 - **Move tree (round grid):** compact/sparse rows and path indexing delegate to gameslib `getMoveTableRounds` / `pathIndexForMoveTableCell` (exploration wire split stays in a thin front adapter).
