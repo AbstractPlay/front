@@ -1726,6 +1726,12 @@
     "newSecretTitle": "Nouveau secret de bot",
     "editTitle": "Modifier le bot : {{name}}",
     "description": "Description",
+    "supportedGames": "Jeux pris en charge",
+    "supportedGamesHelp": "Combinaisons de jeux et de variantes que votre bot accepte. Une liste vide signifie que le bot ne déclare aucun jeu pris en charge.",
+    "supportedGamesEmpty": "Aucun jeu pris en charge répertorié.",
+    "addSupportedGame": "Ajouter un jeu pris en charge",
+    "removeSupportedGame": "Supprimer",
+    "supportedNoVariants": "Variantes par défaut",
     "rotationInProgress": "La rotation du secret est en cours. Déployez le nouveau secret sur votre bot, vérifiez qu'il fonctionne, puis finalisez la rotation.",
     "rotateSecret": "Renouveler le secret",
     "finalizeRotation": "Finaliser la rotation",
@@ -1752,7 +1758,10 @@
       "noSecretReturned": "Le serveur n'a pas renvoyé de nouveau secret client.",
       "rotationRefreshFailed": "La rotation du secret a démarré, mais le rafraîchissement du statut du bot a échoué.",
       "finalizeFailed": "Échec de la finalisation de la rotation du secret.",
-      "finalizeRefreshFailed": "La rotation a été finalisée, mais le rafraîchissement du statut du bot a échoué."
+      "finalizeRefreshFailed": "La rotation a été finalisée, mais le rafraîchissement du statut du bot a échoué.",
+      "supportedMetaRequired": "Choisissez un jeu à ajouter.",
+      "supportedVariantsInvalid": "Corrigez la sélection de variantes avant d'ajouter ce jeu.",
+      "supportedDuplicate": "Cette combinaison de jeu et de variante est déjà répertoriée."
     }
   },
   "gameMove": {

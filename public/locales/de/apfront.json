@@ -1726,6 +1726,12 @@
     "newSecretTitle": "Neues Bot-Secret",
     "editTitle": "Bot bearbeiten: {{name}}",
     "description": "Beschreibung",
+    "supportedGames": "Unterstützte Spiele",
+    "supportedGamesHelp": "Spiele und Variantenkombinationen, die dein Bot akzeptiert. Eine leere Liste bedeutet, dass der Bot keine unterstützten Spiele angibt.",
+    "supportedGamesEmpty": "Keine unterstützten Spiele aufgelistet.",
+    "addSupportedGame": "Unterstütztes Spiel hinzufügen",
+    "removeSupportedGame": "Entfernen",
+    "supportedNoVariants": "Standardvarianten",
     "rotationInProgress": "Secret-Rotation ist im Gange. Spiele das neue Secret auf deinem Bot ein, überprüfe, ob es funktioniert, und schließe die Rotation dann ab.",
     "rotateSecret": "Secret rotieren",
     "finalizeRotation": "Rotation abschließen",
@@ -1752,7 +1758,10 @@
       "noSecretReturned": "Der Server hat kein neues Client-Secret zurückgegeben.",
       "rotationRefreshFailed": "Secret-Rotation wurde gestartet, aber der Bot-Status konnte nicht aktualisiert werden.",
       "finalizeFailed": "Secret-Rotation konnte nicht abgeschlossen werden.",
-      "finalizeRefreshFailed": "Rotation wurde abgeschlossen, aber der Bot-Status konnte nicht aktualisiert werden."
+      "finalizeRefreshFailed": "Rotation wurde abgeschlossen, aber der Bot-Status konnte nicht aktualisiert werden.",
+      "supportedMetaRequired": "Wähle ein Spiel zum Hinzufügen aus.",
+      "supportedVariantsInvalid": "Korrigiere die Variantenauswahl, bevor du dieses Spiel hinzufügst.",
+      "supportedDuplicate": "Diese Spiel- und Variantenkombination ist bereits aufgelistet."
     }
   },
   "gameMove": {
