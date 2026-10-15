@@ -11,6 +11,12 @@ import {
   refreshMe,
 } from "./botApi";
 import { getBotClientId, findBotByClientId } from "./botUtils";
+import BotSupportedGamesEditor from "./BotSupportedGamesEditor";
+import {
+  botSupportedForApi,
+  normalizeBotSupportedEntries,
+} from "../../lib/botSupportedGames";
+import { validateChallengeVariantSelection } from "../../lib/variantChallengeValidation";
 import { useStore } from "../../stores";
 import { useTranslation, Trans } from "react-i18next";
 
@@ -19,6 +25,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
   const [name, nameSetter] = useState("");
   const [endpoint, endpointSetter] = useState("");
   const [description, descriptionSetter] = useState("");
+  const [supported, supportedSetter] = useState([]);
   const [error, errorSetter] = useState("");
   const [saving, savingSetter] = useState(false);
   const [rotating, rotatingSetter] = useState(false);
@@ -31,6 +38,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
       nameSetter(bot.name || "");
       endpointSetter(bot.endpoint || "");
       descriptionSetter(bot.description || "");
+      supportedSetter(normalizeBotSupportedEntries(bot.supported));
       errorSetter("");
       showDeleteConfirmSetter(false);
     }
@@ -67,6 +75,19 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
       errorSetter(t("bots.errors.httpsRequired"));
       return;
     }
+    for (const entry of supported) {
+      const validation = validateChallengeVariantSelection(
+        entry.meta,
+        entry.variants
+      );
+      if (!validation.ok) {
+        errorSetter(
+          validation.message || t("bots.errors.supportedVariantsInvalid")
+        );
+        return;
+      }
+    }
+    const supportedPayload = botSupportedForApi(supported);
     savingSetter(true);
     errorSetter("");
     const result = await updateBot({
@@ -74,10 +95,16 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
       name: name.trim(),
       endpoint: endpoint.trim(),
       description: description.trim(),
+      supported: supportedPayload,
     });
     savingSetter(false);
     if (!result.ok) {
-      errorSetter(result.error || t("bots.errors.updateFailed"));
+      const apiError = result.error || "";
+      errorSetter(
+        apiError === "INVALID_VARIANT_COMBINATION"
+          ? t("bots.errors.supportedVariantsInvalid")
+          : apiError || t("bots.errors.updateFailed")
+      );
       return;
     }
     onBotUpdated({
@@ -85,6 +112,7 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
       name: name.trim(),
       endpoint: endpoint.trim(),
       description: description.trim(),
+      supported: supportedPayload,
     });
     onClose();
   };
@@ -223,6 +251,12 @@ function BotEditModal({ show, bot, onClose, onBotUpdated, onBotDeleted }) {
             />
           </div>
         </div>
+        <BotSupportedGamesEditor
+          supported={supported}
+          onChange={supportedSetter}
+          disabled={saving || rotating || finalizing}
+        />
+        <hr className="bot-edit-section-divider" aria-hidden="true" />
         <div className="field">
           <label className="label is-small">{t("bots.clientId")}</label>
           <div className="control">

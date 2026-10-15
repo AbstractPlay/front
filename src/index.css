@@ -597,6 +597,13 @@ a.navbar-item,
   margin: 0.35rem 0;
 }
 
+.bot-edit-section-divider {
+  background: var(--tag-background-color);
+  border: none;
+  height: 1px;
+  margin: 1.5rem 0 1.25rem;
+}
+
 .notification-bell-btn .notification-bell-badge {
   background: var(--secondary-color-1);
   border-radius: 999px;
