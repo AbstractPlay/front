@@ -180,7 +180,40 @@
   "ClickExpand": "Pulsar para expandir",
   "Events": {
     "Description": "Los eventos organizados son gestionados por particulares. El sistema permite a los organizadores crear eventos, a los jugadores registrarse y, posteriormente, a los organizadores lanzar partidas entre los jugadores registrados. El seguimiento de los resultados, la aplicación de límites de tiempo específicos y el anuncio de los ganadores son responsabilidad del organizador.",
-    "Name": "Eventos organizados"
+    "Name": "Eventos organizados",
+    "loading": "Cargando eventos…",
+    "newEvent": "Nuevo evento",
+    "openForRegistration": "Abierto para registrarte",
+    "activeEvents": "Eventos activos",
+    "completedEvents": "Eventos completados",
+    "createEvent": "Crear evento",
+    "createEventModalTitle": "Crear un evento nuevo",
+    "createEventContact": "Para crear un evento, por favor, contactar a uno de los desarrolladores a través de <0>Discord</0>.",
+    "noOpenRegistration": "Ningún evento está abierto para registrarte actualmente.",
+    "eventNameLabel": "Nombre del evento",
+    "eventNameRequired": "El evento debe tener un nombre.",
+    "maxPlayersLabel": "Jugadores máximos",
+    "maxPlayersHelp": "El valor 0 significa que no hay límite.",
+    "eventDateLabel": "Fecha del evento",
+    "eventTimeLabel": "Hora del evento",
+    "dateTimeRequired": "Se requieren fecha y hora y debe ser en el futuro.",
+    "admin": {
+      "statusLabel": "Estado:",
+      "statusOpen": "La inscripción está abierta.",
+      "statusActive": "El evento se encuentra activo. La inscripción está cerrada.",
+      "statusComplete": "Este evento ha finalizado.",
+      "organizerLabel": "Organizador:",
+      "startDateLabel": "Fecha de inicio:",
+      "endDateLabel": "Fecha de finalización:",
+      "winnerLabel": "Ganador:",
+      "descriptionLabel": "Descripción:",
+      "registrantsLabel": "Inscritos:",
+      "invitedLabel": "Invitados:",
+      "blockedLabel": "Bloqueado:",
+      "gamesTitle": "Juegos",
+      "gamesAsteriskNote": "Un asterisco tras un resultado significa que el organizador lo ajustó manualmente.",
+      "resultsTitle": "Resultados"
+    }
   },
   "LogOut": "Salir de sesión",
   "MakeMove": "Hacer un movimiento",
@@ -404,5 +437,41 @@
   "SelectOpponents_other": "Seleccionar {{count}} oponentes.",
   "StandingChallengesCount_one": "abrir desafío",
   "StandingChallengesCount_many": "abrir desafíos",
-  "StandingChallengesCount_other": "abrir desafíos"
+  "StandingChallengesCount_other": "abrir desafíos",
+  "boardExport": {
+    "gifTitle": "Exportar GIF animado",
+    "startLabel": "Posición para empezar",
+    "endLabel": "",
+    "export": "Exportar GIF",
+    "pathInitial": "Posición inicial",
+    "frameCount_one": "{{count}} frame",
+    "pathVariation": "Variación: {{move}}",
+    "pathVariationUnknown": "Variación",
+    "pathStep": "Paso {{number}}",
+    "gifSuccess": "GIF animado descargado.",
+    "progress": "Exportando frame {{current}} de {{total}}…",
+    "failed": "Exportación fallida: {{error}}"
+  },
+  "recentGames": {
+    "daysOption": "Últimos {{count}} días"
+  },
+  "seoHubEmpty": {
+    "openChallengesForGame": "No hay desafíos abiertos para {{gameName}} ahora mismo.",
+    "openChallengesSite": "No hay desafíos abiertos ahora mismo."
+  },
+  "newChallenge": {
+    "opponentActivityAll": "Todos los oponentes",
+    "opponentActivity7Days": "Activo en los últimos 7 días",
+    "opponentActivity30Days": "Activo en los últimos 30 días"
+  },
+  "common": {
+    "loading": "Cargando…"
+  },
+  "WatchedGames": "Partidas vistas",
+  "ConfirmDrawOffer": "Ofrece un empate",
+  "ConfirmDrawOfferDesc": "¿Estás seguro de que quieres ofrecer un empate?",
+  "EMailCodeInvalid": "Ese código es inválido o ha caducado. Por favor, inténtalo de nuevo.",
+  "EMailInUse": "Esta dirección de correo electrónico ya está asociada con otra cuenta.",
+  "EMailUpdateFailed": "No se ha podido actualizar tu dirección de correo electrónico. Por favor, inténtalo de nuevo.",
+  "EMailVerifyFailed": "No se ha podido verificar tu dirección de correo electrónico. Por favor, inténtalo de nuevo."
 }
