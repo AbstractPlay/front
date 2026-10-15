@@ -22,6 +22,7 @@ export const IN_APP_NOTIFICATION_KEYS = [
   "feedbackDeleted",
   "feedbackReviewRequested",
   "announcements",
+  "bots",
 ];
 
 export const FEEDBACK_NEW_KIND_KEYS = ["bug", "feature", "wishlist"];
