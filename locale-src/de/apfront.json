@@ -2727,6 +2727,10 @@
     "src": "I have copied and securely stored the client secret",
     "out": "Ich habe das Client-Secret kopiert und sicher gespeichert"
   },
+  "bots.addSupportedGame": {
+    "src": "Add supported game",
+    "out": "Unterstütztes Spiel hinzufügen"
+  },
   "bots.clientId": {
     "src": "Client ID",
     "out": "Client-ID"
@@ -2831,6 +2835,18 @@
     "src": "Secret rotation started but failed to refresh bot status.",
     "out": "Secret-Rotation wurde gestartet, aber der Bot-Status konnte nicht aktualisiert werden."
   },
+  "bots.errors.supportedDuplicate": {
+    "src": "This game and variant combination is already listed.",
+    "out": "Diese Spiel- und Variantenkombination ist bereits aufgelistet."
+  },
+  "bots.errors.supportedMetaRequired": {
+    "src": "Choose a game to add.",
+    "out": "Wähle ein Spiel zum Hinzufügen aus."
+  },
+  "bots.errors.supportedVariantsInvalid": {
+    "src": "Fix the variant selection before adding this game.",
+    "out": "Korrigiere die Variantenauswahl, bevor du dieses Spiel hinzufügst."
+  },
   "bots.errors.updateFailed": {
     "src": "Failed to update bot.",
     "out": "Bot konnte nicht aktualisiert werden."
@@ -2871,6 +2887,10 @@
     "src": "Display names cannot contain the robot emoji.",
     "out": "Anzeigenamen dürfen kein Roboter-Emoji enthalten."
   },
+  "bots.removeSupportedGame": {
+    "src": "Remove",
+    "out": "Entfernen"
+  },
   "bots.rotateSecret": {
     "src": "Rotate secret",
     "out": "Secret rotieren"
@@ -2886,6 +2906,22 @@
   "bots.saving": {
     "src": "Saving…",
     "out": "Wird gespeichert…"
+  },
+  "bots.supportedGames": {
+    "src": "Supported games",
+    "out": "Unterstützte Spiele"
+  },
+  "bots.supportedGamesEmpty": {
+    "src": "No supported games listed.",
+    "out": "Keine unterstützten Spiele aufgelistet."
+  },
+  "bots.supportedGamesHelp": {
+    "src": "Games and variant combinations your bot accepts. An empty list means the bot does not declare any supported games.",
+    "out": "Spiele und Variantenkombinationen, die dein Bot akzeptiert. Eine leere Liste bedeutet, dass der Bot keine unterstützten Spiele angibt."
+  },
+  "bots.supportedNoVariants": {
+    "src": "Default variants",
+    "out": "Standardvarianten"
   },
   "bots.yesDelete": {
     "src": "Yes, delete it",

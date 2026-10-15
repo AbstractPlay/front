@@ -2727,6 +2727,10 @@
     "src": "I have copied and securely stored the client secret",
     "out": "Ho copiato e conservato in modo sicuro il segreto client"
   },
+  "bots.addSupportedGame": {
+    "src": "Add supported game",
+    "out": "Aggiungi gioco supportato"
+  },
   "bots.clientId": {
     "src": "Client ID",
     "out": "ID client"
@@ -2831,6 +2835,18 @@
     "src": "Secret rotation started but failed to refresh bot status.",
     "out": "Rotazione del segreto avviata, ma impossibile aggiornare lo stato del bot."
   },
+  "bots.errors.supportedDuplicate": {
+    "src": "This game and variant combination is already listed.",
+    "out": "Questa combinazione di gioco e variante è già presente nell'elenco."
+  },
+  "bots.errors.supportedMetaRequired": {
+    "src": "Choose a game to add.",
+    "out": "Seleziona un gioco da aggiungere."
+  },
+  "bots.errors.supportedVariantsInvalid": {
+    "src": "Fix the variant selection before adding this game.",
+    "out": "Correggi la selezione delle varianti prima di aggiungere questo gioco."
+  },
   "bots.errors.updateFailed": {
     "src": "Failed to update bot.",
     "out": "Aggiornamento del bot non riuscito."
@@ -2871,6 +2887,10 @@
     "src": "Display names cannot contain the robot emoji.",
     "out": "I nomi visualizzati non possono contenere l'emoji del robot."
   },
+  "bots.removeSupportedGame": {
+    "src": "Remove",
+    "out": "Rimuovi"
+  },
   "bots.rotateSecret": {
     "src": "Rotate secret",
     "out": "Ruota segreto"
@@ -2886,6 +2906,22 @@
   "bots.saving": {
     "src": "Saving…",
     "out": "Salvataggio in corso…"
+  },
+  "bots.supportedGames": {
+    "src": "Supported games",
+    "out": "Giochi supportati"
+  },
+  "bots.supportedGamesEmpty": {
+    "src": "No supported games listed.",
+    "out": "Nessun gioco supportato nell'elenco."
+  },
+  "bots.supportedGamesHelp": {
+    "src": "Games and variant combinations your bot accepts. An empty list means the bot does not declare any supported games.",
+    "out": "Le combinazioni di giochi e varianti accettate dal tuo bot. Un elenco vuoto indica che il bot non dichiara alcun gioco supportato."
+  },
+  "bots.supportedNoVariants": {
+    "src": "Default variants",
+    "out": "Varianti predefinite"
   },
   "bots.yesDelete": {
     "src": "Yes, delete it",
