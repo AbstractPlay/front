@@ -11,6 +11,8 @@ The front end is a static SPA deployed to S3 and served through CloudFront using
 
 Defined in [`serverless.yml`](../serverless.yml).
 
+Billable AWS resources for the play site use `ap:service=apfront` and `ap:stage` (`dev` / `prod`) for Cost Explorer. Activate those keys once per account under **Billing → Cost allocation tags**. S3 bucket tags are applied on `serverless client deploy`; CloudFront distribution tags are applied by [`bin/sync-cloudfront-csp.mjs`](../bin/sync-cloudfront-csp.mjs) (runs after each deploy in CI).
+
 ## Build commands
 
 | Command | Effect |

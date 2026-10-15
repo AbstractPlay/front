@@ -11,6 +11,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Added
 
+- **Ops:** `ap:service` and `ap:stage` cost-allocation tags on the `apfront` Serverless stack, play S3 buckets (via `serverless client deploy`), and CloudFront distributions (via CSP sync).
 - **Bots:** edit bot screen lists supported games and variant combinations; add or remove entries and save via `update_bot`.
 - **Rules PDF mirrors:** link to hosted rules PDFs (when available) on game Summary and in the in-play game info (i) dialog, via shared `MetaGameLinks`.
 - **Feedback:** attach SVG and Markdown (`.md`) files on bug reports, features, and comments (with PNG/JPEG/WebP, `.txt`, and `.json`).

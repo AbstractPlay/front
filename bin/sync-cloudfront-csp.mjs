@@ -10,6 +10,7 @@ import { writeFileSync, unlinkSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
 import { CONTENT_SECURITY_POLICY } from "../csp-policy.mjs";
+import { apCostAllocationTagItems } from "./apCostAllocationTags.mjs";
 
 const STAGE_CONFIG = {
   dev: {
@@ -65,7 +66,54 @@ function findDistributionForDomain(domain, profile) {
       `Distribution ${match.Id} (${domain}) has no ResponseHeadersPolicyId`
     );
   }
-  return { distributionId: match.Id, policyId, domain };
+  const arn = match.ARN;
+  if (!arn) {
+    throw new Error(
+      `Distribution ${match.Id} (${domain}) has no ARN (upgrade AWS CLI?)`
+    );
+  }
+  return { distributionId: match.Id, policyId, domain, distributionArn: arn };
+}
+
+function ensureDistributionCostTags(distributionArn, stage, profile, dryRun) {
+  const desired = apCostAllocationTagItems(stage);
+  const { Tags } = awsJson(
+    ["cloudfront", "list-tags-for-resource", "--resource", distributionArn],
+    profile
+  );
+  const existing = new Map(
+    (Tags?.Items ?? []).map((t) => [t.Key, t.Value])
+  );
+  const needsUpdate = desired.some(
+    (t) => existing.get(t.Key) !== t.Value
+  );
+  if (!needsUpdate) {
+    return;
+  }
+  if (dryRun) {
+    console.log(
+      `Dry run — would tag ${distributionArn} with`,
+      desired.map((t) => `${t.Key}=${t.Value}`).join(", ")
+    );
+    return;
+  }
+  const tagItems = desired
+    .map((t) => `{Key=${t.Key},Value=${t.Value}}`)
+    .join(",");
+  aws(
+    [
+      "cloudfront",
+      "tag-resource",
+      "--resource",
+      distributionArn,
+      "--tags",
+      `Items=[${tagItems}]`,
+    ],
+    profile
+  );
+  console.log(
+    `Tagged CloudFront distribution (${desired.map((t) => `${t.Key}=${t.Value}`).join(", ")})`
+  );
 }
 
 function securityHeadersForUpdate(existingSecurity, csp) {
@@ -114,7 +162,11 @@ function buildUpdatedPolicyConfig(existing, csp) {
 function main() {
   const { stage, dryRun } = parseArgs();
   const { domain, profile } = STAGE_CONFIG[stage];
-  const { distributionId, policyId } = findDistributionForDomain(domain, profile);
+  const { distributionId, policyId, distributionArn } = findDistributionForDomain(
+    domain,
+    profile
+  );
+  ensureDistributionCostTags(distributionArn, stage, profile, dryRun);
   const existing = awsJson(
     ["cloudfront", "get-response-headers-policy", "--id", policyId],
     profile

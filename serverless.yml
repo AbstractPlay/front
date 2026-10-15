@@ -34,8 +34,19 @@ provider:
   runtime: nodejs14.x
   region: us-east-1
   profile: ${param:profile}
+  stackTags:
+    ap:service: ${self:service}
+    ap:stage: ${self:provider.stage}
+  tags:
+    ap:service: ${self:service}
+    ap:stage: ${self:provider.stage}
 
 custom:
+  # AWS Billing → Cost allocation tags (activate ap:service and ap:stage once per account).
+  apCostAllocationTags:
+    ap:service: ${self:service}
+    ap:stage: ${self:provider.stage}
+
   rootName: abstract-play-${self:provider.stage}
   stage: ${self:provider.stage}
   region: ${opt:region, self:provider.region}
@@ -45,6 +56,7 @@ custom:
   client:
     bucketName: ${self:custom.rootName}
     distributionFolder: build
+    tags: ${self:custom.apCostAllocationTags}
 
     objectHeaders:
       # Cache-bustable assets (fingerprinted)
