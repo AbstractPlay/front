@@ -1219,6 +1219,10 @@
     "src": "Site announcements",
     "out": "Anuncios del sitio"
   },
+  "InAppNotifyLabel-bots": {
+    "src": "Bot alerts",
+    "out": "Alertas de bots"
+  },
   "InAppNotifyLabel-challenges": {
     "src": "Challenges",
     "out": "Desafíos"
@@ -5334,6 +5338,14 @@
   "me.notifications.dismiss": {
     "src": "Dismiss",
     "out": "Descartar"
+  },
+  "me.notifications.message.botMoveFailed": {
+    "src": "{{botName}} could not submit a valid move in <gameLink>{{metaGame}}</gameLink>{{detailSuffix}}",
+    "out": "{{botName}} no pudo enviar un movimiento válido en <gameLink>{{metaGame}}</gameLink>{{detailSuffix}}"
+  },
+  "me.notifications.message.botOwnerPing": {
+    "src": "Message from your bot {{botName}}{{gameSuffix}}: {{message}}",
+    "out": "Mensaje de tu bot {{botName}}{{gameSuffix}}: {{message}}"
   },
   "me.notifications.message.challengeDeclined": {
     "src": "{{declinerName}} declined your <gameLink>{{metaGame}}</gameLink> challenge",

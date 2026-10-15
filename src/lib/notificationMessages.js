@@ -245,6 +245,47 @@ export function NotificationMessage({ body }) {
           {variantsSuffix(body.metaGame, body.variants)}
         </>
       );
+    case "botMoveFailed":
+      return (
+        <>
+          <Trans
+            i18nKey="me.notifications.message.botMoveFailed"
+            values={{
+              botName: body.botName,
+              metaGame,
+              detailSuffix: body.detail ? ` (${body.detail})` : "",
+            }}
+            components={{
+              gameLink: <Link to={`/move/${body.metaGame}/0/${body.gameId}`} />,
+            }}
+          />
+          {variantsSuffix(body.metaGame, body.variants)}
+        </>
+      );
+    case "botOwnerPing":
+      return (
+        <>
+          <Trans
+            i18nKey="me.notifications.message.botOwnerPing"
+            values={{
+              botName: body.botName,
+              message: body.message,
+              gameSuffix:
+                body.gameId && body.metaGame
+                  ? ` (${metaGameLabel(body.metaGame)})`
+                  : "",
+            }}
+          />
+          {body.gameId && body.metaGame ? (
+            <>
+              {" "}
+              <Link to={`/move/${body.metaGame}/0/${body.gameId}`}>
+                {i18n.t("me.notifications.viewGame", { defaultValue: "View game" })}
+              </Link>
+            </>
+          ) : null}
+        </>
+      );
     case "feedbackReply":
       return (
         <Trans
