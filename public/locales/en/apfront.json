@@ -957,6 +957,20 @@
   "YourChallenges": "Your challenges",
   "YourGames": "Your games",
   "YourTournaments": "Your tournaments",
+  "Dashboard": {
+    "layoutMode": "Dashboard layout",
+    "sectionTabs": "Dashboard sections",
+    "layout": {
+      "vertical": "Vertical",
+      "tabbed": "Tabbed"
+    },
+    "tab": {
+      "games": "Games",
+      "tournaments": "Tournaments",
+      "challenges": "Challenges",
+      "admin": "Admin"
+    }
+  },
   "YourMove": "Your move",
   "EnableZoom": "Enable zoom",
   "IssueChallengeLabel": "Issue Challenge",
