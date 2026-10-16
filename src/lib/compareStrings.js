@@ -37,3 +37,22 @@ export function stringColumnSortingFn(locale) {
   return (rowA, rowB, columnID) =>
     compareStrings(rowA.getValue(columnID), rowB.getValue(columnID), locale);
 }
+
+/** Sort key for a column of `{ name?: string }[]` (empty or missing → ""). */
+export function firstNamedSortKey(list) {
+  const first = Array.isArray(list) ? list[0] : undefined;
+  return first?.name ?? "";
+}
+
+/**
+ * TanStack Table sortingFn for opponent/challengee columns backed by a user list.
+ * @param {string} locale
+ */
+export function firstNamedListSortingFn(locale) {
+  return (rowA, rowB, columnID) =>
+    compareStrings(
+      firstNamedSortKey(rowA.getValue(columnID)),
+      firstNamedSortKey(rowB.getValue(columnID)),
+      locale,
+    );
+}

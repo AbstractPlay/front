@@ -18,7 +18,10 @@ import ActivityMarker from "../ActivityMarker";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
-import { compareStrings } from "../../lib/compareStrings";
+import {
+  compareStrings,
+  firstNamedListSortingFn,
+} from "../../lib/compareStrings";
 import { isHighlighted, toggleHighlight } from "../../lib/playerGameMarks";
 import { queryMatchesHaystack } from "../../lib/searchQuery";
 import { toast } from "react-toastify";
@@ -235,13 +238,7 @@ function History({ handleChallenge }) {
                       ),
                     null
                   ),
-              sortingFn: (rowA, rowB, columnID) => {
-                return compareStrings(
-                  rowA.getValue(columnID)[0].name,
-                  rowB.getValue(columnID)[0].name,
-                  i18n.language
-                );
-              },
+              sortingFn: firstNamedListSortingFn(i18n.language),
               filterFn: (row, colId, val) =>
                 queryMatchesHaystack(
                   val,

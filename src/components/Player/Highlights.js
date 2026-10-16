@@ -15,7 +15,7 @@ import { API_ENDPOINT_OPEN } from "../../config";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
-import { compareStrings } from "../../lib/compareStrings";
+import { firstNamedListSortingFn } from "../../lib/compareStrings";
 import { unhighlightGame } from "../../lib/playerGameMarks";
 import { toast } from "react-toastify";
 import LocalizedTimeAgo from "../LocalizedTimeAgo";
@@ -85,11 +85,7 @@ function HighlightsTable({
                 ),
               null
             ),
-        sortingFn: (rowA, rowB, columnID) => {
-          const nameA = rowA.getValue(columnID)[0]?.name ?? "";
-          const nameB = rowB.getValue(columnID)[0]?.name ?? "";
-          return compareStrings(nameA, nameB, i18n.language);
-        },
+        sortingFn: firstNamedListSortingFn(i18n.language),
       }),
       ...(SHOW_HIGHLIGHTS_END_DATE
         ? [

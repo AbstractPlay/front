@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { compareStrings, stringColumnSortingFn } from "./compareStrings";
+import {
+  compareStrings,
+  firstNamedListSortingFn,
+  firstNamedSortKey,
+  stringColumnSortingFn,
+} from "./compareStrings";
 
 describe("compareStrings", () => {
   it("sorts Esperanto words with eo collation rules", () => {
@@ -64,5 +69,29 @@ describe("stringColumnSortingFn", () => {
     const sortingFn = stringColumnSortingFn("eo");
     expect(sortingFn(row(null), row("a"), "c")).toBeLessThan(0);
     expect(sortingFn(row("a"), row(undefined), "c")).toBeGreaterThan(0);
+  });
+});
+
+describe("firstNamedSortKey", () => {
+  it("returns the first name or empty string", () => {
+    expect(firstNamedSortKey([{ name: "Ada" }, { name: "Bob" }])).toBe("Ada");
+    expect(firstNamedSortKey([])).toBe("");
+    expect(firstNamedSortKey(undefined)).toBe("");
+    expect(firstNamedSortKey([{ id: "x" }])).toBe("");
+  });
+});
+
+describe("firstNamedListSortingFn", () => {
+  const row = (value) => ({ getValue: () => value });
+
+  it("sorts by first opponent name and tolerates empty lists", () => {
+    const sortingFn = firstNamedListSortingFn("en");
+    expect(
+      sortingFn(row([{ name: "Zed" }]), row([{ name: "Ann" }]), "opponents"),
+    ).toBeGreaterThan(0);
+    expect(
+      sortingFn(row([]), row([{ name: "Ann" }]), "opponents"),
+    ).toBeLessThan(0);
+    expect(sortingFn(row([]), row([]), "opponents")).toBe(0);
   });
 });

@@ -13,13 +13,17 @@ const SUPPORTED_LANGUAGES = JSON.parse(
 
 const FRONT_LOCALES = path.join(ROOT, "public", "locales");
 const BUNDLE_LOCALES_EN = path.join(ROOT, "src", "locales", "en");
-const GAMESLIB_LOCALES = path.join(
+const siblingGameslibLocales = path.join(ROOT, "..", "gameslib", "locales");
+const nodeGameslibLocales = path.join(
   ROOT,
   "node_modules",
   "@abstractplay",
   "gameslib",
   "locales",
 );
+const GAMESLIB_LOCALES = fs.existsSync(siblingGameslibLocales)
+  ? siblingGameslibLocales
+  : nodeGameslibLocales;
 
 const BUNDLED_EN_NAMESPACES = ["apfront", "apgames", "apresults"];
 const TIME_AGO_LOCALE_DIR = path.join(
@@ -138,6 +142,8 @@ function syncBundledEnglish() {
 
 fs.mkdirSync(FRONT_LOCALES, { recursive: true });
 copyLocaleTree(GAMESLIB_LOCALES, ["apgames", "apresults"]);
-console.log("Synced gameslib locale files into public/locales");
+console.log(
+  `Synced gameslib locale files into public/locales (from ${path.relative(ROOT, GAMESLIB_LOCALES)})`,
+);
 syncBundledEnglish();
 syncTimeAgoLocaleData();
