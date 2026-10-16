@@ -18,7 +18,7 @@ import BotAwareName from "../Bots/BotAwareName";
 import { minOpponentOnClockRemainingMs } from "../../lib/gameClockDisplay";
 import { useTranslation } from "react-i18next";
 import {
-  compareStrings,
+  firstNamedListSortingFn,
   stringColumnSortingFn,
 } from "../../lib/compareStrings";
 
@@ -153,11 +153,7 @@ function TheirTurnTable(props) {
             ) : null}
           </>
         ),
-        sortingFn: (rowA, rowB, columnID) => {
-          const nameA = rowA.getValue(columnID)[0].name;
-          const nameB = rowB.getValue(columnID)[0].name;
-          return compareStrings(nameA, nameB, i18n.language);
-        },
+        sortingFn: firstNamedListSortingFn(i18n.language),
       }),
       columnHelper.accessor("gameStarted", {
         header: t("tables.started"),

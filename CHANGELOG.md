@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0.0-beta`. Production and dev deploys stamp `1.0.0-ci-<GitHub Actions run id>.0` during the workflow (see `.github/workflows/deploy-prod.js.yml` and `deploy-dev.js.yml`). Entries below are grouped by theme and approximate ship window on **main** (what runs at abstractplay.com); they are not a per-commit log.
 
-## [1.0.0-ci] - 2026-10-15
+## [1.0.0-ci] - 2026-10-16
 
 ### Added
 
@@ -34,6 +34,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Dashboard:** sorting “Challenged” / opponent columns no longer crashes when a row has no named invitees (e.g. partially filled standing challenges with empty `challengees`).
 - **Deploy:** S3 cost-allocation tagging no longer uses serverless-finch `client.tags` (full `putBucketTagging` removed AWS system tags and failed with “System tags cannot be removed by requester”); tags are merged via `bin/apply-s3-cost-allocation-tags.mjs` after upload.
 - **Dashboard (opponent’s turn):** time remaining shows the shortest opponent clock for simultaneous games (after you have submitted for the round).
 - **Hex move-table integration tests:** use committed `hex-b058` replay fixture instead of live prod `get_game` (CI no longer flakes when that game advances).

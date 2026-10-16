@@ -15,7 +15,7 @@ import Spinner from "../Spinner";
 import ChallengeViewModal from "./ChallengeViewModal";
 import { useTranslation } from "react-i18next";
 import {
-  compareStrings,
+  firstNamedListSortingFn,
   stringColumnSortingFn,
 } from "../../lib/compareStrings";
 import { variantSelectionSortingFn } from "../../lib/variantTableSort";
@@ -122,13 +122,7 @@ function ChallengeTheyRespond({ challenges, fetching, handleChallengeRevoke }) {
                 ))
                 .reduce((prev, curr) => [prev, ", ", curr]),
         invertSorting: true,
-        sortingFn: (rowA, rowB, columnID) => {
-          return compareStrings(
-            rowA.original.challengees[0].name,
-            rowB.original.challengees[0].name,
-            i18n.language
-          );
-        },
+        sortingFn: firstNamedListSortingFn(i18n.language),
       }),
       columnHelper.accessor("accepted", {
         header: t("tables.accepted"),

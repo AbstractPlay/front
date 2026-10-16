@@ -19,7 +19,7 @@ import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
 import {
-  compareStrings,
+  firstNamedListSortingFn,
   stringColumnSortingFn,
 } from "../../lib/compareStrings";
 import { toast } from "react-toastify";
@@ -152,13 +152,7 @@ function WatchedGamesTable(props) {
                 ),
               null
             ),
-        sortingFn: (rowA, rowB, columnID) => {
-          const valA = rowA.getValue(columnID);
-          const valB = rowB.getValue(columnID);
-          const nameA = valA[0]?.name ?? "";
-          const nameB = valB[0]?.name ?? "";
-          return compareStrings(nameA, nameB, i18n.language);
-        },
+        sortingFn: firstNamedListSortingFn(i18n.language),
       }),
       columnHelper.accessor("completed", {
         header: t("tables.status"),
