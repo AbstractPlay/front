@@ -11,21 +11,18 @@ import Spinner from "./Spinner";
 import Modal from "./Modal";
 import ChallengeEntryModals from "./ChallengeEntryModals";
 import NewProfile from "./NewProfile";
-import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
+import { useStorageState } from "react-use-storage-state";
+import {
+  DASHBOARD_LAYOUT_VERTICAL,
+  isDashboardLayoutMode,
+} from "../lib/dashboardLayout";
 import { useChallengeResponse } from "../hooks/useChallengeResponse";
 import { fetchDashboard, fetchNotifications } from "../lib/globalMeBootstrap";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { cloneDeep } from "lodash";
-import WatchedGamesTable from "./Me/WatchedGamesTable";
-import MyTurnTable from "./Me/MyTurnTable";
-import TheirTurnTable from "./Me/TheirTurnTable";
-import StandingChallengeTable from "./Me/StandingChallengeTable";
 import StandingChallengeModal from "./StandingChallengeModal";
-import { toast } from "react-toastify";
-import ChallengeMeRespond from "./Me/ChallengeMeRespond";
-import ChallengeTheyRespond from "./Me/ChallengeTheyRespond";
-import ChallengeOpen from "./Me/ChallengeOpen";
+import DashboardMainContent from "./Me/DashboardMainContent";
 import { useStore } from "../stores";
 import { testBotStatus } from "./Bots/botApi";
 import { rawDirectoryDisplayName } from "./Bots/botUtils";
@@ -59,6 +56,13 @@ function Me(props) {
   const allUsers = useStore((state) => state.users);
   const [showNewProfileModal, showNewProfileModalSetter] = useState(false);
   const location = useLocation();
+  const [dashboardLayout, setDashboardLayout] = useStorageState(
+    "dashboard-layout-mode",
+    DASHBOARD_LAYOUT_VERTICAL
+  );
+  const layoutMode = isDashboardLayoutMode(dashboardLayout)
+    ? dashboardLayout
+    : DASHBOARD_LAYOUT_VERTICAL;
 
   const handleNewProfileClose = (cnt) => {
     showNewProfileModalSetter(false);
@@ -452,6 +456,9 @@ function Me(props) {
     ].filter((c) => c !== undefined && c !== null);
     const hasWatchedGames =
       Array.isArray(globalMe.watchedGames) && globalMe.watchedGames.length > 0;
+    const hasYourTournaments =
+      Array.isArray(globalMe.currentTournaments) &&
+      globalMe.currentTournaments.length > 0;
     const hasChallengesReceived =
       Array.isArray(globalMe.challengesReceived) &&
       globalMe.challengesReceived.length > 0;
@@ -478,190 +485,38 @@ function Me(props) {
             </button>
           </div>
         </h1>
-        {/* Your Games */}
-        <div className="columns">
-          <div className="column content is-half is-offset-one-quarter">
-            <p className="subtitle lined">
-              <span>{t("YourGames")}</span>
-            </p>
-            <div className="indentedContainer">
-              <div>
-                <p className="lined">
-                  <span>{t("YourMove")}</span>
-                </p>
-                <MyTurnTable games={myMove} fetching={fetching} />
-              </div>
-              <div className="topPad">
-                <p className="lined">
-                  <span>{t("OpponentMove")}</span>
-                </p>
-                <TheirTurnTable games={waiting} />
-              </div>
-              {hasWatchedGames ? (
-                <div className="topPad">
-                  <p className="lined">
-                    <span>{t("WatchedGames")}</span>
-                  </p>
-                  <p className="help">
-                    <em>{t("WatchedGamesHelp")}</em>
-                  </p>
-                  <WatchedGamesTable
-                    games={globalMe.watchedGames}
-                    setError={errorSetter}
-                  />
-                </div>
-              ) : null}
-            </div>
-          </div>
-        </div>
-        {/* Your Challenges */}
-        <div className="columns">
-          <div className="column content is-half is-offset-one-quarter">
-            <p className="subtitle lined">
-              <span>{t("YourChallenges")}</span>
-            </p>
-            <div id="challenged" className="indentedContainer">
-              {hasChallengesReceived ? (
-                <>
-                  <p className="lined">
-                    <span>{t("ChallengeResponse")}</span>
-                  </p>
-                  <div className="indentedContainer">
-                    <ChallengeMeRespond
-                      fetching={fetching}
-                      handleChallengeResponse={handleChallengeResponse.bind(
-                        this
-                      )}
-                    />
-                  </div>
-                </>
-              ) : null}
-              {hasChallengesAwaitingResponse ? (
-                <>
-                  <p className="lined">
-                    <span>{t("WaitingResponse")}</span>
-                  </p>
-                  <div className="indentedContainer">
-                    <ChallengeTheyRespond
-                      challenges={challengesResponded}
-                      handleChallengeRevoke={handleChallengeRevoke.bind(this)}
-                      fetching={fetching}
-                    />
-                  </div>
-                </>
-              ) : null}
-              {hasOpenChallenges ? (
-                <>
-                  <p className="lined">
-                    <span>{t("StandingChallenges2")}</span>
-                  </p>
-                  <div className="indentedContainer">
-                    <ChallengeOpen
-                      handleChallengeRevoke={handleChallengeRevoke.bind(this)}
-                      fetching={fetching}
-                    />
-                  </div>
-                </>
-              ) : null}
-              <div>
-                <p className="lined">
-                  <span>{t("NewRealStanding")}</span>
-                </p>
-                <StandingChallengeTable
-                  fetching={fetching}
-                  handleSuspend={handleStandingSuspend}
-                  handleDelete={handleStandingDelete}
-                />
-                <button
-                  style={{ marginBottom: "1em" }}
-                  className="button is-small apButton"
-                  onClick={() => handleNewStandingClick(myid)}
-                >
-                  {t("IssueStanding")}
-                </button>
-              </div>
-              <div>
-                <p className="lined">
-                  <span>{t("NewChallenge")}</span>
-                </p>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleNewChallengeClick(myid)}
-                >
-                  {t("IssueChallenge")}
-                </button>
-              </div>
-            </div>
-          </div>
-          {/* Admin functionality */}
-          {!globalMe || globalMe.admin !== true ? (
-            ""
-          ) : (
-            <div className="columns">
-              <div className="column content is-half is-offset-one-quarter">
-                <p className="lined">
-                  <span>Administration</span>
-                </p>
-                <div className="control">
-                  <input
-                    id="genericInput"
-                    type="text"
-                    value={genericInput}
-                    onChange={(e) => genericInputSetter(e.target.value)}
-                  />
-                </div>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleOneTimeFixClick()}
-                >
-                  One time fix
-                </button>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleFixGamesClick()}
-                >
-                  Fix user's games
-                </button>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleEndTournamentClick()}
-                >
-                  End Tournament
-                </button>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleDeleteGamesClick()}
-                >
-                  Delete games!
-                </button>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleTestPushClick()}
-                >
-                  Test push notifications
-                </button>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleTestBotStatusClick()}
-                >
-                  Test bot status
-                </button>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => toast("Toast test!")}
-                >
-                  Test toast
-                </button>
-                <button
-                  className="button is-small apButton"
-                  onClick={() => handleUpdateMetaGameCountsClick()}
-                >
-                  Update meta game counts
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        <DashboardMainContent
+          layout={layoutMode}
+          onLayoutChange={setDashboardLayout}
+          myMove={myMove}
+          waiting={waiting}
+          fetching={fetching}
+          globalMe={globalMe}
+          setError={errorSetter}
+          hasWatchedGames={hasWatchedGames}
+          hasYourTournaments={hasYourTournaments}
+          challengesResponded={challengesResponded}
+          hasChallengesReceived={hasChallengesReceived}
+          hasChallengesAwaitingResponse={hasChallengesAwaitingResponse}
+          hasOpenChallenges={hasOpenChallenges}
+          handleChallengeResponse={handleChallengeResponse}
+          handleChallengeRevoke={handleChallengeRevoke}
+          handleStandingSuspend={handleStandingSuspend}
+          handleStandingDelete={handleStandingDelete}
+          handleNewStandingClick={handleNewStandingClick}
+          handleNewChallengeClick={handleNewChallengeClick}
+          myid={myid}
+          isAdmin={globalMe.admin === true}
+          genericInput={genericInput}
+          onGenericInputChange={genericInputSetter}
+          onOneTimeFix={handleOneTimeFixClick}
+          onFixGames={handleFixGamesClick}
+          onEndTournament={handleEndTournamentClick}
+          onDeleteGames={handleDeleteGamesClick}
+          onTestPush={handleTestPushClick}
+          onTestBotStatus={handleTestBotStatusClick}
+          onUpdateMetaGameCounts={handleUpdateMetaGameCountsClick}
+        />
         <ChallengeEntryModals
           show={showNewChallengeModal}
           handleClose={handleNewChallengeClose}

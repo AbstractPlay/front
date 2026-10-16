@@ -1454,6 +1454,63 @@ abbr.glicko-hint {
   padding-bottom: 1em;
 }
 
+.dashboard-layout-toggle {
+  text-align: right;
+  margin-bottom: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--secondary-font-color);
+}
+
+.dashboard-layout-toggle-label {
+  margin-right: 0.25rem;
+}
+
+.dashboard-layout-option {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: inherit;
+  color: var(--secondary-font-color);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.dashboard-layout-option:hover,
+.dashboard-layout-option:focus-visible {
+  color: var(--main-font-color);
+}
+
+.dashboard-layout-option.is-active {
+  color: var(--main-font-color);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: default;
+}
+
+.dashboard-layout-sep {
+  margin: 0 0.2rem;
+  user-select: none;
+}
+
+.dashboard-tab-panel {
+  padding-top: 0.5rem;
+}
+
+.dashboard-section-tabs li.dashboard-tab-disabled .dashboard-tab-disabled-label {
+  display: block;
+  padding: 0.5em 1em;
+  color: var(--secondary-font-color);
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.dashboard-admin-panel .button {
+  margin-right: 0.35em;
+  margin-bottom: 0.35em;
+}
+
 /* Only the dashboard uses special bullet glyphs */
 #dashboard * ul {
   list-style: none;
