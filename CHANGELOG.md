@@ -34,6 +34,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Customize:** preferred player colour no longer remaps the renderer palette on `shared-pieces` games (e.g. Rincala scoring colours).
 - **Dashboard:** sorting “Challenged” / opponent columns no longer crashes when a row has no named invitees (e.g. partially filled standing challenges with empty `challengees`).
 - **Deploy:** S3 cost-allocation tagging no longer uses serverless-finch `client.tags` (full `putBucketTagging` removed AWS system tags and failed with “System tags cannot be removed by requester”); tags are merged via `bin/apply-s3-cost-allocation-tags.mjs` after upload.
 - **Dashboard (opponent’s turn):** time remaining shows the shortest opponent clock for simultaneous games (after you have submitted for the round).

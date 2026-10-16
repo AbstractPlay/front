@@ -1011,6 +1011,7 @@ function LabSession({
           globalMe: globalMeRef.current,
           engine: engineRef.current,
           numPlayers: gameRef.current?.players?.length,
+          sharedPieces: gameRef.current?.sharedPieces,
         });
         const { displayRep, renderSettings } = prepareBoardRender(
           r,

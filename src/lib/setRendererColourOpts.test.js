@@ -58,6 +58,25 @@ describe("setRendererColourOpts", () => {
     expect(options.coloursGlobal).toBe(true);
   });
 
+  it("skips preferred colour seat remap for shared-pieces games", () => {
+    const YELLOW = "#ffff99";
+    const options = {};
+    setRendererColourOpts({
+      options,
+      metaGame: "four",
+      isParticipant: 0,
+      context: {},
+      globalMe: {
+        customizations: {
+          _default: { preferredColour: YELLOW },
+        },
+      },
+      numPlayers: 2,
+    });
+    expect(options.colours?.[0]).toBe("#e31a1c");
+    expect(options.colours?.[3]).toBe(YELLOW);
+  });
+
   it("per-game preferred colour sets coloursGlobal false for custom-colours games", () => {
     const YELLOW = "#ffff99";
     const acityHints = [

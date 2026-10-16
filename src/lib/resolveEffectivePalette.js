@@ -1,7 +1,16 @@
+import { gameinfo } from "@abstractplay/gameslib";
 import {
   resolveCustomizationScope,
   resolvePreferredColour,
 } from "./resolveEffectiveCustomization.js";
+
+function gameUsesSharedPieces(metaGame, sharedPieces) {
+  if (sharedPieces !== undefined) {
+    return sharedPieces;
+  }
+  const flags = gameinfo.get(metaGame)?.flags;
+  return Array.isArray(flags) && flags.includes("shared-pieces");
+}
 
 const PALETTE_SIZE = 12;
 
@@ -169,6 +178,7 @@ export function resolveEffectivePalette({
   engine,
   numPlayers,
   customizationHints = [],
+  sharedPieces,
 }) {
   const scope = resolveCustomizationScope(globalMe, metaGame);
   const preferredColour = resolvePreferredColour(globalMe, metaGame);
@@ -186,6 +196,10 @@ export function resolveEffectivePalette({
   effective = backfillDefaultPalette(effective);
 
   if (!preferredColour || isParticipant < 0) {
+    return effective;
+  }
+
+  if (gameUsesSharedPieces(metaGame, sharedPieces)) {
     return effective;
   }
 

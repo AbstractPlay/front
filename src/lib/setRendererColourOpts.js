@@ -11,6 +11,7 @@ export const setRendererColourOpts = ({
   engine,
   numPlayers,
   customizationHints = gameinfo.get(metaGame)?.customizations,
+  sharedPieces,
 }) => {
   options.colourContext = context;
   let optioncolours = [];
@@ -33,6 +34,7 @@ export const setRendererColourOpts = ({
       engine,
       numPlayers,
       customizationHints,
+      sharedPieces,
     });
     if (effective) {
       optioncolours = effective;
