@@ -2359,6 +2359,10 @@
     "src": "Your move",
     "out": "La tua mossa"
   },
+  "YourTournaments": {
+    "src": "Your tournaments",
+    "out": "I tuoi tornei"
+  },
   "a11y.activePlayers": {
     "src": "Number of active players",
     "out": "Numero di giocatori attivi"

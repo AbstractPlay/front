@@ -18,6 +18,7 @@ import { fetchDashboard, fetchNotifications } from "../lib/globalMeBootstrap";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { cloneDeep } from "lodash";
 import WatchedGamesTable from "./Me/WatchedGamesTable";
+import YourTournamentsTable from "./Me/YourTournamentsTable";
 import MyTurnTable from "./Me/MyTurnTable";
 import TheirTurnTable from "./Me/TheirTurnTable";
 import StandingChallengeTable from "./Me/StandingChallengeTable";
@@ -452,6 +453,9 @@ function Me(props) {
     ].filter((c) => c !== undefined && c !== null);
     const hasWatchedGames =
       Array.isArray(globalMe.watchedGames) && globalMe.watchedGames.length > 0;
+    const hasYourTournaments =
+      Array.isArray(globalMe.currentTournaments) &&
+      globalMe.currentTournaments.length > 0;
     const hasChallengesReceived =
       Array.isArray(globalMe.challengesReceived) &&
       globalMe.challengesReceived.length > 0;
@@ -514,6 +518,20 @@ function Me(props) {
             </div>
           </div>
         </div>
+        {hasYourTournaments ? (
+          <div className="columns">
+            <div className="column content is-half is-offset-one-quarter">
+              <p className="subtitle lined">
+                <span>{t("YourTournaments")}</span>
+              </p>
+              <div className="indentedContainer">
+                <YourTournamentsTable
+                  tournaments={globalMe.currentTournaments}
+                />
+              </div>
+            </div>
+          </div>
+        ) : null}
         {/* Your Challenges */}
         <div className="columns">
           <div className="column content is-half is-offset-one-quarter">

@@ -2359,6 +2359,10 @@
     "src": "Your move",
     "out": "Du bist am Zug"
   },
+  "YourTournaments": {
+    "src": "Your tournaments",
+    "out": "Deine Turniere"
+  },
   "a11y.activePlayers": {
     "src": "Number of active players",
     "out": "Anzahl aktiver Spieler"

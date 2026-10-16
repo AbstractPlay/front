@@ -26,6 +26,7 @@ The dashboard response drives:
 - Standing challenges
 - Completed games (post-game chat via in-app notifications; browse older games on per-metaGame list pages)
 - Watched games
+- In-progress automated tournaments you are assigned to (`currentTournaments` from `me_dashboard`; backed by backend `TOURNAMENTBYUSER#` index)
 - Bot status (via [`botApi.js`](../src/components/Bots/botApi.js))
 
 Partial data may already be in Zustand `globalMe` from navbar login; `fetchDashboard` merges into `globalMe` with `{ ...prev, ...dashboard }`. In-app notifications are **not** part of the dashboard payload — [`Me.js`](../src/components/Me.js) calls [`fetchNotifications()`](../src/lib/globalMeBootstrap.js) in parallel when loading the dashboard.
@@ -39,6 +40,7 @@ Backend: [Auth queries — Profile and dashboard](/backend/api/auth-queries/) (`
 | [`MyTurnTable.js`](../src/components/Me/MyTurnTable.js) | Games where it is the user's turn |
 | [`TheirTurnTable.js`](../src/components/Me/TheirTurnTable.js) | Games waiting on opponent |
 | [`WatchedGamesTable.js`](../src/components/Me/WatchedGamesTable.js) | Spectated games (persistent watch list) |
+| [`YourTournamentsTable.js`](../src/components/Me/YourTournamentsTable.js) | Ongoing tournaments you are in (same columns as `/tournaments/current`; hidden when empty) |
 | [`StandingChallengeTable.js`](../src/components/Me/StandingChallengeTable.js) | Active standing challenges |
 
 ### In-app notifications
