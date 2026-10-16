@@ -1732,6 +1732,7 @@ export function useGameMoveSession(props) {
         globalMe: globalMeRef.current,
         engine: engineRef.current,
         numPlayers: currentGame?.players?.length,
+        sharedPieces: currentGame?.sharedPieces,
       });
       const canExplore = focusRef.current?.canExplore;
       if (canExplore) {

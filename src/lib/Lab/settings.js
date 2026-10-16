@@ -93,6 +93,7 @@ export function setupColors(settings, game, globalMe, colourContext, node) {
     globalMe,
     engine,
     numPlayers: game.players?.length,
+    sharedPieces: game.sharedPieces,
   });
   game.colors = game.players.map((p, i) => {
     if (game.sharedPieces) {

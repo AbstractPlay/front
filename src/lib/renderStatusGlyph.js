@@ -83,6 +83,7 @@ export function buildStatusGlyphRenderOptions({
     globalMe,
     engine,
     numPlayers: game.players?.length,
+    sharedPieces: game.sharedPieces,
   });
   setGlyphMapOpt({
     options,

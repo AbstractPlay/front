@@ -273,6 +273,20 @@ describe("resolveEffectivePalette", () => {
     expect(result.slice(0, 3)).toEqual([BLUE, RED, GREEN]);
   });
 
+  it("shared-pieces: preferred colour does not remap palette by seat", () => {
+    const YELLOW = "#ffff99";
+    const result = resolveEffectivePalette({
+      globalMe: globalMeWith({
+        _default: { preferredColour: YELLOW },
+      }),
+      metaGame: "four",
+      isParticipant: 0,
+      numPlayers: 2,
+    });
+    expect(result?.[0]).toBe(RED);
+    expect(result?.[3]).toBe(YELLOW);
+  });
+
   it("7: per-game preferredColour overrides _default", () => {
     const result = resolveEffectivePalette({
       globalMe: globalMeWith({
