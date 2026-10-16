@@ -957,6 +957,20 @@
   "YourChallenges": "Le tue sfide",
   "YourGames": "Le tue partite",
   "YourTournaments": "I tuoi tornei",
+  "Dashboard": {
+    "layoutMode": "Layout della dashboard",
+    "sectionTabs": "Sezioni della dashboard",
+    "layout": {
+      "vertical": "Verticale",
+      "tabbed": "A schede"
+    },
+    "tab": {
+      "games": "Partite",
+      "tournaments": "Tornei",
+      "challenges": "Sfide",
+      "admin": "Admin"
+    }
+  },
   "YourMove": "La tua mossa",
   "EnableZoom": "Abilita zoom",
   "IssueChallengeLabel": "Lancia una sfida",

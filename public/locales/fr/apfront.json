@@ -957,6 +957,20 @@
   "YourChallenges": "Vos défis",
   "YourGames": "Vos parties",
   "YourTournaments": "Vos tournois",
+  "Dashboard": {
+    "layoutMode": "Disposition du tableau de bord",
+    "sectionTabs": "Sections du tableau de bord",
+    "layout": {
+      "vertical": "Vertical",
+      "tabbed": "Par onglets"
+    },
+    "tab": {
+      "games": "Parties",
+      "tournaments": "Tournois",
+      "challenges": "Défis",
+      "admin": "Admin"
+    }
+  },
   "YourMove": "Votre tour",
   "EnableZoom": "Activer le zoom",
   "IssueChallengeLabel": "Lancer un défi",
