@@ -75,6 +75,18 @@ describe("customizeRenderSettings", () => {
     expect(uiHigh.labelScale).to.equal(5);
   });
 
+  it("includes render.options in built blob when checkboxes are set", () => {
+    expect(
+      buildRenderCustomization({
+        boardStyle: "",
+        strokeWeight: "",
+        labelScale: 1,
+        renderOptions: ["hide-labels-half"],
+        glyphMap: [],
+      }),
+    ).to.deep.equal({ options: ["hide-labels-half"] });
+  });
+
   it("hydrates options from preview rep when not saved", () => {
     const ui = renderUiStateFromSettings(
       { glyphmap: [] },
