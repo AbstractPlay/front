@@ -139,6 +139,7 @@ function History({ handleChallenge }) {
             opponents,
             winner,
             dateEnd: new Date(rec.header["date-end"]).getTime(),
+            numMoves: Array.isArray(rec.moves) ? rec.moves.length : undefined,
           };
         })
         .sort((a, b) => b.dateEnd - a.dateEnd),
@@ -208,6 +209,14 @@ function History({ handleChallenge }) {
             columnHelper.accessor("dateEnd", {
               header: t("tables.endDate"),
               cell: (props) => formatter.format(props.getValue()),
+              enableGlobalFilter: false,
+            }),
+            columnHelper.accessor("numMoves", {
+              header: t("tables.numMoves"),
+              cell: (props) => {
+                const value = props.getValue();
+                return value === undefined ? "" : value;
+              },
               enableGlobalFilter: false,
             }),
             columnHelper.accessor("opponents", {
