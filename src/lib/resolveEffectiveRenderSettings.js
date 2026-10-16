@@ -103,6 +103,8 @@ export function resolveEffectiveRenderSettings(globalMe, metaGame, rep) {
     if (!result.ok) {
       options = null;
     }
+  } else if (Array.isArray(options) && options.length === 0) {
+    options = null;
   }
 
   return { board, glyphmap, options };

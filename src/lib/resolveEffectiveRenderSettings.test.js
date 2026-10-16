@@ -77,6 +77,22 @@ describe("resolveEffectiveRenderSettings", () => {
     expect(rs.options).to.deep.equal(["hide-labels"]);
   });
 
+  it("does not inherit _default render.options when per-game has no render", () => {
+    const globalMe = {
+      customizations: {
+        _default: {
+          render: { options: ["hide-labels-half"] },
+        },
+        akimbo: {
+          colourContext: { background: "#000", board: "#fff" },
+          palette: ["#000", "#fff"],
+        },
+      },
+    };
+    const rs = resolveEffectiveRenderSettings(globalMe, "akimbo", goRep);
+    expect(rs.options).to.equal(null);
+  });
+
   it("keeps labelScale on pegboard and drops style override", () => {
     const pegRep = {
       board: { style: "pegboard", width: 4, height: 4 },
