@@ -407,6 +407,38 @@
     "src": "Cycle board display",
     "out": "Brettanzeige umschalten"
   },
+  "Dashboard.layout.tabbed": {
+    "src": "Tabbed",
+    "out": "Tab-basiert"
+  },
+  "Dashboard.layout.vertical": {
+    "src": "Vertical",
+    "out": "Vertikal"
+  },
+  "Dashboard.layoutMode": {
+    "src": "Dashboard layout",
+    "out": "Dashboard-Layout"
+  },
+  "Dashboard.sectionTabs": {
+    "src": "Dashboard sections",
+    "out": "Dashboard-Bereiche"
+  },
+  "Dashboard.tab.admin": {
+    "src": "Admin",
+    "out": "Admin"
+  },
+  "Dashboard.tab.challenges": {
+    "src": "Challenges",
+    "out": "Herausforderungen"
+  },
+  "Dashboard.tab.games": {
+    "src": "Games",
+    "out": "Spiele"
+  },
+  "Dashboard.tab.tournaments": {
+    "src": "Tournaments",
+    "out": "Turniere"
+  },
   "Date": {
     "src": "Date",
     "out": "Datum"

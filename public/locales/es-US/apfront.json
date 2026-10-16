@@ -957,6 +957,20 @@
   "YourChallenges": "Tus desafíos",
   "YourGames": "Tus partidas",
   "YourTournaments": "Tus torneos",
+  "Dashboard": {
+    "layoutMode": "Diseño del panel",
+    "sectionTabs": "Secciones del panel",
+    "layout": {
+      "vertical": "Vertical",
+      "tabbed": "Con pestañas"
+    },
+    "tab": {
+      "games": "Partidas",
+      "tournaments": "Torneos",
+      "challenges": "Desafíos",
+      "admin": "Administración"
+    }
+  },
   "YourMove": "Tu turno",
   "EnableZoom": "Habilitar zoom",
   "IssueChallengeLabel": "Enviar desafío",

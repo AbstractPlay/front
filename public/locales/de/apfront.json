@@ -957,6 +957,20 @@
   "YourChallenges": "Deine Herausforderungen",
   "YourGames": "Deine Spiele",
   "YourTournaments": "Deine Turniere",
+  "Dashboard": {
+    "layoutMode": "Dashboard-Layout",
+    "sectionTabs": "Dashboard-Bereiche",
+    "layout": {
+      "vertical": "Vertikal",
+      "tabbed": "Tab-basiert"
+    },
+    "tab": {
+      "games": "Spiele",
+      "tournaments": "Turniere",
+      "challenges": "Herausforderungen",
+      "admin": "Admin"
+    }
+  },
   "YourMove": "Du bist am Zug",
   "EnableZoom": "Zoom aktivieren",
   "IssueChallengeLabel": "Herausforderung aussprechen",
