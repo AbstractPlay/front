@@ -28,6 +28,7 @@ import { useStore } from "../../stores";
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 import { buildEngineMoveResults } from "../engineMoveResults";
 import { buildRenderDisplayOpts } from "../displaySettings.js";
+import { stackExpandingForRender } from "../renderOutput.js";
 import { buildGameMoveRenderExtras } from "./renderExtras.js";
 import {
   applyLivePartialPreview,
@@ -193,9 +194,11 @@ export function syncPlayRenderToFocus(
   );
   renderrepSetter(render);
 
-  const rep = Array.isArray(render) ? render[render.length - 1] : render;
-  game.stackExpanding =
-    !!game.stackExpanding && rep?.renderer === "stacking-expanding";
+  game.stackExpanding = stackExpandingForRender(
+    game.metaGame,
+    engine,
+    render,
+  );
 
   if (loadMoves && focus.canExplore && !game.noMoves) {
     if (game.simultaneous) {

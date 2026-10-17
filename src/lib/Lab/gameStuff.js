@@ -23,6 +23,7 @@ import { resolveRenderLabels, setStatus } from "./misc";
 import { GameNode } from "../../components/Lab/GameTree";
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 import { useStore } from "../../stores";
+import { stackExpandingForRender } from "../renderOutput.js";
 import { LAB_ME } from "./buildGame";
 import { cloneDeep } from "lodash";
 import { toast } from "react-toastify";
@@ -326,8 +327,11 @@ export function updateLabDisplay({
     hiddenViewMode,
     seat
   );
-  game.stackExpanding =
-    game.stackExpanding && render.renderer === "stacking-expanding";
+  game.stackExpanding = stackExpandingForRender(
+    game.metaGame,
+    viewEngine,
+    render,
+  );
   renderrepSetter(render);
   setStatus(viewEngine, game, partial, partialMove, statusRef.current);
 }

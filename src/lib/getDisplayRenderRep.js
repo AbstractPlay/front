@@ -9,6 +9,7 @@ import {
   isBoardStyleSwappable,
 } from "./boardRepShape.js";
 import { resolveEffectiveRenderSettings } from "./resolveEffectiveRenderSettings.js";
+import { isCompositeRenderRep } from "./renderOutput.js";
 
 /**
  * @param {Record<string, unknown>} board
@@ -47,6 +48,15 @@ function boardChromePatchForRep(board, rawRep) {
 export function getDisplayRenderRep(rawRep, renderSettings) {
   if (rawRep == null) {
     return rawRep;
+  }
+  if (isCompositeRenderRep(rawRep)) {
+    return {
+      ...rawRep,
+      panels: rawRep.panels.map((panel) => ({
+        ...panel,
+        render: getDisplayRenderRep(panel.render, renderSettings),
+      })),
+    };
   }
   if (Array.isArray(rawRep)) {
     return rawRep.map((r) => getDisplayRenderRep(r, renderSettings));
@@ -90,6 +100,22 @@ export function getDisplayRenderRep(rawRep, renderSettings) {
 export function resolveDisplayRenderRep(rawRep, globalMe, metaGame) {
   if (rawRep == null) {
     return rawRep;
+  }
+  if (isCompositeRenderRep(rawRep)) {
+    return {
+      ...rawRep,
+      panels: rawRep.panels.map((panel) => {
+        const settings = resolveEffectiveRenderSettings(
+          globalMe,
+          metaGame,
+          panel.render,
+        );
+        return {
+          ...panel,
+          render: getDisplayRenderRep(panel.render, settings),
+        };
+      }),
+    };
   }
   if (Array.isArray(rawRep)) {
     return rawRep.map((r) => {
