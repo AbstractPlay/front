@@ -4855,6 +4855,10 @@
     "src": "Full move history",
     "out": "Historial completo de movimientos"
   },
+  "gameMove.layout.goToPly": {
+    "src": "Go to ply {{n}}",
+    "out": "Ir a la jugada {{n}}"
+  },
   "gameMove.layout.hideEventLog": {
     "src": "Hide event log",
     "out": "Ocultar registro de eventos"
@@ -5502,6 +5506,10 @@
   "me.notifications.title": {
     "src": "Notifications",
     "out": "Notificaciones"
+  },
+  "meta.dateAdded": {
+    "src": "Added {{date}}",
+    "out": "Agregado el {{date}}"
   },
   "meta.gameStatistics": {
     "src": "Game statistics",

@@ -4855,6 +4855,10 @@
     "src": "Full move history",
     "out": "Historique complet des coups"
   },
+  "gameMove.layout.goToPly": {
+    "src": "Go to ply {{n}}",
+    "out": "Aller au demi-coup {{n}}"
+  },
   "gameMove.layout.hideEventLog": {
     "src": "Hide event log",
     "out": "Masquer le journal d'événements"
@@ -5502,6 +5506,10 @@
   "me.notifications.title": {
     "src": "Notifications",
     "out": "Notifications"
+  },
+  "meta.dateAdded": {
+    "src": "Added {{date}}",
+    "out": "Ajouté le {{date}}"
   },
   "meta.gameStatistics": {
     "src": "Game statistics",

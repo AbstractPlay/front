@@ -4855,6 +4855,10 @@
     "src": "Full move history",
     "out": "Vollständiger Zugverlauf"
   },
+  "gameMove.layout.goToPly": {
+    "src": "Go to ply {{n}}",
+    "out": "Gehe zu Halbzug {{n}}"
+  },
   "gameMove.layout.hideEventLog": {
     "src": "Hide event log",
     "out": "Ereignisprotokoll ausblenden"
@@ -5502,6 +5506,10 @@
   "me.notifications.title": {
     "src": "Notifications",
     "out": "Benachrichtigungen"
+  },
+  "meta.dateAdded": {
+    "src": "Added {{date}}",
+    "out": "Hinzugefügt am {{date}}"
   },
   "meta.gameStatistics": {
     "src": "Game statistics",
