@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { backfillManagedLocaleStamps } from "../../bin/translate.mjs";
+import { backfillManagedLocaleStamps } from "../../scripts/translate.mjs";
 
 function collectLeaves(obj, prefix = "") {
   const leaves = {};

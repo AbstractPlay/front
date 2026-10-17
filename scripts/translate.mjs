@@ -134,8 +134,8 @@ function formatApiErrorSummary(parsed) {
 function printResumeSummary() {
   const command =
     files.length > 0
-      ? `node bin/translate.mjs${debugFlag ? " --debug" : ""}${noWaitFlag ? " --no-wait" : ""} ${files.join(" ")}`
-      : "node bin/translate.mjs public/locales/en/apfront.json";
+      ? `node scripts/translate.mjs${debugFlag ? " --debug" : ""}${noWaitFlag ? " --no-wait" : ""} ${files.join(" ")}`
+      : "node scripts/translate.mjs public/locales/en/apfront.json";
   console.error("");
   console.error("Translation incomplete. Partial files saved. Re-run the same command to resume:");
   console.error(`  ${command}`);
@@ -745,7 +745,7 @@ async function run() {
   }
 
   if (files.length === 0) {
-    console.error("Usage: node bin/translate.mjs [--debug] [--no-wait] <source.json> [...]");
+    console.error("Usage: node scripts/translate.mjs [--debug] [--no-wait] <source.json> [...]");
     process.exit(1);
   }
 

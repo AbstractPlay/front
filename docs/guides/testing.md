@@ -31,10 +31,10 @@ Renderer stays on the pinned `ci-deps.prod.json` / `ci-deps.dev.json` version un
 | Layer | Location | What it guards |
 |-------|----------|----------------|
 | Mocked unit tests | `src/lib/GameMove/explorationMoves.test.js`, `src/lib/GameMove/gameStuff.test.js` | Edge cases with lightweight engine mocks; **clear partial move** routing in `processNewMove` |
-| **Real-engine contracts** | `bin/test-exploration-contracts.mjs` | Partial/persist probe + Submit visibility against actual gameslib (includes Pinch partial F7) |
+| **Real-engine contracts** | `scripts/test-exploration-contracts.mjs` | Partial/persist probe + Submit visibility against actual gameslib (includes Pinch partial F7) |
 | Other lib tests | `src/lib/GameMove/exploration.test.js`, `src/lib/Lab/`, etc. | Save/merge, playground payloads |
 
-**Why a Node script for real engines?** Jest (via the old CRA toolchain) loaded `@abstractplay/gameslib`'s TypeScript sources instead of the compiled `build/` output. `bin/test-exploration-contracts.mjs` uses the same resolver as production. Vitest unit tests use a `resolve.alias` to the compiled gameslib `build/` output (see [`vite.config.js`](../../vite.config.js)).
+**Why a Node script for real engines?** Jest (via the old CRA toolchain) loaded `@abstractplay/gameslib`'s TypeScript sources instead of the compiled `build/` output. `scripts/test-exploration-contracts.mjs` uses the same resolver as production. Vitest unit tests use a `resolve.alias` to the compiled gameslib `build/` output (see [`vite.config.js`](../../vite.config.js)).
 
 ### Fixtures
 
@@ -45,7 +45,7 @@ Regression scenarios live under `src/lib/GameMove/fixtures/`. Each fixture is **
 
 Production gameslib builds omit experimental games from the registry (`APGAMES_PRODUCTION=1` in gameslib).
 
-`bin/test-exploration-contracts.mjs` prints `@abstractplay/gameslib@<version>`, active/skipped contract counts, and runs only applicable contracts.
+`scripts/test-exploration-contracts.mjs` prints `@abstractplay/gameslib@<version>`, active/skipped contract counts, and runs only applicable contracts.
 
 Clear-move-after-partial is covered by both `gameStuff.test.js` (mocked routing) and the Pinch `pinch-partial-f7` engine contract.
 
@@ -69,7 +69,7 @@ To add a new regression case when you find a play-page bug:
 
 3. Append to `EXPLORATION_CONTRACTS` in `src/lib/GameMove/fixtures/index.js`.
 
-The engine runner in `bin/` picks up new contracts automatically.
+The engine runner in `scripts/` picks up new contracts automatically.
 
 ### Shared helpers
 
@@ -101,7 +101,7 @@ High-value targets if expanding coverage:
 ESLint config: [`.eslintrc.json`](../.eslintrc.json) (`eslint:recommended`, `eslint-plugin-react`, `react-hooks`, `jsx-a11y`, `eslint-config-prettier`).
 
 ```bash
-npm run lint       # report issues in src/ and bin/
+npm run lint       # report issues in src/ and scripts/
 npm run lint:fix   # auto-fix where ESLint can
 npm run format     # Prettier on src/**/*.{js,jsx}
 ```

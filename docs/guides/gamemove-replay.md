@@ -48,7 +48,7 @@ Example (committed regression case):
 Replay code is stripped from production bundles:
 
 - Vite aliases [`shimEntry.js`](../../src/lib/GameMove/replay/shimEntry.js) to a no-op stub on `vite build`
-- `bin/check-no-gamemove-replay-in-build.mjs` runs after `build-dev` and `build-prod`
+- `scripts/check-no-gamemove-replay-in-build.mjs` runs after `build-dev` and `build-prod`
 
 ## Related
 

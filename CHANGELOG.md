@@ -12,6 +12,11 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 ### Added
 
 - **Composite board rendering:** Game Move and Lab call `renderComposite` when `render()` returns `kind: "composite"`; `panelId` on board clicks; stacking-expanding hover uses `renderColumn(col, row, panelId?)` for the side stack.
+- **Event log:** ply numbers link to that position on the board and move tree.
+
+### Changed
+
+- **Tooling layout:** maintained Node entrypoints moved from `bin/` to `scripts/`; `bin/` is for local scratch (see `bin/README.md`). Lint covers `src/` and `scripts/` only.
 
 ### Fixed
 

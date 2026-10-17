@@ -91,12 +91,12 @@ jobs:
 
 # --- MACHINE TRANSLATION PIPELINE START ---
     - name: Prune stale managed locale keys
-      run: node bin/locale-prune.mjs public/locales/en/apfront.json
+      run: node scripts/locale-prune.mjs public/locales/en/apfront.json
 
     - name: Run Machine Translation on Locales
       env:
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      run: node bin/translate.mjs public/locales/en/apfront.json
+      run: node scripts/translate.mjs public/locales/en/apfront.json
 
     - name: Auto-commit Updated Translations Back to Branch
       uses: stefanzweifel/git-auto-commit-action@v5
@@ -130,13 +130,13 @@ jobs:
       run: npx serverless client deploy --no-confirm
 
     - name: Apply S3 cost allocation tags
-      run: node bin/apply-s3-cost-allocation-tags.mjs --stage dev
+      run: node scripts/apply-s3-cost-allocation-tags.mjs --stage dev
 
     - name: Sync CloudFront CSP
-      run: node bin/sync-cloudfront-csp.mjs --stage dev
+      run: node scripts/sync-cloudfront-csp.mjs --stage dev
 
     - name: Publish locale files to S3
-      run: node bin/publish-locales.mjs --stage dev
+      run: node scripts/publish-locales.mjs --stage dev
 
     - name: Trigger docs rebuild
       if: github.event_name == 'push'

@@ -1837,6 +1837,7 @@
       "switchLayout": "Layout",
       "switcherAria": "Choose play page layout",
       "eventLog": "Event log",
+      "goToPly": "Go to ply {{n}}",
       "lastMove": "Last move: {{move}}",
       "lastMoveBy": "{{player}} played {{move}}",
       "lastMoveLabel": "Last move:",

@@ -6,7 +6,7 @@ import {
   SITEMAP_STATS_TAB_IDS,
   SITEMAP_TOURNAMENT_TAB_IDS,
   buildSitemapLinks,
-} from "../../bin/sitemapLinks.mjs";
+} from "../../scripts/sitemapLinks.mjs";
 
 describe("sitemap links", () => {
   it("includes homepage, explore hub, and nav hubs", () => {

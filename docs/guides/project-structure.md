@@ -5,7 +5,8 @@
 ```
 front/
 ├── .github/workflows/   # CI deploy
-├── bin/                 # Build scripts (sitemap, RSS, news)
+├── scripts/             # Maintained tooling (see package.json)
+├── bin/                 # Local scratch / one-off dev helpers
 ├── docs/                # Developer documentation (this site)
 ├── public/              # Static assets, locales, service worker
 ├── src/                 # Application source

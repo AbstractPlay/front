@@ -1,4 +1,4 @@
-/** Production play site origin; matches {@link bin/sitemapLinks.mjs} SITEMAP_HOSTNAME. */
+/** Production play site origin; matches {@link scripts/sitemapLinks.mjs} SITEMAP_HOSTNAME. */
 export const PLAY_SITE_ORIGIN = "https://play.abstractplay.com";
 
 /**

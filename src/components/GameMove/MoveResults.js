@@ -12,6 +12,7 @@ function MoveResults(props) {
   const comments = props.comments;
   const players = props.players;
   const t = props.t;
+  const handleGameMoveClick = props.handleGameMoveClick;
   const users = useStore((state) => state.users);
 
   let results;
@@ -75,9 +76,32 @@ function MoveResults(props) {
                       />
                     </small>
                     <br />
-                    {!("ply" in r) || r.ply === undefined
-                      ? ""
-                      : `${t("Ply")} ${r.ply}: `}
+                    {!("ply" in r) || r.ply === undefined ? null : (
+                      <>
+                        {handleGameMoveClick ? (
+                          <button
+                            type="button"
+                            className="inlineLinkButton"
+                            aria-label={t("gameMove.layout.goToPly", {
+                              n: r.ply,
+                            })}
+                            onClick={() =>
+                              handleGameMoveClick({
+                                moveNumber: r.ply,
+                                exPath: [],
+                              })
+                            }
+                          >
+                            {t("Ply")} {r.ply}
+                          </button>
+                        ) : (
+                          <>
+                            {t("Ply")} {r.ply}
+                          </>
+                        )}
+                        {": "}
+                      </>
+                    )}
                     {r.log.replaceAll("&#x2F;", "/")}
                   </p>
                 ) : (

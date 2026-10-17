@@ -5,7 +5,7 @@ import {
   pruneManagedLocale,
   pruneSrcTracking,
   pruneToSourceShape,
-} from "../../bin/locale-prune.mjs";
+} from "../../scripts/locale-prune.mjs";
 
 describe("locale-prune", () => {
   it("removes top-level orphan keys from target", () => {
