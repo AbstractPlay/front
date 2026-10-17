@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 
@@ -18,6 +18,13 @@ import {
   RECORDS_DOWNLOAD_LINK_REL,
   RECORDS_DOWNLOAD_URLS,
 } from "../../lib/summaryFetch";
+import UserChats from "../GameMove/UserChats";
+import { callAuthApi } from "../../lib/api";
+import { parseAuthResponse } from "../../lib/parseAuthResponse";
+import {
+  canCommentTournamentChat,
+  tournamentChatPlayers,
+} from "../../lib/tournamentChat";
 
 async function reportError(error) {
   try {
@@ -187,9 +194,13 @@ function processData(tournament, players, games) {
 function Tournament(props) {
   const { t } = useTranslation();
   const allUsers = useStore((state) => state.users);
+  const globalMe = useStore((state) => state.globalMe);
+  const wsSend = useStore((state) => state.wsSend);
   const [tournament, tournamentSetter] = useState(null);
   const [tournamentLoaded, tournamentLoadedSetter] = useState(false);
   const [divisions, divisionsSetter] = useState([]);
+  const [comments, commentsSetter] = useState([]);
+  const [tournamentPlayerRows, tournamentPlayerRowsSetter] = useState([]);
   const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
   const { tournamentid } = useParams();
   const { metaGame } = useParams();
@@ -202,42 +213,106 @@ function Tournament(props) {
   const gameId = searchParams.get("gameId");
   const gameMetaGame = searchParams.get("metaGame");
 
+  const effectiveMetaGame = metaGame || gameMetaGame || "undefined";
+  const isArchived = !!metaGame;
+
+  const fetchTournamentData = useCallback(async () => {
+    let url = new URL(API_ENDPOINT_OPEN);
+    url.searchParams.append("query", "get_tournament");
+    url.searchParams.append("tournamentid", tournamentid);
+    url.searchParams.append("metaGame", effectiveMetaGame);
+    url.searchParams.append("isArchived", isArchived.toString());
+    if (gameId) {
+      url.searchParams.append("gameId", gameId);
+    }
+    const res = await fetch(url);
+    const status = res.status;
+    if (status !== 200) {
+      const result = await res.json();
+      console.log(JSON.parse(result.body));
+      return;
+    }
+    const data = await res.json();
+    const tour = data.tournament[0];
+    const playerRows =
+      data.tournamentPlayers?.length > 0
+        ? data.tournamentPlayers
+        : tour?.players ?? [];
+    let nextDivisions = processData(
+      tour,
+      data.tournamentPlayers,
+      data.tournamentGames
+    );
+    divisionsSetter(nextDivisions);
+    tournamentSetter(tour);
+    tournamentPlayerRowsSetter(playerRows);
+    commentsSetter(data.comments ?? []);
+  }, [tournamentid, effectiveMetaGame, isArchived, gameId]);
+
   useEffect(() => {
-    async function fetchData() {
-      let url = new URL(API_ENDPOINT_OPEN);
-      url.searchParams.append("query", "get_tournament");
-      url.searchParams.append("tournamentid", tournamentid);
-
-      // Determine the metaGame to use and whether this is a known archived tournament
-      const effectiveMetaGame = metaGame || gameMetaGame || "undefined";
-      const isArchived = !!metaGame; // If metaGame is in URL path, it's a known archived tournament
-
-      url.searchParams.append("metaGame", effectiveMetaGame);
-      url.searchParams.append("isArchived", isArchived.toString());
-
-      // Add gameId for potential game reference fixing (for old games where the tournament was archived but the references to it weren't)
-      if (gameId) {
-        url.searchParams.append("gameId", gameId);
-      }
-      const res = await fetch(url);
-      const status = res.status;
-      if (status !== 200) {
-        const result = await res.json();
-        console.log(JSON.parse(result.body));
-      } else {
-        const data = await res.json();
-        let divisions = processData(
-          data.tournament[0],
-          data.tournamentPlayers,
-          data.tournamentGames
-        );
-        divisionsSetter(divisions);
-        tournamentSetter(data.tournament[0]);
-      }
+    async function load() {
+      await fetchTournamentData();
       tournamentLoadedSetter(true);
     }
-    fetchData();
-  }, [tournamentid, metaGame, gameId, gameMetaGame]);
+    tournamentLoadedSetter(false);
+    load();
+  }, [fetchTournamentData]);
+
+  useEffect(() => {
+    if (!tournamentid) {
+      return;
+    }
+    wsSend?.("watchTournaments", { tournaments: [tournamentid] });
+    return () => {
+      wsSend?.("watchTournaments", { tournaments: [] });
+    };
+  }, [tournamentid, wsSend]);
+
+  useEffect(() => {
+    const onRefresh = (event) => {
+      const tid = event.detail?.tournamentId;
+      if (tid === tournamentid) {
+        fetchTournamentData();
+      }
+    };
+    window.addEventListener("refresh-tournament", onRefresh);
+    return () => window.removeEventListener("refresh-tournament", onRefresh);
+  }, [tournamentid, fetchTournamentData]);
+
+  const chatPlayers = useMemo(
+    () => tournamentChatPlayers(tournamentPlayerRows),
+    [tournamentPlayerRows]
+  );
+  const canComment = useMemo(
+    () => canCommentTournamentChat(globalMe, tournamentPlayerRows),
+    [globalMe, tournamentPlayerRows]
+  );
+
+  const submitTournamentComment = async (comment) => {
+    if (!comment || /^\s*$/.test(comment)) {
+      return;
+    }
+    const res = await callAuthApi("submit_tournament_comment", {
+      tournamentid,
+      comment,
+      metaGame: tournament?.metaGame ?? effectiveMetaGame,
+    });
+    const parsed = await parseAuthResponse(res);
+    if (!parsed.ok) {
+      console.log(`submit_tournament_comment failed: ${parsed.error}`);
+      return;
+    }
+    commentsSetter((prev) => [
+      ...prev,
+      {
+        comment,
+        userId: globalMe?.id,
+        moveNumber: 0,
+        timeStamp: Date.now(),
+      },
+    ]);
+    await fetchTournamentData();
+  };
 
   useEffect(() => {
     if (!tournamentLoaded) {
@@ -331,13 +406,10 @@ function Tournament(props) {
             </button>
           </a>
         </div>
-        <div className="columns  is-multiline">
-          {divisions.map((d, i) => (
-            <div
-              className="column content is-10 is-offset-1"
-              key={"division" + i}
-            >
-              <div className="card">
+        <div className="columns is-multiline is-centered">
+          <div className="column is-12 is-8-desktop content">
+            {divisions.map((d, i) => (
+              <div className="card mb-5" key={"division" + i}>
                 <header className="card-header">
                   <p className="card-header-title">
                     {t("Tournament.Division", { num: i + 1 })}
@@ -448,8 +520,26 @@ function Tournament(props) {
                   </div>
                 </div>
               </div>
+            ))}
+          </div>
+          <div className="column is-12 is-4-desktop content">
+            <div className="card">
+              <header className="card-header">
+                <p className="card-header-title">{t("Tournament.Chat")}</p>
+              </header>
+              <div className="card-content">
+                <UserChats
+                  comments={comments}
+                  players={chatPlayers}
+                  gameid={tournamentid}
+                  canComment={canComment}
+                  handleSubmit={submitTournamentComment}
+                  tooMuch={false}
+                  commentingCompletedGame={false}
+                />
+              </div>
             </div>
-          ))}
+          </div>
         </div>
       </article>
     </>

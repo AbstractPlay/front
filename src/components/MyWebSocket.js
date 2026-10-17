@@ -224,6 +224,12 @@ export default function MyWebSocket() {
               detail: { meta: msg.payload?.meta, id: msg.payload?.id },
             })
           );
+        } else if (msg.verb === "tournament") {
+          window.dispatchEvent(
+            new CustomEvent("refresh-tournament", {
+              detail: { tournamentId: msg.payload?.id },
+            })
+          );
         } else if (msg.verb === "connections") {
           const payload = msg.payload;
           if (

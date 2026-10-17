@@ -15,6 +15,7 @@ export const IN_APP_NOTIFICATION_KEYS = [
   "ratingChange",
   "eventInvitation",
   "completedGameChat",
+  "tournamentChat",
   "tournamentStart",
   "tournamentEnd",
   "feedbackReply",
