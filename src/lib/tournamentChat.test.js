@@ -1,40 +1,37 @@
-import assert from "node:assert/strict";
-import { test } from "node:test";
+import { describe, expect, it } from "vitest";
 import {
   canCommentTournamentChat,
   tournamentChatPlayers,
 } from "./tournamentChat.js";
 
-test("canCommentTournamentChat allows admin", () => {
-  assert.equal(
-    canCommentTournamentChat({ id: "a", admin: true }, []),
-    true,
-  );
+describe("canCommentTournamentChat", () => {
+  it("allows admin", () => {
+    expect(canCommentTournamentChat({ id: "a", admin: true }, [])).toBe(true);
+  });
+
+  it("allows participant", () => {
+    expect(
+      canCommentTournamentChat(
+        { id: "p1" },
+        [{ playerid: "p1", playername: "Pat" }],
+      ),
+    ).toBe(true);
+    expect(
+      canCommentTournamentChat(
+        { id: "other" },
+        [{ playerid: "p1", playername: "Pat" }],
+      ),
+    ).toBe(false);
+  });
 });
 
-test("canCommentTournamentChat allows participant", () => {
-  assert.equal(
-    canCommentTournamentChat(
-      { id: "p1" },
-      [{ playerid: "p1", playername: "Pat" }],
-    ),
-    true,
-  );
-  assert.equal(
-    canCommentTournamentChat(
-      { id: "other" },
-      [{ playerid: "p1", playername: "Pat" }],
-    ),
-    false,
-  );
-});
-
-test("tournamentChatPlayers maps ids and names", () => {
-  assert.deepEqual(
-    tournamentChatPlayers([
-      { playerid: "p1", playername: "Pat" },
-      { playerid: "", playername: "X" },
-    ]),
-    [{ id: "p1", name: "Pat" }],
-  );
+describe("tournamentChatPlayers", () => {
+  it("maps ids and names", () => {
+    expect(
+      tournamentChatPlayers([
+        { playerid: "p1", playername: "Pat" },
+        { playerid: "", playername: "X" },
+      ]),
+    ).toEqual([{ id: "p1", name: "Pat" }]);
+  });
 });
