@@ -5507,6 +5507,10 @@
     "src": "Notifications",
     "out": "Notifications"
   },
+  "meta.dateAdded": {
+    "src": "Added {{date}}",
+    "out": "Ajouté le {{date}}"
+  },
   "meta.gameStatistics": {
     "src": "Game statistics",
     "out": "Statistiques de jeu"

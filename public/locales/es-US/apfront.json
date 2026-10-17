@@ -1301,6 +1301,7 @@
     },
     "wikiLink": "Wiki de Abstract Play",
     "rulesMirrorLink": "Espejo local de reglas (PDF)",
+    "dateAdded": "Agregado el {{date}}",
     "historicalIntro": "Las estadísticas a continuación se obtienen del resumen diario y se actualizan a las 6 am UTC.",
     "playCounts": "Recuentos de partidas",
     "gameStatistics": "Estadísticas del juego",

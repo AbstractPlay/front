@@ -1301,6 +1301,7 @@
     },
     "wikiLink": "Wiki Abstract Play",
     "rulesMirrorLink": "Miroir local des règles (PDF)",
+    "dateAdded": "Ajouté le {{date}}",
     "historicalIntro": "Les statistiques ci-dessous sont tirées du résumé quotidien et sont mises à jour à 6 h UTC.",
     "playCounts": "Nombre de parties",
     "gameStatistics": "Statistiques de jeu",

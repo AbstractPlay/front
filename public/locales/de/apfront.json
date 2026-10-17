@@ -1301,6 +1301,7 @@
     },
     "wikiLink": "Abstract Play Wiki",
     "rulesMirrorLink": "Lokaler Regel-Mirror (PDF)",
+    "dateAdded": "Hinzugefügt am {{date}}",
     "historicalIntro": "Die folgenden Statistiken stammen aus der täglichen Zusammenfassung und werden um 6:00 Uhr UTC aktualisiert.",
     "playCounts": "Anzahl der Partien",
     "gameStatistics": "Spielstatistiken",

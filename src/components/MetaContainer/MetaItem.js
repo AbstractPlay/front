@@ -142,6 +142,22 @@ const MetaItem = React.forwardRef(
       coderString += coders.join(", ");
     }
 
+    const dateAddedDisplay = useMemo(() => {
+      if (!game.dateAdded) {
+        return null;
+      }
+      const addedMs = new Date(game.dateAdded).getTime();
+      if (Number.isNaN(addedMs)) {
+        return null;
+      }
+      return {
+        iso: game.dateAdded,
+        formatted: new Intl.DateTimeFormat(i18n.language, {
+          dateStyle: "long",
+        }).format(addedMs),
+      };
+    }, [game.dateAdded, i18n.language]);
+
     const tags = useMemo(
       () =>
         game.categories
@@ -195,6 +211,13 @@ const MetaItem = React.forwardRef(
         <h1 className="subtitle lined">
           <span>{game.name}</span>
         </h1>
+        {dateAddedDisplay === null ? null : (
+          <p className="help" style={{ marginTop: "-0.5rem", marginBottom: "0.75rem" }}>
+            <time dateTime={dateAddedDisplay.iso}>
+              {t("meta.dateAdded", { date: dateAddedDisplay.formatted })}
+            </time>
+          </p>
+        )}
         <div className="tabs is-small is-toggle is-toggle-rounded">
           <ul>
             {visibleTabs.map((tab) => (
