@@ -1837,6 +1837,7 @@
       "switchLayout": "Disposition",
       "switcherAria": "Choisir la disposition de la page de jeu",
       "eventLog": "Journal d'événements",
+      "goToPly": "Aller au demi-coup {{n}}",
       "lastMove": "Dernier coup : {{move}}",
       "lastMoveBy": "{{player}} a joué {{move}}",
       "lastMoveLabel": "Dernier coup :",

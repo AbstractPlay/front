@@ -4855,6 +4855,10 @@
     "src": "Full move history",
     "out": "Cronologia completa delle mosse"
   },
+  "gameMove.layout.goToPly": {
+    "src": "Go to ply {{n}}",
+    "out": "Vai alla mossa {{n}}"
+  },
   "gameMove.layout.hideEventLog": {
     "src": "Hide event log",
     "out": "Nascondi registro eventi"

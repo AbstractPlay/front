@@ -1837,6 +1837,7 @@
       "switchLayout": "Layout",
       "switcherAria": "Spielseiten-Layout auswählen",
       "eventLog": "Ereignisprotokoll",
+      "goToPly": "Gehe zu Halbzug {{n}}",
       "lastMove": "Letzter Zug: {{move}}",
       "lastMoveBy": "{{player}} spielte {{move}}",
       "lastMoveLabel": "Letzter Zug:",

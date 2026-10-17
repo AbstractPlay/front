@@ -1837,6 +1837,7 @@
       "switchLayout": "Diseño",
       "switcherAria": "Elegir el diseño de la página de juego",
       "eventLog": "Registro de eventos",
+      "goToPly": "Ir a la jugada {{n}}",
       "lastMove": "Último movimiento: {{move}}",
       "lastMoveBy": "{{player}} jugó {{move}}",
       "lastMoveLabel": "Último movimiento:",
