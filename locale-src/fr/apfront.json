@@ -1299,6 +1299,10 @@
     "src": "Rating changes",
     "out": "Changements de classement"
   },
+  "InAppNotifyLabel-tournamentChat": {
+    "src": "Tournament chat",
+    "out": "Chat du tournoi"
+  },
   "InAppNotifyLabel-tournamentEnd": {
     "src": "Tournament ended",
     "out": "Tournoi terminé"
@@ -2050,6 +2054,10 @@
   "TotalStars_other": {
     "src": "Total stars",
     "out": "Total d'étoiles"
+  },
+  "Tournament.Chat": {
+    "src": "Tournament chat",
+    "out": "Chat du tournoi"
   },
   "Tournament.Completion": {
     "src": "Completion",
@@ -5490,6 +5498,10 @@
   "me.notifications.message.ratingChange": {
     "src": "Your rating for <gameLink>{{metaGame}}</gameLink>{{variantsInline}} changed {{delta}} points from {{oldRatingDisplay}} to {{newRatingDisplay}}.",
     "out": "Votre classement pour <gameLink>{{metaGame}}</gameLink>{{variantsInline}} a changé de {{delta}} points, passant de {{oldRatingDisplay}} à {{newRatingDisplay}}."
+  },
+  "me.notifications.message.tournamentChat": {
+    "src": "{{commenterName}} posted in <tournamentLink>{{metaGame}}</tournamentLink> tournament chat",
+    "out": "{{commenterName}} a écrit dans le chat du tournoi <tournamentLink>{{metaGame}}</tournamentLink>"
   },
   "me.notifications.message.tournamentEnd": {
     "src": "Tournament {{number}} of <tournamentLink>{{metaGame}}</tournamentLink> has ended.",

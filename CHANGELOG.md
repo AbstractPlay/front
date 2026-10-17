@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0.0-beta`. Production and dev deploys stamp `1.0.0-ci-<GitHub Actions run id>.0` during the workflow (see `.github/workflows/deploy-prod.js.yml` and `deploy-dev.js.yml`). Entries below are grouped by theme and approximate ship window on **main** (what runs at abstractplay.com); they are not a per-commit log.
 
+**Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
+
 ## [1.0.0-ci] - 2026-10-17
 
 ### Added
@@ -14,19 +16,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Game landing page:** Summary tab shows the date the game was added to the site (from gameslib `dateAdded`).
 - **Composite board rendering:** Game Move and Lab call `renderComposite` when `render()` returns `kind: "composite"`; `panelId` on board clicks; stacking-expanding hover uses `renderColumn(col, row, panelId?)` for the side stack.
 - **Event log:** ply numbers link to that position on the board and move tree.
-
-### Changed
-
-- **Tooling layout:** maintained Node entrypoints moved from `bin/` to `scripts/`; `bin/` is for local scratch (see `bin/README.md`). Lint covers `src/` and `scripts/` only.
-
-### Fixed
-
-- **Stack-expanding display:** Re-derive `stackExpanding` from game flags and the current render rep on each sync (and when changing display in settings) so switching from 3D to expanding (e.g. Volcano in Lab) enables stack hover again.
-
-## [1.0.0-ci] - 2026-10-16
-
-### Added
-
+- **Tournaments:** tournament chat on `/tournament/{id}` (Markdown, participant/admin post); `watchTournaments` WebSocket refresh; in-app `tournamentChat` notification preference and bell copy.
 - **Ops:** `ap:service` and `ap:stage` cost-allocation tags on the `apfront` Serverless stack, play S3 buckets (via `serverless client deploy`), and CloudFront distributions (via CSP sync).
 - **Bots:** edit bot screen lists supported games and variant combinations; add or remove entries and save via `update_bot`.
 - **Rules PDF mirrors:** link to hosted rules PDFs (when available) on game Summary and in the in-play game info (i) dialog, via shared `MetaGameLinks`.
@@ -43,6 +33,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Changed
 
+- **Tooling layout:** maintained Node entrypoints moved from `bin/` to `scripts/`; `bin/` is for local scratch (see `bin/README.md`). Lint covers `src/` and `scripts/` only.
 - **Challenges:** direct opponent picker always hides legacy embedded AiAi user id; registered bots appear when their `stars` include the selected game (no `aiai` flag gate).
 - **Tournaments:** automated tournaments help text reflects 120-hour starting clock (full max bank).
 - **Board toolbar:** rotate clockwise/counterclockwise and “back to current position” exploration controls use Unicode arrow glyphs (↳ / ↲ / ↩) instead of Font Awesome icons.
@@ -53,6 +44,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Stack-expanding display:** Re-derive `stackExpanding` from game flags and the current render rep on each sync (and when changing display in settings) so switching from 3D to expanding (e.g. Volcano in Lab) enables stack hover again.
 - **Customize:** per-game settings JSON and saves include the full `render` block (e.g. `hide-labels-half`) when those options are checked — no longer omitted from the editor blob when they match global defaults.
 - **Customize:** preferred player colour no longer remaps the renderer palette on `shared-pieces` games (e.g. Rincala scoring colours).
 - **Dashboard:** sorting “Challenged” / opponent columns no longer crashes when a row has no named invitees (e.g. partially filled standing challenges with empty `challengees`).

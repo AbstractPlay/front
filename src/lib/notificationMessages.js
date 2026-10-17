@@ -245,6 +245,21 @@ export function NotificationMessage({ body }) {
           {variantsSuffix(body.metaGame, body.variants)}
         </>
       );
+    case "tournamentChat":
+      return (
+        <>
+          <Trans
+            i18nKey="me.notifications.message.tournamentChat"
+            values={{ commenterName: body.commenterName, metaGame }}
+            components={{
+              tournamentLink: (
+                <Link to={`/tournament/${body.tournamentId}`} />
+              ),
+            }}
+          />
+          {variantsSuffix(body.metaGame, body.variants)}
+        </>
+      );
     case "botMoveFailed":
       return (
         <>

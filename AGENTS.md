@@ -60,7 +60,15 @@ New `docs/**/*.md` page → [`docs/nav.json`](docs/nav.json). Run `npm run docs:
 
 ## Changelog
 
-Substantive changes → root [`CHANGELOG.md`](CHANGELOG.md), batched per calendar month in `[1.0.0-ci]` sections (see file header).
+Substantive user- or integrator-visible changes → root [`CHANGELOG.md`](CHANGELOG.md).
+
+**One section per calendar month** — not one per ship day or PR:
+
+1. Before editing, search `CHANGELOG.md` for `- YYYY-MM-` using today’s year and month (e.g. `2026-10-`).
+2. If a `## [1.0.0-ci] - …` header already exists for that month, append under the right `### Added` / `### Changed` / `### Fixed` and update **only that header’s date** to today (`YYYY-MM-DD`).
+3. If none exists for that month, add a new `## [1.0.0-ci] - YYYY-MM-DD` section below the `CHANGELOG.md` intro, above older months.
+
+Do **not** add a second October (or same-month) `##` block when one is already present. Detail: [`CHANGELOG.md`](CHANGELOG.md) intro (monthly batching).
 
 ## Contact
 
