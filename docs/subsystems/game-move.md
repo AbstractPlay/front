@@ -65,7 +65,7 @@ Logged-in users call auth `log_gamemove_layout_event`. Anonymous users call the 
 
 1. **Load game** — open query `get_game` with `metaGame`, `cbits`, `gameID`.
 2. **Instantiate rules** — `GameFactory` from `@abstractplay/gameslib` builds the game object from stored state.
-3. **Render board** — game `render()` produces JSON; `@abstractplay/renderer` `render()` produces SVG.
+3. **Render board** — game `render()` produces JSON (`APRenderRep`, a frame array, or `kind: "composite"`). The client calls `@abstractplay/renderer` `render()` or `renderComposite()` (one SVG). Composite `boardClick` / `boardHover` include `panelId`; stacking-expanding games still use `renderColumn(col, row, panelId?)` for the side stack rep.
 4. **Submit move** — auth query (e.g. `submit_move`) via `callAuthApi`.
 5. **Real-time updates** — WebSocket messages refresh game state when opponent moves.
 

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0.0-beta`. Production and dev deploys stamp `1.0.0-ci-<GitHub Actions run id>.0` during the workflow (see `.github/workflows/deploy-prod.js.yml` and `deploy-dev.js.yml`). Entries below are grouped by theme and approximate ship window on **main** (what runs at abstractplay.com); they are not a per-commit log.
 
+## [1.0.0-ci] - 2026-10-17
+
+### Added
+
+- **Composite board rendering:** Game Move and Lab call `renderComposite` when `render()` returns `kind: "composite"`; `panelId` on board clicks; stacking-expanding hover uses `renderColumn(col, row, panelId?)` for the side stack.
+
+### Fixed
+
+- **Stack-expanding display:** Re-derive `stackExpanding` from game flags and the current render rep on each sync (and when changing display in settings) so switching from 3D to expanding (e.g. Volcano in Lab) enables stack hover again.
+
 ## [1.0.0-ci] - 2026-10-16
 
 ### Added

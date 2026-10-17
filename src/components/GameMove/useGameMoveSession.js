@@ -86,10 +86,11 @@ import {
 import { setRendererColourOpts } from "../../lib/setRendererColourOpts";
 import { setGlyphMapOpt } from "../../lib/setGlyphMapOpt";
 import {
-  applyRenderSettingsToOptions,
-  prepareBoardRender,
-} from "../../lib/prepareBoardRender";
-import { resolveDisplayRenderRep } from "../../lib/getDisplayRenderRep";
+  isCompositeRenderRep,
+  primaryRenderRepForUi,
+  stackExpandingForRender,
+} from "../../lib/renderOutput";
+import { renderLiveBoardLayers } from "../../lib/renderLiveBoardLayers";
 import {
   buildRenderDisplayOpts,
   canCycleBoardDisplay,
@@ -401,7 +402,7 @@ export function useGameMoveSession(props) {
   tRef.current = t;
   publishGameColorsRef.current = publishGameColors;
 
-  boardClickHandlerRef.current = (row, col, piece) => {
+  boardClickHandlerRef.current = (row, col, piece, panelId) => {
     let gameEngineTmp = createEngineAtFocus(
       gameRef.current,
       explorationRef.current.nodes,
@@ -415,7 +416,13 @@ export function useGameMoveSession(props) {
           gameRef.current.me + 1,
           piece
         )
-      : gameEngineTmp.handleClick(moveRef.current.move, row, col, piece);
+      : gameEngineTmp.handleClick(
+          moveRef.current.move,
+          row,
+          col,
+          piece,
+          panelId
+        );
     result.rendered = moveRef.current.rendered;
     processNewMove(
       result,
@@ -534,7 +541,12 @@ export function useGameMoveSession(props) {
   }, [colorMode]);
 
   const copyHWDiagram = async () => {
-    if (metaGame === "homeworlds" && gameRef !== null && renderrep !== null) {
+    if (
+      metaGame === "homeworlds" &&
+      gameRef !== null &&
+      renderrep !== null &&
+      !isCompositeRenderRep(renderrep)
+    ) {
       const diagram = {
         numPlayers: gameRef.current.numPlayers,
         universe: [],
@@ -1704,88 +1716,67 @@ export function useGameMoveSession(props) {
   }, [gameID]);
 
   useEffect(() => {
-    let options = {};
+    let stackExpandOptions = {};
 
-    const boardClick = (row, col, piece) => {
-      boardClickHandlerRef.current(row, col, piece);
-    };
-
-    function expand(row, col) {
-      const svg = stackImage.current.querySelector("svg");
+    function expandStackColumn(col, row, panelId) {
+      const svg = stackImage.current?.querySelector("svg");
       if (svg !== null) svg.remove();
-      options.divid = "stack";
-      options.svgid = "theStackSVG";
-      options.colourContext = effectiveColourContext;
-      render(engineRef.current.renderColumn(row, col), options);
+      stackExpandOptions.divid = "stack";
+      stackExpandOptions.svgid = "theStackSVG";
+      stackExpandOptions.colourContext = effectiveColourContext;
+      const engine = engineRef.current;
+      const columnRep =
+        panelId !== undefined && panelId !== null && panelId !== ""
+          ? engine.renderColumn(col, row, panelId)
+          : engine.renderColumn(col, row);
+      render(columnRep, stackExpandOptions);
     }
 
     if (renderrep !== null && displaySettings !== null) {
       const generation = ++boardRenderGenerationRef.current;
 
-      options = {};
+      stackExpandOptions = {};
       const currentGame = gameRef.current;
-      setRendererColourOpts({
-        options,
-        metaGame,
-        isParticipant: currentGame?.me,
-        context: effectiveColourContext,
-        globalMe: globalMeRef.current,
-        engine: engineRef.current,
-        numPlayers: currentGame?.players?.length,
-        sharedPieces: currentGame?.sharedPieces,
-      });
+      const baseOptions = {
+        svgid: "theBoardSVG",
+        showAnnotations: displaySettings.annotate,
+      };
       const canExplore = focusRef.current?.canExplore;
-      if (canExplore) {
-        options.boardClick = boardClick;
-      }
-      options.rotate = displaySettings.rotate;
-      if (currentGame?.stackExpanding) {
-        options.boardHover = (row, col, piece) => {
-          expand(col, row);
-        };
-      }
-      options.showAnnotations = displaySettings.annotate;
-      options.svgid = "theBoardSVG";
-      const tmpRendered = [];
-      const renders = [];
-      if (!Array.isArray(renderrep)) {
-        renders.push(renderrep);
-      } else {
-        renders.push(...renderrep);
-      }
-      for (let i = 0; i < renders.length; i++) {
-        const r = renders[i];
-        const { displayRep, renderSettings } = prepareBoardRender(
-          r,
-          globalMeRef.current,
-          metaGame,
-        );
-        const layerOptions = { ...options };
-        setGlyphMapOpt({
-          options: layerOptions,
-          metaGame,
-          globalMe: globalMeRef.current,
-          renderRep: r,
-        });
-        applyRenderSettingsToOptions(layerOptions, renderSettings);
-        const container = document.createElement("div");
-        container.style.position = "absolute";
-        container.style.left = "-9999px"; // hide off-screen
-        document.body.appendChild(container); // ✅ attach to DOM
-        render(displayRep, {
-          ...layerOptions,
-          divelem: container,
-          boardClick:
-            i === renders.length - 1
-              ? canExplore
-                ? boardClick
-                : undefined
-              : undefined,
-        });
-        const svgNode = container.firstChild;
-        tmpRendered.push(svgNode);
-        document.body.removeChild(container); // ✅ clean up
-      }
+      const { layers, boardRenderIndex: nextIndex } = renderLiveBoardLayers({
+        renderrep,
+        metaGame,
+        globalMe: globalMeRef.current,
+        seatRotate: displaySettings.rotate,
+        baseOptions,
+        applyColourOpts: (options) => {
+          setRendererColourOpts({
+            options,
+            metaGame,
+            isParticipant: currentGame?.me,
+            context: effectiveColourContext,
+            globalMe: globalMeRef.current,
+            engine: engineRef.current,
+            numPlayers: currentGame?.players?.length,
+            sharedPieces: currentGame?.sharedPieces,
+          });
+        },
+        applyGlyphMap: (options, rawRep) => {
+          setGlyphMapOpt({
+            options,
+            metaGame,
+            globalMe: globalMeRef.current,
+            renderRep: rawRep,
+          });
+        },
+        canBoardClick: !!canExplore,
+        onBoardClick: (row, col, piece, panelId) => {
+          boardClickHandlerRef.current(row, col, piece, panelId);
+        },
+        stackExpanding: !!currentGame?.stackExpanding,
+        onStackColumnHover: currentGame?.stackExpanding
+          ? expandStackColumn
+          : undefined,
+      });
       if (
         !shouldCommitBoardRender({
           generationAtStart: generation,
@@ -1796,9 +1787,8 @@ export function useGameMoveSession(props) {
       ) {
         return;
       }
-      const nextIndex = Math.max(0, tmpRendered.length - 1);
       setBoardRenderIndex(nextIndex);
-      setRendered([...tmpRendered]);
+      setRendered([...layers]);
     }
   }, [
     renderrep,
@@ -1902,14 +1892,7 @@ export function useGameMoveSession(props) {
       return 0;
     };
     if (renderrep !== null && engineRef.current !== null) {
-      const displayRep = resolveDisplayRenderRep(
-        renderrep,
-        globalMeRef.current,
-        metaGame,
-      );
-      const repForRotation = Array.isArray(displayRep)
-        ? displayRep[displayRep.length - 1]
-        : displayRep;
+      const repForRotation = primaryRenderRepForUi(renderrep);
       rotIncrementSetter(
         getRotationIncrement(metaGame, repForRotation, engineRef.current)
       );
@@ -1991,8 +1974,11 @@ export function useGameMoveSession(props) {
         useStore.getState().users
       );
       renderrepSetter(newRenderRep);
-      gameRef.current.stackExpanding =
-        newRenderRep.renderer === "stacking-expanding";
+      gameRef.current.stackExpanding = stackExpandingForRender(
+        gameRef.current.metaGame,
+        engineRef.current,
+        newRenderRep,
+      );
     }
   };
 

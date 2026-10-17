@@ -35,6 +35,7 @@ vi.mock("@abstractplay/gameslib", async (importOriginal) => {
       const parsed = JSON.parse(state);
       return {
         stack: [...parsed.stack],
+        getFlags: () => ["stacking-expanding"],
         gameover: false,
         winner: [],
         load: vi.fn(),
@@ -139,7 +140,6 @@ describe("syncPlayRenderToFocus", () => {
 
     expect(game.stackExpanding).to.be.true;
 
-    game.stackExpanding = true;
     const stateSingle = JSON.stringify({
       stack: [1],
       renderResult: { renderer: "plain" },
@@ -157,5 +157,42 @@ describe("syncPlayRenderToFocus", () => {
     });
 
     expect(game.stackExpanding).to.be.false;
+  });
+
+  it("stackExpanding stays on when render is composite with a stacking-expanding panel", () => {
+    const state = JSON.stringify({
+      stack: [1],
+      renderResult: {
+        kind: "composite",
+        layout: { arrangement: "row" },
+        panels: [
+          {
+            id: "main",
+            render: { renderer: "stacking-expanding", board: null },
+          },
+        ],
+      },
+    });
+    const game = {
+      metaGame: "test",
+      state,
+      me: 0,
+      players: [{ id: "p1" }],
+      noMoves: true,
+      stackExpanding: true,
+    };
+    const exploration = [new GameNode(null, "", null, 0)];
+    const focus = { moveNumber: 0, exPath: [], canExplore: false };
+
+    syncPlayRenderToFocus(game, exploration, focus, {
+      partialMoveRenderRef: { current: false },
+      engineRef: { current: null },
+      renderrepSetter: vi.fn(),
+      movesRef: { current: null },
+      statusRef: { current: {} },
+      display: [],
+    });
+
+    expect(game.stackExpanding).to.be.true;
   });
 });

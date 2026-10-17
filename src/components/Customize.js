@@ -3,11 +3,17 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import {
   render,
+  renderComposite,
   renderSheetGlyph,
   sheets,
   isBoardChromeEligible,
   getCompatibleStyles,
 } from "@abstractplay/renderer";
+import {
+  isCompositeRenderRep,
+  prepareDisplayRenderRep,
+} from "../lib/renderOutput.js";
+import { resolveEffectiveRenderSettings } from "../lib/resolveEffectiveRenderSettings.js";
 import {
   isBoardBasicBoard,
   isBoardStyleSwappable,
@@ -1036,13 +1042,22 @@ function Customize(props) {
           },
         },
       };
-      const { displayRep, renderSettings: resolvedRender } = prepareBoardRender(
-        json,
-        mockMe,
-        metaGame,
-      );
-      applyRenderSettingsToOptions(options, resolvedRender);
-      render(displayRep, options);
+      if (isCompositeRenderRep(json)) {
+        const displayRep = prepareDisplayRenderRep(json, mockMe, metaGame);
+        const primaryPanel = json.panels[0]?.render;
+        const resolvedRender = resolveEffectiveRenderSettings(
+          mockMe,
+          metaGame,
+          primaryPanel ?? {},
+        );
+        applyRenderSettingsToOptions(options, resolvedRender);
+        renderComposite(displayRep, options);
+      } else {
+        const { displayRep, renderSettings: resolvedRender } =
+          prepareBoardRender(json, mockMe, metaGame);
+        applyRenderSettingsToOptions(options, resolvedRender);
+        render(displayRep, options);
+      }
     } catch (e) {
       if (div) {
         div.innerHTML = `<div class="notification is-danger">${e.message}</div>`;

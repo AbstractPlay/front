@@ -1,10 +1,18 @@
 import rendererPkg from "@abstractplay/renderer";
+import { isCompositeRenderRep } from "../renderOutput.js";
 
+const render =
+  rendererPkg.render || rendererPkg.default?.render;
+const renderComposite =
+  rendererPkg.renderComposite || rendererPkg.default?.renderComposite;
 const renderStatic =
   rendererPkg.renderStatic || rendererPkg.default?.renderStatic;
 
 function normalizeRenderReps(renderrep) {
   if (renderrep == null) return [];
+  if (isCompositeRenderRep(renderrep)) {
+    return [renderrep];
+  }
   return Array.isArray(renderrep) ? [...renderrep] : [renderrep];
 }
 
@@ -45,14 +53,19 @@ export function renderBoardSvg(renderrep, baseOptions, { metaGame } = {}) {
       divid: "board-export",
     };
 
-    if (typeof renderStatic === "function") {
-      const svgString = renderStatic(reps[index], options);
+    const rep = reps[index];
+    if (isCompositeRenderRep(rep)) {
+      if (typeof renderComposite === "function") {
+        delete options.rotate;
+        renderComposite(rep, options);
+      }
+    } else if (typeof renderStatic === "function") {
+      const svgString = renderStatic(rep, options);
       const svg = svgFromStaticString(svgString);
       return svg ?? container.querySelector("svg")?.cloneNode(true) ?? null;
+    } else if (typeof render === "function") {
+      render(rep, options);
     }
-
-    const render = rendererPkg.render || rendererPkg.default?.render;
-    render(reps[index], options);
     const svg = container.querySelector("svg");
     if (!svg) return null;
     return svg.cloneNode(true);

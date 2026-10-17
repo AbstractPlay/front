@@ -12,9 +12,13 @@ import {
 } from "./enumeratePathFrames";
 import { boardGifFilename, boardPngFilename } from "./boardExportFilename";
 import { triggerDownload } from "./downloadBlob";
+import { isCompositeRenderRep } from "../renderOutput.js";
 
 function pickRenderRep(renderrep) {
   if (renderrep == null) return null;
+  if (isCompositeRenderRep(renderrep)) {
+    return renderrep;
+  }
   const reps = Array.isArray(renderrep) ? renderrep : [renderrep];
   if (reps.length === 0) return null;
   return reps[reps.length - 1];

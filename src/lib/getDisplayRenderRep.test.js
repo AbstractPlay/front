@@ -42,6 +42,25 @@ describe("getDisplayRenderRep", () => {
     expect(display.options).to.deep.equal(["hide-labels"]);
   });
 
+  it("applies board chrome to each composite panel render", () => {
+    const composite = {
+      kind: "composite",
+      layout: { arrangement: "row" },
+      panels: [
+        {
+          id: "one",
+          render: checkeredRep,
+        },
+      ],
+    };
+    const display = getDisplayRenderRep(composite, {
+      board: { style: "vertex" },
+      options: ["hide-labels"],
+    });
+    expect(display.panels[0].render.board.style).to.equal("vertex");
+    expect(display.panels[0].render.options).to.deep.equal(["hide-labels"]);
+  });
+
   it("swaps hex-of-hex to hex-of-tri when renderer registry allows", () => {
     const allowed = getCompatibleStyles("hex-of-hex");
     if (!allowed.includes("hex-of-tri")) {
