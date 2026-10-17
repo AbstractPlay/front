@@ -109,7 +109,7 @@ Not part of node-backend:
 | URL | Purpose |
 |-----|---------|
 | `https://records.abstractplay.com/_summary.json` | Site statistics (`Skeleton`) |
-| `https://thumbnails.abstractplay.com/{metaGame}.json` | Board thumbnail presets (`Customize`) |
+| `https://thumbnails.abstractplay.com/{metaGame}.json` | Board thumbnail presets (`Customize`); v1 `{ source, render }` envelope |
 
 ## Related
 

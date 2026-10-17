@@ -20,6 +20,7 @@ import {
   applyRenderSettingsToOptions,
   prepareBoardRender,
 } from "../lib/prepareBoardRender.js";
+import { parseThumbnailJson, thumbnailJsonUrl } from "../lib/thumbnailArtifact.js";
 import {
   buildRenderCustomization,
   clearBoardRenderUi,
@@ -251,22 +252,28 @@ function Customize(props) {
     const normalized = normalizeData(inJSON);
     return normalized ?? defaultRendererJson;
   });
+  const [sampleGameMoveUrl, setSampleGameMoveUrl] = useState(null);
 
   useEffect(() => {
     if (inJSON !== undefined && inJSON !== null) {
       const normalized = normalizeData(inJSON);
       setRendererJson(normalized ?? defaultRendererJson);
+      setSampleGameMoveUrl(null);
     } else if (metaGame === "_default") {
       setRendererJson(defaultRendererJson);
+      setSampleGameMoveUrl(null);
     } else {
-      fetch(`https://thumbnails.abstractplay.com/${metaGame}.json`)
+      fetch(thumbnailJsonUrl(metaGame))
         .then((res) => (res.ok ? res.json() : Promise.reject(res)))
         .then((data) => {
-          const normalized = normalizeData(data);
+          const { render, source } = parseThumbnailJson(data);
+          const normalized = normalizeData(render);
           setRendererJson(normalized ?? defaultRendererJson);
+          setSampleGameMoveUrl(source?.moveUrl ?? null);
         })
         .catch(() => {
           setRendererJson(defaultRendererJson);
+          setSampleGameMoveUrl(null);
         });
     }
   }, [metaGame, inJSON, defaultRendererJson]);
@@ -1893,6 +1900,11 @@ function Customize(props) {
         </div>
         <div className="customize-page-preview">
           <label className="label">{t("customize.output")}</label>
+          {sampleGameMoveUrl ? (
+            <p className="help mb-2">
+              <a href={sampleGameMoveUrl}>{t("tables.viewSampleGame")}</a>
+            </p>
+          ) : null}
           <div
             id="renderer-demo-output"
             className={

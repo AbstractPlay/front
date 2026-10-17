@@ -98,7 +98,7 @@ Centralized in [`src/lib/api.js`](../src/lib/api.js). See [API client](/front/ap
 | Flag SVGs | `public/flags/` |
 | i18n locale files | `public/locales/` |
 | Service worker | `public/sw.js` |
-| Game thumbnails | `https://thumbnails.abstractplay.com/{metaGame}.json` |
+| Game thumbnails | `https://thumbnails.abstractplay.com/{metaGame}.json` (v1 envelope: `render` + `source`; SVG at `{metaGame}-light.svg` / `-dark.svg`) |
 
 ## Stages
 

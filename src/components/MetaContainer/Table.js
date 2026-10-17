@@ -342,7 +342,7 @@ function Table({
               title={`Board image for ${props.row.original.gameName}`}
             >
               <div className="content">
-                <Thumbnail meta={props.row.original.id} />
+                <Thumbnail meta={props.row.original.id} linkToSource />
               </div>
             </Modal>
           </Fragment>

@@ -924,7 +924,9 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         }
       >
         <div className="content">
-          {activeImgModal && <Thumbnail meta={activeImgModal} />}
+          {activeImgModal && (
+            <Thumbnail meta={activeImgModal} linkToSource />
+          )}
         </div>
       </Modal>
       {handleChallenge && (
