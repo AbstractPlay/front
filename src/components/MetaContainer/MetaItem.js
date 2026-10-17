@@ -491,7 +491,7 @@ const MetaItem = React.forwardRef(
           title={`Board image for ${game.name}`}
         >
           <div className="content">
-            <Thumbnail meta={game.uid} />
+            <Thumbnail meta={game.uid} linkToSource />
           </div>
         </Modal>
       </div>
