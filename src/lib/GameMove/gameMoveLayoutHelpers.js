@@ -261,13 +261,14 @@ export function buildUserChatsProps(session) {
 }
 
 export function buildMoveResultsProps(session) {
-  const { game, comments, gameRef, t } = session;
+  const { game, comments, gameRef, t, handleGameMoveClick } = session;
   return {
     className: "moveResults",
     results: game?.moveResults,
     comments,
     players: gameRef.current?.players,
     t,
+    handleGameMoveClick,
   };
 }
 

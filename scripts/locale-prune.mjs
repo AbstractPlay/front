@@ -178,7 +178,7 @@ function runCli() {
   const files = args.filter((arg) => !arg.startsWith("--"));
 
   if (files.length === 0) {
-    console.error("Usage: node bin/locale-prune.mjs [--dry-run] <public/locales/en/file.json> [...]");
+    console.error("Usage: node scripts/locale-prune.mjs [--dry-run] <public/locales/en/file.json> [...]");
     process.exit(1);
   }
 

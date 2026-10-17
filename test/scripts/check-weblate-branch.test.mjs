@@ -6,7 +6,7 @@ import {
   isLikelyTruncatedWeblateExport,
   isLocalePath,
   parseMergeTreeConflicts,
-} from "../../bin/check-weblate-branch.mjs";
+} from "../../scripts/check-weblate-branch.mjs";
 
 describe("check-weblate-branch", () => {
   it("detects formatting-only JSON changes", () => {

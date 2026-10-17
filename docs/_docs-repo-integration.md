@@ -23,7 +23,7 @@ Relative links resolve against the **published page URL**, not the file path on 
 
 - **Cross-page doc links:** use absolute URLs (`/front/deployment/`, `/backend/getting-started/`).
 - **Source under `src/`, `public/`, `config/`, `.github/`:** relative paths are OK (e.g. [`../src/lib/api.js`](../src/lib/api.js)).
-- **Repo-root files** (`csp-policy.mjs`, `vite.config.js`, `bin/…`): use inline `` `backticks` `` or a GitHub URL — not `[text](../file.mjs)`.
+- **Repo-root files** (`csp-policy.mjs`, `vite.config.js`, `scripts/…`): use inline `` `backticks` `` or a GitHub URL — not `[text](../file.mjs)`.
 
 From this repo:
 

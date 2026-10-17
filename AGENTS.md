@@ -15,7 +15,8 @@ Follow the canonical org-wide policy in [gameslib `AGENTS.md` — Abstract Play 
 | `src/lib/` | Shared non-UI logic (API, game-move, exploration) |
 | `src/stores/` | Zustand |
 | `src/config/` | Cognito/API endpoints (`VITE_REAL_MODE`) |
-| `bin/` | Build, locales, sitemap, exploration contract runner |
+| `scripts/` | Build, locales, sitemap, exploration contract runner (`package.json` entrypoints) |
+| `bin/` | Local scratch, exports, and one-off dev helpers (gitignored output under `bin/out/`) |
 | `public/locales/` | Locale JSON (HTTP + sync source) |
 | `docs/` | Contributor docs |
 
@@ -27,8 +28,8 @@ Follow the canonical org-wide policy in [gameslib `AGENTS.md` — Abstract Play 
 |---------|------|
 | `npm test` | Vitest unit tests (fast) |
 | `npm run test:ci` | Vitest + real gameslib contracts (`test:engines`) — CI |
-| `npm run test:engines` | `bin/test-exploration-contracts.mjs` only |
-| `npm run lint` | Locale JSON format + ESLint (`src/`, `bin/`) |
+| `npm run test:engines` | `scripts/test-exploration-contracts.mjs` only |
+| `npm run lint` | Locale JSON format + ESLint (`src/`, `scripts/`) |
 | `npm run sync-locales` | Before `start` / build — copies gameslib namespaces + bundles English |
 
 `package.json` has no separate `typecheck` script; CI tests run via Vitest. For a TS-free repo, **lint + test:ci** match deploy prerequisites.
@@ -42,7 +43,7 @@ Two layers (detail: [docs/guides/testing.md](docs/guides/testing.md)):
 1. **Vitest** — mocked units under `src/` (`jsdom`, Testing Library). `@abstractplay/gameslib` resolves to compiled **`build/`** via [`vite.config.js`](vite.config.js).
 2. **Real engines** — `npm run test:engines` loads gameslib like production. Vitest alone does not catch Lambda-style CommonJS init issues; backend `lambdaInit` and gameslib postbuild cover other angles.
 
-**Fixtures:** regression scenarios under `src/lib/GameMove/fixtures/` as **inline JSON** — register in `fixtures/index.js`. Do not read `bin/` or external files at test runtime (same rule as gameslib).
+**Fixtures:** regression scenarios under `src/lib/GameMove/fixtures/` as **inline JSON** — register in `fixtures/index.js`. Do not read `bin/` scratch paths or other external files at test runtime (same rule as gameslib).
 
 Play-page bugs: add a contract object (`metaGame`, `state`, `move`, expected partial/persist flags) and append to `EXPLORATION_CONTRACTS` in the fixtures index.
 

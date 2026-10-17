@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { mergeCostAllocationTags } from "../../bin/apply-s3-cost-allocation-tags.mjs";
+import { mergeCostAllocationTags } from "../../scripts/apply-s3-cost-allocation-tags.mjs";
 
 describe("mergeCostAllocationTags", () => {
   it("preserves existing tags and sets ap allocation keys", () => {

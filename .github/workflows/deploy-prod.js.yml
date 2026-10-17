@@ -119,13 +119,13 @@ jobs:
       run: npx serverless client deploy --stage prod --no-confirm
 
     - name: Apply S3 cost allocation tags
-      run: node bin/apply-s3-cost-allocation-tags.mjs --stage prod
+      run: node scripts/apply-s3-cost-allocation-tags.mjs --stage prod
 
     - name: Sync CloudFront CSP
-      run: node bin/sync-cloudfront-csp.mjs --stage prod
+      run: node scripts/sync-cloudfront-csp.mjs --stage prod
 
     - name: Publish locale files to S3
-      run: node bin/publish-locales.mjs --stage prod
+      run: node scripts/publish-locales.mjs --stage prod
 
     - name: Trigger docs rebuild
       if: github.event_name == 'push'

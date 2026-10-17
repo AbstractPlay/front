@@ -82,7 +82,7 @@
   },
   "overrides": [
     {
-      "files": ["bin/**/*.mjs"],
+      "files": ["scripts/**/*.mjs"],
       "env": {
         "node": true
       }

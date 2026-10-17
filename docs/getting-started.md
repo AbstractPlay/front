@@ -94,8 +94,9 @@ After adding translatable strings, edit `public/locales/en/apfront.json`. See [I
 | `src/hooks/` | Custom React hooks |
 | `index.html` | Vite HTML entry |
 | `public/` | Static assets, locales, service worker |
-| `bin/` | Build helpers (sitemap, RSS, news) |
-| `csp-policy.mjs` | Production Content-Security-Policy source (synced to CloudFront via `bin/sync-cloudfront-csp.mjs`) |
+| `scripts/` | Build and deploy helpers (sitemap, locales, CSP sync, …) |
+| `bin/` | Local scratch and one-off dev tools (`bin/out/` is gitignored) |
+| `csp-policy.mjs` | Production Content-Security-Policy source (synced to CloudFront via `scripts/sync-cloudfront-csp.mjs`) |
 
 See [Project structure](/front/guides/project-structure/) for conventions.
 

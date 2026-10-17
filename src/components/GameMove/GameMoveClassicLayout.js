@@ -646,6 +646,7 @@ export default function GameMoveClassicLayout({ session }) {
                   comments={comments}
                   players={gameRef.current?.players}
                   t={t}
+                  handleGameMoveClick={handleGameMoveClick}
                 />
               </div>
             ) : (

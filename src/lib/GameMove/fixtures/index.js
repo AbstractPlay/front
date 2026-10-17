@@ -13,7 +13,7 @@ import { pinchContracts } from "./pinch.js";
  * 2. Export a contract object with id, metaGame, state, move, expectations.
  * 3. Append to EXPLORATION_CONTRACTS below.
  *
- * Run by [`bin/test-exploration-contracts.mjs`](../../../../bin/test-exploration-contracts.mjs)
+ * Run by [`scripts/test-exploration-contracts.mjs`](../../../../scripts/test-exploration-contracts.mjs)
  * (`npm run test:engines`). state: JSON string passed to GameFactory, or null for a fresh game.
  *
  * metaGame must be registered in the pinned gameslib build (see ci-deps.prod.json).

@@ -11,7 +11,7 @@ The front end is a static SPA deployed to S3 and served through CloudFront using
 
 Defined in [`serverless.yml`](../serverless.yml).
 
-Billable AWS resources for the play site use `ap:service=apfront` and `ap:stage` (`dev` / `prod`) for Cost Explorer. Activate those keys once per account under **Billing → Cost allocation tags**. S3 bucket tags are merged (not replaced) by `bin/apply-s3-cost-allocation-tags.mjs` after each `serverless client deploy` so existing AWS system tags are preserved. CloudFront distribution tags are applied by `bin/sync-cloudfront-csp.mjs`.
+Billable AWS resources for the play site use `ap:service=apfront` and `ap:stage` (`dev` / `prod`) for Cost Explorer. Activate those keys once per account under **Billing → Cost allocation tags**. S3 bucket tags are merged (not replaced) by `scripts/apply-s3-cost-allocation-tags.mjs` after each `serverless client deploy` so existing AWS system tags are preserved. CloudFront distribution tags are applied by `scripts/sync-cloudfront-csp.mjs`.
 
 ## Build commands
 
@@ -50,7 +50,7 @@ CI steps:
 4. **Deploy job**: same dep order for the stage, then auto-commit `ci-deps.*.json`, `package-lock.json`, and `package.json` on `repository_dispatch` only.
 5. `npm run build-dev` or `build-prod`.
 6. **`npx serverless client deploy`** (Serverless **v4** from `devDependencies`; org secret `SERVERLESS_ACCESS_KEY` + `SERVERLESS_ORG=abstractplay` — no global CLI install).
-7. Publish locale JSON files to S3 (`bin/publish-locales.mjs`).
+7. Publish locale JSON files to S3 (`scripts/publish-locales.mjs`).
 
 Deployments do **not** use CloudFront invalidations. Cache freshness is handled by upload headers (see below) and content-hashed JS/CSS bundle filenames under `build/static/` (Vite `rollupOptions.output`, matching the former CRA layout).
 
@@ -68,11 +68,11 @@ Locale files uploaded by `publish-locales.mjs` use `max-age=3600`.
 
 `csp-policy.mjs` is the single source of truth. **Production CSP is enforced by a CloudFront response header**, not an HTML meta tag (duplicate policies are intersected by the browser, so an outdated CloudFront header can block features even after `csp-policy.mjs` changes are deployed to S3).
 
-After editing `csp-policy.mjs`, deploy as usual; CI runs `node bin/sync-cloudfront-csp.mjs --stage dev|prod` after `serverless client deploy`. To sync manually:
+After editing `csp-policy.mjs`, deploy as usual; CI runs `node scripts/sync-cloudfront-csp.mjs --stage dev|prod` after `serverless client deploy`. To sync manually:
 
 ```bash
-node bin/sync-cloudfront-csp.mjs --stage dev
-node bin/sync-cloudfront-csp.mjs --stage prod
+node scripts/sync-cloudfront-csp.mjs --stage dev
+node scripts/sync-cloudfront-csp.mjs --stage prod
 ```
 
 Use `--dry-run` to print the policy without calling AWS. Local `npm start` has no CSP (Vite HMR).
