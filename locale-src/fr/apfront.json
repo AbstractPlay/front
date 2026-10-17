@@ -7179,6 +7179,10 @@
     "src": "Variants",
     "out": "Variantes"
   },
+  "tables.viewSampleGame": {
+    "src": "View sample game",
+    "out": "Voir un exemple de partie"
+  },
   "tables.weightedAverage": {
     "src": "Elo",
     "out": "Elo"
