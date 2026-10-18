@@ -5,6 +5,19 @@ import { useTranslation } from "react-i18next";
 const COMMENT_TEXTAREA_MIN_HEIGHT_PX = 30;
 const COMMENT_TEXTAREA_MAX_HEIGHT_PX = 128;
 
+/** In-progress composer text when chat UI unmounts (e.g. drawer tab switch). */
+const chatDraftByGameId = new Map();
+
+function draftKey(gameid) {
+  return gameid != null && gameid !== "" ? String(gameid) : "__anonymous__";
+}
+
+export function clearGameChatDraft(gameId) {
+  if (gameId != null && gameId !== "") {
+    chatDraftByGameId.delete(String(gameId));
+  }
+}
+
 function scrollParentsOf(el) {
   const saved = [];
   let node = el?.parentElement;
@@ -19,23 +32,35 @@ function scrollParentsOf(el) {
 }
 
 function GameCommentShort(props) {
-  const [comment, commentSetter] = useState("");
+  const gameKey = draftKey(props.gameid);
+  const [comment, commentSetter] = useState(
+    () => chatDraftByGameId.get(gameKey) ?? ""
+  );
   const [toolong, toolongSetter] = useState(false);
   const { t } = useTranslation();
   const textareaRef = useRef();
 
   useEffect(() => {
-    commentSetter(props.comment);
-  }, [props.comment]);
+    if (props.comment !== undefined && props.comment !== "") {
+      commentSetter(props.comment);
+      chatDraftByGameId.set(gameKey, props.comment);
+    }
+  }, [props.comment, gameKey]);
 
-  const handleChange = (comment) => {
-    toolongSetter(comment.length > 4000);
-    commentSetter(comment);
+  useEffect(() => {
+    commentSetter(chatDraftByGameId.get(gameKey) ?? "");
+  }, [gameKey]);
+
+  const handleChange = (next) => {
+    toolongSetter(next.length > 4000);
+    commentSetter(next);
+    chatDraftByGameId.set(gameKey, next);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     props.handleSubmit(comment.substring(0, 4000));
+    chatDraftByGameId.delete(gameKey);
     commentSetter("");
   };
 

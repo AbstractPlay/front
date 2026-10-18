@@ -92,9 +92,9 @@ function UserChats(props) {
         {props.canComment && (
           <GameCommentShort
             key={`chatkey_${gameid}`}
+            gameid={gameid}
             handleSubmit={props.handleSubmit}
             tooMuch={props.tooMuch}
-            comment={""}
             commentingCompletedGame={props.commentingCompletedGame}
           />
         )}
