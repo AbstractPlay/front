@@ -8,6 +8,7 @@ import {
   prepareBoardRender,
   applyRenderSettingsToOptions,
 } from "./prepareBoardRender.js";
+import { apPerfRun } from "./apPerf.js";
 import { resolveEffectiveRenderSettings } from "./resolveEffectiveRenderSettings.js";
 
 function attachOffscreenContainer() {
@@ -36,6 +37,7 @@ export function renderLiveBoardLayers({
   stackExpanding,
   onStackColumnHover,
 }) {
+  return apPerfRun("explore.boardSvgLayers", () => {
   const layers = [];
 
   if (isCompositeRenderRep(renderrep)) {
@@ -100,4 +102,5 @@ export function renderLiveBoardLayers({
     document.body.removeChild(container);
   }
   return { layers, boardRenderIndex: Math.max(0, layers.length - 1) };
+  });
 }
