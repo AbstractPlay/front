@@ -1523,6 +1523,36 @@ abbr.glicko-hint {
   z-index: 1000;
 }
 
+/* Challenge start-position preview (modal) — avoid global .board flex/height bleed */
+.challenge-position-preview {
+  margin: 0.75rem 0 1.25rem;
+  position: relative;
+  z-index: 0;
+  clear: both;
+}
+
+.challenge-position-preview__wrap {
+  overflow: auto;
+  max-height: min(45vh, 26rem);
+  width: 100%;
+  contain: layout paint;
+  position: relative;
+  isolation: isolate;
+  border: 1px solid var(--border-color, #dbdbdb);
+  border-radius: 4px;
+  background: var(--background-color, #fff);
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.challenge-position-preview__wrap .challenge-position-preview__board {
+  width: 100% !important;
+  max-width: 100%;
+  height: auto !important;
+  display: block;
+  position: relative;
+}
+
 /* More prominent YourTurn indicator */
 .yourTurn {
     display: flex;

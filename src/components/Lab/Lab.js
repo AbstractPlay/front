@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PageHelmet from "../PageHelmet";
+import ChallengeEntryModals from "../ChallengeEntryModals";
 import { buildLabGame } from "../../lib/Lab/buildGame";
+import { callAuthApi } from "../../lib/api";
+import { rawDirectoryDisplayName } from "../Bots/botUtils";
+import { useStore } from "../../stores";
 import { readSimRoundFromGameSettings } from "../../lib/Lab/labSimBoardSettings";
 import {
   clearLastSession,
@@ -69,7 +73,11 @@ function launchPayloadFromSave(save) {
 
 function Lab() {
   const { t } = useTranslation();
+  const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
   const [session, setSession] = useState(null);
+  const [challengeModalOpen, challengeModalOpenSetter] = useState(false);
+  const [challengeDraft, challengeDraftSetter] = useState(null);
   const [launcherMetaGame, setLauncherMetaGame] = useState(() =>
     getLastLauncherMetaGame(),
   );
@@ -153,6 +161,36 @@ function Lab() {
     setSession(null);
   }, [rememberLauncherMetaGame, session]);
 
+  const handleChallengeFromPosition = useCallback((draft) => {
+    challengeDraftSetter(draft);
+    challengeModalOpenSetter(true);
+  }, []);
+
+  const closeChallengeModal = useCallback(() => {
+    challengeModalOpenSetter(false);
+    challengeDraftSetter(null);
+  }, []);
+
+  const handleIssuePositionChallenge = useCallback(
+    async (challenge) => {
+      if (!globalMe?.id) {
+        return;
+      }
+      const res = await callAuthApi("new_challenge", {
+        ...challenge,
+        challenger: {
+          id: globalMe.id,
+          name: rawDirectoryDisplayName(globalMe, allUsers),
+        },
+      });
+      if (!res) {
+        return;
+      }
+      closeChallengeModal();
+    },
+    [globalMe, allUsers, closeChallengeModal]
+  );
+
   if (!ready) {
     return null;
   }
@@ -161,18 +199,32 @@ function Lab() {
     <>
       <PageHelmet title={documentTitle} />
       {session ? (
-        <LabSession
-          initialGame={session.game}
-          savedExploration={session.savedExploration}
-          savedMoveAnnotations={session.savedMoveAnnotations}
-          initialFocus={session.initialFocus}
-          initialGameSettings={session.gameSettings}
-          sessionName={session.sessionName}
-          loadedSave={session.loadedSave}
-          onLoadedSaveChange={handleLoadedSaveChange}
-          onSessionNameChange={handleSessionNameChange}
-          onExit={handleExit}
-        />
+        <>
+          <LabSession
+            initialGame={session.game}
+            savedExploration={session.savedExploration}
+            savedMoveAnnotations={session.savedMoveAnnotations}
+            initialFocus={session.initialFocus}
+            initialGameSettings={session.gameSettings}
+            sessionName={session.sessionName}
+            loadedSave={session.loadedSave}
+            onLoadedSaveChange={handleLoadedSaveChange}
+            onSessionNameChange={handleSessionNameChange}
+            onExit={handleExit}
+            onChallengeFromPosition={
+              globalMe?.id ? handleChallengeFromPosition : undefined
+            }
+          />
+          <ChallengeEntryModals
+            show={challengeModalOpen}
+            handleClose={closeChallengeModal}
+            handleChallenge={handleIssuePositionChallenge}
+            fixedMetaGame={challengeDraft?.metaGame}
+            initialVariantUids={challengeDraft?.variants}
+            initialStartPosition={challengeDraft?.state}
+            lockTeachingFromPosition={Boolean(challengeDraft?.state)}
+          />
+        </>
       ) : (
         <LabLauncher
           initialMetaGame={launcherMetaGame}

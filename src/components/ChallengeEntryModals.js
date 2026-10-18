@@ -15,6 +15,8 @@ function ChallengeEntryModals({
   fixedMetaGame,
   opponent,
   initialVariantUids,
+  initialStartPosition,
+  lockTeachingFromPosition = false,
   initialSoloSeed = "",
   showSolo = false,
   onSoloClose,
@@ -74,6 +76,8 @@ function ChallengeEntryModals({
         fixedMetaGame={fixedMetaGame}
         opponent={opponent}
         initialVariantUids={initialVariantUids}
+        initialStartPosition={initialStartPosition}
+        lockTeachingFromPosition={lockTeachingFromPosition}
         onSoloHandoff={handleSoloHandoff}
       />
       <SoloPlayModal

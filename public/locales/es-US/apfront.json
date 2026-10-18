@@ -119,6 +119,19 @@
   "ChooseNoExplore": "¿Deshabilitar exploración?",
   "ChooseTeachingMode": "¿Modo de enseñanza?",
   "ChooseOpponent": "Elegir un oponente",
+  "challenge": {
+    "startPosition": {
+      "summary": "Este desafío comienza desde la posición que seleccionaste (modo enseñanza, sin clasificación).",
+      "seatingHint": "Elige tu asiento para jugar del lado que deseas; la posición del tablero no se rota.",
+      "teachingLocked": "Se requiere el modo enseñanza para los desafíos desde una posición.",
+      "notEligible": "Este juego o variante no se puede usar para un desafío desde una posición.",
+      "previewLabel": "Posición inicial",
+      "previewPlayer": "Jugador {{number}}",
+      "badge": "· posición preestablecida",
+      "labButton": "Desafiar desde posición",
+      "gameButton": "Enseñar esta posición"
+    }
+  },
   "newChallenge": {
     "opponentActivityHelp": "Limita la lista de oponentes según la actividad reciente en el sitio.",
     "opponentActivityAll": "Todos los oponentes",

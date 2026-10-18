@@ -2979,6 +2979,42 @@
     "src": "Your bots",
     "out": "I tuoi bot"
   },
+  "challenge.startPosition.badge": {
+    "src": "· preset position",
+    "out": "· posizione preimpostata"
+  },
+  "challenge.startPosition.gameButton": {
+    "src": "Teach this position",
+    "out": "Insegna questa posizione"
+  },
+  "challenge.startPosition.labButton": {
+    "src": "Challenge from position",
+    "out": "Sfida da posizione"
+  },
+  "challenge.startPosition.notEligible": {
+    "src": "This game or variant cannot be used for a position challenge.",
+    "out": "Questo gioco o variante non può essere utilizzato per una sfida da posizione."
+  },
+  "challenge.startPosition.previewLabel": {
+    "src": "Start position",
+    "out": "Posizione iniziale"
+  },
+  "challenge.startPosition.previewPlayer": {
+    "src": "Player {{number}}",
+    "out": "Giocatore {{number}}"
+  },
+  "challenge.startPosition.seatingHint": {
+    "src": "Choose seating so you play the side you intend; the board position is not rotated.",
+    "out": "Scegli il posto in modo da giocare dal lato desiderato; la posizione sulla scacchiera non viene ruotata."
+  },
+  "challenge.startPosition.summary": {
+    "src": "This challenge starts from the position you selected (teaching mode, unrated).",
+    "out": "Questa sfida inizia dalla posizione che hai selezionato (modalità didattica, non classificata)."
+  },
+  "challenge.startPosition.teachingLocked": {
+    "src": "Teaching mode is required for position challenges.",
+    "out": "La modalità didattica è richiesta per le sfide da posizione."
+  },
   "challenges.filters.hardTimeOnly": {
     "src": "Hard time only",
     "out": "Solo tempo rigido"

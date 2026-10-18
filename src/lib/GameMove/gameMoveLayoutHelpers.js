@@ -212,6 +212,7 @@ export function buildGameMovesProps(session) {
     handleGameMoveClick,
     getFocusNode,
     handlePlaygroundExport,
+    handleTeachPositionChallenge,
     engineRef,
     gameRec,
   } = session;
@@ -226,6 +227,7 @@ export function buildGameMovesProps(session) {
     handleGameMoveClick,
     getFocusNode,
     handlePlaygroundExport,
+    handleTeachPositionChallenge,
     engine: engineRef?.current,
     gameRec,
     globalMe: moveTableMe,

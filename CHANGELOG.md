@@ -27,6 +27,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Playground (Lab):** simultaneous games in seat mode — per-seat move entry, round buffer until all active seats submit, eliminated-seat handling, and active-seat picker for board perspective.
 - **Move tree exploration:** mark an explored line as an explicit draw (½) or clear an outcome back to undecided (?), alongside player win markers; annotations propagate up the tree like win/loss markers.
 - **Teaching mode:** optional cooperative undo on 2-player, non-simultaneous challenges (new challenge and standing challenge modals); grant / keep / undo controls on the move page (all four layouts); during review, only keep/undo are offered; challenge cards show a teaching label.
+- **Challenges:** direct teaching challenges from a preset board — issue from Playground/Lab (“Challenge from position”) or the live move tree (“Teach this position”); challengee sees a read-only board preview before accept.
 - **Player profile:** Game History table includes game length (move count) after End date.
 - **Dashboard:** “Your tournaments” section (after Your games) lists in-progress automated tournaments you are in via `me_dashboard.currentTournaments`; hidden when none.
 - **Dashboard:** optional tabbed layout (Games, Tournaments, Challenges; Admin tab for site admins) with vertical/tabbed preference stored locally; Issue challenge always available in tabbed mode.

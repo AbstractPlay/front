@@ -119,6 +119,19 @@
   "ChooseNoExplore": "Analysefunktion deaktivieren?",
   "ChooseTeachingMode": "Lehrmodus?",
   "ChooseOpponent": "Gegner auswählen",
+  "challenge": {
+    "startPosition": {
+      "summary": "Diese Herausforderung beginnt in der von dir ausgewählten Stellung (Lehrmodus, ungewertet).",
+      "seatingHint": "Wähle deinen Platz so, dass du die gewünschte Seite spielst; das Spielbrett wird nicht gedreht.",
+      "teachingLocked": "Für Stellungs-Herausforderungen ist der Lehrmodus erforderlich.",
+      "notEligible": "Dieses Spiel oder diese Variante kann nicht für eine Stellungs-Herausforderung verwendet werden.",
+      "previewLabel": "Startstellung",
+      "previewPlayer": "Spieler {{number}}",
+      "badge": "· voreingestellte Stellung",
+      "labButton": "Aus Stellung herausfordern",
+      "gameButton": "Diese Stellung lehren"
+    }
+  },
   "newChallenge": {
     "opponentActivityHelp": "Gegnerliste nach der letzten Aktivität auf der Website einschränken.",
     "opponentActivityAll": "Alle Gegner",

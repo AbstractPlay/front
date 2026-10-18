@@ -81,6 +81,7 @@ function GameMoves(props) {
   let neverExplore = props.noExplore;
   let exploration = props.exploration;
   const handlePlaygroundExport = props.handlePlaygroundExport;
+  const handleTeachPositionChallenge = props.handleTeachPositionChallenge;
   let handleGameMoveClick = props.handleGameMoveClick;
   const globalMe = props.globalMe;
   const moveTableSeats = resolveMoveTablePlayerSeats(game, globalMe);
@@ -675,6 +676,7 @@ function GameMoves(props) {
     const catalogExportOk = validGames.some(([uid]) => game.metaGame === uid);
     const playgroundExportDisabled =
       !catalogExportOk || !sessionExplorationAllowed(game);
+    const teachPositionDisabled = playgroundExportDisabled;
 
     return (
       <>
@@ -837,14 +839,25 @@ function GameMoves(props) {
             </tbody>
           </table>
         </div>
-        <div className="control">
+        <div className="control buttons are-small">
           <button
-            className={`button is-small apButtonNeutral`}
+            className="button apButtonNeutral"
+            type="button"
             onClick={() => handlePlaygroundExport()}
             disabled={playgroundExportDisabled}
           >
             {t("ExportToLab")}
           </button>
+          {handleTeachPositionChallenge ? (
+            <button
+              className="button apButtonNeutral"
+              type="button"
+              onClick={() => handleTeachPositionChallenge()}
+              disabled={teachPositionDisabled}
+            >
+              {t("challenge.startPosition.gameButton")}
+            </button>
+          ) : null}
         </div>
       </>
     );

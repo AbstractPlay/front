@@ -95,6 +95,8 @@ import {
   saveLabBoardSettings,
 } from "../../lib/Lab/storage";
 import { persistNamedPlaygroundSave } from "../../lib/Lab/persistNamedSave";
+import { buildStartPositionFromLabSession } from "../../lib/challengeStartPosition";
+import { isLabSupportedGame } from "../../lib/Lab/buildGame";
 import { getAuthToken } from "../../lib/api";
 import { getEffectiveColourContext } from "../../lib/effectiveColourContext";
 import { serializePlaygroundExport } from "../../lib/Lab/export";
@@ -156,6 +158,7 @@ function LabSession({
   onLoadedSaveChange,
   onSessionNameChange,
   onExit,
+  onChallengeFromPosition,
 }) {
   const metaGame = initialGame.metaGame;
   const navigate = useNavigate();
@@ -947,6 +950,28 @@ function LabSession({
     showSaveModalSetter(true);
   };
 
+  const handleChallengeFromPositionClick = () => {
+    if (!onChallengeFromPosition) {
+      return;
+    }
+    try {
+      const nodes = explorationRef.current?.nodes;
+      if (!nodes || !focus || !gameRef.current) {
+        return;
+      }
+      onChallengeFromPosition(
+        buildStartPositionFromLabSession({
+          game: gameRef.current,
+          nodes,
+          focus,
+        })
+      );
+    } catch (err) {
+      errorMessageRef.current = err.message || String(err);
+      errorSetter(true);
+    }
+  };
+
   const handleSaveCreate = (name) => runNamedSave("create", name);
 
   const handleSaveUpdate = (name) => runNamedSave("update", name);
@@ -1400,6 +1425,15 @@ function LabSession({
           <button className="button apButton" onClick={handleOpenSave}>
             {t("lab.save")}
           </button>
+          {onChallengeFromPosition && isLabSupportedGame(metaGame) ? (
+            <button
+              type="button"
+              className="button apButtonNeutral"
+              onClick={handleChallengeFromPositionClick}
+            >
+              {t("challenge.startPosition.labButton")}
+            </button>
+          ) : null}
           <button className="button apButtonNeutral" onClick={onExit}>
             {t("lab.exitToLauncher")}
           </button>

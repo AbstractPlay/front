@@ -91,6 +91,7 @@ export default function GameMoveClassicLayout({ session }) {
     handleGameMoveClick,
     getFocusNode,
     handlePlaygroundExport,
+    handleTeachPositionChallenge,
     globalMe,
     chatComments,
     comments,
@@ -430,6 +431,7 @@ export default function GameMoveClassicLayout({ session }) {
                         handleGameMoveClick={handleGameMoveClick}
                         getFocusNode={getFocusNode}
                         handlePlaygroundExport={handlePlaygroundExport}
+                        handleTeachPositionChallenge={handleTeachPositionChallenge}
                         engine={engineRef.current}
                         gameRec={gameRec}
                         globalMe={globalMe}
@@ -599,6 +601,7 @@ export default function GameMoveClassicLayout({ session }) {
                   handleGameMoveClick={handleGameMoveClick}
                   getFocusNode={getFocusNode}
                   handlePlaygroundExport={handlePlaygroundExport}
+                  handleTeachPositionChallenge={handleTeachPositionChallenge}
                   engine={engineRef.current}
                   gameRec={gameRec}
                   globalMe={globalMe}

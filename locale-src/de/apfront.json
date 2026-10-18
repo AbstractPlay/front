@@ -2979,6 +2979,42 @@
     "src": "Your bots",
     "out": "Deine Bots"
   },
+  "challenge.startPosition.badge": {
+    "src": "· preset position",
+    "out": "· voreingestellte Stellung"
+  },
+  "challenge.startPosition.gameButton": {
+    "src": "Teach this position",
+    "out": "Diese Stellung lehren"
+  },
+  "challenge.startPosition.labButton": {
+    "src": "Challenge from position",
+    "out": "Aus Stellung herausfordern"
+  },
+  "challenge.startPosition.notEligible": {
+    "src": "This game or variant cannot be used for a position challenge.",
+    "out": "Dieses Spiel oder diese Variante kann nicht für eine Stellungs-Herausforderung verwendet werden."
+  },
+  "challenge.startPosition.previewLabel": {
+    "src": "Start position",
+    "out": "Startstellung"
+  },
+  "challenge.startPosition.previewPlayer": {
+    "src": "Player {{number}}",
+    "out": "Spieler {{number}}"
+  },
+  "challenge.startPosition.seatingHint": {
+    "src": "Choose seating so you play the side you intend; the board position is not rotated.",
+    "out": "Wähle deinen Platz so, dass du die gewünschte Seite spielst; das Spielbrett wird nicht gedreht."
+  },
+  "challenge.startPosition.summary": {
+    "src": "This challenge starts from the position you selected (teaching mode, unrated).",
+    "out": "Diese Herausforderung beginnt in der von dir ausgewählten Stellung (Lehrmodus, ungewertet)."
+  },
+  "challenge.startPosition.teachingLocked": {
+    "src": "Teaching mode is required for position challenges.",
+    "out": "Für Stellungs-Herausforderungen ist der Lehrmodus erforderlich."
+  },
   "challenges.filters.hardTimeOnly": {
     "src": "Hard time only",
     "out": "Nur harte Bedenkzeit"

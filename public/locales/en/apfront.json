@@ -119,6 +119,19 @@
   "ChooseNoExplore": "Disable exploration?",
   "ChooseTeachingMode": "Teaching mode?",
   "ChooseOpponent": "Choose an opponent",
+  "challenge": {
+    "startPosition": {
+      "summary": "This challenge starts from the position you selected (teaching mode, unrated).",
+      "seatingHint": "Choose seating so you play the side you intend; the board position is not rotated.",
+      "teachingLocked": "Teaching mode is required for position challenges.",
+      "notEligible": "This game or variant cannot be used for a position challenge.",
+      "previewLabel": "Start position",
+      "previewPlayer": "Player {{number}}",
+      "badge": "· preset position",
+      "labButton": "Challenge from position",
+      "gameButton": "Teach this position"
+    }
+  },
   "newChallenge": {
     "opponentActivityHelp": "Limit the opponent list by recent site activity.",
     "opponentActivityAll": "All opponents",

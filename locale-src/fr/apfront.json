@@ -2979,6 +2979,42 @@
     "src": "Your bots",
     "out": "Vos bots"
   },
+  "challenge.startPosition.badge": {
+    "src": "· preset position",
+    "out": "· position prédéfinie"
+  },
+  "challenge.startPosition.gameButton": {
+    "src": "Teach this position",
+    "out": "Enseigner cette position"
+  },
+  "challenge.startPosition.labButton": {
+    "src": "Challenge from position",
+    "out": "Défi à partir de la position"
+  },
+  "challenge.startPosition.notEligible": {
+    "src": "This game or variant cannot be used for a position challenge.",
+    "out": "Ce jeu ou cette variante ne peut pas être utilisé(e) pour un défi à partir d'une position."
+  },
+  "challenge.startPosition.previewLabel": {
+    "src": "Start position",
+    "out": "Position de départ"
+  },
+  "challenge.startPosition.previewPlayer": {
+    "src": "Player {{number}}",
+    "out": "Joueur {{number}}"
+  },
+  "challenge.startPosition.seatingHint": {
+    "src": "Choose seating so you play the side you intend; the board position is not rotated.",
+    "out": "Choisissez votre placement afin de jouer le camp souhaité ; la position du plateau n'est pas pivotée."
+  },
+  "challenge.startPosition.summary": {
+    "src": "This challenge starts from the position you selected (teaching mode, unrated).",
+    "out": "Ce défi commence à partir de la position que vous avez sélectionnée (mode enseignement, non classé)."
+  },
+  "challenge.startPosition.teachingLocked": {
+    "src": "Teaching mode is required for position challenges.",
+    "out": "Le mode enseignement est requis pour les défis à partir d'une position."
+  },
   "challenges.filters.hardTimeOnly": {
     "src": "Hard time only",
     "out": "Temps strict uniquement"
