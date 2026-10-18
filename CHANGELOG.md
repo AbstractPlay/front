@@ -45,7 +45,6 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
-- **Position challenges:** “Challenge from position” and “Teach this position” use the selected move-tree position, including exploration branches and earlier main-line moves, for both the preview and challenge payload.
 - **In-game chat:** unsent composer text is kept when switching drawer or overlay tabs (strip, card, and other layouts that unmount chat).
 - **Stack-expanding display:** Re-derive `stackExpanding` from game flags and the current render rep on each sync (and when changing display in settings) so switching from 3D to expanding (e.g. Volcano in Lab) enables stack hover again.
 - **Customize:** per-game settings JSON and saves include the full `render` block (e.g. `hide-labels-half`) when those options are checked — no longer omitted from the editor blob when they match global defaults.
