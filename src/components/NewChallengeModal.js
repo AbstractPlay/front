@@ -31,6 +31,11 @@ import {
   challengeRatedForPayload,
   challengeTeachingModeForPayload,
 } from "../lib/teachingModeChallenge";
+import {
+  buildStartPositionPayload,
+  isStartPositionChallengeEligible,
+} from "../lib/challengeStartPosition";
+import ChallengePositionPreview from "./Me/ChallengePositionPreview";
 
 const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const handleNewChallengeClose = props.handleClose;
@@ -39,6 +44,8 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
   const opponent = props.opponent;
   const fixedMetaGame = props.fixedMetaGame;
   const initialVariantUids = props.initialVariantUids;
+  const initialStartPosition = props.initialStartPosition;
+  const lockTeachingFromPosition = props.lockTeachingFromPosition === true;
   const show = props.show;
   const { t } = useTranslation();
   const [error, errorSetter] = useState(null);
@@ -128,10 +135,27 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     if (!show) {
       return;
     }
+    if (lockTeachingFromPosition) {
+      teachingModeSetter(true);
+      ratedSetter(false);
+      standingSetter(false);
+      if (playerCount !== 2) {
+        playerCountSetter(2);
+      }
+      return;
+    }
     if (!teachingEligible) {
       teachingModeSetter(false);
     }
-  }, [show, teachingEligible, teachingModeSetter]);
+  }, [
+    show,
+    teachingEligible,
+    teachingModeSetter,
+    lockTeachingFromPosition,
+    ratedSetter,
+    playerCount,
+    playerCountSetter,
+  ]);
 
   useEffect(() => {
     if (!show) {
@@ -495,15 +519,23 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     const openSlots = standing
       ? 0
       : opponentAnyone.filter(Boolean).length;
-    handleNewChallenge({
+    const effectiveTeaching =
+      lockTeachingFromPosition || (teachingEligible && teachingMode);
+    if (lockTeachingFromPosition && initialStartPosition) {
+      if (!isStartPositionChallengeEligible(metaGame, 2, selectedVariants)) {
+        errorSetter(t("challenge.startPosition.notEligible"));
+        return;
+      }
+    }
+    const challengePayload = {
       metaGame: metaGame,
-      numPlayers: playerCount,
-      standing: standing,
+      numPlayers: lockTeachingFromPosition ? 2 : playerCount,
+      standing: lockTeachingFromPosition ? false : standing,
       duration: standingCount,
       seating: seating,
       variants: selectedVariants,
       challengees: namedOpponents,
-      openSlots: openSlots,
+      openSlots: lockTeachingFromPosition ? 0 : openSlots,
       clockStart: clockStart,
       clockInc: clockInc,
       clockMax: clockMax,
@@ -511,15 +543,22 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
       rated: challengeRatedForPayload({
         rated,
         forceUnrated,
-        teachingMode: teachingEligible && teachingMode,
+        teachingMode: effectiveTeaching,
       }),
       noExplore: noExplore,
       teachingMode: challengeTeachingModeForPayload(
-        teachingMode,
-        teachingEligible
+        effectiveTeaching,
+        teachingEligible || lockTeachingFromPosition
       ),
       comment: comment,
-    });
+    };
+    if (lockTeachingFromPosition && initialStartPosition) {
+      Object.assign(
+        challengePayload,
+        buildStartPositionPayload(initialStartPosition)
+      );
+    }
+    handleNewChallenge(challengePayload);
     handleNewChallengeClose();
     // So that if you click on challenge again, it doesn't look like the challenge wasn't submitted:
     playerCountSetter(-1);
@@ -540,8 +579,16 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     playerCount !== -1 &&
     shouldHandoffToSolo(metaGame, playerCount);
 
+  const startPositionEligible =
+    !lockTeachingFromPosition ||
+    !initialStartPosition ||
+    (metaGame !== null &&
+      isStartPositionChallengeEligible(metaGame, 2, selectedVariants));
+
   const challengeDisabled =
-    metaGame !== null && !soloHandoffPath && !variantsValid;
+    (metaGame !== null && !soloHandoffPath && !variantsValid) ||
+    (lockTeachingFromPosition &&
+      (!initialStartPosition || !startPositionEligible));
 
   if (
     (fixedMetaGame && !gameinfo.has(fixedMetaGame)) ||
@@ -660,7 +707,24 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
             </div>
           </div>
         )}
-        {metaGame === null || playerCount === -1 || soloHandoffPath ? (
+        {lockTeachingFromPosition && initialStartPosition ? (
+          <div className="field">
+            <p className="help">{t("challenge.startPosition.summary")}</p>
+            <p className="help is-size-7">
+              {t("challenge.startPosition.seatingHint")}
+            </p>
+            {(fixedMetaGame ?? metaGame) ? (
+              <ChallengePositionPreview
+                metaGame={fixedMetaGame ?? metaGame}
+                state={initialStartPosition}
+              />
+            ) : null}
+          </div>
+        ) : null}
+        {metaGame === null ||
+        playerCount === -1 ||
+        soloHandoffPath ||
+        lockTeachingFromPosition ? (
           ""
         ) : /* Standing Challenge */
         opponent ? (
@@ -932,7 +996,13 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                 {noExplore ? t("HelpNoExploreTrue") : t("HelpNoExploreFalse")}
               </p>
             </div>
-            {teachingEligible ? (
+            {lockTeachingFromPosition ? (
+              <div className="field">
+                <p className="help">
+                  <strong>{t("challenge.startPosition.teachingLocked")}</strong>
+                </p>
+              </div>
+            ) : teachingEligible ? (
               <div className="field">
                 <div className="control">
                   <label className="checkbox">

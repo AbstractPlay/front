@@ -101,6 +101,8 @@ import { buildGameMoveRenderExtras } from "../../lib/GameMove/renderExtras.js";
 import { isLabSupportedGame } from "../../lib/Lab/buildGame";
 import { launchLabFromExport } from "../../lib/Lab/storage";
 import { serializeSessionExploration } from "../../lib/Lab/exploration";
+import { buildStartPositionFromGameMoveSession } from "../../lib/challengeStartPosition";
+import { rawDirectoryDisplayName } from "../Bots/botUtils";
 import { getEffectiveColourContext } from "../../lib/effectiveColourContext";
 import {
   isParticipant,
@@ -1411,6 +1413,56 @@ export function useGameMoveSession(props) {
     nodeidParam,
     state,
   ]);
+
+  const [teachChallengeOpen, teachChallengeOpenSetter] = useState(false);
+  const [teachChallengeDraft, teachChallengeDraftSetter] = useState(null);
+
+  const closeTeachChallengeModal = useCallback(() => {
+    teachChallengeOpenSetter(false);
+    teachChallengeDraftSetter(null);
+  }, []);
+
+  const handleIssueTeachChallenge = useCallback(
+    async (challenge) => {
+      const me = globalMeRef.current;
+      const users = useStore.getState().users;
+      if (!me?.id) {
+        return;
+      }
+      const res = await callAuthApi("new_challenge", {
+        ...challenge,
+        challenger: {
+          id: me.id,
+          name: rawDirectoryDisplayName(me, users),
+        },
+      });
+      if (!res) {
+        return;
+      }
+      closeTeachChallengeModal();
+    },
+    [closeTeachChallengeModal]
+  );
+
+  const handleTeachPositionChallenge = () => {
+    if (!isLabSupportedGame(game.metaGame)) return;
+    if (!sessionExplorationAllowed(game)) return;
+    const nodes = explorationRef.current?.nodes;
+    if (!nodes || !focus) return;
+    try {
+      teachChallengeDraftSetter(
+        buildStartPositionFromGameMoveSession({
+          game: gameRef.current ?? game,
+          nodes,
+          focus,
+        })
+      );
+      teachChallengeOpenSetter(true);
+    } catch (err) {
+      errorMessageRef.current = err.message || String(err);
+      errorSetter(true);
+    }
+  };
 
   const handlePlaygroundExport = async () => {
     if (!isLabSupportedGame(game.metaGame)) return;
@@ -2937,6 +2989,11 @@ export function useGameMoveSession(props) {
     handleGameMoveClick,
     getFocusNode,
     handlePlaygroundExport,
+    handleTeachPositionChallenge,
+    teachChallengeOpen,
+    teachChallengeDraft,
+    closeTeachChallengeModal,
+    handleIssueTeachChallenge,
     globalMe,
     sessionPlayerMe: sessionMe,
     chatComments,

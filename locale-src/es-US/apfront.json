@@ -2979,6 +2979,42 @@
     "src": "Your bots",
     "out": "Tus bots"
   },
+  "challenge.startPosition.badge": {
+    "src": "· preset position",
+    "out": "· posición preestablecida"
+  },
+  "challenge.startPosition.gameButton": {
+    "src": "Teach this position",
+    "out": "Enseñar esta posición"
+  },
+  "challenge.startPosition.labButton": {
+    "src": "Challenge from position",
+    "out": "Desafiar desde posición"
+  },
+  "challenge.startPosition.notEligible": {
+    "src": "This game or variant cannot be used for a position challenge.",
+    "out": "Este juego o variante no se puede usar para un desafío desde una posición."
+  },
+  "challenge.startPosition.previewLabel": {
+    "src": "Start position",
+    "out": "Posición inicial"
+  },
+  "challenge.startPosition.previewPlayer": {
+    "src": "Player {{number}}",
+    "out": "Jugador {{number}}"
+  },
+  "challenge.startPosition.seatingHint": {
+    "src": "Choose seating so you play the side you intend; the board position is not rotated.",
+    "out": "Elige tu asiento para jugar del lado que deseas; la posición del tablero no se rota."
+  },
+  "challenge.startPosition.summary": {
+    "src": "This challenge starts from the position you selected (teaching mode, unrated).",
+    "out": "Este desafío comienza desde la posición que seleccionaste (modo enseñanza, sin clasificación)."
+  },
+  "challenge.startPosition.teachingLocked": {
+    "src": "Teaching mode is required for position challenges.",
+    "out": "Se requiere el modo enseñanza para los desafíos desde una posición."
+  },
   "challenges.filters.hardTimeOnly": {
     "src": "Hard time only",
     "out": "Solo tiempo estricto"

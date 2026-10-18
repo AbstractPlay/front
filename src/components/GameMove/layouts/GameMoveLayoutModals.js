@@ -7,6 +7,7 @@ import Modal from "../../Modal";
 import ClipboardCopy from "../../../lib/ClipboardCopy";
 import { getFocusNode } from "../../../lib/GameMove/exploration";
 import MetaGameLinks from "../../shared/MetaGameLinks";
+import ChallengeEntryModals from "../../ChallengeEntryModals";
 
 export default function GameMoveLayoutModals({ session }) {
   const {
@@ -68,10 +69,26 @@ export default function GameMoveLayoutModals({ session }) {
     cssActive,
     cssActiveSetter,
     customCssAccountActive,
+    teachChallengeOpen,
+    teachChallengeDraft,
+    closeTeachChallengeModal,
+    handleIssueTeachChallenge,
+    globalMe,
   } = session;
 
   return (
     <>
+      {globalMe?.id ? (
+        <ChallengeEntryModals
+          show={teachChallengeOpen === true}
+          handleClose={closeTeachChallengeModal}
+          handleChallenge={handleIssueTeachChallenge}
+          fixedMetaGame={teachChallengeDraft?.metaGame}
+          initialVariantUids={teachChallengeDraft?.variants}
+          initialStartPosition={teachChallengeDraft?.state}
+          lockTeachingFromPosition={Boolean(teachChallengeDraft?.state)}
+        />
+      ) : null}
       <RenderOptionsModal
         show={showSettings}
         game={game}

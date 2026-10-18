@@ -119,6 +119,19 @@
   "ChooseNoExplore": "Désactiver l'exploration ?",
   "ChooseTeachingMode": "Mode d'apprentissage ?",
   "ChooseOpponent": "Choississez un adversaire :",
+  "challenge": {
+    "startPosition": {
+      "summary": "Ce défi commence à partir de la position que vous avez sélectionnée (mode enseignement, non classé).",
+      "seatingHint": "Choisissez votre placement afin de jouer le camp souhaité ; la position du plateau n'est pas pivotée.",
+      "teachingLocked": "Le mode enseignement est requis pour les défis à partir d'une position.",
+      "notEligible": "Ce jeu ou cette variante ne peut pas être utilisé(e) pour un défi à partir d'une position.",
+      "previewLabel": "Position de départ",
+      "previewPlayer": "Joueur {{number}}",
+      "badge": "· position prédéfinie",
+      "labButton": "Défi à partir de la position",
+      "gameButton": "Enseigner cette position"
+    }
+  },
   "newChallenge": {
     "opponentActivityHelp": "Limiter la liste des adversaires selon leur activité récente sur le site.",
     "opponentActivityAll": "Tous les adversaires",

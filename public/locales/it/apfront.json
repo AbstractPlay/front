@@ -119,6 +119,19 @@
   "ChooseNoExplore": "Disabilitare l'esplorazione?",
   "ChooseTeachingMode": "Modalità didattica?",
   "ChooseOpponent": "Scegli un avversario",
+  "challenge": {
+    "startPosition": {
+      "summary": "Questa sfida inizia dalla posizione che hai selezionato (modalità didattica, non classificata).",
+      "seatingHint": "Scegli il posto in modo da giocare dal lato desiderato; la posizione sulla scacchiera non viene ruotata.",
+      "teachingLocked": "La modalità didattica è richiesta per le sfide da posizione.",
+      "notEligible": "Questo gioco o variante non può essere utilizzato per una sfida da posizione.",
+      "previewLabel": "Posizione iniziale",
+      "previewPlayer": "Giocatore {{number}}",
+      "badge": "· posizione preimpostata",
+      "labButton": "Sfida da posizione",
+      "gameButton": "Insegna questa posizione"
+    }
+  },
   "newChallenge": {
     "opponentActivityHelp": "Limita l'elenco degli avversari in base all'attività recente sul sito.",
     "opponentActivityAll": "Tutti gli avversari",
