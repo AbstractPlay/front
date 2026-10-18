@@ -1,4 +1,5 @@
 import { GameFactory } from "@abstractplay/gameslib";
+import { apPerfRun, apPerfRunAsync } from "../apPerf.js";
 import { callAuthApi } from "../api";
 import { parseAuthResponse } from "../parseAuthResponse";
 import { isInterestingComment } from "./misc";
@@ -419,7 +420,9 @@ export async function saveExploration(
     metaGame: game.metaGame,
     move: moveNumber,
     // Note that for completed games you can comment on the parent node, so don't just save children
-    tree: explorationTreeForSave(game, exploration, moveNumber),
+    tree: apPerfRun("explore.saveExploration.treeForSave", () =>
+      explorationTreeForSave(game, exploration, moveNumber)
+    ),
   };
   if (game.gameOver) {
     pars.version = exploration[moveNumber - 1].version
@@ -452,7 +455,9 @@ export async function saveExploration(
       );
     }
   }
-  const res = await callAuthApi("save_exploration", pars);
+  const res = await apPerfRunAsync("explore.saveExploration.api", () =>
+    callAuthApi("save_exploration", pars)
+  );
   const parsed = await parseAuthResponse(res);
   if (!parsed.ok) {
     errorMessageRef.current = `save_exploration failed: ${parsed.error}`;

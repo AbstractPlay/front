@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { render } from "@abstractplay/renderer";
 import { cloneDeep } from "lodash";
 import { API_ENDPOINT_OPEN } from "../../config";
+import { apPerfRun } from "../../lib/apPerf.js";
 import { callAuthApi } from "../../lib/api";
 import { anyOnClockPlayerTimedOut } from "../../lib/gameClockDisplay";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
@@ -1692,40 +1693,53 @@ export function useGameMoveSession(props) {
     if (gameRef.current?.teachingUndo) {
       return;
     }
-    let gameEngineTmp = createEngineAtFocus(
-      gameRef.current,
-      explorationRef.current.nodes,
-      focus
-    );
-    let result;
-    if (gameRef.current.simultaneous)
-      result = gameEngineTmp.validateMove(value, gameRef.current.me + 1);
-    else result = gameEngineTmp.validateMove(value);
-    result.move = value;
-    result.rendered = move.rendered;
-    // console.log(result);
-    processNewMove(
-      result,
-      explorer,
-      globalMe,
-      focus,
-      gameRef,
-      movesRef,
-      statusRef,
-      explorationRef.current.nodes,
-      errorMessageRef,
-      partialMoveRenderRef,
-      renderrepSetter,
-      engineRef,
-      errorSetter,
-      focusSetter,
-      moveSetter,
-      displaySettings,
-      navigate,
-      t
-    );
-    populateChecked(gameRef, engineRef, t, inCheckSetter);
-    publishGameColors({ state: engineRef.current.state() });
+    apPerfRun("explore.handleMove.total", () => {
+      const gameEngineTmp = apPerfRun("explore.handleMove.createEngine", () =>
+        createEngineAtFocus(
+          gameRef.current,
+          explorationRef.current.nodes,
+          focus
+        )
+      );
+      let result;
+      if (gameRef.current.simultaneous) {
+        result = apPerfRun("explore.handleMove.validateMove", () =>
+          gameEngineTmp.validateMove(value, gameRef.current.me + 1)
+        );
+      } else {
+        result = apPerfRun("explore.handleMove.validateMove", () =>
+          gameEngineTmp.validateMove(value)
+        );
+      }
+      result.move = value;
+      result.rendered = move.rendered;
+      apPerfRun("explore.handleMove.processNewMove", () =>
+        processNewMove(
+          result,
+          explorer,
+          globalMe,
+          focus,
+          gameRef,
+          movesRef,
+          statusRef,
+          explorationRef.current.nodes,
+          errorMessageRef,
+          partialMoveRenderRef,
+          renderrepSetter,
+          engineRef,
+          errorSetter,
+          focusSetter,
+          moveSetter,
+          displaySettings,
+          navigate,
+          t
+        )
+      );
+      apPerfRun("explore.handleMove.afterHooks", () => {
+        populateChecked(gameRef, engineRef, t, inCheckSetter);
+        publishGameColors({ state: engineRef.current.state() });
+      });
+    });
   };
 
   // handler when user clicks on "complete move" (for a partial move that could be complete)
@@ -1785,6 +1799,7 @@ export function useGameMoveSession(props) {
     }
 
     if (renderrep !== null && displaySettings !== null) {
+      apPerfRun("explore.boardEffect", () => {
       const generation = ++boardRenderGenerationRef.current;
 
       stackExpandOptions = {};
@@ -1841,6 +1856,7 @@ export function useGameMoveSession(props) {
       }
       setBoardRenderIndex(nextIndex);
       setRendered([...layers]);
+      });
     }
   }, [
     renderrep,

@@ -20,6 +20,7 @@ import {
   explorationEngineMoveOpts,
   isPartialExplorationMove,
 } from "./explorationMoves";
+import { apPerfRun } from "../apPerf.js";
 import { resolveRenderLabels, setStatus } from "./misc";
 import { GameNode } from "../../components/GameMove/GameTree";
 import { cloneDeep } from "lodash";
@@ -431,7 +432,9 @@ function doView(
   navigate,
   t
 ) {
-  let gameEngineTmp = createEngineAtFocus(game, exploration, focus);
+  let gameEngineTmp = apPerfRun("explore.doView.createEngine", () =>
+    createEngineAtFocus(game, exploration, focus)
+  );
   let node = getFocusNode(exploration, game, focus);
   let simMove = false;
   let m = move.move || "";
@@ -448,49 +451,48 @@ function doView(
   let newfocus = cloneDeep(focus);
   let moves;
   try {
-    gameEngineTmp.move(m, explorationEngineMoveOpts(exploringPartial || simMove));
-    if (!exploringPartial && focus.canExplore && !game.noMoves) {
-      moves = gameEngineTmp.moves();
-    }
-    // check for auto moves (automove: any forced move; autopass: only forced pass)
-    if (
-      !exploringPartial &&
-      focus.canExplore &&
-      (game.automove || game.autopass) &&
-      isExplorer(explorer, me)
-    ) {
-      let automoved = false;
-      // Don't auto move through pie offer in a non-Playground game.
-      while (
-        moves.length === 1 &&
-        (game.automove || moves[0] === "pass") &&
-        !blocksExplorationAutomoveForPieEven(game, gameEngineTmp) &&
-        // need a hack for stopping automoves in some emulated situations
-        !gameEngineTmp.__noAutomove
-      ) {
-        automoved = true;
-        if (
-          !game.gameOver ||
-          !gameEngineTmp.sameMove(m, exploration[newfocus.moveNumber + 1].move)
-        ) {
-          let pos = node.AddChild(m, gameEngineTmp);
-          newfocus.exPath.push(pos);
-          node = node.children[pos];
-        } else {
-          newfocus = { moveNumber: newfocus.moveNumber + 1, exPath: [] };
-          node = getFocusNode(exploration, game, newfocus);
-        }
-        m = moves[0];
-        gameEngineTmp.move(
-          m,
-          explorationEngineMoveOpts(exploringPartial || simMove)
-        );
+    apPerfRun("explore.doView.engineMove", () => {
+      gameEngineTmp.move(m, explorationEngineMoveOpts(exploringPartial || simMove));
+      if (!exploringPartial && focus.canExplore && !game.noMoves) {
         moves = gameEngineTmp.moves();
       }
-      if (automoved) {
-        toast(t("AutoMoveToast"));
+      if (
+        !exploringPartial &&
+        focus.canExplore &&
+        (game.automove || game.autopass) &&
+        isExplorer(explorer, me)
+      ) {
+        let automoved = false;
+        while (
+          moves.length === 1 &&
+          (game.automove || moves[0] === "pass") &&
+          !blocksExplorationAutomoveForPieEven(game, gameEngineTmp) &&
+          !gameEngineTmp.__noAutomove
+        ) {
+          automoved = true;
+          if (
+            !game.gameOver ||
+            !gameEngineTmp.sameMove(m, exploration[newfocus.moveNumber + 1].move)
+          ) {
+            const pos = node.AddChild(m, gameEngineTmp);
+            newfocus.exPath.push(pos);
+            node = node.children[pos];
+          } else {
+            newfocus = { moveNumber: newfocus.moveNumber + 1, exPath: [] };
+            node = getFocusNode(exploration, game, newfocus);
+          }
+          m = moves[0];
+          gameEngineTmp.move(
+            m,
+            explorationEngineMoveOpts(exploringPartial || simMove)
+          );
+          moves = gameEngineTmp.moves();
+        }
+        if (automoved) {
+          toast(t("AutoMoveToast"));
+        }
       }
-    }
+    });
   } catch (err) {
     if (err.name === "UserFacingError") {
       errorMessageRef.current = `doView UserFacingError error with error ${err.client}`;
@@ -509,32 +511,34 @@ function doView(
     statusRef.current
   );
   if (!exploringPartial && m.length > 0) {
-    if (
-      !game.gameOver ||
-      !(
-        newfocus.exPath.length === 0 &&
-        gameEngineTmp.sameMove(m, exploration[newfocus.moveNumber + 1].move)
-      )
-    ) {
-      const pos = node.AddChild(simMove ? move.move : m, gameEngineTmp);
-      if (game.gameOver) fixMoveOutcomes(exploration, newfocus.moveNumber + 1);
-      newfocus.exPath.push(pos);
-      saveExploration(
-        exploration,
-        newfocus.moveNumber + 1,
-        game,
-        me,
-        explorer,
-        errorSetter,
-        errorMessageRef,
-        newfocus,
-        navigate
-      );
-    } else {
-      newfocus = { moveNumber: newfocus.moveNumber + 1, exPath: [] };
-    }
-    newfocus.canExplore = canExploreMove(game, exploration, newfocus);
-    focusSetter(newfocus);
+    apPerfRun("explore.doView.treeAndFocus", () => {
+      if (
+        !game.gameOver ||
+        !(
+          newfocus.exPath.length === 0 &&
+          gameEngineTmp.sameMove(m, exploration[newfocus.moveNumber + 1].move)
+        )
+      ) {
+        const pos = node.AddChild(simMove ? move.move : m, gameEngineTmp);
+        if (game.gameOver) fixMoveOutcomes(exploration, newfocus.moveNumber + 1);
+        newfocus.exPath.push(pos);
+        saveExploration(
+          exploration,
+          newfocus.moveNumber + 1,
+          game,
+          me,
+          explorer,
+          errorSetter,
+          errorMessageRef,
+          newfocus,
+          navigate
+        );
+      } else {
+        newfocus = { moveNumber: newfocus.moveNumber + 1, exPath: [] };
+      }
+      newfocus.canExplore = canExploreMove(game, exploration, newfocus);
+      focusSetter(newfocus);
+    });
     if (game.simultaneous) {
       moveSetter({
         ...gameEngineTmp.validateMove("", game.me + 1),
@@ -557,16 +561,17 @@ function doView(
   console.log(
     `(doView) ABOUT TO RERENDER! Display setting: ${settings?.display}`
   );
+  const rawRep = apPerfRun("explore.doView.gameslibRender", () =>
+    gameEngineTmp.render(
+      buildRenderDisplayOpts(game.metaGame, settings?.display, {
+        ...buildGameMoveRenderExtras(game),
+        ...move.opts,
+      })
+    )
+  );
   renderrepSetter(
-    resolveRenderLabels(
-      gameEngineTmp.render(
-        buildRenderDisplayOpts(game.metaGame, settings?.display, {
-          ...buildGameMoveRenderExtras(game),
-          ...move.opts,
-        })
-      ),
-      game.players,
-      useStore.getState().users
+    apPerfRun("explore.doView.resolveLabels", () =>
+      resolveRenderLabels(rawRep, game.players, useStore.getState().users)
     )
   );
   setURL(exploration, newfocus, game, navigate);
