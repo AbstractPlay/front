@@ -1,4 +1,4 @@
-import { getMainLineTipState } from "./Lab/exploration";
+import { getFocusNode } from "./Lab/exploration";
 import { isTeachingChallengeEligible } from "./teachingModeChallenge";
 
 /** Mirrors backend teaching eligibility for start-position challenges. */
@@ -28,7 +28,7 @@ export function buildStartPositionFromLabSession({ game, nodes, focus }) {
   if (!game?.metaGame || !nodes?.length || !focus) {
     throw new Error("Cannot build start position from this session.");
   }
-  const state = getMainLineTipState(nodes, game);
+  const state = getFocusNode(nodes, game, focus)?.state;
   if (!state) {
     throw new Error("Start position state is missing.");
   }
