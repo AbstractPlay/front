@@ -98,6 +98,7 @@
     "sync-locales": "node scripts/sync-locales.mjs",
     "sync-deps": "ap-install-deps --stage dev",
     "sync-deps:prod": "ap-install-deps --stage prod",
+    "setup-git": "node scripts/setup-git-merge-ours.mjs",
     "docs:check": "node scripts/docs-check.mjs",
     "deploy": "serverless client deploy --no-confirm && node scripts/apply-s3-cost-allocation-tags.mjs --stage dev && node scripts/sync-cloudfront-csp.mjs --stage dev",
     "deploy-prod": "serverless client deploy --no-confirm --stage prod && node scripts/apply-s3-cost-allocation-tags.mjs --stage prod && node scripts/sync-cloudfront-csp.mjs --stage prod",

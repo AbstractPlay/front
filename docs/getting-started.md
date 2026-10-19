@@ -13,6 +13,7 @@
 ```bash
 git clone https://github.com/AbstractPlay/front.git
 cd front
+npm run setup-git   # once per clone — enables merge=ours for package pins (develop↔main)
 npm ci
 ```
 
