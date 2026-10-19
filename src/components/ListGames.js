@@ -43,6 +43,15 @@ function ListGamesForMeta({ fixedState, metaGame, gameState }) {
         url.searchParams.append("type", gameState || fixedState);
         const res = await fetch(url);
         const result = await res.json();
+        if (!res.ok || !Array.isArray(result)) {
+          console.warn(
+            `Failed to load ${gameState || fixedState} games for ${metaGame}:`,
+            result
+          );
+          gamesSetter([]);
+          maxPlayersSetter(2);
+          return;
+        }
         gamesSetter(result);
         maxPlayersSetter(
           result.reduce((max, game) => Math.max(max, game.players.length), 0)
