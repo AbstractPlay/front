@@ -34,7 +34,7 @@ Follow the canonical org-wide policy in [gameslib `AGENTS.md` — Abstract Play 
 
 `package.json` has no separate `typecheck` script; CI tests run via Vitest. For a TS-free repo, **lint + test:ci** match deploy prerequisites.
 
-Pinned AP package versions: [`ci-deps.dev.json`](ci-deps.dev.json) / prod sibling; `npm run sync-deps` updates lockfile to pins.
+Pinned AP package versions: [`ci-deps.dev.json`](ci-deps.dev.json) / prod sibling; `npm run sync-deps` updates lockfile to pins. Run **`npm run setup-git`** once per clone so develop↔`main` merges keep the target branch pins (see [deployment](docs/deployment.md)).
 
 ## Testing
 

@@ -91,7 +91,9 @@ Published `gameslib` and `renderer` packages use immutable `1.0.0-ci-{GITHUB_RUN
 
 After a merge that touches dependency files, run `npm run sync-deps` on `develop` (or `npm run sync-deps:prod` on `main`) and commit `ci-deps.*.json`, `package-lock.json`, and `package.json` together. Do not hand-merge version strings — regenerate with `sync-deps`.
 
-`ci-deps.prod.json` is protected on `main` via `.gitattributes` (`merge=ours`) so merges from `develop` do not overwrite production pins. `package-lock.json` uses `merge=ours` on the target branch; run `sync-deps` if the strict check fails after a merge.
+`.gitattributes` marks `ci-deps.prod.json`, `ci-deps.dev.json`, `package.json`, and `package-lock.json` with `merge=ours` so the branch you merge **into** keeps its pins. Run **`npm run setup-git`** once per clone to register Git’s `merge.ours` driver (attributes alone are not enough). Run `sync-deps` / `sync-deps:prod` on that branch when you intend to bump pins.
+
+**GitHub pull-request merges** do not run custom merge drivers. Merge `develop` into `main` locally after `npm run setup-git`, or on the PR conflict UI keep the **base branch** copies of every file listed above (same for back-merging `main` into `develop`).
 
 ### Prod API lag
 
