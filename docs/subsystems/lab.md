@@ -30,6 +30,8 @@ The Lab is a sandbox for exploring games without creating a server-side game rec
 
 Lab reuses renderer and gameslib patterns from the live game page but does not call move-submission auth queries. Display settings helpers are shared via [`src/lib/Lab/settings.js`](../src/lib/Lab/settings.js).
 
+**Move tree / move table:** Lab and live use separate React components but share much of `src/lib/GameMove/` (layout, variations, column filter). Playground-only shims live under `src/lib/Lab/labMoveTable*.js`. See [Lab and Game Move coupling](/front/subsystems/lab-gamemove-coupling/) before changing shared move-table code.
+
 ## Related
 
 - [Game move](/front/subsystems/game-move/)
