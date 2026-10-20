@@ -741,12 +741,27 @@ a.navbar-item,
   padding: 0.75rem 1rem;
 }
 
-.title, .subtitle {
-    color: var(--main-heading-color);
+/* Bulma .content / .title scheme vars follow prefers-color-scheme; AP uses color-mode. */
+.content {
+  --bulma-content-heading-color: var(--main-heading-color);
+  --bulma-content-table-cell-heading-color: var(--main-heading-color);
+  --bulma-content-table-head-cell-color: var(--main-heading-color);
+  --bulma-content-table-foot-cell-color: var(--main-heading-color);
+  --bulma-content-blockquote-background-color: var(--secondary-color-3-bg);
+  --bulma-content-blockquote-border-left: 5px solid var(--secondary-color-3);
 }
 
-.content .title, .content .subtitle {
-    color: var(--main-heading-color);
+.title,
+.subtitle {
+  --bulma-title-color: var(--main-heading-color);
+  --bulma-subtitle-color: var(--main-font-color);
+  --bulma-subtitle-strong-color: var(--main-heading-color);
+  color: var(--main-heading-color);
+}
+
+.content .title,
+.content .subtitle {
+  color: var(--main-heading-color);
 }
 
 

@@ -6,6 +6,19 @@
   padding: 1rem;
 }
 
+/* Lined titles on the panel surface (global .content tokens cover Markdown headings). */
+.feedback-panel .lined {
+  color: var(--main-heading-color);
+}
+
+.feedback-panel .lined::before {
+  border-top-color: var(--main-heading-color);
+}
+
+.feedback-panel .lined span {
+  background: var(--main-bg-color);
+}
+
 .feedback-quick-search {
   margin-bottom: 0.5rem;
 }

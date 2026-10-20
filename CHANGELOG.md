@@ -43,6 +43,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Live play move tree:** mainline moves and exploration branches are styled differently (with a short legend when branches are present).
 - **Move tree branches (live play and Lab):** at a multi-branch ply, list all lines (a, b, …) with the active one highlighted; ↑/↓ toolbar buttons and tooltips match keyboard (up = previous variant, down = next).
 - **Move list:** hover cursor on move notation is a pointer (clickable moves) while text selection still works.
+- **Strip layout:** status drawer and move dock start expanded on narrow viewports (same as wide); dock collapse toggle remains on small screens.
 
 ### Fixed
 
@@ -73,6 +74,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Open challenges:** show a spinner while accept is in flight instead of optimistic “Accepted!” before the server responds.
 - **Live play move list:** sequential games with multiple exploration/premove lines at the tip no longer show opponent branches in the wrong player column or drop the last played mainline ply (e.g. Hex premove trees); active games use the live path builder instead of the finished-game layout when the tip has branches; opponent branch rows no longer inherit premove for column assignment (clock icon unchanged).
 - **i18n CI:** `locale-src/` sidecars are committed again on develop deploy (auto-commit `file_pattern` was multiline, so only `public/locales` were ever staged); backfilled sidecars to stop repeated Gemini rewrites of the same strings.
+- **Theming:** Bulma `.content` and `.title` heading colours (Markdown, legal copy, game summaries, news, tournaments, events, stats, chat, Lab, and feedback) follow AP `color-mode` instead of `prefers-color-scheme`, so headings stay readable when site light/dark disagrees with the OS.
 
 ## [1.0.0-ci] - 2026-09-30
 
