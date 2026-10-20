@@ -9,17 +9,6 @@ import StripContextStrip from "../preview/StripContextStrip";
 import StripDock from "../preview/StripDock";
 import LayoutHint from "../LayoutHint";
 
-const STRIP_WIDE_BREAKPOINT = 900;
-
-function stripDrawerDefaults(session) {
-  const isWide =
-    (session.screenWidth ?? STRIP_WIDE_BREAKPOINT) >= STRIP_WIDE_BREAKPOINT;
-  return {
-    defaultTab: "status",
-    defaultOpen: isWide,
-  };
-}
-
 export default function GameMoveStripLayout({ session }) {
   const { t } = useTranslation();
   const users = useStore((state) => state.users);
@@ -30,7 +19,6 @@ export default function GameMoveStripLayout({ session }) {
   }
 
   const layoutContext = getLayoutContext(session, users, myMove, t);
-  const drawerDefaults = stripDrawerDefaults(session);
 
   return (
     <>
@@ -46,7 +34,8 @@ export default function GameMoveStripLayout({ session }) {
           <GameMoveDrawer
             key={session.game?.id ?? session.gameID}
             session={session}
-            {...drawerDefaults}
+            defaultTab="status"
+            defaultOpen
           />
         </div>
       </article>

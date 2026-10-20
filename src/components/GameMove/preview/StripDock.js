@@ -10,7 +10,7 @@ function StripDock({ session }) {
   const { t } = session;
   const screenWidth = session.screenWidth ?? 1024;
   const isNarrow = screenWidth < 900;
-  const [expanded, setExpanded] = useState(!isNarrow);
+  const [expanded, setExpanded] = useState(true);
 
   useEffect(() => {
     if (!isNarrow) {
