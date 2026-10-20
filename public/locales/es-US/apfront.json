@@ -356,7 +356,7 @@
   "HelpTeachingModeTrue": "Deshacer cooperativo: cualquier jugador puede permitir que su oponente revise, mantenga o deshaga la última jugada.",
   "HelpTeachingModeFalse": "Juego estándar sin la opción de deshacer de enseñanza.",
   "TeachingGameLabel": "Enseñanza (sin clasificación)",
-  "TeachingGrantUndo": "Permitir al oponente deshacer y volver a elegir",
+  "TeachingGrantUndo": "Ofrecer deshacer",
   "TeachingKeepMove": "Mantener mi jugada",
   "TeachingUndoMove": "Deshacer y volver a elegir",
   "TeachingReviewPrompt": "Tu oponente te ofreció una revisión instructiva. Mantén la jugada o deshazla y vuelve a jugar.",

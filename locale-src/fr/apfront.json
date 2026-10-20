@@ -1976,8 +1976,8 @@
     "out": "Apprentissage (non classée)"
   },
   "TeachingGrantUndo": {
-    "src": "Allow opponent to undo and reselect",
-    "out": "Autoriser l'adversaire à annuler et rechoisir"
+    "src": "Offer undo",
+    "out": "Proposer d'annuler"
   },
   "TeachingKeepMove": {
     "src": "Keep my move",
