@@ -27,7 +27,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Playground (Lab):** simultaneous games in seat mode — per-seat move entry, round buffer until all active seats submit, eliminated-seat handling, and active-seat picker for board perspective.
 - **Move tree exploration:** mark an explored line as an explicit draw (½) or clear an outcome back to undecided (?), alongside player win markers; annotations propagate up the tree like win/loss markers.
 - **Teaching mode:** optional cooperative undo on 2-player, non-simultaneous challenges (new challenge and standing challenge modals); grant / keep / undo controls on the move page (all four layouts); during review, only keep/undo are offered; challenge cards show a teaching label.
-- **Challenges:** direct teaching challenges from a preset board — issue from Playground/Lab (“Challenge from position”) or the live move tree (“Teach this position”); challengee sees a read-only board preview before accept.
+- **Challenges:** direct teaching challenges from a preset board — issue from Playground/Lab (“Challenge from position”) or the live move tree (“Teach this position”); challengee sees a read-only board preview before accept. Open (standing) 2-player position challenges: issue Open vs Closed from position handoff (default Closed); open-challenges list shows preset badge and accept confirmation modal with board preview.
 - **Player profile:** Game History table includes game length (move count) after End date.
 - **Dashboard:** “Your tournaments” section (after Your games) lists in-progress automated tournaments you are in via `me_dashboard.currentTournaments`; hidden when none.
 - **Dashboard:** optional tabbed layout (Games, Tournaments, Challenges; Admin tab for site admins) with vertical/tabbed preference stored locally; Issue challenge always available in tabbed mode.
@@ -46,6 +46,9 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Challenges:** `new_challenge` failures from Lab, live teach-from-position, and challenge modals surface the server message instead of closing silently; position-locked variant uids are sent on issue; open-challenges page refreshes after issuing from that screen.
+- **Challenges:** Open vs Closed type on issue-from-position modal is selectable again (removed mistaken `readOnly` on radios — Open was not actually issuable); game page challenges tab passes `metaGame` explicitly; public list fetch parses proxy envelopes instead of failing silently to an empty table.
+- **Challenges:** open (standing) issue sends an empty `challengees` list instead of `[""]` placeholder slots.
 - **In-game chat:** unsent composer text is kept when switching drawer or overlay tabs (strip, card, and other layouts that unmount chat).
 - **Stack-expanding display:** Re-derive `stackExpanding` from game flags and the current render rep on each sync (and when changing display in settings) so switching from 3D to expanding (e.g. Volcano in Lab) enables stack hover again.
 - **Customize:** per-game settings JSON and saves include the full `render` block (e.g. `hide-labels-half`) when those options are checked — no longer omitted from the editor blob when they match global defaults.

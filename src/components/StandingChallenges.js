@@ -22,6 +22,8 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { callAuthApi } from "../lib/api";
+import { submitNewChallenge } from "../lib/submitNewChallenge";
+import { parsePublicQueryList } from "../lib/parsePublicQueryList";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import Spinner from "./Spinner";
 import PageLoading from "./shared/PageLoading";
@@ -29,6 +31,7 @@ import { TableNavSearch } from "./shared/DataTable";
 import { trimmedGlobalIncludesStringFilterFn } from "../lib/tableGlobalFilter";
 import ActivityMarker from "./ActivityMarker";
 import ChallengeEntryModals from "./ChallengeEntryModals";
+import ChallengeResponseModal from "./Me/ChallengeResponseModal";
 import { useStorageState } from "react-use-storage-state";
 import PageHelmet from "./PageHelmet";
 import HubListEmptyNotice from "./shared/HubListEmptyNotice";
@@ -83,19 +86,25 @@ function partitionStandingChallenges(raw) {
 function StandingChallenges(props) {
   const { t, i18n } = useTranslation();
   const { status: authStatus } = useAuthSession();
+  const metaGameProp = props.metaGame;
   const [challenges, challengesSetter] = useState(null);
+  const [listError, listErrorSetter] = useState(null);
   const [accepting, acceptingSetter] = useState(null);
+  const [previewChallenge, previewChallengeSetter] = useState(null);
   const [revoke, revokeSetter] = useState(null);
   const [reject, rejectSetter] = useState(null);
   const { metaGame: metaGameParam } = useParams();
-  const siteWide = !metaGameParam;
-  const metaResolution = useRequiredMetaGameParam(metaGameParam, { skip: siteWide });
+  const routeMetaGame = metaGameProp ?? metaGameParam;
+  const siteWide = routeMetaGame === undefined || routeMetaGame === "";
+  const metaResolution = useRequiredMetaGameParam(routeMetaGame, {
+    skip: siteWide,
+  });
   const metaGame =
     siteWide || metaResolution === null
       ? undefined
       : metaResolution.kind === "ok" || metaResolution.kind === "redirect"
         ? metaResolution.resolved
-        : metaGameParam;
+        : routeMetaGame;
   const [update, updateSetter] = useState(0);
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
@@ -176,21 +185,24 @@ function StandingChallenges(props) {
   const handleNewChallenge = useCallback(
     async (challenge) => {
       try {
-        const res = await callAuthApi("new_challenge", {
-          ...challenge,
-          challenger: {
-            id: globalMe.id,
-            name: rawDirectoryDisplayName(globalMe, allUsers),
-          },
-        });
-        if (!res) return;
+        const parsed = await submitNewChallenge(
+          challenge,
+          globalMe,
+          allUsers
+        );
+        if (!parsed.ok) {
+          return parsed;
+        }
         maybeTrackRecommendationChallenge(challenge.metaGame);
         showModalSetter(false);
+        updateSetter((n) => n + 1);
+        return parsed;
       } catch (error) {
         console.log(error);
+        return { ok: false, error: error?.message ?? String(error) };
       }
     },
-    [globalMe, allUsers]
+    [globalMe, allUsers, updateSetter]
   );
 
   useEffect(() => {
@@ -199,6 +211,7 @@ function StandingChallenges(props) {
         return;
       }
       try {
+        listErrorSetter(null);
         let raw;
         if (siteWide && loggedin) {
           const res = await callAuthApi("all_standing_challenges", {}, false);
@@ -207,13 +220,25 @@ function StandingChallenges(props) {
             const url = new URL(API_ENDPOINT_OPEN);
             url.searchParams.append("query", "all_standing_challenges");
             const publicRes = await fetch(url);
-            raw = await publicRes.json();
+            const parsed = await parsePublicQueryList(publicRes);
+            if (!parsed.ok) {
+              listErrorSetter(parsed.error);
+              challengesSetter([]);
+              return;
+            }
+            raw = parsed.data;
           }
         } else if (siteWide) {
           const url = new URL(API_ENDPOINT_OPEN);
           url.searchParams.append("query", "all_standing_challenges");
           const res = await fetch(url);
-          raw = await res.json();
+          const parsed = await parsePublicQueryList(res);
+          if (!parsed.ok) {
+            listErrorSetter(parsed.error);
+            challengesSetter([]);
+            return;
+          }
+          raw = parsed.data;
         } else {
           const url = new URL(API_ENDPOINT_OPEN);
           url.searchParams.append("query", "standing_challenges");
@@ -222,7 +247,13 @@ function StandingChallenges(props) {
             url.searchParams.append("userId", globalMe.id);
           }
           const res = await fetch(url);
-          raw = await res.json();
+          const parsed = await parsePublicQueryList(res);
+          if (!parsed.ok) {
+            listErrorSetter(parsed.error);
+            challengesSetter([]);
+            return;
+          }
+          raw = parsed.data;
         }
         let bad;
         let result;
@@ -235,6 +266,7 @@ function StandingChallenges(props) {
         acceptingSetter(null);
       } catch (error) {
         challengesSetter([]);
+        listErrorSetter(error?.message ?? String(error));
         console.log(error);
       }
     }
@@ -247,6 +279,7 @@ function StandingChallenges(props) {
     globalMe?.id,
     metaResolution?.kind,
     metaResolution?.resolved,
+    metaGameProp,
   ]);
 
   useEffect(() => {
@@ -358,9 +391,39 @@ function StandingChallenges(props) {
     }
   }, [reject, metaGame, siteWide, challenges, updateSetter]);
 
-  const handleAccept = (id) => {
-    acceptingSetter(id);
-  };
+  const handleAccept = useCallback((row) => {
+    if (row.hasStartPosition) {
+      previewChallengeSetter({
+        id: row.id,
+        metaGame: row.metaGame,
+        standing: true,
+        hasStartPosition: true,
+        teachingMode: row.teachingMode,
+        seating: row.seating,
+        clockStart: row.clockStart,
+        clockInc: row.clockInc,
+        clockMax: row.clockMax,
+        clockHard: row.clockHard,
+        rated: row.rated,
+        noExplore: row.noExplore,
+        numPlayers: row.numPlayers,
+        comment: row.comment ?? "",
+        variants: row.variantsRaw ?? [],
+        players: row.playersAll,
+        challengees: [],
+        challenger: row.challengerUser,
+      });
+      return;
+    }
+    acceptingSetter(row.id);
+  }, []);
+
+  const handlePreviewRespond = useCallback((challenge, accepted) => {
+    previewChallengeSetter(null);
+    if (accepted) {
+      acceptingSetter(challenge.id);
+    }
+  }, []);
 
   const handleReject = async (id) => {
     rejectSetter(id);
@@ -428,6 +491,11 @@ function StandingChallenges(props) {
           variantUids,
           comment: rec.comment,
           matchWinRate,
+          hasStartPosition: rec.hasStartPosition === true,
+          standing: rec.standing !== false,
+          challengerUser: rec.challenger,
+          playersAll: rec.players ?? [],
+          variantsRaw: variantUids,
         };
       });
     let filtered = rows;
@@ -638,12 +706,18 @@ function StandingChallenges(props) {
       }),
       columnHelper.accessor("rated", {
         header: t("tables.rated"),
-        cell: (props) =>
-          props.row.original.teachingMode
+        cell: (props) => {
+          const row = props.row.original;
+          const ratedLabel = row.teachingMode
             ? t("TeachingGameLabel")
             : props.getValue()
               ? t("Yes")
-              : t("No"),
+              : t("No");
+          const positionBadge = row.hasStartPosition
+            ? ` ${t("challenge.startPosition.badge")}`
+            : "";
+          return `${ratedLabel}${positionBadge}`;
+        },
       }),
       columnHelper.accessor("noExplore", {
         header: t("tables.explorationDisabled"),
@@ -679,7 +753,7 @@ function StandingChallenges(props) {
                   ) : (
                     <button
                       className="button is-small apButton"
-                      onClick={() => handleAccept(props.row.original.id)}
+                      onClick={() => handleAccept(props.row.original)}
                     >
                       {t("Accept")}
                     </button>
@@ -701,6 +775,7 @@ function StandingChallenges(props) {
     allUsers,
     siteWide,
     i18n.language,
+    handleAccept,
   ]);
 
   const table = useReactTable({
@@ -977,6 +1052,14 @@ function StandingChallenges(props) {
     );
   }
 
+  if (listError) {
+    return (
+      <div className="notification is-danger is-light">
+        {listError}
+      </div>
+    );
+  }
+
   if (challenges === null) {
     return <PageLoading message={t("challenges.loading")} />;
   }
@@ -1112,6 +1195,12 @@ function StandingChallenges(props) {
           {tableNavigation}
         </div>
       </article>
+      <ChallengeResponseModal
+        show={previewChallenge !== null}
+        challenge={previewChallenge ?? {}}
+        respond={handlePreviewRespond}
+        close={() => previewChallengeSetter(null)}
+      />
     </>
   );
 }

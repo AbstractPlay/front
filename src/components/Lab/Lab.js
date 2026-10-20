@@ -3,8 +3,7 @@ import { useTranslation } from "react-i18next";
 import PageHelmet from "../PageHelmet";
 import ChallengeEntryModals from "../ChallengeEntryModals";
 import { buildLabGame } from "../../lib/Lab/buildGame";
-import { callAuthApi } from "../../lib/api";
-import { rawDirectoryDisplayName } from "../Bots/botUtils";
+import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import { useStore } from "../../stores";
 import { readSimRoundFromGameSettings } from "../../lib/Lab/labSimBoardSettings";
 import {
@@ -173,20 +172,12 @@ function Lab() {
 
   const handleIssuePositionChallenge = useCallback(
     async (challenge) => {
-      if (!globalMe?.id) {
-        return;
-      }
-      const res = await callAuthApi("new_challenge", {
-        ...challenge,
-        challenger: {
-          id: globalMe.id,
-          name: rawDirectoryDisplayName(globalMe, allUsers),
-        },
-      });
-      if (!res) {
-        return;
+      const parsed = await submitNewChallenge(challenge, globalMe, allUsers);
+      if (!parsed.ok) {
+        return parsed;
       }
       closeChallengeModal();
+      return parsed;
     },
     [globalMe, allUsers, closeChallengeModal]
   );

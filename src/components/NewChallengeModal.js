@@ -34,6 +34,7 @@ import {
 import {
   buildStartPositionPayload,
   isStartPositionChallengeEligible,
+  resolveVariantUidsForStartPosition,
 } from "../lib/challengeStartPosition";
 import ChallengePositionPreview from "./Me/ChallengePositionPreview";
 
@@ -126,6 +127,26 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     setForceUnrated(forced);
   }, [metaGame, selectedVariants]);
 
+  const positionLockedMetaGame = fixedMetaGame ?? metaGame;
+  const positionLockedVariantUids = useMemo(() => {
+    if (!lockTeachingFromPosition || !initialStartPosition) {
+      return undefined;
+    }
+    if (!positionLockedMetaGame) {
+      return initialVariantUids;
+    }
+    return resolveVariantUidsForStartPosition(
+      positionLockedMetaGame,
+      initialStartPosition,
+      initialVariantUids,
+    );
+  }, [
+    lockTeachingFromPosition,
+    initialStartPosition,
+    positionLockedMetaGame,
+    initialVariantUids,
+  ]);
+
   const teachingEligible = useMemo(
     () => isTeachingChallengeEligible(metaGame, playerCount, selectedVariants),
     [metaGame, playerCount, selectedVariants]
@@ -138,7 +159,6 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     if (lockTeachingFromPosition) {
       teachingModeSetter(true);
       ratedSetter(false);
-      standingSetter(false);
       if (playerCount !== 2) {
         playerCountSetter(2);
       }
@@ -469,7 +489,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     teachingModeSetter(event.target.checked);
   };
 
-  const handleChallenge = () => {
+  const handleChallenge = async () => {
     if (metaGame === null) {
       errorSetter(t("SelectAGame"));
       return;
@@ -500,16 +520,20 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         return;
       }
     }
+    const variantPayload =
+      lockTeachingFromPosition && positionLockedVariantUids?.length
+        ? positionLockedVariantUids
+        : selectedVariants;
     if (
       metaGame !== null &&
       !soloHandoffPath &&
-      !validateChallengeVariantSelection(metaGame, selectedVariants).ok
+      !validateChallengeVariantSelection(metaGame, variantPayload).ok
     ) {
       errorSetter(t("InvalidVariantCombination"));
       return;
     }
     const namedOpponents = standing
-      ? opponents
+      ? opponents.filter((o) => o && typeof o === "object" && o.id)
       : opponents.filter((o, i) => !opponentAnyone[i] && o && o.id);
     const namedIds = namedOpponents.map((o) => o.id).filter(Boolean);
     if (new Set(namedIds).size !== namedIds.length) {
@@ -522,7 +546,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     const effectiveTeaching =
       lockTeachingFromPosition || (teachingEligible && teachingMode);
     if (lockTeachingFromPosition && initialStartPosition) {
-      if (!isStartPositionChallengeEligible(metaGame, 2, selectedVariants)) {
+      if (!isStartPositionChallengeEligible(metaGame, 2, variantPayload)) {
         errorSetter(t("challenge.startPosition.notEligible"));
         return;
       }
@@ -530,10 +554,10 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     const challengePayload = {
       metaGame: metaGame,
       numPlayers: lockTeachingFromPosition ? 2 : playerCount,
-      standing: lockTeachingFromPosition ? false : standing,
+      standing,
       duration: standingCount,
       seating: seating,
-      variants: selectedVariants,
+      variants: variantPayload,
       challengees: namedOpponents,
       openSlots: lockTeachingFromPosition ? 0 : openSlots,
       clockStart: clockStart,
@@ -558,7 +582,11 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         buildStartPositionPayload(initialStartPosition)
       );
     }
-    handleNewChallenge(challengePayload);
+    const parsed = await handleNewChallenge(challengePayload);
+    if (!parsed?.ok) {
+      errorSetter(parsed?.error ?? t("Error"));
+      return;
+    }
     handleNewChallengeClose();
     // So that if you click on challenge again, it doesn't look like the challenge wasn't submitted:
     playerCountSetter(-1);
@@ -667,11 +695,16 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
           ""
         ) : (
           <GameVariants
-            key={`${metaGame}:${(initialVariantUids ?? []).join("|")}`}
+            key={`${metaGame}:${(positionLockedVariantUids ?? initialVariantUids ?? []).join("|")}`}
             metaGame={metaGame}
             variantsSetter={setSelectedVariants}
             onValidityChange={handleVariantValidityChange}
-            initialVariantUids={initialVariantUids}
+            initialVariantUids={
+              lockTeachingFromPosition
+                ? positionLockedVariantUids
+                : initialVariantUids
+            }
+            disableFields={lockTeachingFromPosition}
           />
         )}
         {metaGame === null || playerCount === -1 || soloHandoffPath ? (
@@ -723,8 +756,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         ) : null}
         {metaGame === null ||
         playerCount === -1 ||
-        soloHandoffPath ||
-        lockTeachingFromPosition ? (
+        soloHandoffPath ? (
           ""
         ) : /* Standing Challenge */
         opponent ? (
@@ -738,7 +770,6 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                   type="radio"
                   name="challengeType"
                   value="open"
-                  readOnly={true}
                   checked={standing}
                   onChange={() => standingSetter(true)}
                 />
@@ -750,7 +781,6 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
                   name="challengeType"
                   value="targeted"
                   checked={!standing}
-                  readOnly={true}
                   onChange={() => standingSetter(false)}
                 />
                 {t("ChallengeTypeTargeted")}
