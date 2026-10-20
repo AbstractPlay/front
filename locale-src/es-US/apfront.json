@@ -1976,8 +1976,8 @@
     "out": "Enseñanza (sin clasificación)"
   },
   "TeachingGrantUndo": {
-    "src": "Allow opponent to undo and reselect",
-    "out": "Permitir al oponente deshacer y volver a elegir"
+    "src": "Offer undo",
+    "out": "Ofrecer deshacer"
   },
   "TeachingKeepMove": {
     "src": "Keep my move",

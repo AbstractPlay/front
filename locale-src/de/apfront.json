@@ -1976,8 +1976,8 @@
     "out": "Lehrspiel (ungewertet)"
   },
   "TeachingGrantUndo": {
-    "src": "Allow opponent to undo and reselect",
-    "out": "Gegner Zug zurücknehmen und neu wählen lassen"
+    "src": "Offer undo",
+    "out": "Zugrücknahme anbieten"
   },
   "TeachingKeepMove": {
     "src": "Keep my move",

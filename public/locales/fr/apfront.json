@@ -356,7 +356,7 @@
   "HelpTeachingModeTrue": "Annulation coopérative : chaque joueur peut laisser son adversaire examiner, conserver ou revenir sur le dernier coup.",
   "HelpTeachingModeFalse": "Partie standard sans annulation d'apprentissage.",
   "TeachingGameLabel": "Apprentissage (non classée)",
-  "TeachingGrantUndo": "Autoriser l'adversaire à annuler et rechoisir",
+  "TeachingGrantUndo": "Proposer d'annuler",
   "TeachingKeepMove": "Conserver mon coup",
   "TeachingUndoMove": "Annuler et rechoisir",
   "TeachingReviewPrompt": "Votre adversaire a proposé une analyse pédagogique. Conservez le coup ou annulez pour rejouer.",

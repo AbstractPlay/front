@@ -356,7 +356,7 @@
   "HelpTeachingModeTrue": "Cooperative undo: either player can let the opponent review, keep, or rewind the last move.",
   "HelpTeachingModeFalse": "Standard play without teaching undo.",
   "TeachingGameLabel": "Teaching (unrated)",
-  "TeachingGrantUndo": "Allow opponent to undo and reselect",
+  "TeachingGrantUndo": "Offer undo",
   "TeachingKeepMove": "Keep my move",
   "TeachingUndoMove": "Undo and choose again",
   "TeachingReviewPrompt": "Your opponent offered a teaching review. Keep the move or undo and play again.",

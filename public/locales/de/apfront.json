@@ -356,7 +356,7 @@
   "HelpTeachingModeTrue": "Kooperatives Rückgängigmachen: Jeder Spieler kann dem Gegner erlauben, den letzten Zug zu überprüfen, zu behalten oder zurückzunehmen.",
   "HelpTeachingModeFalse": "Standardspiel ohne Lehr-Rückgängigmachen.",
   "TeachingGameLabel": "Lehrspiel (ungewertet)",
-  "TeachingGrantUndo": "Gegner Zug zurücknehmen und neu wählen lassen",
+  "TeachingGrantUndo": "Zugrücknahme anbieten",
   "TeachingKeepMove": "Meinen Zug behalten",
   "TeachingUndoMove": "Rückgängig machen und neu wählen",
   "TeachingReviewPrompt": "Dein Gegner hat eine Lehranalyse angeboten. Behalte den Zug bei oder mache ihn rückgängig und spiele erneut.",

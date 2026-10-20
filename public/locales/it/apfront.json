@@ -356,7 +356,7 @@
   "HelpTeachingModeTrue": "Annullamento cooperativo: ciascun giocatore può permettere all'avversario di esaminare, mantenere o annullare l'ultima mossa.",
   "HelpTeachingModeFalse": "Partita standard senza annullamento didattico.",
   "TeachingGameLabel": "Didattica (non classificata)",
-  "TeachingGrantUndo": "Consenti all'avversario di annullare e scegliere di nuovo",
+  "TeachingGrantUndo": "Offri di annullare",
   "TeachingKeepMove": "Mantieni la mia mossa",
   "TeachingUndoMove": "Annulla e scegli di nuovo",
   "TeachingReviewPrompt": "Il tuo avversario ha offerto una revisione didattica. Mantieni la mossa o annulla e gioca di nuovo.",
