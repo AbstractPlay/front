@@ -21,23 +21,28 @@ import {
 } from "../../lib/GameMove/moveTableLayout";
 import { shouldSkipMoveTreeKeyboard } from "../../lib/GameMove/moveTreeKeyboard";
 import {
-  collectVariationChoices,
   enrichExplorationMoveCell,
   explorationPathEquals,
   focusedMovePathIndex,
+  isIdleMainlineExplorationTip,
   moveCellsFromVariationChoices,
-  shouldSubstituteVariationChoicesAtCell,
   nodeForExplorationPath,
   rowHasFocus,
 } from "../../lib/GameMove/moveTreeVariations";
 import {
+  labShouldSubstituteVariationChoicesAtCell,
+  labVariationChoicesForMoveCell,
+} from "../../lib/Lab/labMoveTableVariations";
+import { filterLabPathCellsForSeat } from "../../lib/Lab/labMoveTablePathCells";
+import {
+  buildMoveCellClass,
+  pathHasExplorationMoves,
+} from "../../lib/GameMove/moveTreeCellClasses";
+import {
   labDisplayMoveLabel,
   resolveLabMoveTableEngine,
 } from "../../lib/Lab/hiddenView";
-import {
-  filterPathCellsForSeat,
-  resolveMoveTablePlayerSeats,
-} from "../../lib/GameMove/moveTablePathCells";
+import { resolveMoveTablePlayerSeats } from "../../lib/GameMove/moveTablePathCells";
 
 function syncRowFocusClasses(cells, focus) {
   return cells.map((cell) => {
@@ -52,13 +57,16 @@ function syncRowFocusClasses(cells, focus) {
   });
 }
 
-function labMoveCellClass({ isFocus }) {
-  return isFocus ? "gameMove gameMoveFocus" : "gameMove";
+function labMoveCellClass({ movePath, isFocus }) {
+  return buildMoveCellClass({ movePath, isFocus });
 }
 
 function labVariationGameContext(focus, exploration, game) {
   return {
-    gameOver: shouldUseCompletedPath(focus, exploration, game.gameOver),
+    ...game,
+    gameOver:
+      game.gameOver ||
+      shouldUseCompletedPath(focus, exploration, game.gameOver),
   };
 }
 
@@ -110,7 +118,8 @@ function useEventListener(eventName, handler, element = window) {
 }
 
 function shouldUseCompletedPath(focus, exploration, gameOver) {
-  return gameOver;
+  if (gameOver) return true;
+  return !isIdleMainlineExplorationTip(focus, exploration, gameOver);
 }
 
 function getPath(focus, exploration, path, gameOver) {
@@ -385,14 +394,24 @@ function GameMoves(props) {
         break;
       case "ArrowDown":
       case "i":
-        curNumVariations = getPath(focus, exploration, path, game.gameOver);
+        curNumVariations = getPath(
+          focus,
+          exploration,
+          path,
+          shouldUseCompletedPath(focus, exploration, game.gameOver)
+        );
         if (curNumVariations > 1)
           handleGameMoveClick(nextVarFocus(curNumVariations));
         e.preventDefault();
         break;
       case "ArrowUp":
       case "m":
-        curNumVariations = getPath(focus, exploration, path, game.gameOver);
+        curNumVariations = getPath(
+          focus,
+          exploration,
+          path,
+          shouldUseCompletedPath(focus, exploration, game.gameOver)
+        );
         if (curNumVariations > 1)
           handleGameMoveClick(prevVarFocus(curNumVariations));
         e.preventDefault();
@@ -521,8 +540,9 @@ function GameMoves(props) {
 
     let focusRow = 0;
     let numRows = 0;
+    let showMoveTreeLegend = false;
     if (exploration !== null) {
-      if (!game.gameOver) {
+      if (isIdleMainlineExplorationTip(focus, exploration, game.gameOver)) {
         for (let i = 1; i < exploration.length; i++) {
           let className = "gameMove";
           if (
@@ -634,9 +654,7 @@ function GameMoves(props) {
               move: fmtMove(
                 i,
                 exploration[i].move,
-                exploration[i].children.length > 0 && focus.moveNumber !== i
-                  ? "..."
-                  : ""
+                exploration[i].children.length > 0 ? "..." : ""
               ),
               path: { moveNumber: i, exPath: [] },
             },
@@ -716,8 +734,10 @@ function GameMoves(props) {
         focus,
         exploration,
         keyboardPathScratch,
-        game.gameOver
+        shouldUseCompletedPath(focus, exploration, game.gameOver)
       );
+      showMoveTreeLegend =
+        !neverExplore && pathHasExplorationMoves(path);
       const exportState =
         exploration?.length > 0
           ? exploration[exploration.length - 1]?.state ?? game?.state
@@ -773,10 +793,15 @@ function GameMoves(props) {
               game
             );
             const { count: branchChoiceCount, choices: branchChoices } =
-              collectVariationChoices(focus, exploration, variationGame);
+              labVariationChoicesForMoveCell(
+                movenum,
+                focus,
+                exploration,
+                variationGame
+              );
             let cells = path[movenum];
             if (
-              shouldSubstituteVariationChoicesAtCell(
+              labShouldSubstituteVariationChoicesAtCell(
                 focus,
                 exploration,
                 movenum,
@@ -794,7 +819,7 @@ function GameMoves(props) {
             } else if (cells.length > 1) {
               cells = syncRowFocusClasses(cells, focus);
             }
-            cells = filterPathCellsForSeat(cells, {
+            cells = filterLabPathCellsForSeat(cells, {
               seatIdx: j,
               movenum,
               layout,
@@ -983,6 +1008,17 @@ function GameMoves(props) {
             </button>
           ) : null}
         </div>
+        {showMoveTreeLegend ? (
+          <p className="move-tree-legend" aria-hidden="true">
+            <span className="move-tree-legend__mainline">
+              {t("gameMove.moveTree.legendMainline")}
+            </span>
+            <span className="move-tree-legend__sep"> · </span>
+            <span className="move-tree-legend__exploration">
+              {t("gameMove.moveTree.legendExploration")}
+            </span>
+          </p>
+        ) : null}
         <div className="movesTable" ref={tableRef}>
           <table className="table apTable is-narrow">
             <tbody>

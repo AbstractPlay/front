@@ -14,6 +14,7 @@
   { "slug": "subsystems/tournaments" },
   { "slug": "subsystems/events" },
   { "slug": "subsystems/lab" },
+  { "slug": "subsystems/lab-gamemove-coupling", "title": "Lab / Game Move coupling" },
   { "slug": "subsystems/bots" },
   { "slug": "subsystems/websockets" },
   { "slug": "subsystems/notifications" },
