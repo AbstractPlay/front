@@ -60,6 +60,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Board export:** animated GIF dialog on strip/card/narrative layouts (modal mounted in game-move shell); GIF button disabled when no exportable move line; PNG/GIF export uses the last renderrep for multi-board games (e.g. Bao).
 - **Game move (finished games):** move scrubbing and board GIF export show full hidden information (e.g. hands) by using omniscient render when the session is over, matching Lab archive behaviour.
 - **Live play exploration:** restore `emulation: true` on engine moves during exploration (partial still from UI/sim round); Waldmeister/Frogger snapshot reload fixed in gameslib emulated-complete `saveState()` behaviour.
+- **Alfred's Wyke:** move cooldown colours on the button bar no longer depend on site dark-mode CSS (player-tinted fills from gameslib); selected move type is highlighted while placing cells.
 - **Player profile:** Game History Rematch pre-fills variant rules from the original game using variant UIDs encoded in `site.gameid` (not display names in `header.game.variants`).
 - **Live play exploration:** clicks, typed moves, and board render all use one engine built from the hydrated focus node (partials stay in the move string); multi-frame SVG remounts when the focused render changes; exploration premove clock is no longer clipped.
 - **Live play multi-frame boards:** render from live main-line `game.state` at move-tree focus (not stale exploration spine snapshots); clear spine caches on API state refresh.
