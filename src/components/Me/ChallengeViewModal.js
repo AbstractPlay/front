@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactDom from "react-dom";
 import { useTranslation } from "react-i18next";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
@@ -8,8 +8,7 @@ import rehypeRaw from "rehype-raw";
 import Modal from "../Modal";
 import { useStore } from "../../stores";
 import { formatPlayerDisplayName } from "../Bots/botUtils";
-import { callAuthApi } from "../../lib/api";
-import { parseAuthResponse } from "../../lib/parseAuthResponse";
+import { useChallengePositionPreview } from "../../hooks/useChallengePositionPreview";
 import ChallengePositionPreview from "./ChallengePositionPreview";
 
 const ChallengeViewModal = React.memo(function ChallengeViewModal({
@@ -20,42 +19,13 @@ const ChallengeViewModal = React.memo(function ChallengeViewModal({
 }) {
   const { t } = useTranslation();
   const [comment, commentSetter] = useState("");
-  const [positionPreview, positionPreviewSetter] = useState(null);
-  const [positionPreviewError, positionPreviewErrorSetter] = useState(null);
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
-
-  useEffect(() => {
-    if (!show || !challenge?.hasStartPosition || !challenge?.id) {
-      positionPreviewSetter(null);
-      positionPreviewErrorSetter(null);
-      return;
-    }
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await callAuthApi(
-          "get_challenge_position_preview",
-          { id: challenge.id },
-          false
-        );
-        const parsed = await parseAuthResponse(res);
-        if (!parsed.ok) {
-          throw new Error(parsed.error);
-        }
-        if (!cancelled) {
-          positionPreviewSetter(parsed.data);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          positionPreviewErrorSetter(err.message || String(err));
-        }
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [show, challenge?.id, challenge?.hasStartPosition]);
+  const { positionPreview, positionPreviewError } = useChallengePositionPreview({
+    id: challenge?.id,
+    metaGame: challenge?.metaGame,
+    enabled: show && challenge?.hasStartPosition === true,
+  });
 
   function handleCommentChange(event) {
     commentSetter(event.target.value);

@@ -1,3 +1,4 @@
+import { GameFactory } from "@abstractplay/gameslib";
 import { getFocusNode } from "./Lab/exploration";
 import { isTeachingChallengeEligible } from "./teachingModeChallenge";
 
@@ -8,6 +9,36 @@ export function isStartPositionChallengeEligible(
   variants = undefined
 ) {
   return isTeachingChallengeEligible(metaGame, playerCount, variants);
+}
+
+/**
+ * Variant uids implied by a start-position handoff (explicit list or engine state).
+ */
+export function resolveVariantUidsForStartPosition(
+  metaGame,
+  state,
+  explicitVariantUids = undefined,
+) {
+  if (Array.isArray(explicitVariantUids) && explicitVariantUids.length > 0) {
+    return [...explicitVariantUids];
+  }
+  if (
+    typeof metaGame !== "string" ||
+    metaGame === "" ||
+    typeof state !== "string" ||
+    state.trim() === ""
+  ) {
+    return [];
+  }
+  try {
+    const engine = GameFactory(metaGame, state);
+    if (engine?.variants !== undefined && engine.variants.length > 0) {
+      return [...engine.variants];
+    }
+  } catch {
+    // fall through
+  }
+  return [];
 }
 
 export function buildStartPositionPayload(state) {

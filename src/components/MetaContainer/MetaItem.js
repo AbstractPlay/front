@@ -474,7 +474,9 @@ const MetaItem = React.forwardRef(
               </SummaryGate>
             )}
             {activeTab !== "players" ? null : <Ratings />}
-            {activeTab !== "challenges" ? null : <StandingChallenges />}
+            {activeTab !== "challenges" ? null : (
+              <StandingChallenges metaGame={game.uid} />
+            )}
             {activeTab !== "games" ? null : (
               <ListGames fixedState={"current"} />
             )}

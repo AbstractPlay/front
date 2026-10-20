@@ -5,6 +5,7 @@ import {
   buildStartPositionFromLabSession,
   buildStartPositionFromGameMoveSession,
   isStartPositionChallengeEligible,
+  resolveVariantUidsForStartPosition,
 } from "./challengeStartPosition";
 
 describe("challengeStartPosition", () => {
@@ -13,6 +14,22 @@ describe("challengeStartPosition", () => {
     expect(buildStartPositionPayload(state)).toEqual({
       startPosition: { state },
     });
+  });
+
+  it("resolveVariantUidsForStartPosition prefers explicit uids", () => {
+    expect(
+      resolveVariantUidsForStartPosition("saltire", "{}", ["v1", "v2"]),
+    ).toEqual(["v1", "v2"]);
+  });
+
+  it("resolveVariantUidsForStartPosition reads variants from serialized state", () => {
+    const engine = GameFactory("saltire", undefined, []);
+    const uids = resolveVariantUidsForStartPosition(
+      "saltire",
+      engine.serialize(),
+      [],
+    );
+    expect(Array.isArray(uids)).toBe(true);
   });
 
   it("isStartPositionChallengeEligible matches teaching rules for saltire 2P", () => {

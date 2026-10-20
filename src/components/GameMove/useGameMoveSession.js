@@ -8,6 +8,7 @@ import { apPerfRun } from "../../lib/apPerf.js";
 import { callAuthApi } from "../../lib/api";
 import { anyOnClockPlayerTimedOut } from "../../lib/gameClockDisplay";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
+import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import {
   maybeSyncInProgressCommentedFlag,
   runCheckTimeQuery,
@@ -103,7 +104,6 @@ import { isLabSupportedGame } from "../../lib/Lab/buildGame";
 import { launchLabFromExport } from "../../lib/Lab/storage";
 import { serializeSessionExploration } from "../../lib/Lab/exploration";
 import { buildStartPositionFromGameMoveSession } from "../../lib/challengeStartPosition";
-import { rawDirectoryDisplayName } from "../Bots/botUtils";
 import { getEffectiveColourContext } from "../../lib/effectiveColourContext";
 import {
   isParticipant,
@@ -1427,20 +1427,12 @@ export function useGameMoveSession(props) {
     async (challenge) => {
       const me = globalMeRef.current;
       const users = useStore.getState().users;
-      if (!me?.id) {
-        return;
-      }
-      const res = await callAuthApi("new_challenge", {
-        ...challenge,
-        challenger: {
-          id: me.id,
-          name: rawDirectoryDisplayName(me, users),
-        },
-      });
-      if (!res) {
-        return;
+      const parsed = await submitNewChallenge(challenge, me, users);
+      if (!parsed.ok) {
+        return parsed;
       }
       closeTeachChallengeModal();
+      return parsed;
     },
     [closeTeachChallengeModal]
   );

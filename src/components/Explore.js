@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import { useStorageState } from "react-use-storage-state";
 import { callAuthApi } from "../lib/api";
+import { submitNewChallenge } from "../lib/submitNewChallenge";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
 import { API_ENDPOINT_OPEN } from "../config";
 import PageHelmet from "./PageHelmet";
@@ -22,8 +23,6 @@ import {
   isValidExploreView,
 } from "../lib/exploreSections";
 import { useStore } from "../stores";
-import { rawDirectoryDisplayName } from "./Bots/botUtils";
-
 function Explore(props) {
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
@@ -108,16 +107,19 @@ function Explore(props) {
 
   const handleNewChallenge = async (challenge) => {
     try {
-      await callAuthApi("new_challenge", {
-        ...challenge,
-        challenger: {
-          id: globalMe.id,
-          name: rawDirectoryDisplayName(globalMe, allUsers),
-        },
-      });
+      const parsed = await submitNewChallenge(
+        challenge,
+        globalMe,
+        allUsers
+      );
+      if (!parsed.ok) {
+        return parsed;
+      }
       maybeTrackRecommendationChallenge(challenge.metaGame);
+      return parsed;
     } catch (error) {
       console.log(error);
+      return { ok: false, error: error?.message ?? String(error) };
     }
   };
 

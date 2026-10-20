@@ -12,6 +12,7 @@ import Modal from "./Modal";
 import ChallengeEntryModals from "./ChallengeEntryModals";
 import NewProfile from "./NewProfile";
 import { callAuthApi } from "../lib/api";
+import { submitNewChallenge } from "../lib/submitNewChallenge";
 import { useStorageState } from "react-use-storage-state";
 import {
   DASHBOARD_LAYOUT_VERTICAL,
@@ -25,8 +26,6 @@ import StandingChallengeModal from "./StandingChallengeModal";
 import DashboardMainContent from "./Me/DashboardMainContent";
 import { useStore } from "../stores";
 import { testBotStatus } from "./Bots/botApi";
-import { rawDirectoryDisplayName } from "./Bots/botUtils";
-
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
   const [error, errorSetter] = useState(null);
@@ -161,20 +160,21 @@ function Me(props) {
   const handleNewChallenge2 = useCallback(
     async (challenge) => {
       try {
-        console.log("calling new_challenge");
-        const res = await callAuthApi("new_challenge", {
-          ...challenge,
-          challenger: {
-            id: globalMe.id,
-            name: rawDirectoryDisplayName(globalMe, allUsers),
-          },
-        });
-        if (!res) return;
+        const parsed = await submitNewChallenge(
+          challenge,
+          globalMe,
+          allUsers
+        );
+        if (!parsed.ok) {
+          return parsed;
+        }
         maybeTrackRecommendationChallenge(challenge.metaGame);
         showNewChallengeModalSetter(false);
         varsSetter({ dummy: myid });
+        return parsed;
       } catch (error) {
         errorSetter(error);
+        return { ok: false, error: error?.message ?? String(error) };
       }
     },
     [globalMe, allUsers, myid]
