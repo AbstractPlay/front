@@ -2126,14 +2126,6 @@ span.hardTime::after {
     fill: var(--svg-default-fill);
   }
 
-  /* Alfred's Wyke button bar fill inversion in dark mode */
-  :root[color-mode="dark"] svg#_btnBar symbol.aprender-button-a697952a21593 > rect {
-    fill: #dddddd;
-  }
-  :root[color-mode="dark"] svg#_btnBar symbol.aprender-button-0ca07818d5ffc > rect {
-    fill: #999999;
-  }
-
   /* Player profile tabbed layout */
   #playerProfile .player-hero {
     margin-bottom: 1rem;
