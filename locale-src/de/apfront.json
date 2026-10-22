@@ -5167,6 +5167,18 @@
     "src": "Back to launcher",
     "out": "Zurück zum Launcher"
   },
+  "lab.clearGame": {
+    "src": "Clear game",
+    "out": "Partie zurücksetzen"
+  },
+  "lab.clearGameConfirmBody": {
+    "src": "Start over with the same game and variants. Your move tree and exploration branches will be removed.",
+    "out": "Starte neu mit demselben Spiel und denselben Varianten. Dein Zugbaum und deine Analysezweige werden gelöscht."
+  },
+  "lab.clearGameConfirmTitle": {
+    "src": "Clear game?",
+    "out": "Partie zurücksetzen?"
+  },
   "lab.coderOne": {
     "src": "Coder: ",
     "out": "Entwickler: "
@@ -5330,6 +5342,14 @@
   "lab.playgroundSuffix": {
     "src": " (Playground)",
     "out": " (Playground)"
+  },
+  "lab.resetToImport": {
+    "src": "Reset to import",
+    "out": "Auf Import zurücksetzen"
+  },
+  "lab.resetToImportHelp": {
+    "src": "Restore the position and move tree from when you opened Playground from a live game or full export.",
+    "out": "Stellt die Stellung und den Zugbaum aus dem Moment wieder her, als du den Playground aus einer Live-Partie oder einem vollständigen Export geöffnet hast."
   },
   "lab.save": {
     "src": "Save",

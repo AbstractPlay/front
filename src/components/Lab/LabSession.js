@@ -155,9 +155,12 @@ function LabSession({
   initialGameSettings,
   sessionName,
   loadedSave: initialLoadedSave,
+  hasImportCheckpoint = false,
   onLoadedSaveChange,
   onSessionNameChange,
   onExit,
+  onResetToImport,
+  onClearGame,
   onChallengeFromPosition,
 }) {
   const metaGame = initialGame.metaGame;
@@ -176,6 +179,7 @@ function LabSession({
   const [error, errorSetter] = useState(false);
   const [showDeleteSubtreeConfirm, showDeleteSubtreeConfirmSetter] =
     useState(false);
+  const [showClearGameConfirm, showClearGameConfirmSetter] = useState(false);
   const [showGameDetails, showGameDetailsSetter] = useState(false);
   const [showGameDump, showGameDumpSetter] = useState(false);
   const [showSettings, showSettingsSetter] = useState(false);
@@ -1421,22 +1425,53 @@ function LabSession({
             </div>
           </div>
         )}
-        <div className="buttons">
-          <button className="button apButton" onClick={handleOpenSave}>
-            {t("lab.save")}
-          </button>
-          {onChallengeFromPosition && isLabSupportedGame(metaGame) ? (
+        <div className="lab-session-actions">
+          <div className="lab-session-actions__primary buttons">
+            <button
+              type="button"
+              className="button apButton"
+              onClick={handleOpenSave}
+            >
+              {t("lab.save")}
+            </button>
+            {onClearGame ? (
+              <button
+                type="button"
+                className="button apButtonNeutral"
+                onClick={() => showClearGameConfirmSetter(true)}
+              >
+                {t("lab.clearGame")}
+              </button>
+            ) : null}
+            {hasImportCheckpoint && onResetToImport ? (
+              <button
+                type="button"
+                className="button apButtonNeutral"
+                onClick={onResetToImport}
+                title={t("lab.resetToImportHelp")}
+              >
+                {t("lab.resetToImport")}
+              </button>
+            ) : null}
             <button
               type="button"
               className="button apButtonNeutral"
-              onClick={handleChallengeFromPositionClick}
+              onClick={onExit}
             >
-              {t("challenge.startPosition.labButton")}
+              {t("lab.exitToLauncher")}
             </button>
+          </div>
+          {onChallengeFromPosition && isLabSupportedGame(metaGame) ? (
+            <div className="lab-session-actions__secondary buttons">
+              <button
+                type="button"
+                className="button is-small apButtonNeutral"
+                onClick={handleChallengeFromPositionClick}
+              >
+                {t("challenge.startPosition.labButton")}
+              </button>
+            </div>
           ) : null}
-          <button className="button apButtonNeutral" onClick={onExit}>
-            {t("lab.exitToLauncher")}
-          </button>
         </div>
 
         <LabSaveModal
@@ -1464,6 +1499,27 @@ function LabSession({
         >
           <div className="content">
             <p>{t("ConfirmDeleteSubtreeDesc")}</p>
+          </div>
+        </Modal>
+        <Modal
+          show={showClearGameConfirm}
+          title={t("lab.clearGameConfirmTitle")}
+          buttons={[
+            {
+              label: t("lab.clearGame"),
+              action: () => {
+                showClearGameConfirmSetter(false);
+                onClearGame?.();
+              },
+            },
+            {
+              label: t("Cancel"),
+              action: () => showClearGameConfirmSetter(false),
+            },
+          ]}
+        >
+          <div className="content">
+            <p>{t("lab.clearGameConfirmBody")}</p>
           </div>
         </Modal>
         <Modal
