@@ -5167,6 +5167,18 @@
     "src": "Back to launcher",
     "out": "Retour au lanceur"
   },
+  "lab.clearGame": {
+    "src": "Clear game",
+    "out": "Effacer la partie"
+  },
+  "lab.clearGameConfirmBody": {
+    "src": "Start over with the same game and variants. Your move tree and exploration branches will be removed.",
+    "out": "Recommencez avec la même partie et les mêmes variantes. Votre arbre de coups et vos branches d'exploration seront supprimés."
+  },
+  "lab.clearGameConfirmTitle": {
+    "src": "Clear game?",
+    "out": "Effacer la partie ?"
+  },
   "lab.coderOne": {
     "src": "Coder: ",
     "out": "Développeur : "
@@ -5330,6 +5342,14 @@
   "lab.playgroundSuffix": {
     "src": " (Playground)",
     "out": " (Bac à sable)"
+  },
+  "lab.resetToImport": {
+    "src": "Reset to import",
+    "out": "Réinitialiser à l'import"
+  },
+  "lab.resetToImportHelp": {
+    "src": "Restore the position and move tree from when you opened Playground from a live game or full export.",
+    "out": "Restaure la position et l'arbre de coups du moment où vous avez ouvert le Playground depuis une partie en direct ou un export complet."
   },
   "lab.save": {
     "src": "Save",

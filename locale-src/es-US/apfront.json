@@ -5167,6 +5167,18 @@
     "src": "Back to launcher",
     "out": "Volver al iniciador"
   },
+  "lab.clearGame": {
+    "src": "Clear game",
+    "out": "Limpiar partida"
+  },
+  "lab.clearGameConfirmBody": {
+    "src": "Start over with the same game and variants. Your move tree and exploration branches will be removed.",
+    "out": "Vuelve a empezar con la misma partida y variantes. Se eliminarán tu árbol de movimientos y las ramas de exploración."
+  },
+  "lab.clearGameConfirmTitle": {
+    "src": "Clear game?",
+    "out": "¿Limpiar partida?"
+  },
   "lab.coderOne": {
     "src": "Coder: ",
     "out": "Programador: "
@@ -5330,6 +5342,14 @@
   "lab.playgroundSuffix": {
     "src": " (Playground)",
     "out": " (Zona de pruebas)"
+  },
+  "lab.resetToImport": {
+    "src": "Reset to import",
+    "out": "Restablecer a la importación"
+  },
+  "lab.resetToImportHelp": {
+    "src": "Restore the position and move tree from when you opened Playground from a live game or full export.",
+    "out": "Restaura la posición y el árbol de movimientos de cuando abriste el Playground desde una partida en vivo o una exportación completa."
   },
   "lab.save": {
     "src": "Save",

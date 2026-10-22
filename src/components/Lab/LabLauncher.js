@@ -19,6 +19,8 @@ import {
   shouldShowImportBanner,
   dismissImportBanner,
   removeSavesById,
+  clearImportCheckpoint,
+  saveImportCheckpointFromPlaygroundImport,
 } from "../../lib/Lab/storage";
 import {
   listPlaygroundSaves,
@@ -211,15 +213,25 @@ function LabLauncher({ initialMetaGame = "", onLaunch, onLoadSave }) {
         variants: imported.variants,
         numPlayers: imported.playerCount,
       });
+      const sessionName = `${getGameDisplayName(imported.metaGame)}${t(
+        "lab.importedSuffix"
+      )}`;
+      if (imported.isPlaygroundExport) {
+        saveImportCheckpointFromPlaygroundImport(imported, {
+          id: game.id,
+          name: sessionName,
+        });
+      } else {
+        clearImportCheckpoint();
+      }
       onLaunch({
         game,
         savedExploration: imported.exploration,
         savedMoveAnnotations: imported.moveAnnotations,
         initialFocus: imported.focus,
         gameSettings: {},
-        sessionName: `${getGameDisplayName(imported.metaGame)}${t(
-          "lab.importedSuffix"
-        )}`,
+        sessionName,
+        preserveImportCheckpoint: imported.isPlaygroundExport,
       });
     } catch (err) {
       setError(err.message || String(err));

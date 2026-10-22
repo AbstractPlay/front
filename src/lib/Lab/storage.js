@@ -14,7 +14,7 @@ function defaultBoardSettings() {
 }
 
 function emptyStorage() {
-  return { version: 1, saves: [], lastSession: null };
+  return { version: 1, saves: [], lastSession: null, importCheckpoint: null };
 }
 
 export function loadStorage() {
@@ -127,6 +127,27 @@ export function clearLastSession() {
   writeStorage(data);
 }
 
+/**
+ * Immutable Playground import snapshot (live export or full Playground JSON paste).
+ * Not updated by session autosave.
+ */
+export function saveImportCheckpoint(session) {
+  const data = loadStorage();
+  data.importCheckpoint = { ...session, savedAt: Date.now() };
+  writeStorage(data);
+}
+
+export function getImportCheckpoint() {
+  const cp = loadStorage().importCheckpoint;
+  return cp && typeof cp === "object" ? cp : null;
+}
+
+export function clearImportCheckpoint() {
+  const data = loadStorage();
+  data.importCheckpoint = null;
+  writeStorage(data);
+}
+
 export function getLastLauncherMetaGame() {
   const metaGame = loadStorage().lastLauncherMetaGame;
   return typeof metaGame === "string" && metaGame.length > 0 ? metaGame : "";
@@ -165,7 +186,7 @@ export function launchLabFromExport({
   name,
 }) {
   const focusPoint = focus ?? { moveNumber: 0, exPath: [] };
-  saveLastSession({
+  const sessionPayload = {
     id: nanoid(),
     name,
     metaGame,
@@ -178,6 +199,30 @@ export function launchLabFromExport({
     },
     exploration,
     explorationFormat: 2,
+    gameSettings: {},
+    loadedSave: null,
+  };
+  saveLastSession(sessionPayload);
+  saveImportCheckpoint(sessionPayload);
+}
+
+/** @param {{ id: string, name: string }} session */
+export function saveImportCheckpointFromPlaygroundImport(imported, session) {
+  const focusPoint = imported.focus ?? { moveNumber: 0, exPath: [] };
+  saveImportCheckpoint({
+    id: session.id,
+    name: session.name,
+    metaGame: imported.metaGame,
+    state: imported.state,
+    variants: imported.variants ?? [],
+    playerCount: imported.playerCount,
+    focus: {
+      moveNumber: focusPoint.moveNumber,
+      exPath: [...(focusPoint.exPath ?? [])],
+    },
+    exploration: imported.exploration ?? null,
+    explorationFormat: 2,
+    moveAnnotations: imported.moveAnnotations ?? null,
     gameSettings: {},
     loadedSave: null,
   });

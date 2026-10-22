@@ -9,7 +9,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
-## [1.0.0-ci] - 2026-10-20
+## [1.0.0-ci] - 2026-10-22
 
 ### Added
 
@@ -31,6 +31,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Player profile:** Game History table includes game length (move count) after End date.
 - **Dashboard:** “Your tournaments” section (after Your games) lists in-progress automated tournaments you are in via `me_dashboard.currentTournaments`; hidden when none.
 - **Dashboard:** optional tabbed layout (Games, Tournaments, Challenges; Admin tab for site admins) with vertical/tabbed preference stored locally; Issue challenge always available in tabbed mode.
+- **Playground (Lab):** import checkpoint when opening from a live game or full Playground JSON export — reset to that snapshot after exploring; **Clear game** restarts the move tree with the same game and variants; session actions reorganized (challenge de-emphasized below primary actions).
 
 ### Changed
 

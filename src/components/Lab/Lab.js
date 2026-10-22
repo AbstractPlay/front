@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { nanoid } from "nanoid";
 import PageHelmet from "../PageHelmet";
 import ChallengeEntryModals from "../ChallengeEntryModals";
 import { buildLabGame } from "../../lib/Lab/buildGame";
@@ -7,7 +8,9 @@ import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import { useStore } from "../../stores";
 import { readSimRoundFromGameSettings } from "../../lib/Lab/labSimBoardSettings";
 import {
+  clearImportCheckpoint,
   clearLastSession,
+  getImportCheckpoint,
   getLastLauncherMetaGame,
   getLastSession,
   localSaveToLaunchPayload,
@@ -25,14 +28,14 @@ function simOptionsFromSettings(gameSettings) {
   };
 }
 
-function sessionFromAutosave(last) {
+function sessionStateFromPersistedPayload(last) {
   const gameSettings = last.gameSettings ?? {};
   const game = buildLabGame(last.metaGame, last.state, {
     variants: last.variants ?? [],
     numPlayers: last.playerCount,
     ...simOptionsFromSettings(gameSettings),
   });
-  game.id = last.id;
+  game.id = last.id ?? nanoid();
   game.selectedVariants = last.variants ?? [];
   return {
     game,
@@ -42,6 +45,18 @@ function sessionFromAutosave(last) {
     gameSettings,
     sessionName: last.name,
     loadedSave: last.loadedSave ?? null,
+    sessionKey: nanoid(),
+  };
+}
+
+function sessionFromAutosave(last) {
+  return sessionStateFromPersistedPayload(last);
+}
+
+function wrapLaunchSession(sessionFields) {
+  return {
+    ...sessionFields,
+    sessionKey: nanoid(),
   };
 }
 
@@ -55,7 +70,7 @@ function launchPayloadFromSave(save) {
   });
   game.id = payload.id;
   game.selectedVariants = payload.variants ?? [];
-  return {
+  return wrapLaunchSession({
     game,
     savedExploration: payload.exploration,
     savedMoveAnnotations: payload.moveAnnotations ?? null,
@@ -67,7 +82,7 @@ function launchPayloadFromSave(save) {
       name: payload.name,
       source: payload.source ?? "local",
     },
-  };
+  });
 }
 
 function Lab() {
@@ -81,6 +96,9 @@ function Lab() {
     getLastLauncherMetaGame(),
   );
   const [ready, setReady] = useState(false);
+  const [hasImportCheckpoint, hasImportCheckpointSetter] = useState(() =>
+    Boolean(getImportCheckpoint()),
+  );
 
   useEffect(() => {
     const last = getLastSession();
@@ -92,6 +110,7 @@ function Lab() {
         clearLastSession();
       }
     }
+    hasImportCheckpointSetter(Boolean(getImportCheckpoint()));
     setReady(true);
   }, []);
 
@@ -118,17 +137,26 @@ function Lab() {
       initialFocus,
       gameSettings,
       sessionName,
+      preserveImportCheckpoint = false,
     }) => {
       rememberLauncherMetaGame(game?.metaGame);
-      setSession({
-        game,
-        savedExploration,
-        savedMoveAnnotations: savedMoveAnnotations ?? null,
-        initialFocus: initialFocus ?? null,
-        gameSettings,
-        sessionName,
-        loadedSave: null,
-      });
+      if (!preserveImportCheckpoint) {
+        clearImportCheckpoint();
+        hasImportCheckpointSetter(false);
+      } else {
+        hasImportCheckpointSetter(Boolean(getImportCheckpoint()));
+      }
+      setSession(
+        wrapLaunchSession({
+          game,
+          savedExploration,
+          savedMoveAnnotations: savedMoveAnnotations ?? null,
+          initialFocus: initialFocus ?? null,
+          gameSettings,
+          sessionName,
+          loadedSave: null,
+        }),
+      );
     },
     [rememberLauncherMetaGame],
   );
@@ -138,6 +166,8 @@ function Lab() {
       try {
         const payload = launchPayloadFromSave(save);
         rememberLauncherMetaGame(payload.game?.metaGame);
+        clearImportCheckpoint();
+        hasImportCheckpointSetter(false);
         setSession(payload);
       } catch (err) {
         window.alert(err.message || String(err));
@@ -157,8 +187,55 @@ function Lab() {
   const handleExit = useCallback(() => {
     rememberLauncherMetaGame(session?.game?.metaGame);
     clearLastSession();
+    clearImportCheckpoint();
+    hasImportCheckpointSetter(false);
     setSession(null);
   }, [rememberLauncherMetaGame, session]);
+
+  const handleResetToImport = useCallback(() => {
+    const cp = getImportCheckpoint();
+    if (!cp?.metaGame || !cp?.state) {
+      return;
+    }
+    try {
+      setSession(sessionStateFromPersistedPayload({
+        ...cp,
+        loadedSave: null,
+      }));
+      hasImportCheckpointSetter(true);
+    } catch (err) {
+      window.alert(err.message || String(err));
+    }
+  }, []);
+
+  const handleClearGame = useCallback(() => {
+    if (!session?.game) {
+      return;
+    }
+    const { game, gameSettings, sessionName } = session;
+    try {
+      const fresh = buildLabGame(game.metaGame, null, {
+        variants: game.selectedVariants ?? [],
+        numPlayers: game.numPlayers,
+        ...simOptionsFromSettings(gameSettings ?? {}),
+      });
+      fresh.id = nanoid();
+      fresh.selectedVariants = game.selectedVariants ?? [];
+      setSession(
+        wrapLaunchSession({
+          game: fresh,
+          savedExploration: null,
+          savedMoveAnnotations: null,
+          initialFocus: null,
+          gameSettings: gameSettings ?? {},
+          sessionName,
+          loadedSave: null,
+        }),
+      );
+    } catch (err) {
+      window.alert(err.message || String(err));
+    }
+  }, [session]);
 
   const handleChallengeFromPosition = useCallback((draft) => {
     challengeDraftSetter(draft);
@@ -192,6 +269,7 @@ function Lab() {
       {session ? (
         <>
           <LabSession
+            key={session.sessionKey}
             initialGame={session.game}
             savedExploration={session.savedExploration}
             savedMoveAnnotations={session.savedMoveAnnotations}
@@ -199,9 +277,12 @@ function Lab() {
             initialGameSettings={session.gameSettings}
             sessionName={session.sessionName}
             loadedSave={session.loadedSave}
+            hasImportCheckpoint={hasImportCheckpoint}
             onLoadedSaveChange={handleLoadedSaveChange}
             onSessionNameChange={handleSessionNameChange}
             onExit={handleExit}
+            onResetToImport={handleResetToImport}
+            onClearGame={handleClearGame}
             onChallengeFromPosition={
               globalMe?.id ? handleChallengeFromPosition : undefined
             }

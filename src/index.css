@@ -3548,6 +3548,10 @@ span.hardTime::after {
   color: var(--main-heading-color);
 }
 
+.lab-session-actions__secondary {
+  margin-top: 0.75rem;
+}
+
 .game-move-card-move-path__mode,
 .game-move-card-move-path__pending {
   margin: 0 0 0.5rem;
