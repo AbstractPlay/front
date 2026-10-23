@@ -1948,7 +1948,7 @@ export function useGameMoveSession(props) {
           return 90;
         }
         if (style.startsWith("hex-of")) {
-          return 60;
+          return 30;
         }
         if (style === "sowing") {
           return 180;
