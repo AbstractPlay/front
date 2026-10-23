@@ -2243,9 +2243,21 @@
     "src": "Filter by game…",
     "out": "Filtrer par jeu…"
   },
+  "Tournament.loadErrorBody": {
+    "src": "Something went wrong while loading this tournament. You can try again later or return to the tournaments list.",
+    "out": "Une erreur est survenue lors du chargement de ce tournoi. Vous pouvez réessayer plus tard ou retourner à la liste des tournois."
+  },
+  "Tournament.loadErrorTitle": {
+    "src": "Could not load tournament",
+    "out": "Impossible de charger le tournoi"
+  },
   "Tournament.loading": {
-    "src": "Loading tournaments…",
-    "out": "Chargement des tournois…"
+    "src": "Loading tournament…",
+    "out": "Chargement du tournoi…"
+  },
+  "Tournament.notStarted": {
+    "src": "This tournament has not started yet. Division standings will appear here once play begins.",
+    "out": "Ce tournoi n'a pas encore commencé. Le classement des divisions apparaîtra ici dès le début des parties."
   },
   "Tournament.registeredOnly": {
     "src": "Only tournaments I'm in",

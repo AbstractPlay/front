@@ -861,7 +861,10 @@
     }
   },
   "Tournament": {
-    "loading": "Loading tournaments…",
+    "loading": "Loading tournament…",
+    "loadErrorTitle": "Could not load tournament",
+    "loadErrorBody": "Something went wrong while loading this tournament. You can try again later or return to the tournaments list.",
+    "notStarted": "This tournament has not started yet. Division standings will appear here once play begins.",
     "Number": "Tournament Number",
     "Tournaments": "Automated Tournaments",
     "Completion": "Completion",

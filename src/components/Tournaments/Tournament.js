@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { API_ENDPOINT_OPEN } from "../../config";
 import PageHelmet from "../PageHelmet";
 import PageLoading from "../shared/PageLoading";
+import NotFound from "../NotFound";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { formatVariantsJoined } from "../../lib/expandVariants";
@@ -25,6 +26,7 @@ import {
   canCommentTournamentChat,
   tournamentChatPlayers,
 } from "../../lib/tournamentChat";
+import { parseTournamentDetailResponse } from "../../lib/tournamentDetailData";
 
 async function reportError(error) {
   try {
@@ -52,152 +54,13 @@ async function reportError(error) {
   }
 }
 
-function outcomeForPlayerGame(playerid, game) {
-  let outcome = "";
-  let outcome2 = "";
-  if (game.winner === undefined) {
-    outcome = "_";
-    outcome2 = "_";
-  } else if (game.winner.length === 2) {
-    outcome = "Draw";
-    outcome2 = "½";
-  } else if (game.winner[0] === playerid) {
-    outcome = "Win";
-    outcome2 = "1";
-  } else {
-    outcome = "Loss";
-    outcome2 = "0";
-  }
-  return [outcome, outcome2, game.id];
-}
-
-function processData(tournament, players, games) {
-  const numdivisions = Object.keys(tournament.divisions).length;
-  if (tournament.players) {
-    players = tournament.players;
-  }
-  for (let i = 1; i <= numdivisions; i++) {
-    tournament.divisions[i].players = [];
-  }
-  for (let player of players) {
-    if (player.division !== undefined) {
-      player.games = [];
-      tournament.divisions[player.division].players.push(player);
-    }
-  }
-  for (let game of games) {
-    const division = game.sk.split("#")[1];
-    const player1 = tournament.divisions[division].players.find(
-      (p) => p.playerid === game.player1
-    );
-    const player2 = tournament.divisions[division].players.find(
-      (p) => p.playerid === game.player2
-    );
-    player1.games.push(game);
-    player2.games.push(game);
-  }
-  let divisions = [];
-  for (let i = 1; i <= numdivisions; i++) {
-    let division = tournament.divisions[i];
-    if (!division.processed) {
-      let completed = 0;
-      let errors = 0;
-      for (let player of division.players) {
-        player.n =
-          player.games.reduce(
-            (acc, g) => (g.winner !== undefined ? ++acc : acc),
-            0
-          ) + 1;
-        player.tiebreak = 0;
-        let score = 0;
-        for (const game of player.games) {
-          if (game.winner !== undefined) {
-            if (game.winner.length === 2) {
-              const opponent =
-                game.winner[0] === player.playerid
-                  ? game.winner[1]
-                  : game.winner[0];
-              player.tiebreak +=
-                division.players.find((p) => p.playerid === opponent).score / 2;
-              score += 0.5;
-            } else if (game.winner[0] === player.playerid) {
-              const opponent =
-                game.winner[0] === game.player1 ? game.player2 : game.player1;
-              player.tiebreak += division.players.find(
-                (p) => p.playerid === opponent
-              ).score;
-              score += 1;
-            }
-            completed++;
-          }
-        }
-        if (score !== player.score && errors === 0) {
-          console.log(
-            `Score mismatch for player ${player.playerid} in division ${i} of tournament ${tournament.id}`
-          );
-          reportError(
-            `Score mismatch for player ${player.playerid} in division ${i} of tournament ${tournament.id}`
-          );
-          errors++;
-        }
-        if (player.tiebreak < 0) player.tiebreak = 0;
-      }
-      if (2 * division.numCompleted !== completed && errors === 0) {
-        console.log(
-          `Number of games completed incorrect in division ${i} of tournament ${tournament.id}`
-        );
-        reportError(
-          `Number of games completed incorrect in division ${i} of tournament ${tournament.id}`
-        );
-      }
-    } else {
-      console.log("Division " + i + " already processed");
-    }
-    division.players.sort((b, a) => {
-      return a.score !== b.score
-        ? a.score - b.score
-        : a.tiebreak !== b.tiebreak
-        ? a.tiebreak - b.tiebreak
-        : a.rating - b.rating;
-    });
-    // Now also sort games and record outcomes for the table
-    for (let p of division.players) {
-      p.outcomes = [];
-      for (let i = 0; i < division.players.length; i++) {
-        let o = division.players[i];
-        if (o.playerid === p.playerid) {
-          p.outcomes.push(["-"]);
-        } else {
-          const gamesVsO = p.games
-            .filter(
-              (g) => g.player1 === o.playerid || g.player2 === o.playerid
-            )
-            .sort((a, b) => (a.matchLeg ?? 1) - (b.matchLeg ?? 1));
-          if (gamesVsO.length === 0) {
-            p.outcomes.push(["_", "_", null]);
-          } else if (gamesVsO.length === 1) {
-            p.outcomes.push(outcomeForPlayerGame(p.playerid, gamesVsO[0]));
-          } else {
-            p.outcomes.push([
-              "multi",
-              gamesVsO.map((g) => outcomeForPlayerGame(p.playerid, g)),
-            ]);
-          }
-        }
-      }
-    }
-    divisions.push(division);
-  }
-  return divisions;
-}
-
 function Tournament(props) {
   const { t } = useTranslation();
   const allUsers = useStore((state) => state.users);
   const globalMe = useStore((state) => state.globalMe);
   const wsSend = useStore((state) => state.wsSend);
   const [tournament, tournamentSetter] = useState(null);
-  const [tournamentLoaded, tournamentLoadedSetter] = useState(false);
+  const [fetchStatus, fetchStatusSetter] = useState("loading");
   const [divisions, divisionsSetter] = useState([]);
   const [comments, commentsSetter] = useState([]);
   const [tournamentPlayerRows, tournamentPlayerRowsSetter] = useState([]);
@@ -216,46 +79,72 @@ function Tournament(props) {
   const effectiveMetaGame = metaGame || gameMetaGame || "undefined";
   const isArchived = !!metaGame;
 
+  const clearTournamentState = useCallback(() => {
+    tournamentSetter(null);
+    divisionsSetter([]);
+    commentsSetter([]);
+    tournamentPlayerRowsSetter([]);
+  }, []);
+
   const fetchTournamentData = useCallback(async () => {
-    let url = new URL(API_ENDPOINT_OPEN);
-    url.searchParams.append("query", "get_tournament");
-    url.searchParams.append("tournamentid", tournamentid);
-    url.searchParams.append("metaGame", effectiveMetaGame);
-    url.searchParams.append("isArchived", isArchived.toString());
-    if (gameId) {
-      url.searchParams.append("gameId", gameId);
+    try {
+      const url = new URL(API_ENDPOINT_OPEN);
+      url.searchParams.append("query", "get_tournament");
+      url.searchParams.append("tournamentid", tournamentid);
+      url.searchParams.append("metaGame", effectiveMetaGame);
+      url.searchParams.append("isArchived", isArchived.toString());
+      if (gameId) {
+        url.searchParams.append("gameId", gameId);
+      }
+      const res = await fetch(url);
+      if (res.status !== 200) {
+        try {
+          const result = await res.json();
+          console.log(JSON.parse(result.body));
+        } catch (parseError) {
+          console.log(`get_tournament failed: ${res.status}`, parseError);
+        }
+        clearTournamentState();
+        return "error";
+      }
+      const data = await res.json();
+      const parsed = parseTournamentDetailResponse(data, {
+        onIntegrityIssue: reportError,
+      });
+      if (!parsed.ok) {
+        clearTournamentState();
+        return parsed.reason === "notFound" ? "not_found" : "error";
+      }
+      divisionsSetter(parsed.divisions);
+      tournamentSetter(parsed.tournament);
+      tournamentPlayerRowsSetter(parsed.playerRows);
+      commentsSetter(parsed.comments);
+      return "ok";
+    } catch (error) {
+      console.log(`Error loading tournament ${tournamentid}: ${error}`);
+      clearTournamentState();
+      return "error";
     }
-    const res = await fetch(url);
-    const status = res.status;
-    if (status !== 200) {
-      const result = await res.json();
-      console.log(JSON.parse(result.body));
-      return;
-    }
-    const data = await res.json();
-    const tour = data.tournament[0];
-    const playerRows =
-      data.tournamentPlayers?.length > 0
-        ? data.tournamentPlayers
-        : tour?.players ?? [];
-    let nextDivisions = processData(
-      tour,
-      data.tournamentPlayers,
-      data.tournamentGames
-    );
-    divisionsSetter(nextDivisions);
-    tournamentSetter(tour);
-    tournamentPlayerRowsSetter(playerRows);
-    commentsSetter(data.comments ?? []);
-  }, [tournamentid, effectiveMetaGame, isArchived, gameId]);
+  }, [
+    tournamentid,
+    effectiveMetaGame,
+    isArchived,
+    gameId,
+    clearTournamentState,
+  ]);
 
   useEffect(() => {
-    async function load() {
-      await fetchTournamentData();
-      tournamentLoadedSetter(true);
-    }
-    tournamentLoadedSetter(false);
-    load();
+    let cancelled = false;
+    fetchStatusSetter("loading");
+    (async () => {
+      const status = await fetchTournamentData();
+      if (!cancelled) {
+        fetchStatusSetter(status);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [fetchTournamentData]);
 
   useEffect(() => {
@@ -269,10 +158,11 @@ function Tournament(props) {
   }, [tournamentid, wsSend]);
 
   useEffect(() => {
-    const onRefresh = (event) => {
+    const onRefresh = async (event) => {
       const tid = event.detail?.tournamentId;
       if (tid === tournamentid) {
-        fetchTournamentData();
+        const status = await fetchTournamentData();
+        fetchStatusSetter(status);
       }
     };
     window.addEventListener("refresh-tournament", onRefresh);
@@ -311,11 +201,12 @@ function Tournament(props) {
         timeStamp: Date.now(),
       },
     ]);
-    await fetchTournamentData();
+    const status = await fetchTournamentData();
+    fetchStatusSetter(status);
   };
 
   useEffect(() => {
-    if (!tournamentLoaded) {
+    if (fetchStatus !== "ok") {
       return;
     }
     if (
@@ -329,7 +220,7 @@ function Tournament(props) {
     }
     navigate(canonicalPath, { replace: true });
   }, [
-    tournamentLoaded,
+    fetchStatus,
     tournamentid,
     location.pathname,
     location.search,
@@ -337,10 +228,13 @@ function Tournament(props) {
     canonicalPath,
   ]);
 
-  const handleResize = () => {
-    screenWidthSetter(window.innerWidth);
-  };
-  window.addEventListener("resize", handleResize);
+  useEffect(() => {
+    const handleResize = () => {
+      screenWidthSetter(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const metaGameName = tournament
     ? gameinfo.get(tournament.metaGame)?.name
@@ -349,9 +243,16 @@ function Tournament(props) {
     ? formatVariantsJoined(tournament.metaGame, tournament.variants)
     : "";
 
-  const pageTitle = tournament
-    ? `${metaGameName}: Tournament ${tournamentid}`
-    : t("Tournament.loading");
+  const pageTitle =
+    fetchStatus === "loading"
+      ? t("Tournament.loading")
+      : fetchStatus === "not_found"
+        ? t("404")
+        : fetchStatus === "error"
+          ? t("Tournament.loadErrorTitle")
+          : tournament
+            ? `${metaGameName}: Tournament ${tournamentid}`
+            : t("Tournament.loading");
 
   const helmet = (
     <PageHelmet title={pageTitle} canonicalPath={canonicalPath} noIndex>
@@ -364,11 +265,37 @@ function Tournament(props) {
     </PageHelmet>
   );
 
-  if (!tournamentLoaded) {
+  if (fetchStatus === "loading") {
     return (
       <>
         {helmet}
         <PageLoading message={t("Tournament.loading")} />
+      </>
+    );
+  }
+
+  if (fetchStatus === "not_found") {
+    return (
+      <>
+        {helmet}
+        <NotFound path={canonicalPath} />
+      </>
+    );
+  }
+
+  if (fetchStatus === "error" || !tournament) {
+    return (
+      <>
+        {helmet}
+        <article className="content">
+          <h1 className="title has-text-centered">{t("Tournament.loadErrorTitle")}</h1>
+          <p className="has-text-centered">{t("Tournament.loadErrorBody")}</p>
+          <p className="has-text-centered">
+            <Link to="/tournaments" className="button apButton">
+              {t("Tournament.Tournaments")}
+            </Link>
+          </p>
+        </article>
       </>
     );
   }
@@ -408,6 +335,9 @@ function Tournament(props) {
         </div>
         <div className="columns is-multiline is-centered">
           <div className="column is-12 is-8-desktop content">
+            {divisions.length === 0 ? (
+              <p className="has-text-centered">{t("Tournament.notStarted")}</p>
+            ) : null}
             {divisions.map((d, i) => (
               <div className="card mb-5" key={"division" + i}>
                 <header className="card-header">
