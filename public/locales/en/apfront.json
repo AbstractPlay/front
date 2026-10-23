@@ -357,6 +357,8 @@
   "HelpTeachingModeFalse": "Standard play without teaching undo.",
   "TeachingGameLabel": "Teaching (unrated)",
   "TeachingGrantUndo": "Offer undo",
+  "ConfirmTeachingGrantUndo": "Offer undo",
+  "ConfirmTeachingGrantUndoDesc": "Offer your opponent a teaching review of the last move? They can keep the move or undo and play again.",
   "TeachingKeepMove": "Keep my move",
   "TeachingUndoMove": "Undo and choose again",
   "TeachingReviewPrompt": "Your opponent offered a teaching review. Keep the move or undo and play again.",

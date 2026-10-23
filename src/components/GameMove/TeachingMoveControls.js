@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import Modal from "../Modal";
 import { teachingPlayerRole } from "../../lib/teachingModeChallenge";
 
 function TeachingMoveControls({
@@ -13,6 +14,8 @@ function TeachingMoveControls({
   t,
   buttonClassName = "button is-small apButton",
 }) {
+  const [showGrantConfirm, setShowGrantConfirm] = useState(false);
+
   if (!game?.teachingMode || game.numPlayers !== 2 || uiState !== 0) {
     return null;
   }
@@ -56,17 +59,38 @@ function TeachingMoveControls({
   }
 
   if (!undo && game.canSubmit && numMoves > 0) {
+    const handleGrantClick = () => setShowGrantConfirm(true);
+    const handleCloseGrantConfirm = () => setShowGrantConfirm(false);
+    const handleGrantConfirmed = () => {
+      setShowGrantConfirm(false);
+      onGrant();
+    };
+
     return (
-      <div className="field game-move-teaching-controls">
-        <button
-          type="button"
-          className={buttonClassName}
-          disabled={busy}
-          onClick={onGrant}
+      <>
+        <div className="field game-move-teaching-controls">
+          <button
+            type="button"
+            className={buttonClassName}
+            disabled={busy}
+            onClick={handleGrantClick}
+          >
+            {t("TeachingGrantUndo")}
+          </button>
+        </div>
+        <Modal
+          show={showGrantConfirm}
+          title={t("ConfirmTeachingGrantUndo")}
+          buttons={[
+            { label: t("Confirm"), action: handleGrantConfirmed },
+            { label: t("Cancel"), action: handleCloseGrantConfirm },
+          ]}
         >
-          {t("TeachingGrantUndo")}
-        </button>
-      </div>
+          <div className="content">
+            <p>{t("ConfirmTeachingGrantUndoDesc")}</p>
+          </div>
+        </Modal>
+      </>
     );
   }
 
