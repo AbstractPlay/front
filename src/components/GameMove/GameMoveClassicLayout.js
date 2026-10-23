@@ -722,7 +722,11 @@ export default function GameMoveClassicLayout({ session }) {
           show={showMoveConfirm}
           title={t("ConfirmMove")}
           buttons={[
-            { label: t("Submit"), action: handleMoveConfirmed },
+            {
+              label: t("Submit"),
+              action: handleMoveConfirmed,
+              disabled: submitting,
+            },
             {
               label: t("Cancel"),
               action: handleCloseMoveConfirm,

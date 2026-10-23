@@ -876,6 +876,10 @@
     "Join": "Join recurring",
     "JoinOnce": "Join once",
     "Name": "{{metaGame}} Tournament",
+    "allGames": "All games",
+    "filterByGame": "Filter by game…",
+    "registeredOnly": "Only tournaments I'm in",
+    "starredOnly": "Only starred games",
     "ProposeNew": "Request a new tournament",
     "New2": "New tournaments",
     "New1": "New tournament",
@@ -2049,6 +2053,7 @@
     }
   },
   "gamePicker": {
+    "allGames": "All games",
     "choose": "Choose a game…",
     "searchLabel": "Search",
     "searchPlaceholder": "Type to filter games…",

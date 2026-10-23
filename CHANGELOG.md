@@ -46,9 +46,11 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Move tree branches (live play and Lab):** at a multi-branch ply, list all lines (a, b, …) with the active one highlighted; ↑/↓ toolbar buttons and tooltips match keyboard (up = previous variant, down = next).
 - **Move list:** hover cursor on move notation is a pointer (clickable moves) while text selection still works.
 - **Strip layout:** status drawer and move dock start expanded on narrow viewports (same as wide); dock collapse toggle remains on small screens.
+- **Automated tournaments:** game filter on `/tournaments/` uses the shared game picker (search, categories, quick picks) with an always-visible **All games** control and the same option inside the picker.
 
 ### Fixed
 
+- **Live play:** serialize `submit_move`, debounce move-confirm modal submit, and refetch before surfacing move-number mismatch when the server already recorded the ply (duplicate submit).
 - **Guerrilla Checkers (match):** finished and in-progress match games load again after game 1 (move list / game record no longer throw on missing `lastmove` on the G2 reset checkpoint; requires gameslib + API hydrate with stack repair).
 - **Challenges:** `new_challenge` failures from Lab, live teach-from-position, and challenge modals surface the server message instead of closing silently; position-locked variant uids are sent on issue; open-challenges page refreshes after issuing from that screen.
 - **Challenges:** Open vs Closed type on issue-from-position modal is selectable again (removed mistaken `readOnly` on radios — Open was not actually issuable); game page challenges tab passes `metaGame` explicitly; public list fetch parses proxy envelopes instead of failing silently to an empty table.
