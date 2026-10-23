@@ -11,10 +11,12 @@ import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
 import { formatVariantsJoined } from "../../lib/expandVariants";
 import TournamentFormatBadge from "./TournamentFormatBadge";
+import { shouldNormalizeTournamentDetailUrl } from "../../lib/seoCanonical";
 import {
-  shouldNormalizeTournamentDetailUrl,
-  tournamentDetailPath,
-} from "../../lib/seoCanonical";
+  isConcreteMetaGame,
+  tournamentDetailPathActive,
+  tournamentDetailPathArchived,
+} from "../../lib/tournamentRoutes";
 import {
   RECORDS_DOWNLOAD_LINK_REL,
   RECORDS_DOWNLOAD_URLS,
@@ -69,7 +71,18 @@ function Tournament(props) {
   const { metaGame } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const canonicalPath = tournamentDetailPath(tournamentid);
+  const canonicalPath = useMemo(() => {
+    if (isConcreteMetaGame(metaGame)) {
+      return tournamentDetailPathArchived(tournamentid, metaGame);
+    }
+    if (
+      tournament?.dateEnded &&
+      isConcreteMetaGame(tournament.metaGame)
+    ) {
+      return tournamentDetailPathArchived(tournamentid, tournament.metaGame);
+    }
+    return tournamentDetailPathActive(tournamentid);
+  }, [tournamentid, metaGame, tournament]);
 
   // Get query parameters for game fixing
   const searchParams = new URLSearchParams(location.search);
@@ -213,24 +226,49 @@ function Tournament(props) {
     if (fetchStatus !== "ok") {
       return;
     }
+    const searchParamsForNav = new URLSearchParams(location.search);
+    const queryMeta = searchParamsForNav.get("metaGame");
+    let target = canonicalPath;
+    if (gameId && isConcreteMetaGame(queryMeta)) {
+      target = tournamentDetailPathArchived(tournamentid, queryMeta);
+    }
     if (
       !shouldNormalizeTournamentDetailUrl(
         location.pathname,
         location.search,
-        tournamentid
+        tournamentid,
+        metaGame
       )
     ) {
       return;
     }
-    navigate(canonicalPath, { replace: true });
+    navigate(target, { replace: true });
   }, [
     fetchStatus,
     tournamentid,
+    metaGame,
+    gameId,
     location.pathname,
     location.search,
     navigate,
     canonicalPath,
   ]);
+
+  useEffect(() => {
+    if (fetchStatus !== "ok" || !tournament?.dateEnded) {
+      return;
+    }
+    if (
+      !isConcreteMetaGame(tournament.metaGame) ||
+      isConcreteMetaGame(metaGame)
+    ) {
+      return;
+    }
+    navigate(
+      tournamentDetailPathArchived(tournamentid, tournament.metaGame),
+      { replace: true }
+    );
+  }, [fetchStatus, tournament, tournamentid, metaGame, navigate]);
 
   useEffect(() => {
     const handleResize = () => {

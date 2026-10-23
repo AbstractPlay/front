@@ -5,6 +5,10 @@ import i18n from "i18next";
 import { getGameDisplayName } from "./gameOptions";
 import { expandVariants } from "./expandVariants";
 import { isSoloOnlyGame } from "./soloPlay";
+import {
+  tournamentDetailPathActive,
+  tournamentDetailPathArchived,
+} from "./tournamentRoutes";
 
 function metaGameLabel(metaGame) {
   return getGameDisplayName(metaGame);
@@ -201,7 +205,11 @@ export function NotificationMessage({ body }) {
             i18nKey="me.notifications.message.tournamentStart"
             values={{ number: body.number, metaGame }}
             components={{
-              tournamentLink: <Link to={`/tournament/${body.tournamentId}`} />,
+              tournamentLink: (
+                <Link
+                  to={tournamentDetailPathActive(body.tournamentId)}
+                />
+              ),
             }}
           />
           {variantsSuffix(body.metaGame, body.variants)}
@@ -222,7 +230,14 @@ export function NotificationMessage({ body }) {
               winnerName: body.winnerName,
             }}
             components={{
-              tournamentLink: <Link to={`/tournament/${body.tournamentId}`} />,
+              tournamentLink: (
+                <Link
+                  to={tournamentDetailPathArchived(
+                    body.tournamentId,
+                    body.metaGame
+                  )}
+                />
+              ),
             }}
           />
           {variantsSuffix(body.metaGame, body.variants)}
@@ -253,7 +268,7 @@ export function NotificationMessage({ body }) {
             values={{ commenterName: body.commenterName, metaGame }}
             components={{
               tournamentLink: (
-                <Link to={`/tournament/${body.tournamentId}`} />
+                <Link to={tournamentDetailPathActive(body.tournamentId)} />
               ),
             }}
           />

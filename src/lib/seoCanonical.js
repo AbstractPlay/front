@@ -1,3 +1,9 @@
+import {
+  isConcreteMetaGame,
+  tournamentDetailPathActive,
+  tournamentDetailPathArchived,
+} from "./tournamentRoutes.js";
+
 /** Production play site origin; matches {@link scripts/sitemapLinks.mjs} SITEMAP_HOSTNAME. */
 export const PLAY_SITE_ORIGIN = "https://play.abstractplay.com";
 
@@ -29,18 +35,58 @@ export function canonicalPlayUrl(pathname) {
   return `${PLAY_SITE_ORIGIN}${normalizePlayPathname(pathname)}`;
 }
 
-/** Canonical path for a recurring-tournament detail page (id-only). */
-export function tournamentDetailPath(tournamentid) {
-  return `/tournament/${tournamentid}`;
+/** @deprecated Use {@link tournamentDetailPathActive} or {@link tournamentDetailPathArchived}. */
+export function tournamentDetailPath(tournamentid, metaGame) {
+  if (isConcreteMetaGame(metaGame)) {
+    return tournamentDetailPathArchived(tournamentid, metaGame);
+  }
+  return tournamentDetailPathActive(tournamentid);
 }
 
-/** True when pathname + search should redirect to {@link tournamentDetailPath}. */
-export function shouldNormalizeTournamentDetailUrl(pathname, search, tournamentid) {
+/**
+ * @param {string} pathname
+ * @param {string} search
+ * @param {string} tournamentid
+ * @param {string} [routeMetaGame] — from `/tournament/:metaGame/:tournamentid`
+ */
+export function shouldNormalizeTournamentDetailUrl(
+  pathname,
+  search,
+  tournamentid,
+  routeMetaGame
+) {
   if (!tournamentid) {
     return false;
   }
-  const canonical = tournamentDetailPath(tournamentid);
-  return normalizePlayPathname(pathname) !== canonical || Boolean(search);
+  const path = normalizePlayPathname(pathname);
+  const raw = search.startsWith("?") ? search.slice(1) : search;
+  const params = raw ? new URLSearchParams(raw) : new URLSearchParams();
+
+  const queryMeta = params.get("metaGame");
+  if (params.has("gameId") && isConcreteMetaGame(queryMeta)) {
+    const target = tournamentDetailPathArchived(tournamentid, queryMeta);
+    return path !== target;
+  }
+
+  if (isConcreteMetaGame(routeMetaGame)) {
+    const archivedPath = tournamentDetailPathArchived(
+      tournamentid,
+      routeMetaGame
+    );
+    if (path === archivedPath) {
+      return params.has("gameId");
+    }
+  }
+
+  const activePath = tournamentDetailPathActive(tournamentid);
+  if (path === activePath && !raw) {
+    return false;
+  }
+  if (path === activePath && raw) {
+    return true;
+  }
+
+  return false;
 }
 
 /** Query param names stripped from move URLs when computing canonical (step 3). */

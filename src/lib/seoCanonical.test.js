@@ -53,33 +53,34 @@ describe("canonicalPlayUrlFromLocation", () => {
 });
 
 describe("tournamentDetailPath", () => {
-  it("uses id-only path", () => {
+  it("uses id-only path without metaGame", () => {
     expect(tournamentDetailPath("09fe1afc-7c15-4ac2-a57b-cadfc100511d")).toBe(
       "/tournament/09fe1afc-7c15-4ac2-a57b-cadfc100511d"
     );
+  });
+
+  it("uses meta path when metaGame provided", () => {
+    const id = "09fe1afc-7c15-4ac2-a57b-cadfc100511d";
+    expect(tournamentDetailPath(id, "go")).toBe(`/tournament/go/${id}`);
   });
 });
 
 describe("shouldNormalizeTournamentDetailUrl", () => {
   const id = "09fe1afc-7c15-4ac2-a57b-cadfc100511d";
 
-  it("normalizes meta/id path", () => {
+  it("does not strip meta/id archived path", () => {
     expect(
-      shouldNormalizeTournamentDetailUrl(
-        `/tournament/go/${id}`,
-        "",
-        id
-      )
-    ).toBe(true);
+      shouldNormalizeTournamentDetailUrl(`/tournament/go/${id}`, "", id, "go")
+    ).toBe(false);
   });
 
-  it("accepts canonical path without search", () => {
+  it("accepts canonical active path without search", () => {
     expect(
       shouldNormalizeTournamentDetailUrl(`/tournament/${id}`, "", id)
     ).toBe(false);
   });
 
-  it("strips fix-up query params", () => {
+  it("promotes game fix-up query to meta/id path", () => {
     expect(
       shouldNormalizeTournamentDetailUrl(
         `/tournament/${id}`,
