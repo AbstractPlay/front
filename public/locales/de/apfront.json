@@ -1843,6 +1843,14 @@
       "postGame": ", nach dem Spiel",
       "moveLink": "Zug"
     },
+    "moveEntry": {
+      "textareaMode": "Mehrzeilige Eingabe",
+      "textareaModeTooltip": "Mehrzeilige Zugeingabe umschalten. Klicke auf \"Zug verarbeiten\", wenn du bereit bist. Umschalt+Eingabe fügt eine neue Zeile hinzu.",
+      "commitDraft": "Zug verarbeiten",
+      "unappliedEdits": "Der Zugtext wurde noch nicht übernommen. Klicke auf \"Zug verarbeiten\", um ihn zu validieren.",
+      "discardUnappliedConfirm": "Du hast nicht übernommenen Zugtext. Möchtest du diesen verwerfen und zur einzeiligen Eingabe wechseln?",
+      "commitBeforeSubmit": "Verarbeite deinen Zugtext vor dem Absenden."
+    },
     "layout": {
       "pickerTitle": "Layout der Spielseite wählen",
       "pickerIntro": "Wähle, wie die Spielseite auf diesem Gerät angeordnet wird. Deine Auswahl wird in diesem Browser gespeichert.",

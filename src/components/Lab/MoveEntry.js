@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { useDebouncedMoveInput } from "../../lib/GameMove/useDebouncedMoveInput";
+import MoveEntryField from "../GameMove/MoveEntryField";
 import { GameFactory } from "@abstractplay/gameslib";
 import { resolveCustomButtonLabel } from "../../lib/customButtonLabel";
 import {
@@ -89,8 +89,12 @@ function MoveEntry(props) {
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
-  const { inputValue, handleMoveInputChange, handleClear } =
-    useDebouncedMoveInput({ move, onCommit: handleMove });
+  const moveDraft = props.moveDraft ?? move.move;
+  const onDraftChange = props.onDraftChange ?? handleMove;
+  const onCommit = props.onCommit ?? handleMove;
+  const textareaMode = props.textareaMode ?? false;
+  const onTextareaModeChange =
+    props.onTextareaModeChange ?? (() => undefined);
 
   function getFocusNode(exp, foc) {
     let curNode = exp[foc.moveNumber];
@@ -290,29 +294,18 @@ function MoveEntry(props) {
               ) : (
                 ""
               )}
-              <div className="control input-icon">
-                <input
-                  className={`input is-small ${moveState}`}
-                  name="move"
-                  id="enterAMove"
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => handleMoveInputChange(e.target.value)}
-                  placeholder={t("EnterMove")}
-                />
-                {move.move.length === 0 ? (
-                  ""
-                ) : (
-                  <div
-                    className="tooltipped"
-                    style={{ marginTop: "0.6ex" }}
-                    onClick={() => handleClear()}
-                  >
-                    <i className="fa fa-trash resetIcon"></i>
-                    <span className="tooltiptext">{t("ClearMove")}</span>
-                  </div>
-                )}
-              </div>
+              <MoveEntryField
+                move={move}
+                moveDraft={moveDraft}
+                onDraftChange={onDraftChange}
+                onCommit={onCommit}
+                textareaMode={textareaMode}
+                onTextareaModeChange={onTextareaModeChange}
+                moveState={moveState}
+                inputId="enterAMove"
+                inputSize="is-small"
+                t={t}
+              />
               <div>
                 {move.valid && move.complete === 0 && move.move.length > 0 ? (
                   <button

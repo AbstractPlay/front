@@ -19,6 +19,7 @@ import Joyride from "react-joyride";
 import PageLoading from "../shared/PageLoading";
 import LayoutPickerTrigger from "./LayoutPickerTrigger";
 import MetaGameLinks from "../shared/MetaGameLinks";
+import { buildMoveEntryProps } from "../../lib/GameMove/gameMoveLayoutHelpers";
 
 export default function GameMoveClassicLayout({ session }) {
   const {
@@ -48,8 +49,6 @@ export default function GameMoveClassicLayout({ session }) {
     movesRef,
     engineRef,
     focus,
-    move,
-    moveEntryHandlers,
     submitting,
     teachingBusy,
     teachingMoveHandlers,
@@ -353,20 +352,9 @@ export default function GameMoveClassicLayout({ session }) {
                     ) : key === "move" ? (
                       <>
                         <MoveEntry
-                          move={move}
-                          toMove={toMove}
-                          game={gameRef.current}
-                          moves={movesRef.current}
-                          engine={engineRef.current}
-                          exploration={explorationRef.current.nodes}
-                          focus={focus}
-                          submitting={submitting || teachingBusy}
-                          teachingBusy={teachingBusy}
-                          teachingMoveHandlers={teachingMoveHandlers}
-                          gameRec={gameRec}
-                          forceUndoRight={true}
-                          screenWidth={screenWidth}
-                          handlers={moveEntryHandlers}
+                          {...buildMoveEntryProps(session, {
+                            forceUndoRight: true,
+                          })}
                         />
                         <MiscButtons
                           metaGame={metaGame}
@@ -486,20 +474,7 @@ export default function GameMoveClassicLayout({ session }) {
                   <span>{t("MakeMove")}</span>
                 </h1>
                 <MoveEntry
-                  move={move}
-                  toMove={toMove}
-                  game={gameRef.current}
-                  engine={engineRef.current}
-                  moves={movesRef.current}
-                  exploration={explorationRef.current.nodes}
-                  focus={focus}
-                  submitting={submitting || teachingBusy}
-                  teachingBusy={teachingBusy}
-                  teachingMoveHandlers={teachingMoveHandlers}
-                  gameRec={gameRec}
-                  forceUndoRight={false}
-                  screenWidth={screenWidth}
-                  handlers={moveEntryHandlers}
+                  {...buildMoveEntryProps(session, { forceUndoRight: false })}
                 />
               </div>
               <MiscButtons

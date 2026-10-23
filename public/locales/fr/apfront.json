@@ -1843,6 +1843,14 @@
       "postGame": ", d'après-partie",
       "moveLink": "coup"
     },
+    "moveEntry": {
+      "textareaMode": "Saisie multiligne",
+      "textareaModeTooltip": "Basculer la saisie de coups multiligne. Cliquez sur Traiter le coup une fois prêt. Maj+Entrée ajoute une nouvelle ligne.",
+      "commitDraft": "Traiter le coup",
+      "unappliedEdits": "Le texte du coup n'est pas encore appliqué. Cliquez sur Traiter le coup pour valider.",
+      "discardUnappliedConfirm": "Vous avez du texte de coup non appliqué. Voulez-vous l'abandonner et passer à la saisie sur une seule ligne ?",
+      "commitBeforeSubmit": "Traitez le texte de votre coup avant de soumettre."
+    },
     "layout": {
       "pickerTitle": "Choisir la disposition de la page de jeu",
       "pickerIntro": "Choisissez l'agencement de la page de jeu sur cet appareil. Votre choix est mémorisé dans ce navigateur.",

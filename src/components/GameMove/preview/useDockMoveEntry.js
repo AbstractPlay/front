@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDebouncedMoveInput } from "../../../lib/GameMove/useDebouncedMoveInput";
 import { GameFactory } from "@abstractplay/gameslib";
 import { useStore } from "../../../stores";
 import { callAuthApi } from "../../../lib/api";
@@ -61,8 +60,16 @@ export function useDockMoveEntry(props) {
     showDrawOfferConfirmSetter(false);
   };
 
-  const { inputValue, handleMoveInputChange, handleClear } =
-    useDebouncedMoveInput({ move, onCommit: handleMove });
+  const moveDraft = props.moveDraft ?? move.move;
+  const onDraftChange = props.onDraftChange ?? setMoveDraftFallback;
+  const onCommit = props.onCommit ?? handleMove;
+  const textareaMode = props.textareaMode ?? false;
+  const onTextareaModeChange =
+    props.onTextareaModeChange ?? (() => undefined);
+
+  function setMoveDraftFallback(value) {
+    handleMove(value);
+  }
 
   const pingBot = useCallback(async () => {
     if (globalMe !== undefined) {
@@ -255,7 +262,11 @@ export function useDockMoveEntry(props) {
     drawoffer,
     gameOverNonLeafNode,
     moveState,
-    inputValue,
+    moveDraft,
+    onDraftChange,
+    onCommit,
+    textareaMode,
+    onTextareaModeChange,
     connections,
     showMoveControls,
     showBotPing,
@@ -274,8 +285,6 @@ export function useDockMoveEntry(props) {
       handleDrawOfferChange,
       handleDrawOfferConfirmed,
       handleCloseDrawOfferConfirm,
-      handleClear,
-      handleMoveInputChange,
       pingBot,
       getFocusNode: (exp, g, foc) => getFocusNode(exp, g, foc),
     },

@@ -1843,6 +1843,14 @@
       "postGame": ", post-partita",
       "moveLink": "mossa"
     },
+    "moveEntry": {
+      "textareaMode": "Inserimento multilinea",
+      "textareaModeTooltip": "Attiva/disattiva l'inserimento mosse multilinea. Fai clic su Elabora mossa quando sei pronto. Maiusc+Invio aggiunge una nuova riga.",
+      "commitDraft": "Elabora mossa",
+      "unappliedEdits": "Il testo della mossa non è ancora stato applicato. Fai clic su Elabora mossa per convalidare.",
+      "discardUnappliedConfirm": "Hai del testo della mossa non applicato. Vuoi scartarlo e passare all'inserimento a riga singola?",
+      "commitBeforeSubmit": "Elabora il testo della mossa prima di inviare."
+    },
     "layout": {
       "pickerTitle": "Scegli il layout della pagina di gioco",
       "pickerIntro": "Scegli come disporre la pagina di gioco su questo dispositivo. La tua scelta verrà memorizzata in questo browser.",

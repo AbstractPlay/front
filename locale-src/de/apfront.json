@@ -5043,6 +5043,30 @@
     "src": "Loading game…",
     "out": "Partie wird geladen…"
   },
+  "gameMove.moveEntry.commitBeforeSubmit": {
+    "src": "Process your move text before submitting.",
+    "out": "Verarbeite deinen Zugtext vor dem Absenden."
+  },
+  "gameMove.moveEntry.commitDraft": {
+    "src": "Process move",
+    "out": "Zug verarbeiten"
+  },
+  "gameMove.moveEntry.discardUnappliedConfirm": {
+    "src": "You have unapplied move text. Discard it and switch to single-line entry?",
+    "out": "Du hast nicht übernommenen Zugtext. Möchtest du diesen verwerfen und zur einzeiligen Eingabe wechseln?"
+  },
+  "gameMove.moveEntry.textareaMode": {
+    "src": "Multi-line entry",
+    "out": "Mehrzeilige Eingabe"
+  },
+  "gameMove.moveEntry.textareaModeTooltip": {
+    "src": "Toggle multi-line move entry. Click Process move when ready. Shift+Enter adds a new line.",
+    "out": "Mehrzeilige Zugeingabe umschalten. Klicke auf \"Zug verarbeiten\", wenn du bereit bist. Umschalt+Eingabe fügt eine neue Zeile hinzu."
+  },
+  "gameMove.moveEntry.unappliedEdits": {
+    "src": "Move text is not applied yet. Click Process move to validate.",
+    "out": "Der Zugtext wurde noch nicht übernommen. Klicke auf \"Zug verarbeiten\", um ihn zu validieren."
+  },
   "gameMove.moveTree.legendExploration": {
     "src": "Exploration",
     "out": "Erkundung"

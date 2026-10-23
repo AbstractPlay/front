@@ -98,6 +98,8 @@ import { persistNamedPlaygroundSave } from "../../lib/Lab/persistNamedSave";
 import { buildStartPositionFromLabSession } from "../../lib/challengeStartPosition";
 import { isLabSupportedGame } from "../../lib/Lab/buildGame";
 import { getAuthToken } from "../../lib/api";
+import { useMoveEntryDraft } from "../../lib/GameMove/useMoveEntryDraft";
+import { appendMovePartToDraft } from "../../lib/GameMove/moveEntryDraft";
 import { getEffectiveColourContext } from "../../lib/effectiveColourContext";
 import { serializePlaygroundExport } from "../../lib/Lab/export";
 
@@ -176,6 +178,13 @@ function LabSession({
     complete: 0,
     rendered: "",
   });
+  const {
+    moveDraftRef,
+    moveDraft,
+    setMoveDraft,
+    textareaMode,
+    setTextareaMode: setTextareaModeBase,
+  } = useMoveEntryDraft(move);
   const [error, errorSetter] = useState(false);
   const [showDeleteSubtreeConfirm, showDeleteSubtreeConfirmSetter] =
     useState(false);
@@ -753,10 +762,38 @@ function LabSession({
     }
   };
 
+  const appendMovePart = useCallback(
+    (movePart, handler) => {
+      const next = appendMovePartToDraft(
+        moveDraftRef.current,
+        movePart,
+        handler
+      );
+      setMoveDraft(next);
+      if (!textareaMode) {
+        handleMove(next);
+      }
+    },
+    [handleMove, moveDraftRef, setMoveDraft, textareaMode]
+  );
+
   const handleStashClick = (player, count, movePart, handler) => {
-    if (handler) handleMove(handler(move.move, movePart));
-    else handleMove(move.move + movePart);
+    appendMovePart(movePart, handler);
   };
+
+  const commitMoveDraft = useCallback(() => {
+    handleMove(moveDraftRef.current);
+  }, [handleMove, moveDraftRef]);
+
+  const handleTextareaModeChange = useCallback(
+    (enabled) => {
+      setTextareaModeBase(enabled, {
+        confirmDiscard: () =>
+          window.confirm(t("gameMove.moveEntry.discardUnappliedConfirm")),
+      });
+    },
+    [setTextareaModeBase, t]
+  );
 
   const handleRotate = (dir) => {
     let newGameSettings = cloneDeep(gameSettings) ?? {};
@@ -1325,6 +1362,12 @@ function LabSession({
       />
       <MoveEntry
         move={move}
+        moveDraft={moveDraft}
+        onDraftChange={setMoveDraft}
+        onCommit={handleMove}
+        textareaMode={textareaMode}
+        onTextareaModeChange={handleTextareaModeChange}
+        commitMoveDraft={commitMoveDraft}
         toMove={toMove}
         game={game}
         engine={engineRef.current}

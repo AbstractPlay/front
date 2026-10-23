@@ -5043,6 +5043,30 @@
     "src": "Loading game…",
     "out": "Chargement de la partie…"
   },
+  "gameMove.moveEntry.commitBeforeSubmit": {
+    "src": "Process your move text before submitting.",
+    "out": "Traitez le texte de votre coup avant de soumettre."
+  },
+  "gameMove.moveEntry.commitDraft": {
+    "src": "Process move",
+    "out": "Traiter le coup"
+  },
+  "gameMove.moveEntry.discardUnappliedConfirm": {
+    "src": "You have unapplied move text. Discard it and switch to single-line entry?",
+    "out": "Vous avez du texte de coup non appliqué. Voulez-vous l'abandonner et passer à la saisie sur une seule ligne ?"
+  },
+  "gameMove.moveEntry.textareaMode": {
+    "src": "Multi-line entry",
+    "out": "Saisie multiligne"
+  },
+  "gameMove.moveEntry.textareaModeTooltip": {
+    "src": "Toggle multi-line move entry. Click Process move when ready. Shift+Enter adds a new line.",
+    "out": "Basculer la saisie de coups multiligne. Cliquez sur Traiter le coup une fois prêt. Maj+Entrée ajoute une nouvelle ligne."
+  },
+  "gameMove.moveEntry.unappliedEdits": {
+    "src": "Move text is not applied yet. Click Process move to validate.",
+    "out": "Le texte du coup n'est pas encore appliqué. Cliquez sur Traiter le coup pour valider."
+  },
   "gameMove.moveTree.legendExploration": {
     "src": "Exploration",
     "out": "Exploration"

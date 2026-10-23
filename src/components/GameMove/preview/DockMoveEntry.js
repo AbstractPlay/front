@@ -1,4 +1,5 @@
 import Modal from "../../Modal";
+import MoveEntryField from "../MoveEntryField";
 import { useDockMoveEntry } from "./useDockMoveEntry";
 import ExplorationToolbar from "./ExplorationToolbar";
 import { NoMoves, safeGetButtons, sortLenAlpha } from "./moveEntryUtils";
@@ -56,7 +57,11 @@ function DockMoveEntry(props) {
     drawoffer,
     gameOverNonLeafNode,
     moveState,
-    inputValue,
+    moveDraft,
+    onDraftChange,
+    onCommit,
+    textareaMode,
+    onTextareaModeChange,
     showMoveControls,
     showBotPing,
     handlers,
@@ -137,29 +142,19 @@ function DockMoveEntry(props) {
                 dangerouslySetInnerHTML={{ __html: move.message }}
               />
             ) : null}
-            <div className="control input-icon game-move-dock-entry__input">
-              <input
-                className={`input is-small ${moveState}`}
-                name="move"
-                id="enterAMove"
-                type="text"
-                value={inputValue}
-                onChange={(e) => handlers.handleMoveInputChange(e.target.value)}
-                placeholder={t("EnterMove")}
-                aria-label={t("EnterMove")}
-              />
-              {move.move.length === 0 ? null : (
-                <button
-                  type="button"
-                  className="game-move-dock-entry__clear tooltipped"
-                  onClick={() => handlers.handleClear()}
-                  aria-label={t("ClearMove")}
-                >
-                  <i className="fa fa-trash resetIcon" aria-hidden="true" />
-                  <span className="tooltiptext">{t("ClearMove")}</span>
-                </button>
-              )}
-            </div>
+            <MoveEntryField
+              move={move}
+              moveDraft={moveDraft}
+              onDraftChange={onDraftChange}
+              onCommit={onCommit}
+              textareaMode={textareaMode}
+              onTextareaModeChange={onTextareaModeChange}
+              moveState={moveState}
+              inputId="enterAMove"
+              inputSize="is-small"
+              wrapperClassName="control input-icon game-move-dock-entry__input"
+              t={t}
+            />
           </div>
         ) : null}
 

@@ -15,6 +15,10 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 - **Play:** move entry validates 500 ms after typing pauses (same delay on all devices and characters).
 
+### Added
+
+- **Play / Playground:** optional multi-line move entry (device-local preference) with **Update move** to apply text; stash clicks append to the current draft. Playground (`/playground`) matches live play.
+
 ### Fixed
 
 - **Tournaments:** tournament detail page handles missing API data without crashing (404, load error, registration phase without divisions).
