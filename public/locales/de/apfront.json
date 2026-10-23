@@ -357,6 +357,8 @@
   "HelpTeachingModeFalse": "Standardspiel ohne Lehr-Rückgängigmachen.",
   "TeachingGameLabel": "Lehrspiel (ungewertet)",
   "TeachingGrantUndo": "Zugrücknahme anbieten",
+  "ConfirmTeachingGrantUndo": "Zugrücknahme anbieten",
+  "ConfirmTeachingGrantUndoDesc": "Möchtest du deinem Gegner eine Lehr-Analyse des letzten Zuges anbieten? Er kann den Zug beibehalten oder zurücknehmen und erneut spielen.",
   "TeachingKeepMove": "Meinen Zug behalten",
   "TeachingUndoMove": "Rückgängig machen und neu wählen",
   "TeachingReviewPrompt": "Dein Gegner hat eine Lehranalyse angeboten. Behalte den Zug bei oder mache ihn rückgängig und spiele erneut.",
