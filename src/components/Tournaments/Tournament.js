@@ -100,7 +100,11 @@ function Tournament(props) {
       if (res.status !== 200) {
         try {
           const result = await res.json();
-          console.log(JSON.parse(result.body));
+          const detail =
+            typeof result?.body === "string"
+              ? JSON.parse(result.body)
+              : result?.message ?? result;
+          console.log(`get_tournament failed: ${res.status}`, detail);
         } catch (parseError) {
           console.log(`get_tournament failed: ${res.status}`, parseError);
         }
