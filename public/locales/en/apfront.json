@@ -533,7 +533,10 @@
     "markRead": "Mark read",
     "markAllRead": "Mark all read",
     "dismissAll": "Dismiss all",
-    "dismissAllConfirm": "Click again to dismiss all"
+    "dismissAllConfirm": "Click again to dismiss all",
+    "filterLabel": "Filter notifications by type",
+    "filterAll": "All",
+    "filterEmpty": "No notifications in this category"
   },
   "NewsPreamble": "The authoritative and most up-to-date source of Abstract Play news is on our Discord Server (https://discord.abstractplay.com). Please come join us!",
   "NextGame": "Next game",

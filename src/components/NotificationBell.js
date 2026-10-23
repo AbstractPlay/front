@@ -17,6 +17,13 @@ import { useStore } from "../stores";
 import { useAnnouncementCursorBootstrap } from "../hooks/useAnnouncementCursorBootstrap";
 import AnnouncementNotificationItem from "./Announcements/AnnouncementNotificationItem";
 import { maxPublishedAt } from "../hooks/useAnnouncementUnread";
+import {
+  availableNotificationFilters,
+  countNotificationCategories,
+  filterPanelRowsByCategory,
+} from "../lib/notificationCategories";
+
+const NOTIFICATION_FILTER_CHIP_MAX = 4;
 
 function NotificationBell({ closeBurger }) {
   const { t } = useTranslation();
@@ -34,6 +41,7 @@ function NotificationBell({ closeBurger }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeChallengeModal, setActiveChallengeModal] = useState("");
   const [dismissAllConfirming, setDismissAllConfirming] = useState(false);
+  const [categoryFilter, setCategoryFilter] = useState("");
 
   const handleDismiss = useDismissNotification();
   const dismissAllNotifications = useDismissAllNotifications();
@@ -96,6 +104,31 @@ function NotificationBell({ closeBurger }) {
     return rows.sort((a, b) => b.sortTime - a.sortTime);
   }, [notifications, unreadAnnouncementItems, unreadAnnouncementOverflow]);
 
+  const availableFilters = useMemo(
+    () => availableNotificationFilters(panelRows),
+    [panelRows],
+  );
+
+  const categoryCounts = useMemo(
+    () => countNotificationCategories(panelRows),
+    [panelRows],
+  );
+
+  const showFilterBar = availableFilters.length >= 2;
+
+  const visibleRows = useMemo(() => {
+    if (!categoryFilter) {
+      return panelRows;
+    }
+    return filterPanelRowsByCategory(panelRows, categoryFilter);
+  }, [panelRows, categoryFilter]);
+
+  useEffect(() => {
+    if (categoryFilter && !availableFilters.includes(categoryFilter)) {
+      setCategoryFilter("");
+    }
+  }, [availableFilters, categoryFilter]);
+
   useEffect(() => {
     if (globalMe?.id && globalMe.notifications === undefined) {
       fetchNotifications();
@@ -129,6 +162,7 @@ function NotificationBell({ closeBurger }) {
 
   const closeMenu = () => {
     setDismissAllConfirming(false);
+    setCategoryFilter("");
     setMenuOpen(false);
     setActiveChallengeModal("");
   };
@@ -138,10 +172,14 @@ function NotificationBell({ closeBurger }) {
       if (open) {
         setDismissAllConfirming(false);
         setActiveChallengeModal("");
+        setCategoryFilter("");
       }
       return !open;
     });
   };
+
+  const categoryFilterLabel = (key) =>
+    t(`InAppNotifyLabel-${key}`, { defaultValue: key });
 
   const openChallengeModal = async (challengeId) => {
     const dashboard = await fetchDashboard();
@@ -279,6 +317,96 @@ function NotificationBell({ closeBurger }) {
     );
   };
 
+  const renderPanelRow = (row) => {
+    if (row.kind === "announcement") {
+      return (
+        <AnnouncementNotificationItem
+          key={row.key}
+          item={row.item}
+          onMarkRead={handleAnnouncementMarkRead}
+          onNavigate={closePanelAndBurger}
+        />
+      );
+    }
+    if (row.kind === "announcement-more") {
+      return (
+        <AnnouncementNotificationItem
+          key={row.key}
+          variant="more"
+          overflowCount={row.overflow}
+          onMarkRead={handleAnnouncementMarkRead}
+          onNavigate={closePanelAndBurger}
+        />
+      );
+    }
+    return renderDashboardNotification(row.notification);
+  };
+
+  const renderCategoryFilters = () => {
+    if (!showFilterBar) {
+      return null;
+    }
+    const filterLabel = t("notifications.filterLabel");
+    const useChips = availableFilters.length <= NOTIFICATION_FILTER_CHIP_MAX;
+
+    if (useChips) {
+      return (
+        <div
+          className="notification-panel-filters"
+          role="toolbar"
+          aria-label={filterLabel}
+        >
+          <button
+            type="button"
+            className={`button is-small apButtonNeutral notification-panel-filter-chip${
+              categoryFilter === "" ? " notification-panel-filter-chip--selected" : ""
+            }`}
+            aria-pressed={categoryFilter === ""}
+            onClick={() => setCategoryFilter("")}
+          >
+            {t("notifications.filterAll")}
+          </button>
+          {availableFilters.map((key) => (
+            <button
+              key={key}
+              type="button"
+              className={`button is-small apButtonNeutral notification-panel-filter-chip${
+                categoryFilter === key ? " notification-panel-filter-chip--selected" : ""
+              }`}
+              aria-pressed={categoryFilter === key}
+              onClick={() => setCategoryFilter(key)}
+            >
+              {categoryFilterLabel(key)} ({categoryCounts.get(key) ?? 0})
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div className="notification-panel-filters notification-panel-filters-select">
+        <label className="notification-panel-filter-select-label" htmlFor="notification-panel-category-filter">
+          <span className="is-sr-only">{filterLabel}</span>
+          <div className="select is-small is-fullwidth">
+            <select
+              id="notification-panel-category-filter"
+              aria-label={filterLabel}
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+            >
+              <option value="">{t("notifications.filterAll")}</option>
+              {availableFilters.map((key) => (
+                <option key={key} value={key}>
+                  {categoryFilterLabel(key)} ({categoryCounts.get(key) ?? 0})
+                </option>
+              ))}
+            </select>
+          </div>
+        </label>
+      </div>
+    );
+  };
+
   return (
     <NavDropdownPanel
       open={menuOpen && !activeChallengeModal}
@@ -333,32 +461,14 @@ function NotificationBell({ closeBurger }) {
             <p className="notification-panel-empty">{t("notifications.empty")}</p>
           ) : (
             <>
-              <ul className="notification-panel-list">
-                {panelRows.map((row) => {
-                  if (row.kind === "announcement") {
-                    return (
-                      <AnnouncementNotificationItem
-                        key={row.key}
-                        item={row.item}
-                        onMarkRead={handleAnnouncementMarkRead}
-                        onNavigate={closePanelAndBurger}
-                      />
-                    );
-                  }
-                  if (row.kind === "announcement-more") {
-                    return (
-                      <AnnouncementNotificationItem
-                        key={row.key}
-                        variant="more"
-                        overflowCount={row.overflow}
-                        onMarkRead={handleAnnouncementMarkRead}
-                        onNavigate={closePanelAndBurger}
-                      />
-                    );
-                  }
-                  return renderDashboardNotification(row.notification);
-                })}
-              </ul>
+              {renderCategoryFilters()}
+              {categoryFilter && visibleRows.length === 0 ? (
+                <p className="notification-panel-empty">{t("notifications.filterEmpty")}</p>
+              ) : (
+                <ul className="notification-panel-list">
+                  {visibleRows.map((row) => renderPanelRow(row))}
+                </ul>
+              )}
               {notifications.length > 0 ? (
                 <div className="notification-panel-toolbar notification-panel-toolbar-bottom">
                   <button

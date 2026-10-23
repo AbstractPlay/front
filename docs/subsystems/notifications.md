@@ -22,8 +22,8 @@ Browser push notifications alert users when it is their turn or when notable eve
 
 Panel layout (top to bottom):
 
-1. **News callout** (if unread news) — link to `/news`
-2. **Mark all read** — when any item is new (`mark_notifications_seen` with no `sks`)
+1. **Bulk read** — when any dashboard item is new or announcements are unread (`mark_notifications_seen`, `mark announcements read`)
+2. **Category filter** (when the queue spans two or more in-app categories) — chips (≤4 categories) or a compact dropdown; labels match in-app notification settings (`InAppNotifyLabel-*`)
 3. **Notification list** — new items highlighted; per-row **Mark read**, **Dismiss**, and challenge **View**
 4. **Dismiss all** — two-click confirm (`dismiss_all_notifications`)
 
