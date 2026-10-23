@@ -876,6 +876,10 @@
     "Join": "Wiederkehrend beitreten",
     "JoinOnce": "Einmalig beitreten",
     "Name": "{{metaGame}}-Turnier",
+    "allGames": "Alle Spiele",
+    "filterByGame": "Nach Spiel filtern…",
+    "registeredOnly": "Nur Turniere, an denen ich teilnehme",
+    "starredOnly": "Nur favorisierte Spiele",
     "ProposeNew": "Ein neues Turnier anfordern",
     "New2": "Neue Turniere",
     "New1": "Neues Turnier",
@@ -2049,6 +2053,7 @@
     }
   },
   "gamePicker": {
+    "allGames": "Alle Spiele",
     "choose": "Wähle ein Spiel…",
     "searchLabel": "Suchen",
     "searchPlaceholder": "Tippen, um Spiele zu filtern…",
