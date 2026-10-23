@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { debounce } from "lodash";
+import { useDebouncedMoveInput } from "../../../lib/GameMove/useDebouncedMoveInput";
 import { GameFactory } from "@abstractplay/gameslib";
 import { useStore } from "../../../stores";
 import { callAuthApi } from "../../../lib/api";
@@ -15,7 +15,6 @@ export function useDockMoveEntry(props) {
   const [drawoffer, drawofferSetter] = useState(false);
   const [showDrawOfferConfirm, showDrawOfferConfirmSetter] = useState(false);
   const [moveState, moveStateSetter] = useState("is-success");
-  const [inputValue, inputValueSetter] = useState(props.move.move);
 
   const move = props.move;
   const toMove = props.toMove;
@@ -62,28 +61,8 @@ export function useDockMoveEntry(props) {
     showDrawOfferConfirmSetter(false);
   };
 
-  const handleClear = () => {
-    handleMove("");
-  };
-
-  const delayedHandleMove = useMemo(
-    () =>
-      debounce(
-        (value) => handleMove(value),
-        props.screenWidth < 770 ? 1000 : 500
-      ),
-    [handleMove, props.screenWidth]
-  );
-
-  const handleMoveInputChange = (value) => {
-    inputValueSetter(value);
-    if (/\d$/.test(value)) {
-      delayedHandleMove(value);
-    } else {
-      delayedHandleMove.cancel();
-      handleMove(value);
-    }
-  };
+  const { inputValue, handleMoveInputChange, handleClear } =
+    useDebouncedMoveInput({ move, onCommit: handleMove });
 
   const pingBot = useCallback(async () => {
     if (globalMe !== undefined) {
@@ -119,10 +98,6 @@ export function useDockMoveEntry(props) {
       moveStateSetter("is-success");
     }
   }, [move, focus, game, submitting]);
-
-  useEffect(() => {
-    inputValueSetter(move.move);
-  }, [move.move]);
 
   if (!focus) {
     return { ready: false };

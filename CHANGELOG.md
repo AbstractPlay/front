@@ -11,6 +11,10 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ## [1.0.0-ci] - 2026-10-23
 
+### Changed
+
+- **Play:** move entry validates 500 ms after typing pauses (same delay on all devices and characters).
+
 ### Fixed
 
 - **Tournaments:** tournament detail page handles missing API data without crashing (404, load error, registration phase without divisions).

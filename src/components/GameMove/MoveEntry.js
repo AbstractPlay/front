@@ -1,13 +1,7 @@
-import React, {
-  useEffect,
-  useState,
-  Fragment,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useEffect, useState, Fragment, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { callAuthApi } from "../../lib/api";
-import { debounce } from "lodash";
+import { useDebouncedMoveInput } from "../../lib/GameMove/useDebouncedMoveInput";
 import { GameFactory } from "@abstractplay/gameslib";
 import { useStore } from "../../stores";
 import { formatPlayerDisplayName, isClientBotTurn } from "../Bots/botUtils";
@@ -139,7 +133,8 @@ function MoveEntry(props) {
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
-  const [inputValue, inputValueSetter] = useState(move.move);
+  const { inputValue, handleMoveInputChange, handleClear } =
+    useDebouncedMoveInput({ move, onCommit: handleMove });
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
 
@@ -172,33 +167,6 @@ function MoveEntry(props) {
 
   const handleCloseDrawOfferConfirm = () => {
     showDrawOfferConfirmSetter(false);
-  };
-
-  const handleClear = () => {
-    handleMove("");
-  };
-
-  const delayedHandleMove = useMemo(
-    () =>
-      debounce(
-        (value) => {
-          console.log(props.screenWidth);
-          handleMove(value);
-        },
-        props.screenWidth < 770 ? 1000 : 500
-      ),
-    [handleMove, props.screenWidth]
-  );
-
-  const handleMoveInputChange = (value) => {
-    inputValueSetter(value);
-    // If the input ends with a digit, delay the processing by a bit (500ms) in case the user wants to complete a number.
-    if (/\d$/.test(value)) {
-      delayedHandleMove(value);
-    } else {
-      delayedHandleMove.cancel();
-      handleMove(value);
-    }
   };
 
   const sortLenAlpha = (a, b) => {
@@ -243,10 +211,6 @@ function MoveEntry(props) {
       moveStateSetter("is-success");
     }
   }, [move, focus, game, submitting]);
-
-  useEffect(() => {
-    inputValueSetter(move.move);
-  }, [move.move]);
 
   if (focus) {
     const moveToSubmit = getPendingSubmitMove(exploration, focus, {

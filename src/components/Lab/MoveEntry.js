@@ -1,6 +1,6 @@
-import React, { useEffect, useState, Fragment, useMemo } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { debounce } from "lodash";
+import { useDebouncedMoveInput } from "../../lib/GameMove/useDebouncedMoveInput";
 import { GameFactory } from "@abstractplay/gameslib";
 import { resolveCustomButtonLabel } from "../../lib/customButtonLabel";
 import {
@@ -89,7 +89,8 @@ function MoveEntry(props) {
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
-  const [inputValue, inputValueSetter] = useState(move.move);
+  const { inputValue, handleMoveInputChange, handleClear } =
+    useDebouncedMoveInput({ move, onCommit: handleMove });
 
   function getFocusNode(exp, foc) {
     let curNode = exp[foc.moveNumber];
@@ -98,37 +99,6 @@ function MoveEntry(props) {
     }
     return curNode;
   }
-
-  const handleClear = () => {
-    handleMove("");
-  };
-
-  const delayedHandleMove = useMemo(
-    () =>
-      debounce(
-        (value) => {
-          console.log(props.screenWidth);
-          handleMove(value);
-        },
-        props.screenWidth < 770 ? 1000 : 500
-      ),
-    [handleMove, props.screenWidth]
-  );
-
-  const handleMoveInputChange = (value) => {
-    inputValueSetter(value);
-    // If the input ends with a digit, delay the processing by a bit (500ms) in case the user wants to complete a number.
-    if (/\d$/.test(value)) {
-      delayedHandleMove(value);
-    } else {
-      delayedHandleMove.cancel();
-      handleMove(value);
-    }
-  };
-
-  useEffect(() => {
-    inputValueSetter(move.move);
-  }, [move.move]);
 
   const sortLenAlpha = (a, b) => {
     if (a.length === b.length) {
