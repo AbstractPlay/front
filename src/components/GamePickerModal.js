@@ -26,7 +26,15 @@ const SECTION_LABEL_KEYS = {
   recommended: "gamePicker.quickPicks.recommended",
 };
 
-function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tournamentOnly = false }) {
+function GamePickerModal({
+  show,
+  value,
+  onChange,
+  onClose,
+  labOnly = false,
+  tournamentOnly = false,
+  includeAllGamesOption = false,
+}) {
   const { t, i18n } = useTranslation();
   const { t: tCat } = useTranslation("apgames");
   const localeBundleKey = getUiLocaleBundleKey(i18n);
@@ -148,6 +156,19 @@ function GamePickerModal({ show, value, onChange, onClose, labOnly = false, tour
       title={t("gamePicker.choose")}
       buttons={[{ label: t("Close"), action: handleClose }]}
     >
+      {includeAllGamesOption ? (
+        <div className="field mb-4">
+          <button
+            type="button"
+            className={`button is-small is-fullwidth${
+              value ? " apButtonNeutral" : " apButton"
+            }`}
+            onClick={() => handleSelect("")}
+          >
+            {t("gamePicker.allGames")}
+          </button>
+        </div>
+      ) : null}
       <div className="field">
         <label className="label" htmlFor="gamePickerSearch">
           {t("gamePicker.searchLabel")}

@@ -9,6 +9,8 @@ function GamePickerTrigger({
   onChange,
   labOnly = false,
   tournamentOnly = false,
+  includeAllGamesOption = false,
+  emptyLabel,
   id,
   size = "small",
 }) {
@@ -29,7 +31,7 @@ function GamePickerTrigger({
         className={`button is-${size} apButtonNeutral`}
         onClick={() => setOpen(true)}
       >
-        {selectedName ?? t("gamePicker.choose")}
+        {selectedName ?? emptyLabel ?? t("gamePicker.choose")}
       </button>
       <GamePickerModal
         show={open}
@@ -38,6 +40,7 @@ function GamePickerTrigger({
         onClose={() => setOpen(false)}
         labOnly={labOnly}
         tournamentOnly={tournamentOnly}
+        includeAllGamesOption={includeAllGamesOption}
       />
     </>
   );

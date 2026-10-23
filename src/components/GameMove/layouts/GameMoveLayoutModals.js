@@ -39,6 +39,7 @@ export default function GameMoveLayoutModals({ session }) {
     showMoveConfirm,
     handleMoveConfirmed,
     handleCloseMoveConfirm,
+    submitting,
     showTimeoutConfirm,
     handleTimeoutConfirmed,
     handleCloseTimeoutConfirm,
@@ -144,7 +145,11 @@ export default function GameMoveLayoutModals({ session }) {
         show={showMoveConfirm}
         title={t("ConfirmMove")}
         buttons={[
-          { label: t("Submit"), action: handleMoveConfirmed },
+          {
+            label: t("Submit"),
+            action: handleMoveConfirmed,
+            disabled: submitting,
+          },
           { label: t("Cancel"), action: handleCloseMoveConfirm },
         ]}
       >

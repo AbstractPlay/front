@@ -16,8 +16,8 @@ import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_OPEN } from "../../config";
 import NewTournamentModal from "./NewTournamentModal";
 import TournamentFormatBadge from "./TournamentFormatBadge";
-import { gameinfo } from "@abstractplay/gameslib";
-import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
+import { getGameDisplayName } from "../../lib/gameOptions";
+import GamePickerTrigger from "../GamePickerTrigger";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
 import { useTranslation } from "react-i18next";
 import { compareStrings } from "../../lib/compareStrings";
@@ -1126,70 +1126,67 @@ function Tournaments(props) {
         <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
           {t("Tournament.Description")}
         </ReactMarkdown>
-        {globalMe === undefined || globalMe === null ? null : (
-          <div className="field">
-            <div className="control">
-              <label className="checkbox">
-                <input
-                  type="checkbox"
-                  defaultChecked={registeredOnly}
-                  onClick={() => registeredOnlySetter(!registeredOnly)}
-                />
-                Only show tournaments you're participating in
-              </label>
-            </div>
-            {!(
-              "stars" in globalMe &&
-              Array.isArray(globalMe.stars) &&
-              globalMe.stars.length > 0
-            ) ? null : (
+        <div className="tournaments-page-toolbar">
+          <div className="tournaments-page-toolbar-filters">
+            {isEmbedded ? null : (
               <div className="control">
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    defaultChecked={starredOnly}
-                    onClick={() => starredOnlySetter(!starredOnly)}
+                <div className="buttons">
+                  <button
+                    type="button"
+                    className={`button is-small${
+                      filterMeta ? " apButtonNeutral" : " apButton"
+                    }`}
+                    aria-pressed={!filterMeta}
+                    onClick={() => goToTournamentList(activeTab, null)}
+                  >
+                    {t("Tournament.allGames")}
+                  </button>
+                  <GamePickerTrigger
+                    id="tournamentsGameFilter"
+                    value={filterMeta ?? ""}
+                    onChange={(meta) =>
+                      goToTournamentList(activeTab, meta || null)
+                    }
+                    tournamentOnly
+                    includeAllGamesOption
+                    emptyLabel={t("Tournament.filterByGame")}
                   />
-                  Only show tournaments for your starred games
-                </label>
+                </div>
               </div>
             )}
+            {globalMe === undefined || globalMe === null ? null : (
+              <>
+                <div className="control">
+                  <label className="checkbox tournaments-page-filter-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={registeredOnly}
+                      onChange={() =>
+                        registeredOnlySetter(!registeredOnly)
+                      }
+                    />
+                    {t("Tournament.registeredOnly")}
+                  </label>
+                </div>
+                {!(
+                  "stars" in globalMe &&
+                  Array.isArray(globalMe.stars) &&
+                  globalMe.stars.length > 0
+                ) ? null : (
+                  <div className="control">
+                    <label className="checkbox tournaments-page-filter-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={starredOnly}
+                        onChange={() => starredOnlySetter(!starredOnly)}
+                      />
+                      {t("Tournament.starredOnly")}
+                    </label>
+                  </div>
+                )}
+              </>
+            )}
           </div>
-        )}
-        <div className="tournaments-page-toolbar">
-          {isEmbedded ? null : (
-            <div className="control">
-              <div className="select is-small">
-                <select
-                  value={filterMeta ?? ""}
-                  onChange={(e) => {
-                    const nextMeta =
-                      e.target.value === "" ? null : e.target.value;
-                    goToTournamentList(activeTab, nextMeta);
-                  }}
-                >
-                  <option value="" key="filterMetaBlank">
-                    --Show all--
-                  </option>
-                  {[...gameinfo.values()]
-                    .filter(isPublicCatalogGame)
-                    .filter((rec) => tournamentPlaySupported(rec.uid))
-                    .sort((a, b) =>
-                      compareStrings(
-                        getGameDisplayName(a.uid),
-                        getGameDisplayName(b.uid),
-                        i18n.language
-                      )
-                    )
-                    .map((rec) => (
-                      <option value={rec.uid} key={"filterMeta" + rec.uid}>
-                        {rec.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            </div>
-          )}
           {showProposeButton ? (
             <div className="control">
               <button

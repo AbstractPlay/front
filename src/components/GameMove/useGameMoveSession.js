@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render } from "@abstractplay/renderer";
-import { cloneDeep } from "lodash";
+import { cloneDeep, debounce } from "lodash";
 import { API_ENDPOINT_OPEN } from "../../config";
 import { apPerfRun } from "../../lib/apPerf.js";
 import { callAuthApi } from "../../lib/api";
@@ -118,6 +118,10 @@ import {
 } from "../../lib/playerGameMarks";
 import { gameUpdateMatchesGame } from "../../lib/watchGames";
 import { resolvePlayUiToMove } from "../../lib/GameMove/playUiToMove.js";
+import {
+  parseMoveNumberMismatch,
+  submitMoveMismatchLooksApplied,
+} from "../../lib/GameMove/submitMoveErrorRecovery.js";
 import { useGameMoveKeyboardNav } from "./useGameMoveKeyboardNav";
 import {
   applyReplayBundleExploration,
@@ -220,6 +224,7 @@ export function useGameMoveSession(props) {
   const [canPublish, canPublishSetter] = useState("no");
   const [boardKey, boardKeySetter] = useState(nanoid()); // used to trigger board redrawing
   const errorMessageRef = useRef("");
+  const submitMoveInFlightRef = useRef(false);
   const movesRef = useRef(null);
   const statusRef = useRef({});
   // whether user has entered a partial move that can be rendered
@@ -2079,63 +2084,9 @@ export function useGameMoveSession(props) {
     bumpExploration();
   };
 
-  const handleSubmit = async (draw) => {
-    submittingSetter(true);
-    if (globalMe?.settings?.all?.moveConfirmOff) {
-      if (draw === "drawaccepted") {
-        submitMove("", draw);
-      } else {
-        let m = getFocusNode(
-          explorationRef.current.nodes,
-          gameRef.current,
-          focus
-        ).move;
-        submitMove(m, draw);
-      }
-    } else {
-      drawMessageSetter(draw);
-      showMoveConfirmSetter(true);
-    }
-  };
-
-  const submitMove = async (m, draw) => {
-    try {
-      if (gameRef.current.teachingUndo) {
-        submittingSetter(false);
-        setError("Finish teaching review (keep or undo) before playing.");
-        return;
-      }
-      if (gameRef.current.gameOver || !gameRef.current.canSubmit) {
-        submittingSetter(false);
-        setError("It is not your turn or this game is over.");
-        return;
-      }
-      // Find opponent ID for premove checking (only for 2-player non-simultaneous games)
-      const opponent = gameRef.current.players.find(
-        (p) => p.id !== globalMe.id
-      );
-      const res = await callAuthApi("submit_move", {
-        id: gameRef.current.id,
-        metaGame: gameRef.current.metaGame,
-        cbit: cbit,
-        move: m,
-        draw: draw,
-        moveNumber: explorationRef.current.nodes.length,
-        opponentId: opponent ? opponent.id : undefined,
-        exploration: explorationTreeForSave(
-          gameRef.current,
-          explorationRef.current.nodes,
-          explorationRef.current.nodes.length
-        ),
-      });
-      if (!res) return;
-      const parsed = await parseAuthResponse(res);
-      submittingSetter(false);
-      if (!parsed.ok) {
-        throw new Error(parsed.error);
-      }
+  const applySubmitMoveResponse = useCallback(
+    (game0) => {
       setMyMove((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
-      let game0 = parsed.data;
       const priorNodeCount = explorationRef.current?.nodes?.length ?? 0;
       const priorTip =
         priorNodeCount > 0
@@ -2183,14 +2134,132 @@ export function useGameMoveSession(props) {
       if (gameRef.current.customColours) {
         publishGameColors({ state: engineRef.current.state() });
       }
-      // Keep dbgame in sync so the main useEffect (which re-runs on
-      // globalMe changes, e.g. color settings) doesn't revert to
-      // the pre-move state.
       dbgameSetter(game0);
-    } catch (err) {
-      setError(
-        `submitMove (move: ${m}, draw: ${draw}) failed with: ${err.message}`
-      );
+    },
+    [
+      dbgameSetter,
+      explorer,
+      gameID,
+      navigate,
+      publishGameColors,
+      sessionDisplayOverride,
+      sessionMe,
+      setMyMove,
+    ]
+  );
+
+  const fetchGameAfterSubmitMismatch = useCallback(async () => {
+    const res = await callAuthApi(
+      "get_game",
+      {
+        id: gameID,
+        metaGame,
+        cbit,
+      },
+      false
+    );
+    if (!res) {
+      return null;
+    }
+    const parsed = await parseAuthResponse(res);
+    return parsed.ok ? parsed.data : null;
+  }, [cbit, gameID, metaGame]);
+
+  const submitMove = useCallback(
+    async (m, draw) => {
+      if (submitMoveInFlightRef.current) {
+        return;
+      }
+      submitMoveInFlightRef.current = true;
+      try {
+        if (gameRef.current.teachingUndo) {
+          setError("Finish teaching review (keep or undo) before playing.");
+          return;
+        }
+        if (gameRef.current.gameOver || !gameRef.current.canSubmit) {
+          setError("It is not your turn or this game is over.");
+          return;
+        }
+        const opponent = gameRef.current.players.find(
+          (p) => p.id === globalMe.id
+        );
+        const res = await callAuthApi("submit_move", {
+          id: gameRef.current.id,
+          metaGame: gameRef.current.metaGame,
+          cbit: cbit,
+          move: m,
+          draw: draw,
+          moveNumber: explorationRef.current.nodes.length,
+          opponentId: opponent ? opponent.id : undefined,
+          exploration: explorationTreeForSave(
+            gameRef.current,
+            explorationRef.current.nodes,
+            explorationRef.current.nodes.length
+          ),
+        });
+        if (!res) {
+          return;
+        }
+        const parsed = await parseAuthResponse(res);
+        if (!parsed.ok) {
+          throw new Error(parsed.error);
+        }
+        applySubmitMoveResponse(parsed.data);
+      } catch (err) {
+        const mismatch = parseMoveNumberMismatch(err.message);
+        if (mismatch) {
+          const game0 = await fetchGameAfterSubmitMismatch();
+          if (game0) {
+            applySubmitMoveResponse(game0);
+            const nodes = explorationRef.current?.nodes ?? [];
+            const tipMove =
+              nodes.length > 0 ? nodes[nodes.length - 1].move : null;
+            if (
+              submitMoveMismatchLooksApplied({
+                mismatch,
+                explorationNodeCount: nodes.length,
+                attemptedMove: m,
+                tipMove,
+                gameOver: gameRef.current?.gameOver,
+              })
+            ) {
+              return;
+            }
+          }
+        }
+        setError(
+          `submitMove (move: ${m}, draw: ${draw}) failed with: ${err.message}`
+        );
+      } finally {
+        submitMoveInFlightRef.current = false;
+        submittingSetter(false);
+      }
+    },
+    [
+      applySubmitMoveResponse,
+      cbit,
+      fetchGameAfterSubmitMismatch,
+      globalMe?.id,
+    ]
+  );
+
+  const handleSubmit = async (draw) => {
+    submittingSetter(true);
+    if (globalMe?.settings?.all?.moveConfirmOff) {
+      if (draw === "drawaccepted") {
+        await submitMove("", draw);
+      } else {
+        const moveNode = getFocusNode(
+          explorationRef.current.nodes,
+          gameRef.current,
+          focus
+        );
+        await submitMove(moveNode.move, draw);
+      }
+    } else {
+      submittingSetter(false);
+      drawMessageSetter(draw);
+      showMoveConfirmSetter(true);
     }
   };
 
@@ -2278,20 +2347,39 @@ export function useGameMoveSession(props) {
     showMoveConfirmSetter(false);
   };
 
-  const handleMoveConfirmed = async () => {
+  const handleMoveConfirmedImmediate = useCallback(async () => {
     showMoveConfirmSetter(false);
     submittingSetter(true);
     if (drawMessage === "drawaccepted") {
-      submitMove("", drawMessage);
+      await submitMove("", drawMessage);
     } else {
       const m = getFocusNode(
         explorationRef.current.nodes,
         gameRef.current,
-        focus
+        focusRef.current ?? focus
       ).move;
-      submitMove(m, drawMessage);
+      await submitMove(m, drawMessage);
     }
-  };
+  }, [drawMessage, focus, submitMove]);
+
+  const handleMoveConfirmed = useMemo(
+    () =>
+      debounce(
+        () => {
+          void handleMoveConfirmedImmediate();
+        },
+        500,
+        { leading: true, trailing: false }
+      ),
+    [handleMoveConfirmedImmediate]
+  );
+
+  useEffect(
+    () => () => {
+      handleMoveConfirmed.cancel();
+    },
+    [handleMoveConfirmed]
+  );
 
   const handleCloseResignConfirm = () => {
     showResignConfirmSetter(false);
