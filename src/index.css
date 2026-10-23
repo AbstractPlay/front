@@ -725,6 +725,72 @@ a.navbar-item,
   gap: 0.35rem;
 }
 
+.notification-panel-filters {
+  border-bottom: 1px solid var(--tag-background-color);
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding: 0.4rem 1rem;
+  scrollbar-width: thin;
+}
+
+.notification-panel-filters .button.is-small {
+  flex-shrink: 0;
+  height: auto;
+  min-height: var(--bulma-control-size, 1.75rem);
+  padding-bottom: calc(var(--bulma-control-padding-vertical, 0.25rem) - 1px);
+  padding-top: calc(var(--bulma-control-padding-vertical, 0.25rem) - 1px);
+  white-space: nowrap;
+}
+
+.notification-panel-filter-chip:not(.notification-panel-filter-chip--selected) {
+  background: var(--main-bg-color);
+  border: 1px dashed var(--tag-background-color);
+  color: var(--secondary-font-color);
+}
+
+.notification-panel-filter-chip:not(.notification-panel-filter-chip--selected):hover,
+.notification-panel-filter-chip:not(.notification-panel-filter-chip--selected):focus-visible {
+  background: var(--tag-background-color);
+  border-color: var(--tag-background-color);
+  color: var(--main-font-color);
+}
+
+.notification-panel-filter-chip--selected {
+  background: var(--secondary-color-3);
+  border: 1px solid var(--secondary-color-3);
+  color: var(--high-contrast-font-color);
+}
+
+.notification-panel-filter-chip--selected:hover,
+.notification-panel-filter-chip--selected:focus-visible {
+  background: var(--secondary-color-3-lighter);
+  border-color: var(--secondary-color-3-lighter);
+  color: var(--high-contrast-font-color);
+}
+
+.notification-panel-filters-select {
+  display: block;
+  overflow-x: visible;
+}
+
+.notification-panel-filter-select-label {
+  display: block;
+  margin: 0;
+  width: 100%;
+}
+
+.notification-panel-filters-select .select {
+  width: 100%;
+}
+
+.notification-panel-filters-select .select select {
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  width: 100%;
+}
+
 .notification-panel-bulk-btn {
   width: 100%;
 }
