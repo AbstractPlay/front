@@ -1,6 +1,6 @@
-import React, { useEffect, useState, Fragment, useMemo } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { debounce } from "lodash";
+import MoveEntryField from "../GameMove/MoveEntryField";
 import { GameFactory } from "@abstractplay/gameslib";
 import { resolveCustomButtonLabel } from "../../lib/customButtonLabel";
 import {
@@ -89,7 +89,12 @@ function MoveEntry(props) {
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
-  const [inputValue, inputValueSetter] = useState(move.move);
+  const moveDraft = props.moveDraft ?? move.move;
+  const onDraftChange = props.onDraftChange ?? handleMove;
+  const onCommit = props.onCommit ?? handleMove;
+  const textareaMode = props.textareaMode ?? false;
+  const onTextareaModeChange =
+    props.onTextareaModeChange ?? (() => undefined);
 
   function getFocusNode(exp, foc) {
     let curNode = exp[foc.moveNumber];
@@ -98,37 +103,6 @@ function MoveEntry(props) {
     }
     return curNode;
   }
-
-  const handleClear = () => {
-    handleMove("");
-  };
-
-  const delayedHandleMove = useMemo(
-    () =>
-      debounce(
-        (value) => {
-          console.log(props.screenWidth);
-          handleMove(value);
-        },
-        props.screenWidth < 770 ? 1000 : 500
-      ),
-    [handleMove, props.screenWidth]
-  );
-
-  const handleMoveInputChange = (value) => {
-    inputValueSetter(value);
-    // If the input ends with a digit, delay the processing by a bit (500ms) in case the user wants to complete a number.
-    if (/\d$/.test(value)) {
-      delayedHandleMove(value);
-    } else {
-      delayedHandleMove.cancel();
-      handleMove(value);
-    }
-  };
-
-  useEffect(() => {
-    inputValueSetter(move.move);
-  }, [move.move]);
 
   const sortLenAlpha = (a, b) => {
     if (a.length === b.length) {
@@ -320,29 +294,18 @@ function MoveEntry(props) {
               ) : (
                 ""
               )}
-              <div className="control input-icon">
-                <input
-                  className={`input is-small ${moveState}`}
-                  name="move"
-                  id="enterAMove"
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => handleMoveInputChange(e.target.value)}
-                  placeholder={t("EnterMove")}
-                />
-                {move.move.length === 0 ? (
-                  ""
-                ) : (
-                  <div
-                    className="tooltipped"
-                    style={{ marginTop: "0.6ex" }}
-                    onClick={() => handleClear()}
-                  >
-                    <i className="fa fa-trash resetIcon"></i>
-                    <span className="tooltiptext">{t("ClearMove")}</span>
-                  </div>
-                )}
-              </div>
+              <MoveEntryField
+                move={move}
+                moveDraft={moveDraft}
+                onDraftChange={onDraftChange}
+                onCommit={onCommit}
+                textareaMode={textareaMode}
+                onTextareaModeChange={onTextareaModeChange}
+                moveState={moveState}
+                inputId="enterAMove"
+                inputSize="is-small"
+                t={t}
+              />
               <div>
                 {move.valid && move.complete === 0 && move.move.length > 0 ? (
                   <button

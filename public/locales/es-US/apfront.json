@@ -1843,6 +1843,14 @@
       "postGame": ", al finalizar la partida",
       "moveLink": "movimiento"
     },
+    "moveEntry": {
+      "textareaMode": "Entrada multilínea",
+      "textareaModeTooltip": "Alterna la entrada de movimientos multilínea. Haz clic en Procesar movimiento cuando estés listo. Shift+Enter agrega una línea nueva.",
+      "commitDraft": "Procesar movimiento",
+      "unappliedEdits": "El texto del movimiento aún no se ha aplicado. Haz clic en Procesar movimiento para validarlo.",
+      "discardUnappliedConfirm": "Tienes texto de movimiento sin aplicar. ¿Quieres descartarlo y cambiar a la entrada de una sola línea?",
+      "commitBeforeSubmit": "Procesa el texto de tu movimiento antes de enviarlo."
+    },
     "layout": {
       "pickerTitle": "Elige el diseño de la página de juego",
       "pickerIntro": "Elige cómo se organiza la página de juego en este dispositivo. Tu elección se guardará en este navegador.",

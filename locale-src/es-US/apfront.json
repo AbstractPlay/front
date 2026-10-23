@@ -5043,6 +5043,30 @@
     "src": "Loading game…",
     "out": "Cargando partida…"
   },
+  "gameMove.moveEntry.commitBeforeSubmit": {
+    "src": "Process your move text before submitting.",
+    "out": "Procesa el texto de tu movimiento antes de enviarlo."
+  },
+  "gameMove.moveEntry.commitDraft": {
+    "src": "Process move",
+    "out": "Procesar movimiento"
+  },
+  "gameMove.moveEntry.discardUnappliedConfirm": {
+    "src": "You have unapplied move text. Discard it and switch to single-line entry?",
+    "out": "Tienes texto de movimiento sin aplicar. ¿Quieres descartarlo y cambiar a la entrada de una sola línea?"
+  },
+  "gameMove.moveEntry.textareaMode": {
+    "src": "Multi-line entry",
+    "out": "Entrada multilínea"
+  },
+  "gameMove.moveEntry.textareaModeTooltip": {
+    "src": "Toggle multi-line move entry. Click Process move when ready. Shift+Enter adds a new line.",
+    "out": "Alterna la entrada de movimientos multilínea. Haz clic en Procesar movimiento cuando estés listo. Shift+Enter agrega una línea nueva."
+  },
+  "gameMove.moveEntry.unappliedEdits": {
+    "src": "Move text is not applied yet. Click Process move to validate.",
+    "out": "El texto del movimiento aún no se ha aplicado. Haz clic en Procesar movimiento para validarlo."
+  },
   "gameMove.moveTree.legendExploration": {
     "src": "Exploration",
     "out": "Exploración"

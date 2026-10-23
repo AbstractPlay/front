@@ -7,6 +7,7 @@ import { NoMoves, safeGetButtons, sortLenAlpha } from "./moveEntryUtils";
 import { sessionExplorationAllowed } from "../../../lib/effectiveGameFlags";
 import { resolveCustomButtonLabel } from "../../../lib/customButtonLabel";
 import TeachingMoveControls from "../TeachingMoveControls";
+import MoveEntryField from "../MoveEntryField";
 
 function CardMovePath(props) {
   const state = useDockMoveEntry(props);
@@ -34,7 +35,11 @@ function CardMovePath(props) {
     drawOffered,
     gameOverNonLeafNode,
     moveState,
-    inputValue,
+    moveDraft,
+    onDraftChange,
+    onCommit,
+    textareaMode,
+    onTextareaModeChange,
     showMoveControls,
     showBotPing,
     handlers,
@@ -165,29 +170,19 @@ function CardMovePath(props) {
       ) : null}
 
       {showChooser ? (
-        <div className="control input-icon game-move-card-move-path__input">
-          <input
-            className={`input ${moveState}`}
-            name="move"
-            id="card-enterAMove"
-            type="text"
-            value={inputValue}
-            onChange={(e) => handlers.handleMoveInputChange(e.target.value)}
-            placeholder={t("EnterMove")}
-            aria-label={t("EnterMove")}
-          />
-          {move.move.length === 0 ? null : (
-            <button
-              type="button"
-              className="game-move-card-move-path__clear tooltipped"
-              onClick={() => handlers.handleClear()}
-              aria-label={t("ClearMove")}
-            >
-              <i className="fa fa-trash resetIcon" aria-hidden="true" />
-              <span className="tooltiptext">{t("ClearMove")}</span>
-            </button>
-          )}
-        </div>
+        <MoveEntryField
+          move={move}
+          moveDraft={moveDraft}
+          onDraftChange={onDraftChange}
+          onCommit={onCommit}
+          textareaMode={textareaMode}
+          onTextareaModeChange={onTextareaModeChange}
+          moveState={moveState}
+          inputId="card-enterAMove"
+          inputSize=""
+          wrapperClassName="control input-icon game-move-card-move-path__input"
+          t={t}
+        />
       ) : null}
 
       {teachingReview ? null : (

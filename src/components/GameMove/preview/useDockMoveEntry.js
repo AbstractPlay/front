@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { debounce } from "lodash";
 import { GameFactory } from "@abstractplay/gameslib";
 import { useStore } from "../../../stores";
 import { callAuthApi } from "../../../lib/api";
@@ -15,7 +14,6 @@ export function useDockMoveEntry(props) {
   const [drawoffer, drawofferSetter] = useState(false);
   const [showDrawOfferConfirm, showDrawOfferConfirmSetter] = useState(false);
   const [moveState, moveStateSetter] = useState("is-success");
-  const [inputValue, inputValueSetter] = useState(props.move.move);
 
   const move = props.move;
   const toMove = props.toMove;
@@ -62,28 +60,16 @@ export function useDockMoveEntry(props) {
     showDrawOfferConfirmSetter(false);
   };
 
-  const handleClear = () => {
-    handleMove("");
-  };
+  const moveDraft = props.moveDraft ?? move.move;
+  const onDraftChange = props.onDraftChange ?? setMoveDraftFallback;
+  const onCommit = props.onCommit ?? handleMove;
+  const textareaMode = props.textareaMode ?? false;
+  const onTextareaModeChange =
+    props.onTextareaModeChange ?? (() => undefined);
 
-  const delayedHandleMove = useMemo(
-    () =>
-      debounce(
-        (value) => handleMove(value),
-        props.screenWidth < 770 ? 1000 : 500
-      ),
-    [handleMove, props.screenWidth]
-  );
-
-  const handleMoveInputChange = (value) => {
-    inputValueSetter(value);
-    if (/\d$/.test(value)) {
-      delayedHandleMove(value);
-    } else {
-      delayedHandleMove.cancel();
-      handleMove(value);
-    }
-  };
+  function setMoveDraftFallback(value) {
+    handleMove(value);
+  }
 
   const pingBot = useCallback(async () => {
     if (globalMe !== undefined) {
@@ -119,10 +105,6 @@ export function useDockMoveEntry(props) {
       moveStateSetter("is-success");
     }
   }, [move, focus, game, submitting]);
-
-  useEffect(() => {
-    inputValueSetter(move.move);
-  }, [move.move]);
 
   if (!focus) {
     return { ready: false };
@@ -280,7 +262,11 @@ export function useDockMoveEntry(props) {
     drawoffer,
     gameOverNonLeafNode,
     moveState,
-    inputValue,
+    moveDraft,
+    onDraftChange,
+    onCommit,
+    textareaMode,
+    onTextareaModeChange,
     connections,
     showMoveControls,
     showBotPing,
@@ -299,8 +285,6 @@ export function useDockMoveEntry(props) {
       handleDrawOfferChange,
       handleDrawOfferConfirmed,
       handleCloseDrawOfferConfirm,
-      handleClear,
-      handleMoveInputChange,
       pingBot,
       getFocusNode: (exp, g, foc) => getFocusNode(exp, g, foc),
     },

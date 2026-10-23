@@ -1843,6 +1843,14 @@
       "postGame": ", post-game",
       "moveLink": "move"
     },
+    "moveEntry": {
+      "textareaMode": "Multi-line entry",
+      "textareaModeTooltip": "Toggle multi-line move entry. Click Process move when ready. Shift+Enter adds a new line.",
+      "commitDraft": "Process move",
+      "unappliedEdits": "Move text is not applied yet. Click Process move to validate.",
+      "discardUnappliedConfirm": "You have unapplied move text. Discard it and switch to single-line entry?",
+      "commitBeforeSubmit": "Process your move text before submitting."
+    },
     "layout": {
       "pickerTitle": "Choose play page layout",
       "pickerIntro": "Pick how the game page is arranged on this device. Your choice is remembered in this browser.",

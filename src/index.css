@@ -3204,6 +3204,68 @@ span.hardTime::after {
   margin: 0;
 }
 
+.game-move-entry-field__mode {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.15rem;
+}
+
+.game-move-entry-field__mode-btn {
+  padding: 0.1rem 0.35rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  background: transparent;
+  color: var(--secondary-font-color);
+  border: 1px solid var(--tag-background-color);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.game-move-entry-field__mode-btn:hover,
+.game-move-entry-field__mode-btn:focus-visible {
+  color: var(--main-font-color);
+  background: var(--tag-background-color);
+}
+
+.game-move-entry-field__mode-btn[aria-pressed="true"] {
+  color: var(--main-font-color);
+  border-color: var(--secondary-color-3);
+  background: var(--tag-background-color);
+}
+
+.game-move-entry-field__textarea {
+  min-height: 5rem;
+  resize: vertical;
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  border-color: var(--tag-background-color);
+}
+
+.game-move-entry-field__textarea:focus {
+  border-color: var(--secondary-color-3);
+}
+
+.game-move-entry-field--unapplied {
+  border-color: var(--secondary-color-1);
+}
+
+.game-move-entry-field__unapplied-hint {
+  margin-bottom: 0.35rem;
+}
+
+.game-move-entry-field__commit {
+  margin-top: 0.35rem;
+}
+
+.game-move-entry-field__clear {
+  margin-top: 0.6ex;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--main-font-color);
+}
+
 .game-move-dock-entry__actions {
   display: flex;
   flex-wrap: wrap;

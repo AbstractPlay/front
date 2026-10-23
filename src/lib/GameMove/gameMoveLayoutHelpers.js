@@ -126,6 +126,11 @@ export function buildMoveEntryProps(session, { forceUndoRight = false } = {}) {
     gameRec,
     screenWidth,
     moveEntryHandlers,
+    moveDraft,
+    textareaMode,
+    setMoveDraft,
+    commitMoveDraft,
+    handleTextareaModeChange,
   } = session;
 
   const busy = submitting || teachingBusy;
@@ -145,6 +150,12 @@ export function buildMoveEntryProps(session, { forceUndoRight = false } = {}) {
     forceUndoRight,
     screenWidth,
     handlers: moveEntryHandlers,
+    moveDraft,
+    textareaMode,
+    onDraftChange: setMoveDraft,
+    onCommit: moveEntryHandlers[0],
+    commitMoveDraft,
+    onTextareaModeChange: handleTextareaModeChange,
   };
 }
 

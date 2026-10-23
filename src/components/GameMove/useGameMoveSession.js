@@ -38,6 +38,8 @@ import { useGameCustomCss } from "../../hooks/useGameCustomCss";
 import { toast } from "react-toastify";
 import { nanoid } from "nanoid";
 import { useStore } from "../../stores";
+import { useMoveEntryDraft } from "../../lib/GameMove/useMoveEntryDraft";
+import { appendMovePartToDraft } from "../../lib/GameMove/moveEntryDraft";
 
 // import helpers
 import {
@@ -162,6 +164,13 @@ export function useGameMoveSession(props) {
     complete: 0,
     rendered: "",
   });
+  const {
+    moveDraftRef,
+    moveDraft,
+    setMoveDraft,
+    textareaMode,
+    setTextareaMode: setTextareaModeBase,
+  } = useMoveEntryDraft(move);
   const [refresh, setRefresh] = useState(0);
   const [watchCount, watchCountSetter] = useState(0);
   const [marksBusy, marksBusySetter] = useState(false);
@@ -1771,13 +1780,38 @@ export function useGameMoveSession(props) {
     populateChecked(gameRef, engineRef, t, inCheckSetter);
   };
 
+  const appendMovePart = useCallback(
+    (movePart, handler) => {
+      const next = appendMovePartToDraft(
+        moveDraftRef.current,
+        movePart,
+        handler
+      );
+      setMoveDraft(next);
+      if (!textareaMode) {
+        handleMove(next);
+      }
+    },
+    [handleMove, moveDraftRef, setMoveDraft, textareaMode]
+  );
+
   const handleStashClick = (player, count, movePart, handler) => {
-    if (handler) {
-      handleMove(handler(move.move, movePart));
-    } else {
-      handleMove(move.move + movePart);
-    }
+    appendMovePart(movePart, handler);
   };
+
+  const commitMoveDraft = useCallback(() => {
+    handleMove(moveDraftRef.current);
+  }, [handleMove, moveDraftRef]);
+
+  const handleTextareaModeChange = useCallback(
+    (enabled) => {
+      setTextareaModeBase(enabled, {
+        confirmDiscard: () =>
+          window.confirm(t("gameMove.moveEntry.discardUnappliedConfirm")),
+      });
+    },
+    [setTextareaModeBase, t]
+  );
 
   useEffect(() => {
     initialMoveFromUrlAppliedRef.current = false;
@@ -2249,6 +2283,13 @@ export function useGameMoveSession(props) {
   );
 
   const handleSubmit = async (draw) => {
+    if (
+      textareaMode &&
+      moveDraftRef.current !== (moveRef.current?.move ?? "")
+    ) {
+      toast(t("gameMove.moveEntry.commitBeforeSubmit"), { type: "warning" });
+      return;
+    }
     submittingSetter(true);
     if (globalMe?.settings?.all?.moveConfirmOff) {
       if (draw === "drawaccepted") {
@@ -3043,6 +3084,11 @@ export function useGameMoveSession(props) {
     engineRef,
     focus,
     move,
+    moveDraft,
+    setMoveDraft,
+    textareaMode,
+    handleTextareaModeChange,
+    commitMoveDraft,
     moveEntryHandlers,
     submitting,
     teachingBusy,
