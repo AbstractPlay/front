@@ -149,7 +149,7 @@ function Stats() {
       >
         <meta
           property="og:description"
-          content={`Site statistics, updated weekly`}
+          content={`Site statistics, updated daily`}
         />
       </PageHelmet>
       <article id="leaderboard">
