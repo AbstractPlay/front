@@ -533,7 +533,10 @@
     "markRead": "Segna come letta",
     "markAllRead": "Segna tutte come lette",
     "dismissAll": "Rimuovi tutte",
-    "dismissAllConfirm": "Clicca di nuovo per rimuovere tutte"
+    "dismissAllConfirm": "Clicca di nuovo per rimuovere tutte",
+    "filterLabel": "Filtra le notifiche per tipo",
+    "filterAll": "Tutte",
+    "filterEmpty": "Nessuna notifica in questa categoria"
   },
   "NewsPreamble": "La fonte autorevole e più aggiornata per le notizie di Abstract Play è il nostro server Discord (https://discord.abstractplay.com). Unisciti a noi!",
   "NextGame": "Prossima partita",

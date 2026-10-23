@@ -533,7 +533,10 @@
     "markRead": "Marcar como leída",
     "markAllRead": "Marcar todas como leídas",
     "dismissAll": "Descartar todas",
-    "dismissAllConfirm": "Haz clic de nuevo para descartar todas"
+    "dismissAllConfirm": "Haz clic de nuevo para descartar todas",
+    "filterLabel": "Filtrar notificaciones por tipo",
+    "filterAll": "Todas",
+    "filterEmpty": "No hay notificaciones en esta categoría"
   },
   "NewsPreamble": "La fuente oficial y más actualizada de noticias de Abstract Play está en nuestro servidor de Discord (https://discord.abstractplay.com). ¡Acompáñanos!",
   "NextGame": "Siguiente juego",

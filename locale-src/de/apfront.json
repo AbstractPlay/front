@@ -5787,6 +5787,18 @@
     "src": "No notifications",
     "out": "Keine Benachrichtigungen"
   },
+  "notifications.filterAll": {
+    "src": "All",
+    "out": "Alle"
+  },
+  "notifications.filterEmpty": {
+    "src": "No notifications in this category",
+    "out": "Keine Benachrichtigungen in dieser Kategorie"
+  },
+  "notifications.filterLabel": {
+    "src": "Filter notifications by type",
+    "out": "Benachrichtigungen nach Typ filtern"
+  },
   "notifications.markAllRead": {
     "src": "Mark all read",
     "out": "Alle als gelesen markieren"
