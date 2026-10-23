@@ -16,6 +16,10 @@ import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_OPEN } from "../../config";
 import NewTournamentModal from "./NewTournamentModal";
 import TournamentFormatBadge from "./TournamentFormatBadge";
+import {
+  tournamentDetailPathActive,
+  tournamentDetailPathArchived,
+} from "../../lib/tournamentRoutes";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import GamePickerTrigger from "../GamePickerTrigger";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
@@ -723,7 +727,9 @@ function Tournaments(props) {
       currentTournamentsColumnHelper.display({
         id: "actions",
         cell: (props) => (
-          <Link to={`/tournament/${props.row.original.tournamentid}`}>
+          <Link
+            to={tournamentDetailPathActive(props.row.original.tournamentid)}
+          >
             {t("Tournament.Visit")}
           </Link>
         ),
@@ -954,7 +960,12 @@ function Tournaments(props) {
       completedTournamentsColumnHelper.display({
         id: "actions",
         cell: (props) => (
-          <Link to={`/tournament/${props.row.original.tournamentid}`}>
+          <Link
+            to={tournamentDetailPathArchived(
+              props.row.original.tournamentid,
+              props.row.original.metaGame
+            )}
+          >
             {t("Tournament.Visit")}
           </Link>
         ),

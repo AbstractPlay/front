@@ -8,6 +8,7 @@ import { apPerfRun } from "../../lib/apPerf.js";
 import { callAuthApi } from "../../lib/api";
 import { anyOnClockPlayerTimedOut } from "../../lib/gameClockDisplay";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
+import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
 import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import {
   maybeSyncInProgressCommentedFlag,
@@ -894,14 +895,18 @@ export function useGameMoveSession(props) {
         game.tournament !== undefined &&
         game.tournament !== null
       ) {
-        const tournamentLink = game.tournament.includes("#")
-          ? `/tournament/${game.tournament.replace("#", "/")}`
-          : `/tournament/${game.tournament}?gameId=${game.id}&metaGame=${game.metaGame}`;
+        const tournamentLink = tournamentDetailPathFromGameRef(
+          game.tournament,
+          game.metaGame,
+          game.id
+        );
 
-        parentheticalSetter((val) => [
-          ...val,
-          <Link to={tournamentLink}>{t("gameMove.tournamentLink")}</Link>,
-        ]);
+        if (tournamentLink !== null) {
+          parentheticalSetter((val) => [
+            ...val,
+            <Link to={tournamentLink}>{t("gameMove.tournamentLink")}</Link>,
+          ]);
+        }
       }
       if ("event" in game && game.event !== undefined && game.event !== null) {
         parentheticalSetter((val) => [

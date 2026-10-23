@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { useStorageState } from "react-use-storage-state";
 import TournamentFormatBadge from "../Tournaments/TournamentFormatBadge";
 import { dashboardTournamentsToCurrentRows } from "../../lib/tournamentListData";
+import { tournamentDetailPathActive } from "../../lib/tournamentRoutes";
 import { variantSelectionSortingFn } from "../../lib/variantTableSort";
 import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
@@ -117,7 +118,9 @@ function YourTournamentsTable({ tournaments }) {
       columnHelper.display({
         id: "actions",
         cell: (props) => (
-          <Link to={`/tournament/${props.row.original.tournamentid}`}>
+          <Link
+            to={tournamentDetailPathActive(props.row.original.tournamentid)}
+          >
             {t("Tournament.Visit")}
           </Link>
         ),
