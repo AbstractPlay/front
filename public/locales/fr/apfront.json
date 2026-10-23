@@ -533,7 +533,10 @@
     "markRead": "Marquer comme lu",
     "markAllRead": "Tout marquer comme lu",
     "dismissAll": "Tout effacer",
-    "dismissAllConfirm": "Cliquer à nouveau pour tout effacer"
+    "dismissAllConfirm": "Cliquer à nouveau pour tout effacer",
+    "filterLabel": "Filtrer les notifications par type",
+    "filterAll": "Toutes",
+    "filterEmpty": "Aucune notification dans cette catégorie"
   },
   "NewsPreamble": "La source officielle et la plus à jour des actualités d'Abstract Play se trouve sur notre serveur Discord (https://discord.abstractplay.com). Rejoignez-nous !",
   "NextGame": "Partie suivante",
