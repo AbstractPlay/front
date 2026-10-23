@@ -2243,9 +2243,21 @@
     "src": "Filter by game…",
     "out": "Nach Spiel filtern…"
   },
+  "Tournament.loadErrorBody": {
+    "src": "Something went wrong while loading this tournament. You can try again later or return to the tournaments list.",
+    "out": "Beim Laden dieses Turniers ist ein Fehler aufgetreten. Du kannst es später erneut versuchen oder zur Turnierliste zurückkehren."
+  },
+  "Tournament.loadErrorTitle": {
+    "src": "Could not load tournament",
+    "out": "Turnier konnte nicht geladen werden"
+  },
   "Tournament.loading": {
-    "src": "Loading tournaments…",
-    "out": "Turniere werden geladen…"
+    "src": "Loading tournament…",
+    "out": "Turnier wird geladen…"
+  },
+  "Tournament.notStarted": {
+    "src": "This tournament has not started yet. Division standings will appear here once play begins.",
+    "out": "Dieses Turnier hat noch nicht begonnen. Die Divisionsrangliste wird hier angezeigt, sobald die Spiele beginnen."
   },
   "Tournament.registeredOnly": {
     "src": "Only tournaments I'm in",

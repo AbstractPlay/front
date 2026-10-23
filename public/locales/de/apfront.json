@@ -861,7 +861,10 @@
     }
   },
   "Tournament": {
-    "loading": "Turniere werden geladen…",
+    "loading": "Turnier wird geladen…",
+    "loadErrorTitle": "Turnier konnte nicht geladen werden",
+    "loadErrorBody": "Beim Laden dieses Turniers ist ein Fehler aufgetreten. Du kannst es später erneut versuchen oder zur Turnierliste zurückkehren.",
+    "notStarted": "Dieses Turnier hat noch nicht begonnen. Die Divisionsrangliste wird hier angezeigt, sobald die Spiele beginnen.",
     "Number": "Turniernummer",
     "Tournaments": "Automatisierte Turniere",
     "Completion": "Abschluss",

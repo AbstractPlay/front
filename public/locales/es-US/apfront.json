@@ -861,7 +861,10 @@
     }
   },
   "Tournament": {
-    "loading": "Cargando torneos…",
+    "loading": "Cargando torneo…",
+    "loadErrorTitle": "No se pudo cargar el torneo",
+    "loadErrorBody": "Algo salió mal al cargar este torneo. Puedes intentarlo de nuevo más tarde o regresar a la lista de torneos.",
+    "notStarted": "Este torneo aún no ha comenzado. Las posiciones de la división aparecerán aquí una vez que comience el juego.",
     "Number": "Número de torneo",
     "Tournaments": "Torneos automatizados",
     "Completion": "Completado",

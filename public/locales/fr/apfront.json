@@ -861,7 +861,10 @@
     }
   },
   "Tournament": {
-    "loading": "Chargement des tournois…",
+    "loading": "Chargement du tournoi…",
+    "loadErrorTitle": "Impossible de charger le tournoi",
+    "loadErrorBody": "Une erreur est survenue lors du chargement de ce tournoi. Vous pouvez réessayer plus tard ou retourner à la liste des tournois.",
+    "notStarted": "Ce tournoi n'a pas encore commencé. Le classement des divisions apparaîtra ici dès le début des parties.",
     "Number": "Numéro du tournoi",
     "Tournaments": "Tournois automatisés",
     "Completion": "Avancement",
