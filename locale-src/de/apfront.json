@@ -2235,9 +2235,25 @@
     "src": "Withdraw from next",
     "out": "Vom nächsten abmelden"
   },
+  "Tournament.allGames": {
+    "src": "All games",
+    "out": "Alle Spiele"
+  },
+  "Tournament.filterByGame": {
+    "src": "Filter by game…",
+    "out": "Nach Spiel filtern…"
+  },
   "Tournament.loading": {
     "src": "Loading tournaments…",
     "out": "Turniere werden geladen…"
+  },
+  "Tournament.registeredOnly": {
+    "src": "Only tournaments I'm in",
+    "out": "Nur Turniere, an denen ich teilnehme"
+  },
+  "Tournament.starredOnly": {
+    "src": "Only starred games",
+    "out": "Nur favorisierte Spiele"
   },
   "Tournament.tabs.completed": {
     "src": "Recently completed",
@@ -5042,6 +5058,10 @@
   "gameMove.unrated": {
     "src": "unrated",
     "out": "ungewertet"
+  },
+  "gamePicker.allGames": {
+    "src": "All games",
+    "out": "Alle Spiele"
   },
   "gamePicker.choose": {
     "src": "Choose a game…",

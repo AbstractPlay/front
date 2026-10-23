@@ -876,6 +876,10 @@
     "Join": "S'inscrire aux tournois récurrents",
     "JoinOnce": "S'inscrire une seule fois",
     "Name": "Tournoi {{metaGame}}",
+    "allGames": "Tous les jeux",
+    "filterByGame": "Filtrer par jeu…",
+    "registeredOnly": "Uniquement les tournois auxquels je participe",
+    "starredOnly": "Uniquement les jeux favoris",
     "ProposeNew": "Demander un nouveau tournoi",
     "New2": "Nouveaux tournois",
     "New1": "Nouveau tournoi",
@@ -2049,6 +2053,7 @@
     }
   },
   "gamePicker": {
+    "allGames": "Tous les jeux",
     "choose": "Choisir un jeu…",
     "searchLabel": "Rechercher",
     "searchPlaceholder": "Saisissez du texte pour filtrer les jeux…",
