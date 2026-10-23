@@ -21,6 +21,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Teaching mode:** confirmation before **Offer undo** to reduce misclicks.
 - **Tournaments:** tournament detail page handles missing API data without crashing (404, load error, registration phase without divisions).
 - **Tournaments:** completed/history links and tournament-end notifications use `/tournament/{metaGame}/{id}` so archived events need no expensive id-only API fallback; stop canonical redirects that stripped `metaGame` from URLs.
 
