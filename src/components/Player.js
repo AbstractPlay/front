@@ -8,8 +8,8 @@ import React, {
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useStorageState } from "react-use-storage-state";
-import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
+import { submitNewChallenge } from "../lib/submitNewChallenge";
 import { gameinfo } from "@abstractplay/gameslib";
 import OnVacationBadge from "./OnVacationBadge";
 import PageHelmet from "./PageHelmet";
@@ -37,10 +37,7 @@ import ProfileModule from "./Player/ProfileModule";
 import SummaryGate from "./shared/SummaryGate";
 import { useStore } from "../stores";
 import { useEnsureSummaryTier } from "../hooks/useEnsureSummaryTier";
-import {
-  formatUserDisplayName,
-  rawDirectoryDisplayName,
-} from "./Bots/botUtils";
+import { formatUserDisplayName } from "./Bots/botUtils";
 import { fetchUserNames } from "../lib/fetchUserNames";
 import {
   fetchPlayerSummarySlice,
@@ -261,16 +258,19 @@ function Player() {
 
   const handleNewChallenge = async (challenge) => {
     try {
-      await callAuthApi("new_challenge", {
-        ...challenge,
-        challenger: {
-          id: globalMe.id,
-          name: rawDirectoryDisplayName(globalMe, allUsers),
-        },
-      });
+      const parsed = await submitNewChallenge(
+        challenge,
+        globalMe,
+        allUsers
+      );
+      if (!parsed.ok) {
+        return parsed;
+      }
       maybeTrackRecommendationChallenge(challenge.metaGame);
+      return parsed;
     } catch (error) {
       console.log(error);
+      return { ok: false, error: error?.message ?? String(error) };
     }
   };
 

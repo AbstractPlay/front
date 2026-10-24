@@ -9,7 +9,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
-## [1.0.0-ci] - 2026-10-23
+## [1.0.0-ci] - 2026-10-24
 
 ### Changed
 
@@ -23,6 +23,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 - **Teaching mode:** confirmation before **Offer undo** to reduce misclicks.
 - **Tournaments:** tournament detail page handles missing API data without crashing (404, load error, registration phase without divisions).
+- **Tournaments:** game-page tournament links and URL cleanup no longer redirect in-progress events to `/tournament/{metaGame}/{id}` (which implied archived-only API lookup).
 - **Tournaments:** completed/history links and tournament-end notifications use `/tournament/{metaGame}/{id}` so archived events need no expensive id-only API fallback; stop canonical redirects that stripped `metaGame` from URLs.
 
 ### Added
@@ -69,6 +70,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Challenges:** `new_challenge` failures from Lab, live teach-from-position, and challenge modals surface the server message instead of closing silently; position-locked variant uids are sent on issue; open-challenges page refreshes after issuing from that screen.
 - **Challenges:** Open vs Closed type on issue-from-position modal is selectable again (removed mistaken `readOnly` on radios — Open was not actually issuable); game page challenges tab passes `metaGame` explicitly; public list fetch parses proxy envelopes instead of failing silently to an empty table.
 - **Challenges:** open (standing) issue sends an empty `challengees` list instead of `[""]` placeholder slots.
+- **Challenges:** issue-from-player-profile, game-info page, and hub ratings table return `submitNewChallenge` results so the modal no longer shows a false “Error!” after a successful send.
 - **In-game chat:** unsent composer text is kept when switching drawer or overlay tabs (strip, card, and other layouts that unmount chat).
 - **Stack-expanding display:** Re-derive `stackExpanding` from game flags and the current render rep on each sync (and when changing display in settings) so switching from 3D to expanding (e.g. Volcano in Lab) enables stack hover again.
 - **Customize:** per-game settings JSON and saves include the full `render` block (e.g. `hide-labels-half`) when those options are checked — no longer omitted from the editor blob when they match global defaults.

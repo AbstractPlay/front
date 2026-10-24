@@ -62,10 +62,9 @@ export function shouldNormalizeTournamentDetailUrl(
   const raw = search.startsWith("?") ? search.slice(1) : search;
   const params = raw ? new URLSearchParams(raw) : new URLSearchParams();
 
-  const queryMeta = params.get("metaGame");
-  if (params.has("gameId") && isConcreteMetaGame(queryMeta)) {
-    const target = tournamentDetailPathArchived(tournamentid, queryMeta);
-    return path !== target;
+  if (params.has("gameId")) {
+    const target = tournamentDetailPathActive(tournamentid);
+    return path !== target || raw.length > 0;
   }
 
   if (isConcreteMetaGame(routeMetaGame)) {

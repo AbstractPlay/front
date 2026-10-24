@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
+import { submitNewChallenge } from "../lib/submitNewChallenge";
 import PageHelmet from "./PageHelmet";
 // import Gallery from "./MetaContainer/Gallery";
 import Table from "./MetaContainer/Table";
@@ -13,8 +14,6 @@ import { listPublicCatalogMetas, getGameDisplayName } from "../lib/gameOptions";
 import { compareStrings } from "../lib/compareStrings";
 import { getUiLocaleBundleKey } from "../i18n";
 import { useStore } from "../stores";
-import { rawDirectoryDisplayName } from "./Bots/botUtils";
-
 function MetaContainer(props) {
   const { i18n } = useTranslation();
   const localeBundleKey = getUiLocaleBundleKey(i18n);
@@ -81,16 +80,19 @@ function MetaContainer(props) {
 
   const handleNewChallenge = async (challenge) => {
     try {
-      await callAuthApi("new_challenge", {
-        ...challenge,
-        challenger: {
-          id: globalMe.id,
-          name: rawDirectoryDisplayName(globalMe, allUsers),
-        },
-      });
+      const parsed = await submitNewChallenge(
+        challenge,
+        globalMe,
+        allUsers
+      );
+      if (!parsed.ok) {
+        return parsed;
+      }
       maybeTrackRecommendationChallenge(challenge.metaGame);
+      return parsed;
     } catch (error) {
       console.log(error);
+      return { ok: false, error: error?.message ?? String(error) };
     }
   };
 

@@ -80,7 +80,7 @@ describe("shouldNormalizeTournamentDetailUrl", () => {
     ).toBe(false);
   });
 
-  it("promotes game fix-up query to meta/id path", () => {
+  it("strips legacy game fix-up query to id-only path", () => {
     expect(
       shouldNormalizeTournamentDetailUrl(
         `/tournament/${id}`,

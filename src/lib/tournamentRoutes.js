@@ -37,8 +37,5 @@ export function tournamentDetailPathFromGameRef(tournamentRef, gameMetaGame, gam
       return tournamentDetailPathArchived(id, meta);
     }
   }
-  if (isConcreteMetaGame(gameMetaGame) && gameId) {
-    return `${tournamentDetailPathActive(ref)}?gameId=${gameId}&metaGame=${gameMetaGame}`;
-  }
   return tournamentDetailPathActive(ref);
 }
