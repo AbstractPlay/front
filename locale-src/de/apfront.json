@@ -64,8 +64,8 @@
     "out": "Spielbretteinstellungen anpassen"
   },
   "CanPie": {
-    "src": "This player has the option to switch seats.",
-    "out": "Dieser Spieler hat die Möglichkeit, die Sitzplätze zu tauschen."
+    "src": "This player has the option to switch colours.",
+    "out": "Dieser Spieler hat die Option, die Farben zu tauschen."
   },
   "Cancel": {
     "src": "Cancel",
@@ -1340,8 +1340,8 @@
     "out": "Diese Variantenkombination ist für dieses Spiel nicht erlaubt."
   },
   "InvokePie": {
-    "src": "Swap player seats",
-    "out": "Sitzplätze tauschen"
+    "src": "Swap player colours",
+    "out": "Spielerfarben tauschen"
   },
   "IssueChallenge": {
     "src": "Issue a new challenge",
