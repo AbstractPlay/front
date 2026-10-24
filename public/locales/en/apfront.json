@@ -1467,6 +1467,8 @@
       "discuss": "Discuss",
       "legacyVotesNote": "includes former BGG list votes",
       "viewExisting": "View existing wishlist entry",
+      "downloadCurrentView": "Download current view",
+      "downloadCurrentViewHint": "JSON reflects your current sort, filters, and search.",
       "category": {
         "none": "Uncategorized",
         "permissions_required": "Permissions required",

@@ -35,6 +35,11 @@ import FeedbackPageHelmet from "./FeedbackPageHelmet";
 import FeedbackQuickSearch from "./FeedbackQuickSearch";
 import FeedbackTagBadges from "./FeedbackTagBadges";
 import { filterFeedbackItemsByQuery } from "../../lib/feedback/filterFeedbackItemsByQuery";
+import {
+  buildWishlistExportDocument,
+  wishlistExportFilename,
+} from "../../lib/feedback/wishlistExport";
+import { triggerDownload } from "../../lib/boardExport/downloadBlob";
 import { loadFeedbackTagVocab, tagOptionsForKind } from "../../lib/feedback/feedbackTagVocab";
 import "./feedback.css";
 
@@ -201,6 +206,21 @@ function FeedbackBoard({ kind = "bug" }) {
       : feedbackBoardSortLabelKey(option)
   );
 
+  const handleWishlistDownload = () => {
+    const doc = buildWishlistExportDocument({
+      visibleItems,
+      sortBy,
+      categoryFilter,
+      statusFilter,
+      searchQuery,
+      showClosedOnly,
+    });
+    triggerDownload(
+      new Blob([JSON.stringify(doc, null, 2)], { type: "application/json" }),
+      wishlistExportFilename({ categoryFilter }),
+    );
+  };
+
   if (loading) {
     return <Spinner />;
   }
@@ -332,6 +352,20 @@ function FeedbackBoard({ kind = "bug" }) {
           </div>
         ) : null}
       </div>
+      {kind === "wishlist" ? (
+        <div className="feedback-wishlist-export">
+          <button
+            type="button"
+            className="button is-small apButtonNeutral"
+            onClick={handleWishlistDownload}
+          >
+            {t("feedback.wishlist.downloadCurrentView")}
+          </button>
+          <span className="feedback-muted feedback-wishlist-export-hint">
+            {t("feedback.wishlist.downloadCurrentViewHint")}
+          </span>
+        </div>
+      ) : null}
       {error && <p className="has-text-danger">{error}</p>}
       {visibleItems.length === 0 ? (
         <p className="feedback-muted">

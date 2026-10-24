@@ -37,6 +37,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Bots:** edit bot screen lists supported games and variant combinations; add or remove entries and save via `update_bot`.
 - **Rules PDF mirrors:** link to hosted rules PDFs (when available) on game Summary and in the in-play game info (i) dialog, via shared `MetaGameLinks`.
 - **Feedback:** attach SVG and Markdown (`.md`) files on bug reports, features, and comments (with PNG/JPEG/WebP, `.txt`, and `.json`).
+- **Wishlist:** **Download current view** on `/wishlist` exports JSON matching the filtered, sorted, searched list (no public snapshot URL).
 - **In-app notifications:** WebSocket `notification` hint debounces `list_notifications` for the navbar bell; home dashboard refetches notifications in parallel with `me_dashboard` (gap filler).
 - **Multi-frame board chrome:** jump to first/last frame buttons (double chevrons) beside step prev/next when a game returns multiple render reps.
 - **Playground (Lab):** God vs Live view for games with hidden information — board and status use the current player’s stripped view in Live mode; exploration and saves keep full state.
