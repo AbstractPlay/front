@@ -64,8 +64,8 @@
     "out": "Changer les paramètres du plateau"
   },
   "CanPie": {
-    "src": "This player has the option to switch seats.",
-    "out": "Ce joueur à l'option d'échanger les places."
+    "src": "This player has the option to switch colours.",
+    "out": "Ce joueur a la possibilité de changer de couleur."
   },
   "Cancel": {
     "src": "Cancel",
@@ -1340,8 +1340,8 @@
     "out": "Cette combinaison de variantes n'est pas autorisée pour ce jeu."
   },
   "InvokePie": {
-    "src": "Swap player seats",
-    "out": "Inverser les rôles (Règle du gâteau)"
+    "src": "Swap player colours",
+    "out": "Échanger les couleurs des joueurs"
   },
   "IssueChallenge": {
     "src": "Issue a new challenge",
