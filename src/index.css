@@ -959,6 +959,10 @@ strong {
   color: var(--high-contrast-font-color);
 }
 
+.apTextAlert {
+  color: var(--secondary-color-1);
+}
+
 .apButtonNeutral {
     /* background: linear-gradient(
       180deg,

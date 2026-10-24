@@ -169,7 +169,7 @@ function ChallengeOpen({ fetching, handleChallengeRevoke }) {
       <>
         <div className="content">
           {fetching ? <Spinner size="20" /> : null}
-          <p>{t("NoGames")}</p>
+          <p className="apTextAlert">{t("NoGames")}</p>
         </div>
       </>
     );
