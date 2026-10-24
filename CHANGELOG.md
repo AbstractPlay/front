@@ -13,6 +13,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Changed
 
+- **Site theme:** Customize Site Theme is a full page at `/customize/site-theme` (profile menu) with a large live preview of every tunable colour token; the navbar modal was removed.
 - **Play / Lab:** move-tree replay controls are grouped (step vs jump-to-start/end) with a fixed prev/next bar on narrow screens to reduce mis-taps on mobile.
 - **Play:** move entry validates 500 ms after typing pauses (same delay on all devices and characters).
 

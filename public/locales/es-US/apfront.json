@@ -1908,6 +1908,8 @@
   "Back": "Volver",
   "theme": {
     "title": "Personalizar el tema del sitio",
+    "pageIntro": "Ajusta los colores de la interfaz del sitio para los modos claro y oscuro. Los cambios se aplicarán después de guardar. La vista previa usa los mismos estilos que el resto del sitio.",
+    "saved": "Tema del sitio guardado.",
     "lightMode": "Modo claro",
     "darkMode": "Modo oscuro",
     "cssVariable": "Variable CSS",
@@ -1922,7 +1924,32 @@
     "primaryButton": "Botón principal",
     "alertButton": "Botón de alerta",
     "tag1": "Etiqueta 1",
-    "tag2": "Etiqueta 2"
+    "tag2": "Etiqueta 2",
+    "preview": {
+      "legend": "Cada tarjeta muestra un patrón de interfaz real. La barra de abajo muestra qué variables del tema afectan a esa tarjeta.",
+      "usesVariables": "Variables del tema",
+      "typography": "Tipografía",
+      "sectionTitle": "Título de sección",
+      "linedTitle": "Movimientos",
+      "buttons": "Botones",
+      "neutralButton": "Neutral",
+      "accents": "Alertas e insignias",
+      "alertText": "Acción requerida",
+      "bulletSample": "Elemento del panel",
+      "badgeHint": "Número de notificaciones",
+      "moveTree": "Árbol de movimientos",
+      "focusedMove": "e4",
+      "notifications": "Notificaciones",
+      "newsCallout": "Noticias del sitio",
+      "notificationTitle": "Tu turno en Ajedrez",
+      "notificationTime": "Hace 2 horas",
+      "selection": "Selección",
+      "selectedGame": "Tarjeta de juego seleccionada",
+      "tags": "Etiquetas",
+      "boardSvg": "SVG del tablero (CSS personalizado)",
+      "svgDefaultFill": "Relleno de casilla bloqueada",
+      "svgVolcanoCaps": "Trazo del remate de la pieza"
+    }
   },
   "customize": {
     "title": "Personalizar configuración para {{gameName}}",

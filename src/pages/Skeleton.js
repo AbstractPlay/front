@@ -34,6 +34,7 @@ import Event from "../components/Event";
 import Events from "../components/Events";
 import Play from "../components/Play";
 import Customize from "../components/Customize";
+import SiteThemeCustomize from "../components/SiteThemeCustomize";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TimeAgo from "javascript-time-ago";
@@ -262,6 +263,10 @@ function Bones(props) {
                   element={<Tournaments />}
                 />
                 <Route path="/play" element={<Play />} />
+                <Route
+                  path="/customize/site-theme"
+                  element={<SiteThemeCustomize />}
+                />
                 <Route path="/customize/:metaGame" element={<Customize />} />
                 <Route path="/feedback/bugs" element={<FeedbackBoard kind="bug" />} />
                 <Route path="/feedback/ideas" element={<FeedbackBoard kind="feature" />} />
