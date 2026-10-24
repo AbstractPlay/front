@@ -1908,6 +1908,8 @@
   "Back": "Retour",
   "theme": {
     "title": "Personnaliser le thème du site",
+    "pageIntro": "Ajustez les couleurs de l'interface pour les modes clair et sombre. Les modifications s'appliquent après enregistrement. L'aperçu utilise les mêmes styles que le reste du site.",
+    "saved": "Thème du site enregistré.",
     "lightMode": "Mode clair",
     "darkMode": "Mode sombre",
     "cssVariable": "Variable CSS",
@@ -1922,7 +1924,32 @@
     "primaryButton": "Bouton principal",
     "alertButton": "Bouton d'alerte",
     "tag1": "Tag 1",
-    "tag2": "Tag 2"
+    "tag2": "Tag 2",
+    "preview": {
+      "legend": "Chaque carte présente un élément d'interface réel. La barre du bas indique les variables de thème qui affectent cette carte.",
+      "usesVariables": "Variables de thème",
+      "typography": "Typographie",
+      "sectionTitle": "Titre de section",
+      "linedTitle": "Coups",
+      "buttons": "Boutons",
+      "neutralButton": "Neutre",
+      "accents": "Alertes et badges",
+      "alertText": "Action requise",
+      "bulletSample": "Élément du tableau de bord",
+      "badgeHint": "Nombre de notifications",
+      "moveTree": "Arbre de coups",
+      "focusedMove": "e4",
+      "notifications": "Notifications",
+      "newsCallout": "Actualités du site",
+      "notificationTitle": "À vous de jouer aux Échecs",
+      "notificationTime": "Il y a 2 heures",
+      "selection": "Sélection",
+      "selectedGame": "Carte de partie sélectionnée",
+      "tags": "Tags",
+      "boardSvg": "SVG du plateau (CSS personnalisé)",
+      "svgDefaultFill": "Remplissage des cases bloquées",
+      "svgVolcanoCaps": "Contour des chapeaux de pièces"
+    }
   },
   "customize": {
     "title": "Personnaliser les paramètres pour {{gameName}}",

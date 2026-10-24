@@ -1908,6 +1908,8 @@
   "Back": "Back",
   "theme": {
     "title": "Customize Site Theme",
+    "pageIntro": "Adjust site chrome colours for light and dark mode. Changes apply after you save. The preview uses the same styles as the rest of the site.",
+    "saved": "Site theme saved.",
     "lightMode": "Light Mode",
     "darkMode": "Dark Mode",
     "cssVariable": "CSS Variable",
@@ -1922,7 +1924,32 @@
     "primaryButton": "Primary Button",
     "alertButton": "Alert Button",
     "tag1": "Tag 1",
-    "tag2": "Tag 2"
+    "tag2": "Tag 2",
+    "preview": {
+      "legend": "Each card shows a real UI pattern. The bar at the bottom lists which theme variables affect that card.",
+      "usesVariables": "Theme variables",
+      "typography": "Typography",
+      "sectionTitle": "Section title",
+      "linedTitle": "Moves",
+      "buttons": "Buttons",
+      "neutralButton": "Neutral",
+      "accents": "Alerts and badges",
+      "alertText": "Action required",
+      "bulletSample": "Dashboard item",
+      "badgeHint": "Notification count",
+      "moveTree": "Move tree",
+      "focusedMove": "e4",
+      "notifications": "Notifications",
+      "newsCallout": "Site news",
+      "notificationTitle": "Your turn in Chess",
+      "notificationTime": "2 hours ago",
+      "selection": "Selection",
+      "selectedGame": "Selected game card",
+      "tags": "Tags",
+      "boardSvg": "Board SVG (custom CSS)",
+      "svgDefaultFill": "Blocked cell fill",
+      "svgVolcanoCaps": "Piece cap stroke"
+    }
   },
   "customize": {
     "title": "Customize Settings for {{gameName}}",

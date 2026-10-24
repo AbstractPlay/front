@@ -1908,6 +1908,8 @@
   "Back": "Zurück",
   "theme": {
     "title": "Website-Design anpassen",
+    "pageIntro": "Passe die Farben der Benutzeroberfläche für den Hell- und Dunkelmodus an. Die Änderungen werden nach dem Speichern übernommen. Die Vorschau verwendet dieselben Stile wie der Rest der Website.",
+    "saved": "Website-Design gespeichert.",
     "lightMode": "Hellmodus",
     "darkMode": "Dunkelmodus",
     "cssVariable": "CSS-Variable",
@@ -1922,7 +1924,32 @@
     "primaryButton": "Primäre Schaltfläche",
     "alertButton": "Warn-Schaltfläche",
     "tag1": "Tag 1",
-    "tag2": "Tag 2"
+    "tag2": "Tag 2",
+    "preview": {
+      "legend": "Jede Karte zeigt ein reales UI-Muster. Die Leiste am unteren Rand listet auf, welche Design-Variablen diese Karte beeinflussen.",
+      "usesVariables": "Design-Variablen",
+      "typography": "Typografie",
+      "sectionTitle": "Abschnittstitel",
+      "linedTitle": "Züge",
+      "buttons": "Schaltflächen",
+      "neutralButton": "Neutral",
+      "accents": "Hinweise und Badges",
+      "alertText": "Aktion erforderlich",
+      "bulletSample": "Dashboard-Eintrag",
+      "badgeHint": "Benachrichtigungsanzahl",
+      "moveTree": "Zugbaum",
+      "focusedMove": "e4",
+      "notifications": "Benachrichtigungen",
+      "newsCallout": "Website-News",
+      "notificationTitle": "Du bist am Zug bei Schach",
+      "notificationTime": "Vor 2 Stunden",
+      "selection": "Auswahl",
+      "selectedGame": "Ausgewählte Spielkarte",
+      "tags": "Tags",
+      "boardSvg": "Brett-SVG (benutzerdefiniertes CSS)",
+      "svgDefaultFill": "Füllung blockierter Felder",
+      "svgVolcanoCaps": "Kontur der Steinkappe"
+    }
   },
   "customize": {
     "title": "Einstellungen für {{gameName}} anpassen",

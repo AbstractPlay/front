@@ -13,7 +13,6 @@ import { fetchProfile } from "../lib/globalMeBootstrap";
 
 function ProfileMenu({
   closeBurger,
-  onCustomizeTheme,
   showColorModeInMenu = false,
   colorMode,
   onToggleColorMode,
@@ -179,17 +178,14 @@ function ProfileMenu({
               />
               <span>{t("nav.visibilityVisible")}</span>
             </label>
-            <button
-              type="button"
+            <Link
+              to="/customize/site-theme"
               className="nav-profile-menu-item"
               role="menuitem"
-              onClick={() => {
-                closeMenu();
-                onCustomizeTheme();
-              }}
+              onClick={closeMenu}
             >
               {t("nav.customizeTheme")}
-            </button>
+            </Link>
             <div
               className="nav-profile-menu-item nav-profile-menu-static nav-profile-menu-wifi"
               role="none"

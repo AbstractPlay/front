@@ -16,7 +16,7 @@ Users can customize board appearance per meta-game. Route: `/customize/:metaGame
 | [`resolveEffectiveCustomCss.js`](../src/lib/resolveEffectiveCustomCss.js) | Account vs localStorage CSS resolution |
 | [`useGameCustomCss.js`](../src/hooks/useGameCustomCss.js) | Mount/unmount per-game CSS on game pages |
 | [`ThemeApplicator.js`](../src/components/ThemeApplicator.js) | Applies stored site theme globally |
-| [`ThemeCustomizer.js`](../src/components/ThemeCustomizer.js) | Site chrome colour picker |
+| [`SiteThemeCustomize.js`](../src/components/SiteThemeCustomize.js) | Site chrome colour picker (`/customize/site-theme`) |
 | [`RenderOptionsModal.js`](../src/components/RenderOptionsModal.js) | Renderer display options (also on game page) |
 | [`setRendererColourOpts.js`](../src/lib/setRendererColourOpts.js) | Passes colour context to renderer |
 | [`setGlyphMapOpt.js`](../src/lib/setGlyphMapOpt.js) | Glyph substitution map from resolved `render.glyphmap` |

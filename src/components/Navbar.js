@@ -1,17 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
 import ProfileMenu from "./ProfileMenu";
 import NotificationBell from "./NotificationBell";
-import ErrorBoundary from "./ErrorBoundary";
 import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../stores";
 import { useAuthSession } from "../hooks/useAuthSession";
 import { REAL_MODE } from "../lib/realMode";
-import Spinner from "./Spinner";
 import {
   DEFAULT_COLOUR_CONTEXT_DARK,
   DEFAULT_COLOUR_CONTEXT_LIGHT,
@@ -20,8 +18,6 @@ import NavbarHoverDropdown, {
   NavbarHoverDropdownAnchor,
   NavbarHoverDropdownLink,
 } from "./NavbarHoverDropdown";
-
-const ThemeCustomizer = lazy(() => import("./ThemeCustomizer"));
 
 function Navbar() {
   const { status } = useAuthSession();
@@ -38,7 +34,6 @@ function Navbar() {
     DEFAULT_COLOUR_CONTEXT_DARK
   );
   const { t } = useTranslation();
-  const [showThemeModal, setShowThemeModal] = useState(false);
   const [storedInvis, setStoredInvis] = useStorageState("invisible", false);
 
   useEffect(() => {
@@ -60,7 +55,6 @@ function Navbar() {
 
   const profileMenuProps = {
     closeBurger,
-    onCustomizeTheme: () => setShowThemeModal(true),
     colorMode,
     onToggleColorMode: toggleColorMode,
     visibleToOthers: !storedInvis,
@@ -276,16 +270,6 @@ function Navbar() {
           )}
         </div>
       </div>
-      <ErrorBoundary inline>
-        <Suspense fallback={<Spinner />}>
-          {showThemeModal ? (
-            <ThemeCustomizer
-              show={showThemeModal}
-              handleClose={() => setShowThemeModal(false)}
-            />
-          ) : null}
-        </Suspense>
-      </ErrorBoundary>
     </nav>
   );
 }

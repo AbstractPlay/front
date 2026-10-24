@@ -7387,6 +7387,102 @@
     "src": "Light Mode",
     "out": "Hellmodus"
   },
+  "theme.pageIntro": {
+    "src": "Adjust site chrome colours for light and dark mode. Changes apply after you save. The preview uses the same styles as the rest of the site.",
+    "out": "Passe die Farben der Benutzeroberfläche für den Hell- und Dunkelmodus an. Die Änderungen werden nach dem Speichern übernommen. Die Vorschau verwendet dieselben Stile wie der Rest der Website."
+  },
+  "theme.preview.accents": {
+    "src": "Alerts and badges",
+    "out": "Hinweise und Badges"
+  },
+  "theme.preview.alertText": {
+    "src": "Action required",
+    "out": "Aktion erforderlich"
+  },
+  "theme.preview.badgeHint": {
+    "src": "Notification count",
+    "out": "Benachrichtigungsanzahl"
+  },
+  "theme.preview.boardSvg": {
+    "src": "Board SVG (custom CSS)",
+    "out": "Brett-SVG (benutzerdefiniertes CSS)"
+  },
+  "theme.preview.bulletSample": {
+    "src": "Dashboard item",
+    "out": "Dashboard-Eintrag"
+  },
+  "theme.preview.buttons": {
+    "src": "Buttons",
+    "out": "Schaltflächen"
+  },
+  "theme.preview.focusedMove": {
+    "src": "e4",
+    "out": "e4"
+  },
+  "theme.preview.legend": {
+    "src": "Each card shows a real UI pattern. The bar at the bottom lists which theme variables affect that card.",
+    "out": "Jede Karte zeigt ein reales UI-Muster. Die Leiste am unteren Rand listet auf, welche Design-Variablen diese Karte beeinflussen."
+  },
+  "theme.preview.linedTitle": {
+    "src": "Moves",
+    "out": "Züge"
+  },
+  "theme.preview.moveTree": {
+    "src": "Move tree",
+    "out": "Zugbaum"
+  },
+  "theme.preview.neutralButton": {
+    "src": "Neutral",
+    "out": "Neutral"
+  },
+  "theme.preview.newsCallout": {
+    "src": "Site news",
+    "out": "Website-News"
+  },
+  "theme.preview.notificationTime": {
+    "src": "2 hours ago",
+    "out": "Vor 2 Stunden"
+  },
+  "theme.preview.notificationTitle": {
+    "src": "Your turn in Chess",
+    "out": "Du bist am Zug bei Schach"
+  },
+  "theme.preview.notifications": {
+    "src": "Notifications",
+    "out": "Benachrichtigungen"
+  },
+  "theme.preview.sectionTitle": {
+    "src": "Section title",
+    "out": "Abschnittstitel"
+  },
+  "theme.preview.selectedGame": {
+    "src": "Selected game card",
+    "out": "Ausgewählte Spielkarte"
+  },
+  "theme.preview.selection": {
+    "src": "Selection",
+    "out": "Auswahl"
+  },
+  "theme.preview.svgDefaultFill": {
+    "src": "Blocked cell fill",
+    "out": "Füllung blockierter Felder"
+  },
+  "theme.preview.svgVolcanoCaps": {
+    "src": "Piece cap stroke",
+    "out": "Kontur der Steinkappe"
+  },
+  "theme.preview.tags": {
+    "src": "Tags",
+    "out": "Tags"
+  },
+  "theme.preview.typography": {
+    "src": "Typography",
+    "out": "Typografie"
+  },
+  "theme.preview.usesVariables": {
+    "src": "Theme variables",
+    "out": "Design-Variablen"
+  },
   "theme.primaryButton": {
     "src": "Primary Button",
     "out": "Primäre Schaltfläche"
@@ -7414,6 +7510,10 @@
   "theme.sampleText": {
     "src": "This is some sample text.",
     "out": "Dies ist ein Beispieltext."
+  },
+  "theme.saved": {
+    "src": "Site theme saved.",
+    "out": "Website-Design gespeichert."
   },
   "theme.secondaryFontColor": {
     "src": "This is secondary font color.",

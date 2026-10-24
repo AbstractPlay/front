@@ -1908,6 +1908,8 @@
   "Back": "Indietro",
   "theme": {
     "title": "Personalizza tema del sito",
+    "pageIntro": "Regola i colori dell'interfaccia del sito per la modalità chiara e scura. Le modifiche verranno applicate dopo il salvataggio. L'anteprima utilizza gli stessi stili del resto del sito.",
+    "saved": "Tema del sito salvato.",
     "lightMode": "Modalità chiara",
     "darkMode": "Modalità scura",
     "cssVariable": "Variabile CSS",
@@ -1922,7 +1924,32 @@
     "primaryButton": "Pulsante primario",
     "alertButton": "Pulsante di avviso",
     "tag1": "Tag 1",
-    "tag2": "Tag 2"
+    "tag2": "Tag 2",
+    "preview": {
+      "legend": "Ogni scheda mostra un modello di interfaccia reale. La barra in basso elenca le variabili del tema che influenzano quella scheda.",
+      "usesVariables": "Variabili del tema",
+      "typography": "Tipografia",
+      "sectionTitle": "Titolo della sezione",
+      "linedTitle": "Mosse",
+      "buttons": "Pulsanti",
+      "neutralButton": "Neutro",
+      "accents": "Avvisi e badge",
+      "alertText": "Azione richiesta",
+      "bulletSample": "Elemento della dashboard",
+      "badgeHint": "Conteggio notifiche",
+      "moveTree": "Albero delle mosse",
+      "focusedMove": "e4",
+      "notifications": "Notifiche",
+      "newsCallout": "Notizie del sito",
+      "notificationTitle": "Il tuo turno a Scacchi",
+      "notificationTime": "2 ore fa",
+      "selection": "Selezione",
+      "selectedGame": "Scheda della partita selezionata",
+      "tags": "Tag",
+      "boardSvg": "SVG del tabellone (CSS personalizzato)",
+      "svgDefaultFill": "Riempimento casella bloccata",
+      "svgVolcanoCaps": "Tratto del cappuccio del pezzo"
+    }
   },
   "customize": {
     "title": "Personalizza impostazioni per {{gameName}}",

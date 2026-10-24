@@ -7387,6 +7387,102 @@
     "src": "Light Mode",
     "out": "Mode clair"
   },
+  "theme.pageIntro": {
+    "src": "Adjust site chrome colours for light and dark mode. Changes apply after you save. The preview uses the same styles as the rest of the site.",
+    "out": "Ajustez les couleurs de l'interface pour les modes clair et sombre. Les modifications s'appliquent après enregistrement. L'aperçu utilise les mêmes styles que le reste du site."
+  },
+  "theme.preview.accents": {
+    "src": "Alerts and badges",
+    "out": "Alertes et badges"
+  },
+  "theme.preview.alertText": {
+    "src": "Action required",
+    "out": "Action requise"
+  },
+  "theme.preview.badgeHint": {
+    "src": "Notification count",
+    "out": "Nombre de notifications"
+  },
+  "theme.preview.boardSvg": {
+    "src": "Board SVG (custom CSS)",
+    "out": "SVG du plateau (CSS personnalisé)"
+  },
+  "theme.preview.bulletSample": {
+    "src": "Dashboard item",
+    "out": "Élément du tableau de bord"
+  },
+  "theme.preview.buttons": {
+    "src": "Buttons",
+    "out": "Boutons"
+  },
+  "theme.preview.focusedMove": {
+    "src": "e4",
+    "out": "e4"
+  },
+  "theme.preview.legend": {
+    "src": "Each card shows a real UI pattern. The bar at the bottom lists which theme variables affect that card.",
+    "out": "Chaque carte présente un élément d'interface réel. La barre du bas indique les variables de thème qui affectent cette carte."
+  },
+  "theme.preview.linedTitle": {
+    "src": "Moves",
+    "out": "Coups"
+  },
+  "theme.preview.moveTree": {
+    "src": "Move tree",
+    "out": "Arbre de coups"
+  },
+  "theme.preview.neutralButton": {
+    "src": "Neutral",
+    "out": "Neutre"
+  },
+  "theme.preview.newsCallout": {
+    "src": "Site news",
+    "out": "Actualités du site"
+  },
+  "theme.preview.notificationTime": {
+    "src": "2 hours ago",
+    "out": "Il y a 2 heures"
+  },
+  "theme.preview.notificationTitle": {
+    "src": "Your turn in Chess",
+    "out": "À vous de jouer aux Échecs"
+  },
+  "theme.preview.notifications": {
+    "src": "Notifications",
+    "out": "Notifications"
+  },
+  "theme.preview.sectionTitle": {
+    "src": "Section title",
+    "out": "Titre de section"
+  },
+  "theme.preview.selectedGame": {
+    "src": "Selected game card",
+    "out": "Carte de partie sélectionnée"
+  },
+  "theme.preview.selection": {
+    "src": "Selection",
+    "out": "Sélection"
+  },
+  "theme.preview.svgDefaultFill": {
+    "src": "Blocked cell fill",
+    "out": "Remplissage des cases bloquées"
+  },
+  "theme.preview.svgVolcanoCaps": {
+    "src": "Piece cap stroke",
+    "out": "Contour des chapeaux de pièces"
+  },
+  "theme.preview.tags": {
+    "src": "Tags",
+    "out": "Tags"
+  },
+  "theme.preview.typography": {
+    "src": "Typography",
+    "out": "Typographie"
+  },
+  "theme.preview.usesVariables": {
+    "src": "Theme variables",
+    "out": "Variables de thème"
+  },
   "theme.primaryButton": {
     "src": "Primary Button",
     "out": "Bouton principal"
@@ -7414,6 +7510,10 @@
   "theme.sampleText": {
     "src": "This is some sample text.",
     "out": "Ceci est un exemple de texte."
+  },
+  "theme.saved": {
+    "src": "Site theme saved.",
+    "out": "Thème du site enregistré."
   },
   "theme.secondaryFontColor": {
     "src": "This is secondary font color.",
