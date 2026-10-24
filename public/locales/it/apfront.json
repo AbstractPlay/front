@@ -1467,6 +1467,8 @@
       "discuss": "Discussione",
       "legacyVotesNote": "include i precedenti voti della lista BGG",
       "viewExisting": "Visualizza la voce esistente nella lista desideri",
+      "downloadCurrentView": "Scarica la vista corrente",
+      "downloadCurrentViewHint": "Il JSON riflette l'ordinamento, i filtri e la ricerca attuali.",
       "category": {
         "none": "Senza categoria",
         "permissions_required": "Permessi richiesti",

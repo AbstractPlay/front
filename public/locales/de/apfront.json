@@ -1467,6 +1467,8 @@
       "discuss": "Diskutieren",
       "legacyVotesNote": "enthält frühere BGG-Listenstimmen",
       "viewExisting": "Bestehenden Wunschlisten-Eintrag anzeigen",
+      "downloadCurrentView": "Aktuelle Ansicht herunterladen",
+      "downloadCurrentViewHint": "JSON spiegelt deine aktuelle Sortierung, Filter und Suche wider.",
       "category": {
         "none": "Nicht kategorisiert",
         "permissions_required": "Genehmigung erforderlich",

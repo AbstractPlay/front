@@ -22,6 +22,8 @@ In-app feedback replaces Discord forum workflows for bug reports, feature ideas,
 - **feature** — markdown body; attachments on create and comments (up to 3 files per comment: images, `.txt`, `.json`)
 - **wishlist** — game title, HTTPS URL, optional cover image (one PNG/JPEG/WebP), notes; dedup by BGG id or normalized URL
 
+On `/wishlist`, **Download current view** saves a JSON file of the rows currently shown (sort, category/status filters, closed-only mode, and quick search). Cover URLs and attachment keys are omitted. There is no stable public URL for a full snapshot in v1.
+
 ## API
 
 Open queries: `feedback_list`, `feedback_get`, `feedback_history_list`, `wishlist_search`.

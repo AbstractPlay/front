@@ -4675,6 +4675,14 @@
     "src": "Discuss",
     "out": "Diskutieren"
   },
+  "feedback.wishlist.downloadCurrentView": {
+    "src": "Download current view",
+    "out": "Aktuelle Ansicht herunterladen"
+  },
+  "feedback.wishlist.downloadCurrentViewHint": {
+    "src": "JSON reflects your current sort, filters, and search.",
+    "out": "JSON spiegelt deine aktuelle Sortierung, Filter und Suche wider."
+  },
   "feedback.wishlist.empty": {
     "src": "No wishlist entries yet.",
     "out": "Noch keine Wunschlisten-Einträge."

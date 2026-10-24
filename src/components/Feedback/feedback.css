@@ -635,6 +635,18 @@
   margin: 0 0 0.5rem;
 }
 
+.feedback-wishlist-export {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+  margin: 0 0 1rem;
+}
+
+.feedback-wishlist-export-hint {
+  font-size: 0.9rem;
+}
+
 .feedback-board-toolbar-row {
   display: flex;
   flex-wrap: wrap;
