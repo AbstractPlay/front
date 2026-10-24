@@ -50,6 +50,8 @@ import {
   filterPathCellsForSeat,
   resolveMoveTablePlayerSeats,
 } from "../../lib/GameMove/moveTablePathCells";
+import { buildMoveTreeNavHandlers } from "../../lib/GameMove/moveTreeNavHandlers";
+import MoveTreeNavBar from "./MoveTreeNavBar";
 
 function syncRowFocusClasses(cells, focus) {
   return cells.map((cell) => {
@@ -678,130 +680,37 @@ function GameMoves(props) {
       !catalogExportOk || !sessionExplorationAllowed(game);
     const teachPositionDisabled = playgroundExportDisabled;
 
+    const moveTreeNav = buildMoveTreeNavHandlers({
+      focus,
+      path,
+      exploration,
+      handleGameMoveClick,
+      curNumVariations,
+      onPrevVar: () =>
+        handleGameMoveClick(prevVarFocus(focus, game, curNumVariations)),
+      onNextVar: () =>
+        handleGameMoveClick(nextVarFocus(focus, game, curNumVariations)),
+    });
+
     return (
       <>
-        <div className="field is-grouped" id="MoveTreeBtnBar">
-          <button
-            className="button is-small tooltipped"
-            onClick={() => handleGameMoveClick({ moveNumber: 0, exPath: [] })}
-          >
-            <i className="fa fa-angle-double-left"></i>
-            <span className="tooltiptext">{t("GoBegin")}</span>
-          </button>
-          <button
-            className="button is-small tooltipped"
-            disabled={focus.moveNumber + focus.exPath.length > 0 ? false : true}
-            onClick={
-              focus.moveNumber + focus.exPath.length > 0
-                ? () =>
-                    handleGameMoveClick(
-                      focus.moveNumber + focus.exPath.length === 1
-                        ? { moveNumber: 0, exPath: [] }
-                        : path[focus.moveNumber + focus.exPath.length - 2][0]
-                            .path
-                    )
-                : undefined
-            }
-          >
-            <i className="fa fa-angle-left"></i>
-            <span className="tooltiptext">{t("GoPrev")}</span>
-          </button>
-          {neverExplore ? null : (
-            <button
-              className="button is-small tooltipped"
-              disabled={curNumVariations > 1 ? false : true}
-              onClick={
-                curNumVariations > 1
-                  ? () =>
-                      handleGameMoveClick(
-                        prevVarFocus(focus, game, curNumVariations)
-                      )
-                  : undefined
-              }
-            >
-              <i className="fa fa-angle-up"></i>
-              <span className="tooltiptext">{t("GoPrevVar")}</span>
-            </button>
-          )}
-          {neverExplore ? null : (
-            <button
-              className="button is-small tooltipped"
-              disabled={curNumVariations > 1 ? false : true}
-              onClick={
-                curNumVariations > 1
-                  ? () =>
-                      handleGameMoveClick(
-                        nextVarFocus(focus, game, curNumVariations)
-                      )
-                  : undefined
-              }
-            >
-              <i className="fa fa-angle-down"></i>
-              <span className="tooltiptext">{t("GoNextVar")}</span>
-            </button>
-          )}
-          <button
-            className="button is-small tooltipped"
-            disabled={
-              focus.moveNumber + focus.exPath.length < path.length
-                ? false
-                : true
-            }
-            onClick={
-              focus.moveNumber + focus.exPath.length < path.length
-                ? () =>
-                    handleGameMoveClick(
-                      path[focus.moveNumber + focus.exPath.length][0].path
-                    )
-                : undefined
-            }
-          >
-            <i className="fa fa-angle-right"></i>
-            <span className="tooltiptext">{t("GoNext")}</span>
-          </button>
-          <button
-            className="button is-small tooltipped"
-            disabled={
-              focus.moveNumber + focus.exPath.length !== exploration.length - 1
-                ? false
-                : true
-            }
-            onClick={() =>
-              handleGameMoveClick(
-                { moveNumber: exploration.length - 1, exPath: [] }
-                /*
-                exploration.length === 1
-                  ? { moveNumber: 0, exPath: [] }
-                  : path[exploration.length - 2][0].path
-                */
-              )
-            }
-          >
-            <i className="fa fa-angle-double-right"></i>
-            <span className="tooltiptext">{t("GoCurrent")}</span>
-          </button>
-          {layout.model === "sequenced" ? (
-            <button
-              className="button is-small tooltipped"
-              type="button"
-              onClick={() => {
-                const next =
-                  readMoveTableDensityPreference() === "auto"
-                    ? "sparse"
-                    : "auto";
-                localStorage.setItem(MOVE_TREE_DENSITY_STORAGE_KEY, next);
-                setMoveTableDensityRev((n) => n + 1);
-              }}
-            >
-              <i className="fa fa-th" aria-hidden="true"></i>
-              <span className="tooltiptext">
-                {readMoveTableDensityPreference() === "auto"
-                  ? t("gameMove.layout.moveTableDensityAuto")
-                  : t("gameMove.layout.moveTableDensitySparse")}
-              </span>
-            </button>
-          ) : null}
-        </div>
+        <MoveTreeNavBar
+          t={t}
+          neverExplore={neverExplore}
+          showDensityToggle={layout.model === "sequenced"}
+          densityTooltip={
+            readMoveTableDensityPreference() === "auto"
+              ? t("gameMove.layout.moveTableDensityAuto")
+              : t("gameMove.layout.moveTableDensitySparse")
+          }
+          onDensityClick={() => {
+            const next =
+              readMoveTableDensityPreference() === "auto" ? "sparse" : "auto";
+            localStorage.setItem(MOVE_TREE_DENSITY_STORAGE_KEY, next);
+            setMoveTableDensityRev((n) => n + 1);
+          }}
+          {...moveTreeNav}
+        />
         {showMoveTreeLegend ? (
           <p className="move-tree-legend" aria-hidden="true">
             <span className="move-tree-legend__mainline">
@@ -867,32 +776,7 @@ function GameMoves(props) {
         <h1 className="subtitle lined">
           <span>{t("Moves")}</span>
         </h1>
-        <div className="field is-grouped" id="MoveTreeBtnBar">
-          <button className="button is-small tooltipped">
-            <i className="fa fa-angle-double-left"></i>
-            <span className="tooltiptext">{t("GoBegin")}</span>
-          </button>
-          <button className="button is-small tooltipped">
-            <i className="fa fa-angle-left"></i>
-            <span className="tooltiptext">{t("GoPrev")}</span>
-          </button>
-          <button className="button is-small tooltipped">
-            <i className="fa fa-angle-up"></i>
-            <span className="tooltiptext">{t("GoNextVar")}</span>
-          </button>
-          <button className="button is-small tooltipped">
-            <i className="fa fa-angle-down"></i>
-            <span className="tooltiptext">{t("GoPrevVar")}</span>
-          </button>
-          <button className="button is-small tooltipped">
-            <i className="fa fa-angle-right"></i>
-            <span className="tooltiptext">{t("GoNext")}</span>
-          </button>
-          <button className="button is-small tooltipped">
-            <i className="fa fa-angle-double-right"></i>
-            <span className="tooltiptext">{t("GoCurrent")}</span>
-          </button>
-        </div>
+        <MoveTreeNavBar t={t} skeleton />
         <table className="table">
           <tbody></tbody>
         </table>

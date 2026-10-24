@@ -1237,9 +1237,32 @@ th .player {
   color: var(--main-font-color);
 }
 
-#MoveTreeBtnBar .button:disabled .fa-angle-up,
-#MoveTreeBtnBar .button:disabled .fa-angle-down {
+.move-tree-nav .button:disabled .fa-angle-up,
+.move-tree-nav .button:disabled .fa-angle-down {
   opacity: 0.35;
+}
+
+.move-tree-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.move-tree-nav__group {
+  display: flex;
+  gap: 0.15rem;
+  align-items: center;
+}
+
+.move-tree-nav__group--var {
+  padding-left: 0.35rem;
+  padding-right: 0.35rem;
+  border-left: 1px solid var(--tag-background-color);
+  border-right: 1px solid var(--tag-background-color);
 }
 
 /* Winning/losing indicators */
@@ -1519,12 +1542,90 @@ abbr.glicko-hint {
   margin-bottom: 1rem;
 }
 
-/* Colours the buttons in the move tree button bar */
-#MoveTreeBtnBar > button {
+/* Colours the buttons in the move tree button bar (id beats Bulma + game-move-layout resets) */
+#MoveTreeBtnBar .button.move-tree-nav__btn {
   background-color: var(--main-fg-color);
+  border-color: var(--main-fg-color);
   color: var(--high-contrast-font-color);
   /* Have to size them because otherwise the invisible tooltip text leads to mixed sizes */
   width: 1.5em;
+}
+
+#MoveTreeBtnBar .button.move-tree-nav__btn .fa {
+  color: inherit;
+}
+
+#MoveTreeBtnBar .button.move-tree-nav__btn:hover,
+#MoveTreeBtnBar .button.move-tree-nav__btn:focus-visible {
+  background-color: var(--secondary-color-3);
+  border-color: var(--secondary-color-3);
+  color: var(--high-contrast-font-color);
+}
+
+#MoveTreeBtnBar .button.move-tree-nav__btn:disabled {
+  background-color: var(--main-fg-color);
+  border-color: var(--main-fg-color);
+  color: var(--high-contrast-font-color);
+  opacity: 0.5;
+}
+
+/* Fixed prev/next stepper when the move list is on screen (narrow viewports). */
+.move-tree-mobile-stepper {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .move-tree-mobile-stepper {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(
+      var(--game-move-stepper-bottom, 0px) + env(safe-area-inset-bottom, 0px)
+    );
+    z-index: 30;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--main-bg-color);
+    color: var(--main-font-color);
+    border-top: 1px solid var(--tag-background-color);
+    box-shadow: 0 -4px 12px var(--dropshadow-target-start);
+  }
+
+  .move-tree-mobile-stepper__btn {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .move-tree-mobile-stepper__btn:hover,
+  .move-tree-mobile-stepper__btn:focus-visible {
+    background: var(--tag-background-color);
+    color: var(--main-font-color);
+  }
+
+  .move-tree-mobile-stepper__position {
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--main-font-color);
+    min-width: 4.5rem;
+    text-align: center;
+  }
+
+  body.move-tree-mobile-stepper-active .movesTable {
+    margin-bottom: 3.75rem;
+  }
+
+  .game-move-layout--strip {
+    --game-move-stepper-bottom: 4.25rem;
+  }
+
+  .game-move-layout--strip .game-move-strip-dock:not(.is-expanded) {
+    --game-move-stepper-bottom: 5.5rem;
+  }
 }
 
 /* Can be nested to create ever-more indented containers.
@@ -2929,6 +3030,25 @@ span.hardTime::after {
 .game-move-layout .button:not(.apButton):not(.apButtonNeutral):focus-visible {
   background: var(--tag-background-color);
   color: var(--main-font-color);
+}
+
+#MoveTreeBtnBar .button.move-tree-nav__btn {
+  background-color: var(--main-fg-color);
+  border-color: var(--main-fg-color);
+  color: var(--high-contrast-font-color);
+}
+
+#MoveTreeBtnBar .button.move-tree-nav__btn:hover,
+#MoveTreeBtnBar .button.move-tree-nav__btn:focus-visible {
+  background-color: var(--secondary-color-3);
+  border-color: var(--secondary-color-3);
+  color: var(--high-contrast-font-color);
+}
+
+#MoveTreeBtnBar .button.move-tree-nav__btn:disabled {
+  background-color: var(--main-fg-color);
+  border-color: var(--main-fg-color);
+  color: var(--high-contrast-font-color);
 }
 
 /* --- Context strip --- */
