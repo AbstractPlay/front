@@ -357,6 +357,8 @@
   "HelpTeachingModeFalse": "Juego estándar sin la opción de deshacer de enseñanza.",
   "TeachingGameLabel": "Enseñanza (sin clasificación)",
   "TeachingGrantUndo": "Ofrecer deshacer",
+  "ConfirmTeachingGrantUndo": "Ofrecer deshacer",
+  "ConfirmTeachingGrantUndoDesc": "¿Ofrecerle a tu oponente una revisión didáctica de la última jugada? Puede mantener la jugada o deshacerla y volver a jugar.",
   "TeachingKeepMove": "Mantener mi jugada",
   "TeachingUndoMove": "Deshacer y volver a elegir",
   "TeachingReviewPrompt": "Tu oponente te ofreció una revisión instructiva. Mantén la jugada o deshazla y vuelve a jugar.",

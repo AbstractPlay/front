@@ -226,11 +226,12 @@ function Tournament(props) {
     if (fetchStatus !== "ok") {
       return;
     }
-    const searchParamsForNav = new URLSearchParams(location.search);
-    const queryMeta = searchParamsForNav.get("metaGame");
     let target = canonicalPath;
-    if (gameId && isConcreteMetaGame(queryMeta)) {
-      target = tournamentDetailPathArchived(tournamentid, queryMeta);
+    if (gameId) {
+      target =
+        tournament?.dateEnded && isConcreteMetaGame(tournament.metaGame)
+          ? tournamentDetailPathArchived(tournamentid, tournament.metaGame)
+          : tournamentDetailPathActive(tournamentid);
     }
     if (
       !shouldNormalizeTournamentDetailUrl(
@@ -252,6 +253,8 @@ function Tournament(props) {
     location.search,
     navigate,
     canonicalPath,
+    tournament?.dateEnded,
+    tournament?.metaGame,
   ]);
 
   useEffect(() => {

@@ -363,6 +363,14 @@
     "src": "Are you sure you want to resign?",
     "out": "Êtes-vous sûr de vouloir abandonner ?"
   },
+  "ConfirmTeachingGrantUndo": {
+    "src": "Offer undo",
+    "out": "Proposer d'annuler"
+  },
+  "ConfirmTeachingGrantUndoDesc": {
+    "src": "Offer your opponent a teaching review of the last move? They can keep the move or undo and play again.",
+    "out": "Proposer à votre adversaire une révision pédagogique du dernier coup ? Votre adversaire pourra conserver son coup ou l'annuler et rejouer."
+  },
   "ConfirmTimeout": {
     "src": "Out of time",
     "out": "Temps écoulé"

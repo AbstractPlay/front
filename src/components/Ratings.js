@@ -5,8 +5,8 @@ import { getGameDisplayName, isSummaryStatsVisible } from "../lib/gameOptions";
 import NotFound from "./NotFound";
 import { useRequiredMetaGameParam } from "../hooks/useRequiredMetaGameParam";
 import { stringColumnSortingFn } from "../lib/compareStrings";
-import { callAuthApi } from "../lib/api";
 import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribution";
+import { submitNewChallenge } from "../lib/submitNewChallenge";
 import { createColumnHelper } from "@tanstack/react-table";
 import ChallengeEntryModals from "./ChallengeEntryModals";
 import ActivityMarker from "./ActivityMarker";
@@ -25,7 +25,6 @@ import PageLoading from "./shared/PageLoading";
 import { SUMMARY_URLS, RECORDS_DOWNLOAD_LINK_REL } from "../lib/summaryFetch";
 import GlickoHint from "./shared/GlickoHint";
 import GlickoDisplayNote from "./shared/GlickoDisplayNote";
-import { rawDirectoryDisplayName } from "./Bots/botUtils";
 import DataTable, { LIST_TABLE_PROPS } from "./shared/DataTable";
 import HubListEmptyNotice from "./shared/HubListEmptyNotice";
 
@@ -49,20 +48,22 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
   const handleNewChallenge = useCallback(
     async (challenge) => {
       try {
-        await callAuthApi("new_challenge", {
-          ...challenge,
-          challenger: {
-            id: globalMe.id,
-            name: rawDirectoryDisplayName(globalMe, allUsers),
-          },
-        });
+        const parsed = await submitNewChallenge(
+          challenge,
+          globalMe,
+          allUsers
+        );
+        if (!parsed.ok) {
+          return parsed;
+        }
         maybeTrackRecommendationChallenge(challenge.metaGame);
-        closeChallengeModal();
+        return parsed;
       } catch (error) {
         console.log(error);
+        return { ok: false, error: error?.message ?? String(error) };
       }
     },
-    [globalMe, allUsers, closeChallengeModal]
+    [globalMe, allUsers]
   );
 
   const data = useMemo(() => {

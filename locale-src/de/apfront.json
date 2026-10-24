@@ -363,6 +363,14 @@
     "src": "Are you sure you want to resign?",
     "out": "Bist du sicher, dass du aufgeben möchtest?"
   },
+  "ConfirmTeachingGrantUndo": {
+    "src": "Offer undo",
+    "out": "Zugrücknahme anbieten"
+  },
+  "ConfirmTeachingGrantUndoDesc": {
+    "src": "Offer your opponent a teaching review of the last move? They can keep the move or undo and play again.",
+    "out": "Möchtest du deinem Gegner eine Lehr-Analyse des letzten Zuges anbieten? Er kann den Zug beibehalten oder zurücknehmen und erneut spielen."
+  },
   "ConfirmTimeout": {
     "src": "Out of time",
     "out": "Bedenkzeit abgelaufen"

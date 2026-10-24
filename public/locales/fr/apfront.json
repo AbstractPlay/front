@@ -357,6 +357,8 @@
   "HelpTeachingModeFalse": "Partie standard sans annulation d'apprentissage.",
   "TeachingGameLabel": "Apprentissage (non classée)",
   "TeachingGrantUndo": "Proposer d'annuler",
+  "ConfirmTeachingGrantUndo": "Proposer d'annuler",
+  "ConfirmTeachingGrantUndoDesc": "Proposer à votre adversaire une révision pédagogique du dernier coup ? Votre adversaire pourra conserver son coup ou l'annuler et rejouer.",
   "TeachingKeepMove": "Conserver mon coup",
   "TeachingUndoMove": "Annuler et rechoisir",
   "TeachingReviewPrompt": "Votre adversaire a proposé une analyse pédagogique. Conservez le coup ou annulez pour rejouer.",

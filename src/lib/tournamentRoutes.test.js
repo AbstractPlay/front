@@ -25,5 +25,8 @@ describe("tournamentRoutes", () => {
     expect(tournamentDetailPathFromGameRef("saltire#abc", "go", "1")).toBe(
       "/tournament/saltire/abc"
     );
+    expect(
+      tournamentDetailPathFromGameRef("f75c6345-0a38-4299-bc5a-d8aa8f7f2cbd", "circleOfLife", "g1")
+    ).toBe("/tournament/f75c6345-0a38-4299-bc5a-d8aa8f7f2cbd");
   });
 });

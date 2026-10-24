@@ -357,6 +357,8 @@
   "HelpTeachingModeFalse": "Partita standard senza annullamento didattico.",
   "TeachingGameLabel": "Didattica (non classificata)",
   "TeachingGrantUndo": "Offri di annullare",
+  "ConfirmTeachingGrantUndo": "Offri di annullare",
+  "ConfirmTeachingGrantUndoDesc": "Vuoi offrire al tuo avversario una revisione didattica dell'ultima mossa? Potrà scegliere se mantenere la mossa o annullarla e giocare di nuovo.",
   "TeachingKeepMove": "Mantieni la mia mossa",
   "TeachingUndoMove": "Annulla e scegli di nuovo",
   "TeachingReviewPrompt": "Il tuo avversario ha offerto una revisione didattica. Mantieni la mossa o annulla e gioca di nuovo.",
