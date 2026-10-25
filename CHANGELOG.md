@@ -24,6 +24,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Deploy / long-lived tabs:** lazy route chunks that fail after a new release trigger one automatic full-page reload before showing the fatal error screen.
 - **Teaching mode:** confirmation before **Offer undo** to reduce misclicks.
 - **Tournaments:** tournament detail page handles missing API data without crashing (404, load error, registration phase without divisions).
 - **Tournaments:** game-page tournament links and URL cleanup no longer redirect in-progress events to `/tournament/{metaGame}/{id}` (which implied archived-only API lookup).

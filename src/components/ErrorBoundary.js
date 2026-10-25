@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import FatalError from "./FatalError";
+import Spinner from "./Spinner";
+import { attemptChunkReload } from "../lib/chunkLoadRecovery";
 import { pushCapturedError } from "../lib/feedback/consoleCapture";
 
 class ErrorBoundary extends React.Component {
@@ -23,6 +25,9 @@ class ErrorBoundary extends React.Component {
     const { children, inline = false } = this.props;
 
     if (error) {
+      if (attemptChunkReload(error)) {
+        return <Spinner />;
+      }
       return <FatalError error={error} inline={inline} />;
     }
 
