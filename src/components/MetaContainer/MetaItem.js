@@ -30,6 +30,8 @@ import { tournamentPlaySupported } from "../../lib/tournamentGame";
 import SoloMetaStatsPanel from "../Stats/SoloMetaStatsPanel";
 import SoloSeedLeaderboard from "../Stats/SoloSeedLeaderboard";
 import { soloPlaySupported } from "../../lib/soloPlay";
+import { isLabSupportedGame } from "../../lib/Lab/buildGame";
+import { buildPlaygroundLaunchPath } from "../../lib/Lab/playgroundLaunch";
 import { compareStrings } from "../../lib/compareStrings";
 import { compareCategoryTagEntries } from "../../lib/gameOptions";
 import MetaGameLinks from "../shared/MetaGameLinks";
@@ -404,6 +406,14 @@ const MetaItem = React.forwardRef(
                       </li>
                     </ul>
                   )}
+                  {isLabSupportedGame(game.uid) ? (
+                    <Link
+                      to={buildPlaygroundLaunchPath(game.uid)}
+                      className="button is-small apButtonNeutral"
+                    >
+                      {t("meta.launchPlayground")}
+                    </Link>
+                  ) : null}{" "}
                   {globalMe === null || globalMe === undefined ? (
                     ""
                   ) : (

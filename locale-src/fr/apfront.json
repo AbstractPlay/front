@@ -5375,6 +5375,10 @@
     "src": "Launch",
     "out": "Lancer"
   },
+  "lab.launchMetaGameInvalid": {
+    "src": "That game is not available in the Playground.",
+    "out": "Ce jeu n'est pas disponible dans le Playground."
+  },
   "lab.launcherPageTitle": {
     "src": "Playground",
     "out": "Espace d'essai"
@@ -5658,6 +5662,10 @@
   "meta.historicalIntro": {
     "src": "The stats below are drawn from the daily summary and updated at 6am UTC.",
     "out": "Les statistiques ci-dessous sont tirées du résumé quotidien et sont mises à jour à 6 h UTC."
+  },
+  "meta.launchPlayground": {
+    "src": "Launch in Playground",
+    "out": "Lancer dans le Playground"
   },
   "meta.playCounts": {
     "src": "Play counts",

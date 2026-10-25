@@ -1,6 +1,16 @@
 # Lab
 
-The Lab is a sandbox for exploring games without creating a server-side game record. Route: `/lab` (alias: `/playground` redirects here).
+The Lab is a sandbox for exploring games without creating a server-side game record. Route: `/playground` (alias: `/lab` redirects here).
+
+## Deep link from game pages
+
+- **URL:** `/playground?metaGame=<catalog-uid>` (normalized via `resolveMetaGameUid`).
+- Game landing pages link here with **Launch in Playground** when [`isLabSupportedGame`](../src/lib/Lab/buildGame.js) is true (solo-only catalog titles are excluded).
+- When the query param is present, **session autosave (`lastSession`) is not restored** — the link wins over an in-progress device session.
+- If the game needs a player count and/or variant choices, the launcher opens with that game pre-selected; otherwise a fresh session starts immediately.
+- After handling, the client replaces the URL with `/playground` (no query) so refresh does not re-trigger auto-start.
+
+Helpers live in [`playgroundLaunch.js`](../src/lib/Lab/playgroundLaunch.js).
 
 ## Key files
 

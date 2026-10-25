@@ -9,10 +9,9 @@ import {
 } from "../../lib/gameOptions";
 import { getAuthToken } from "../../lib/api";
 import { buildLabGame, getLabPlayerCounts } from "../../lib/Lab/buildGame";
-import { readSimRoundFromBoardSettings } from "../../lib/Lab/labSimBoardSettings";
+import { buildFreshPlaygroundSession } from "../../lib/Lab/playgroundLaunch";
 import { parsePlaygroundImport } from "../../lib/Lab/export";
 import {
-  getLabBoardSettings,
   listSaves,
   deleteSave,
   localSaveToLaunchPayload,
@@ -72,14 +71,19 @@ function SavesTable({ saves, dateField, onLoad, onDelete, t }) {
   );
 }
 
-function LabLauncher({ initialMetaGame = "", onLaunch, onLoadSave }) {
+function LabLauncher({
+  initialMetaGame = "",
+  initialError = "",
+  onLaunch,
+  onLoadSave,
+}) {
   const { t } = useTranslation();
   const [mode, setMode] = useState("new");
   const [metaGame, setMetaGame] = useState(initialMetaGame);
   const [playerCount, setPlayerCount] = useState("");
   const [selectedVariants, setSelectedVariants] = useState([]);
   const [pastedState, setPastedState] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(initialError);
   const [localSaves, setLocalSaves] = useState(() => listSaves());
   const [cloudSaves, setCloudSaves] = useState([]);
   const [cloudLoading, setCloudLoading] = useState(false);
@@ -149,6 +153,12 @@ function LabLauncher({ initialMetaGame = "", onLaunch, onLoadSave }) {
     }
   }, [initialMetaGame]);
 
+  useEffect(() => {
+    if (initialError) {
+      setError(initialError);
+    }
+  }, [initialError]);
+
   const playercounts = useMemo(
     () => (metaGame ? getLabPlayerCounts(metaGame) : []),
     [metaGame]
@@ -188,18 +198,12 @@ function LabLauncher({ initialMetaGame = "", onLaunch, onLoadSave }) {
       return;
     }
     try {
-      const sim = readSimRoundFromBoardSettings(getLabBoardSettings());
-      const game = buildLabGame(metaGame, null, {
-        variants: selectedVariants,
-        numPlayers: count,
-        activeSeat: sim.activeSeat,
-      });
-      onLaunch({
-        game,
-        savedExploration: null,
-        gameSettings: {},
-        sessionName: getGameDisplayName(metaGame),
-      });
+      onLaunch(
+        buildFreshPlaygroundSession(metaGame, {
+          playerCount: count,
+          variants: selectedVariants,
+        }),
+      );
     } catch (err) {
       setError(err.message || String(err));
     }
