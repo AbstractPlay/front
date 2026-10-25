@@ -179,6 +179,10 @@ function Navbar() {
             <NavbarHoverDropdownLink to="/wishlist">
               {t("nav.gameWishlist")}
             </NavbarHoverDropdownLink>
+            {loggedin ? <hr className="navbar-divider" /> : null}
+            <NavbarHoverDropdownLink to="/feedback/history">
+              {t("nav.feedbackHistory")}
+            </NavbarHoverDropdownLink>
             {loggedin ? (
               <NavbarHoverDropdownLink to="/feedback/mine">
                 {t("nav.myFeedback")}
@@ -192,9 +196,13 @@ function Navbar() {
             <NavbarHoverDropdownLink to="/news">
               {t("News")}
             </NavbarHoverDropdownLink>
-            <NavbarHoverDropdownLink to="/feedback/history">
-              {t("nav.feedbackHistory")}
-            </NavbarHoverDropdownLink>
+            <NavbarHoverDropdownAnchor
+              href="https://abstractplay.com/wiki"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t("footer.wiki")}
+            </NavbarHoverDropdownAnchor>
             <NavbarHoverDropdownLink to="/about">
               {t("About")}
             </NavbarHoverDropdownLink>

@@ -17,6 +17,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Play / Lab:** move-tree replay controls are grouped (step vs jump-to-start/end) with a fixed prev/next bar on narrow screens to reduce mis-taps on mobile.
 - **Play:** mobile move-tree prev/next bar stays available for the whole game page (not only when the move list panel is open).
 - **Play:** move entry validates 500 ms after typing pauses (same delay on all devices and characters).
+- **Navigation:** Community menu lists **Feedback history** above **My feedback** (with a divider when signed in); About menu links to the wiki instead of feedback history.
 
 ### Added
 
