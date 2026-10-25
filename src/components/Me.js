@@ -24,7 +24,23 @@ import { maybeTrackRecommendationChallenge } from "../lib/recommendationAttribut
 import { cloneDeep } from "lodash";
 import StandingChallengeModal from "./StandingChallengeModal";
 import DashboardMainContent from "./Me/DashboardMainContent";
+import PlayerVacationDetail from "./PlayerVacationDetail";
+import { vacationHasStint } from "../lib/vacationDisplay";
 import { useStore } from "../stores";
+
+function dashboardVacationSnapshot(globalMe) {
+  if (!globalMe) {
+    return null;
+  }
+  const snap = globalMe.vacation;
+  if (snap && (vacationHasStint(snap) || snap.onVacation)) {
+    return snap;
+  }
+  if (globalMe.onVacation === true) {
+    return snap ? { ...snap, onVacation: true } : { onVacation: true };
+  }
+  return null;
+}
 import { testBotStatus } from "./Bots/botApi";
 function Me(props) {
   const [myid, myidSetter] = useState(-1);
@@ -485,6 +501,7 @@ function Me(props) {
             </button>
           </div>
         </h1>
+        <PlayerVacationDetail vacation={dashboardVacationSnapshot(globalMe)} />
         <DashboardMainContent
           layout={layoutMode}
           onLayoutChange={setDashboardLayout}
