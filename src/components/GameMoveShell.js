@@ -21,6 +21,7 @@ import LayoutPickerModal from "./GameMove/LayoutPickerModal";
 import BoardExportGifModal from "./BoardExport/BoardExportGifModal";
 import PageLoading from "./shared/PageLoading";
 import ReplayModeBanner from "./GameMove/ReplayModeBanner";
+import MoveTreeMobileChrome from "./GameMove/MoveTreeMobileChrome";
 import { isGameMoveReplayEnabled } from "../lib/GameMove/replay/replayEnabled";
 import { activateReplayFromSearchParams } from "../lib/GameMove/replay/shimEntry.js";
 
@@ -137,6 +138,7 @@ function GameMoveShell() {
     <LayoutPickerProvider value={pickerValue}>
       <div className="game-move-shell">
         <ReplayModeBanner />
+        <MoveTreeMobileChrome session={session} />
         <GameMoveLayout
           key={`${params.metaGame}-${params.gameID}-${layoutId}`}
           session={session}

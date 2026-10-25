@@ -1,3 +1,7 @@
+function focusPathFromNavCell(cell) {
+  return cell?.path ?? cell;
+}
+
 /**
  * Shared disabled flags and click handlers for move-tree nav (play + Lab).
  */
@@ -24,13 +28,13 @@ export function buildMoveTreeNavHandlers({
     handleGameMoveClick(
       depth === 1
         ? { moveNumber: 0, exPath: [] }
-        : path[depth - 2][0].path
+        : focusPathFromNavCell(path[depth - 2][0])
     );
   };
 
   const onNext = () => {
     if (nextDisabled) return;
-    handleGameMoveClick(path[depth][0].path);
+    handleGameMoveClick(focusPathFromNavCell(path[depth][0]));
   };
 
   const onCurrent = () =>

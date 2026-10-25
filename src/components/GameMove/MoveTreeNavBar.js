@@ -1,9 +1,8 @@
 import MoveTreeNavButton from "./MoveTreeNavButton";
-import MoveTreeMobileStepper from "./MoveTreeMobileStepper";
 
 /**
  * Grouped move-tree navigation (play + Lab). Handlers and disabled state come from parent.
- * Groups: jump to start/end | variation | prev/next step (step group hidden on narrow viewports).
+ * Groups: jump to start/end | variation | prev/next step.
  */
 function MoveTreeNavBar({
   t,
@@ -23,14 +22,11 @@ function MoveTreeNavBar({
   prevVarDisabled,
   nextVarDisabled,
   currentDisabled,
-  mobileStepper,
 }) {
   const noop = undefined;
-  const stepper = mobileStepper && !skeleton ? mobileStepper : null;
 
   return (
-    <>
-      <nav
+    <nav
         id="MoveTreeBtnBar"
         className="move-tree-nav field is-grouped"
         aria-label={t("Moves")}
@@ -98,19 +94,7 @@ function MoveTreeNavBar({
             </button>
           </div>
         ) : null}
-      </nav>
-      {stepper ? (
-        <MoveTreeMobileStepper
-          t={t}
-          positionIndex={stepper.positionIndex}
-          positionTotal={stepper.positionTotal}
-          prevDisabled={stepper.prevDisabled}
-          nextDisabled={stepper.nextDisabled}
-          onPrev={stepper.onPrev}
-          onNext={stepper.onNext}
-        />
-      ) : null}
-    </>
+    </nav>
   );
 }
 
