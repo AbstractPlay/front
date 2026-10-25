@@ -22,7 +22,8 @@ export function isDashboardTab(tab) {
 }
 
 /**
- * Which dashboard tabs have content (empty tabs are disabled in tabbed mode).
+ * Which dashboard tabs have content (empty tournaments tab is hidden in tabbed
+ * mode; other empty tabs are disabled).
  */
 export function dashboardTabAvailability({
   myMove,
