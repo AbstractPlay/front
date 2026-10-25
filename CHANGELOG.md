@@ -24,6 +24,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Playground:** game landing pages link **Launch in Playground**; `/playground?metaGame=` opens the launcher with that game selected or starts immediately when no player count or variant setup is required.
 - **Play / Playground:** optional multi-line move entry (device-local preference) with **Update move** to apply text; stash clicks append to the current draft. Playground (`/playground`) matches live play.
 - **Tournaments:** **All** tab on `/tournaments` shows archived tournament history when a single game is selected (`/tournaments/all/:metaGame`, including the game-page tournaments embed).
+- **Dashboard:** when you are on vacation (or have vacation scheduled), the same info banner as on your player profile appears at the top of the dashboard.
 
 ### Fixed
 
