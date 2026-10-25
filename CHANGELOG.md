@@ -26,6 +26,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Live play premoves:** `submit_move` again passes the opponent’s user id so the server can load their exploration tree and auto-play premoves (regression from move-submit serialization).
 - **Deploy / long-lived tabs:** lazy route chunks that fail after a new release trigger one automatic full-page reload before showing the fatal error screen.
 - **Teaching mode:** confirmation before **Offer undo** to reduce misclicks.
 - **Tournaments:** tournament detail page handles missing API data without crashing (404, load error, registration phase without divisions).
