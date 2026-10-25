@@ -125,6 +125,7 @@ import {
   parseMoveNumberMismatch,
   submitMoveMismatchLooksApplied,
 } from "../../lib/GameMove/submitMoveErrorRecovery.js";
+import { submitMoveOpponentId } from "../../lib/GameMove/submitMoveOpponentId.js";
 import { useGameMoveKeyboardNav } from "./useGameMoveKeyboardNav";
 import {
   applyReplayBundleExploration,
@@ -2219,8 +2220,9 @@ export function useGameMoveSession(props) {
           setError("It is not your turn or this game is over.");
           return;
         }
-        const opponent = gameRef.current.players.find(
-          (p) => p.id === globalMe.id
+        const opponentId = submitMoveOpponentId(
+          gameRef.current.players,
+          globalMe.id
         );
         const res = await callAuthApi("submit_move", {
           id: gameRef.current.id,
@@ -2229,7 +2231,7 @@ export function useGameMoveSession(props) {
           move: m,
           draw: draw,
           moveNumber: explorationRef.current.nodes.length,
-          opponentId: opponent ? opponent.id : undefined,
+          opponentId,
           exploration: explorationTreeForSave(
             gameRef.current,
             explorationRef.current.nodes,
