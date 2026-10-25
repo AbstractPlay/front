@@ -20,6 +20,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Added
 
+- **Playground:** game landing pages link **Launch in Playground**; `/playground?metaGame=` opens the launcher with that game selected or starts immediately when no player count or variant setup is required.
 - **Play / Playground:** optional multi-line move entry (device-local preference) with **Update move** to apply text; stash clicks append to the current draft. Playground (`/playground`) matches live play.
 
 ### Fixed

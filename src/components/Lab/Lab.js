@@ -1,9 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { nanoid } from "nanoid";
+import { resolveMetaGameUid } from "../../lib/gameOptions";
+import {
+  buildLabGame,
+  isLabSupportedGame,
+} from "../../lib/Lab/buildGame";
+import {
+  buildFreshPlaygroundSession,
+  playgroundNeedsLauncherSetup,
+} from "../../lib/Lab/playgroundLaunch";
 import PageHelmet from "../PageHelmet";
 import ChallengeEntryModals from "../ChallengeEntryModals";
-import { buildLabGame } from "../../lib/Lab/buildGame";
 import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import { useStore } from "../../stores";
 import { readSimRoundFromGameSettings } from "../../lib/Lab/labSimBoardSettings";
@@ -87,6 +96,7 @@ function launchPayloadFromSave(save) {
 
 function Lab() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
   const [session, setSession] = useState(null);
@@ -95,23 +105,59 @@ function Lab() {
   const [launcherMetaGame, setLauncherMetaGame] = useState(() =>
     getLastLauncherMetaGame(),
   );
+  const [launcherError, setLauncherError] = useState("");
   const [ready, setReady] = useState(false);
   const [hasImportCheckpoint, hasImportCheckpointSetter] = useState(() =>
     Boolean(getImportCheckpoint()),
   );
 
   useEffect(() => {
-    const last = getLastSession();
-    if (last?.metaGame && last?.state) {
-      try {
-        setSession(sessionFromAutosave(last));
-      } catch (err) {
-        console.error("Failed to restore Playground session:", err);
-        clearLastSession();
+    const rawMetaGame = new URLSearchParams(window.location.search).get(
+      "metaGame",
+    );
+    const hasDeepLink =
+      typeof rawMetaGame === "string" && rawMetaGame.length > 0;
+
+    if (hasDeepLink) {
+      const resolved = resolveMetaGameUid(rawMetaGame);
+      if (!resolved || !isLabSupportedGame(resolved)) {
+        setLauncherError(t("lab.launchMetaGameInvalid"));
+      } else {
+        saveLastLauncherMetaGame(resolved);
+        setLauncherMetaGame(resolved);
+        if (!playgroundNeedsLauncherSetup(resolved)) {
+          try {
+            const fresh = buildFreshPlaygroundSession(resolved);
+            clearImportCheckpoint();
+            setSession(
+              wrapLaunchSession({
+                ...fresh,
+                savedMoveAnnotations: null,
+                initialFocus: null,
+                loadedSave: null,
+              }),
+            );
+          } catch (err) {
+            setLauncherError(err.message || String(err));
+          }
+        }
+      }
+      navigate("/playground", { replace: true });
+    } else {
+      const last = getLastSession();
+      if (last?.metaGame && last?.state) {
+        try {
+          setSession(sessionFromAutosave(last));
+        } catch (err) {
+          console.error("Failed to restore Playground session:", err);
+          clearLastSession();
+        }
       }
     }
     hasImportCheckpointSetter(Boolean(getImportCheckpoint()));
     setReady(true);
+    // Mount-only: read query from location so replace navigation does not re-trigger.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional once on load
   }, []);
 
   const documentTitle = useMemo(() => {
@@ -300,6 +346,7 @@ function Lab() {
       ) : (
         <LabLauncher
           initialMetaGame={launcherMetaGame}
+          initialError={launcherError}
           onLaunch={handleLaunch}
           onLoadSave={handleLoadSave}
         />

@@ -5375,6 +5375,10 @@
     "src": "Launch",
     "out": "Avvia"
   },
+  "lab.launchMetaGameInvalid": {
+    "src": "That game is not available in the Playground.",
+    "out": "Quel gioco non è disponibile nel Playground."
+  },
   "lab.launcherPageTitle": {
     "src": "Playground",
     "out": "Area di prova"
@@ -5658,6 +5662,10 @@
   "meta.historicalIntro": {
     "src": "The stats below are drawn from the daily summary and updated at 6am UTC.",
     "out": "Le statistiche sottostanti sono estratte dal riepilogo giornaliero e aggiornate alle 6:00 UTC."
+  },
+  "meta.launchPlayground": {
+    "src": "Launch in Playground",
+    "out": "Avvia nel Playground"
   },
   "meta.playCounts": {
     "src": "Play counts",
