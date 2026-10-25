@@ -12,6 +12,7 @@ describe("tournamentListPath", () => {
   it("builds tab-only paths", () => {
     expect(tournamentListPath("open")).toBe("/tournaments/open");
     expect(tournamentListPath("completed")).toBe("/tournaments/completed");
+    expect(tournamentListPath("all")).toBe("/tournaments/all");
   });
 
   it("appends a valid game filter", () => {
@@ -38,6 +39,20 @@ describe("resolveTournamentRouteParams", () => {
     expect(resolved.redirectTo).toBeNull();
   });
 
+  it("redirects /tournaments/all without a game filter", () => {
+    const resolved = resolveTournamentRouteParams("all", undefined, "open");
+    expect(resolved.tab).toBe("open");
+    expect(resolved.metaGame).toBeNull();
+    expect(resolved.redirectTo).toBe("/tournaments/open");
+  });
+
+  it("accepts /tournaments/all/:metaGame", () => {
+    const resolved = resolveTournamentRouteParams("all", "go", "open");
+    expect(resolved.tab).toBe("all");
+    expect(resolved.metaGame).toBe("go");
+    expect(resolved.redirectTo).toBeNull();
+  });
+
   it("redirects legacy /tournaments/:gameUid paths", () => {
     const resolved = resolveTournamentRouteParams("go", undefined, "open");
     expect(resolved.tab).toBe("open");
@@ -53,6 +68,7 @@ describe("resolveTournamentRouteParams", () => {
 
   it("validates tab ids", () => {
     expect(isValidTournamentTab("open")).toBe(true);
+    expect(isValidTournamentTab("all")).toBe(true);
     expect(isValidTournamentTab("propose")).toBe(false);
     expect(isValidTournamentTab("go")).toBe(false);
   });

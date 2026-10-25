@@ -919,7 +919,8 @@
     "tabs": {
       "open": "Iscrizioni aperte",
       "current": "In corso",
-      "completed": "Conclusi di recente"
+      "completed": "Conclusi di recente",
+      "all": "Tutti"
     }
   },
   "TriggerRefresh": "Forza un aggiornamento",

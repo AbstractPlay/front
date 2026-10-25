@@ -919,7 +919,8 @@
     "tabs": {
       "open": "Offen für Anmeldungen",
       "current": "Laufend",
-      "completed": "Kürzlich beendet"
+      "completed": "Kürzlich beendet",
+      "all": "Alle"
     }
   },
   "TriggerRefresh": "Aktualisierung auslösen",

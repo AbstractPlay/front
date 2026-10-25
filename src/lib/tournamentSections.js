@@ -6,12 +6,24 @@ export const TOURNAMENT_TABS = [
   { id: "open", nameKey: "Tournament.tabs.open" },
   { id: "current", nameKey: "Tournament.tabs.current" },
   { id: "completed", nameKey: "Tournament.tabs.completed" },
+  { id: "all", nameKey: "Tournament.tabs.all" },
 ];
 
 export const TOURNAMENT_TAB_IDS = TOURNAMENT_TABS.map((tab) => tab.id);
 
 export function isValidTournamentTab(tab) {
   return TOURNAMENT_TAB_IDS.includes(tab);
+}
+
+/** Full history tab only applies when a single game is selected (URL or embedded game page). */
+export function isTournamentAllTabAvailable(metaGame) {
+  return isValidTournamentMetaGame(metaGame);
+}
+
+export function visibleTournamentTabs(metaGame = null) {
+  return TOURNAMENT_TABS.filter(
+    (tab) => tab.id !== "all" || isTournamentAllTabAvailable(metaGame)
+  );
 }
 
 export function getTournamentTab(tabId) {
@@ -61,6 +73,15 @@ export function resolveTournamentRouteParams(tabParam, metaGameParam, storedTab)
     const metaGame = isValidTournamentMetaGame(metaGameParam)
       ? metaGameParam
       : null;
+    if (tabParam === "all" && !isTournamentAllTabAvailable(metaGame)) {
+      const fallbackTab =
+        preferredTab === "all" ? DEFAULT_TOURNAMENT_TAB : preferredTab;
+      return {
+        tab: fallbackTab,
+        metaGame: null,
+        redirectTo: tournamentListPath(fallbackTab, null),
+      };
+    }
     const redirectTo =
       metaGameParam !== undefined &&
       metaGameParam !== "" &&
@@ -103,12 +124,18 @@ export function resolveTournamentRouteContext({
   storedTab,
 }) {
   if (isEmbeddedTournamentsPath(pathname)) {
-    const preferredTab = isValidTournamentTab(storedTab)
+    const metaGame = isValidTournamentMetaGame(metaGameParam)
+      ? metaGameParam
+      : null;
+    let preferredTab = isValidTournamentTab(storedTab)
       ? storedTab
       : DEFAULT_TOURNAMENT_TAB;
+    if (preferredTab === "all" && !isTournamentAllTabAvailable(metaGame)) {
+      preferredTab = DEFAULT_TOURNAMENT_TAB;
+    }
     return {
       tab: preferredTab,
-      metaGame: isValidTournamentMetaGame(metaGameParam) ? metaGameParam : null,
+      metaGame,
       redirectTo: null,
       embedded: true,
     };

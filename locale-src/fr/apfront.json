@@ -2275,6 +2275,10 @@
     "src": "Only starred games",
     "out": "Uniquement les jeux favoris"
   },
+  "Tournament.tabs.all": {
+    "src": "All",
+    "out": "Tous"
+  },
   "Tournament.tabs.completed": {
     "src": "Recently completed",
     "out": "Récemment terminés"

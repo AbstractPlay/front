@@ -1,6 +1,6 @@
 # Tournaments
 
-Tournament list and detail pages. Routes: `/tournaments/:tab?/:metaGame?` (tabs: `open`, `current`, `completed`; legacy `/tournaments/:gameUid` redirects to `/tournaments/open/:gameUid`), `/tournament/:metaGame/:tournamentid`.
+Tournament list and detail pages. Routes: `/tournaments/:tab?/:metaGame?` (tabs: `open`, `current`, `completed`; `all` only with a game filter, e.g. `/tournaments/all/go`; legacy `/tournaments/:gameUid` redirects to `/tournaments/open/:gameUid`), `/tournament/:metaGame/:tournamentid`.
 
 ## Key files
 

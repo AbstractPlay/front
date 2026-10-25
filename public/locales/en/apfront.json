@@ -919,7 +919,8 @@
     "tabs": {
       "open": "Open for registration",
       "current": "Ongoing",
-      "completed": "Recently completed"
+      "completed": "Recently completed",
+      "all": "All"
     }
   },
   "TriggerRefresh": "Trigger a refresh",

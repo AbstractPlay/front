@@ -38,13 +38,15 @@ import PageHelmet from "../PageHelmet";
 import { useStore } from "../../stores";
 import { formatUserDisplayName } from "../Bots/botUtils";
 import {
-  TOURNAMENT_TABS,
   DEFAULT_TOURNAMENT_TAB,
   resolveTournamentRouteContext,
   tournamentListPath,
   isValidTournamentTab,
+  isValidTournamentMetaGame,
+  visibleTournamentTabs,
 } from "../../lib/tournamentSections";
 import PageLoading from "../shared/PageLoading";
+import HistoricalTournamentsTable from "./HistoricalTournamentsTable";
 import { TableNavSearch } from "../shared/DataTable";
 import { trimmedGlobalIncludesStringFilterFn } from "../../lib/tableGlobalFilter";
 import {
@@ -108,13 +110,22 @@ function Tournaments(props) {
 
   const goToTournamentList = useCallback(
     (tabId, metaGame = filterMeta) => {
+      const resolvedTab =
+        tabId === "all" && !isValidTournamentMetaGame(metaGame)
+          ? DEFAULT_TOURNAMENT_TAB
+          : tabId;
       if (isEmbedded) {
-        setStoredTab(tabId);
+        setStoredTab(resolvedTab);
         return;
       }
-      navigate(tournamentListPath(tabId, metaGame));
+      navigate(tournamentListPath(resolvedTab, metaGame));
     },
     [filterMeta, isEmbedded, navigate, setStoredTab]
+  );
+
+  const tournamentTabs = useMemo(
+    () => visibleTournamentTabs(filterMeta),
+    [filterMeta]
   );
 
   useEffect(() => {
@@ -1215,7 +1226,7 @@ function Tournaments(props) {
           <div className="column is-12 is-10-desktop">
             <div className="tabs is-small is-toggle is-toggle-rounded tournaments-page-tabs">
               <ul>
-                {TOURNAMENT_TABS.map((tab) => (
+                {tournamentTabs.map((tab) => (
                   <li
                     key={tab.id}
                     className={activeTab === tab.id ? "is-active" : ""}
@@ -1388,6 +1399,15 @@ function Tournaments(props) {
                     ? openTournamentsTableNavigation
                     : null}
                 </>
+              ) : null}
+
+              {activeTab === "all" && filterMeta !== null ? (
+                <HistoricalTournamentsTable
+                  filterMeta={filterMeta}
+                  registeredOnly={registeredOnly}
+                  starredOnly={starredOnly}
+                  globalMe={globalMe}
+                />
               ) : null}
 
               {activeTab === "current" ? (
