@@ -9,12 +9,13 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
-## [1.0.0-ci] - 2026-10-24
+## [1.0.0-ci] - 2026-10-25
 
 ### Changed
 
 - **Site theme:** Customize Site Theme is a full page at `/customize/site-theme` (profile menu) with a large live preview of every tunable colour token; the navbar modal was removed.
 - **Play / Lab:** move-tree replay controls are grouped (step vs jump-to-start/end) with a fixed prev/next bar on narrow screens to reduce mis-taps on mobile.
+- **Play:** mobile move-tree prev/next bar stays available for the whole game page (not only when the move list panel is open).
 - **Play:** move entry validates 500 ms after typing pauses (same delay on all devices and characters).
 
 ### Added
