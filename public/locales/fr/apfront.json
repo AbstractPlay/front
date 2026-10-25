@@ -919,7 +919,8 @@
     "tabs": {
       "open": "Inscriptions ouvertes",
       "current": "En cours",
-      "completed": "Récemment terminés"
+      "completed": "Récemment terminés",
+      "all": "Tous"
     }
   },
   "TriggerRefresh": "Lancer un rafraîchissement",
