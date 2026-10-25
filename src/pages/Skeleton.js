@@ -48,6 +48,7 @@ import GameWatch from "../components/GameWatch";
 import ProfileBootstrap from "../components/ProfileBootstrap";
 import { resolveAuthSession } from "../lib/authSession";
 import ErrorBoundary from "../components/ErrorBoundary";
+import ChunkLoadRecoveryBoot from "../components/ChunkLoadRecoveryBoot";
 import RecentApUrlRecorder from "../components/Feedback/RecentApUrlRecorder";
 import { useStore } from "../stores";
 import { isAnonymousFriendlyPath } from "../lib/publicPaths";
@@ -192,6 +193,7 @@ function Bones(props) {
         </Helmet>
         <ToastContainer />
         <Router>
+          <ChunkLoadRecoveryBoot />
           <RecentApUrlRecorder />
           <DefaultDocumentTitle />
           <TimeAgoLocaleSync />

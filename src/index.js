@@ -1,5 +1,6 @@
 import "./polyfills";
 import { configureAmplifyAuth } from "./lib/amplifyAuth";
+import { installChunkLoadRecovery } from "./lib/chunkLoadRecovery";
 import { installConsoleCapture } from "./lib/feedback/consoleCapture";
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -12,6 +13,7 @@ import "./myBulma.css";
 import "./index.css";
 
 configureAmplifyAuth();
+installChunkLoadRecovery();
 installConsoleCapture();
 
 const container = document.getElementById("root");
