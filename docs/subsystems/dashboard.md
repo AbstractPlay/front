@@ -41,7 +41,7 @@ Backend: [Auth queries — Profile and dashboard](/backend/api/auth-queries/) (`
 | [`TheirTurnTable.js`](../src/components/Me/TheirTurnTable.js) | Games waiting on opponent |
 | [`WatchedGamesTable.js`](../src/components/Me/WatchedGamesTable.js) | Spectated games (persistent watch list) |
 | [`YourTournamentsTable.js`](../src/components/Me/YourTournamentsTable.js) | Ongoing tournaments you are in (same columns as `/tournaments/current`; hidden when empty) |
-| [`DashboardMainContent.js`](../src/components/Me/DashboardMainContent.js) | Vertical (default) or tabbed layout; tabbed mode uses Games / Tournaments / Challenges tabs (disabled when empty), **Admin** tab for admins, and a persistent Issue challenge action |
+| [`DashboardMainContent.js`](../src/components/Me/DashboardMainContent.js) | Vertical (default) or tabbed layout; tabbed mode uses Games / Tournaments (hidden when empty) / Challenges tabs (disabled when empty), **Admin** tab for admins, and a persistent Issue challenge action |
 | [`StandingChallengeTable.js`](../src/components/Me/StandingChallengeTable.js) | Active standing challenges |
 
 ### In-app notifications

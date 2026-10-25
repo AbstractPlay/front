@@ -428,7 +428,14 @@ export default function DashboardMainContent(props) {
 
   const tabDefs = [
     { id: DASHBOARD_TAB_GAMES, labelKey: "Dashboard.tab.games" },
-    { id: DASHBOARD_TAB_TOURNAMENTS, labelKey: "Dashboard.tab.tournaments" },
+    ...(tabAvailability[DASHBOARD_TAB_TOURNAMENTS]
+      ? [
+          {
+            id: DASHBOARD_TAB_TOURNAMENTS,
+            labelKey: "Dashboard.tab.tournaments",
+          },
+        ]
+      : []),
     { id: DASHBOARD_TAB_CHALLENGES, labelKey: "Dashboard.tab.challenges" },
     ...(isAdmin
       ? [{ id: DASHBOARD_TAB_ADMIN, labelKey: "Dashboard.tab.admin" }]
