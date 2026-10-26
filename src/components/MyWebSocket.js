@@ -230,6 +230,13 @@ export default function MyWebSocket() {
               detail: { tournamentId: msg.payload?.id },
             })
           );
+        } else if (msg.verb === "ladder") {
+          window.dispatchEvent(
+            new CustomEvent("refresh-ladder", {
+              detail: { ladderId: msg.payload?.id },
+            })
+          );
+          window.dispatchEvent(new CustomEvent("refresh-me"));
         } else if (msg.verb === "connections") {
           const payload = msg.payload;
           if (

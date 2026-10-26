@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useStorageState } from "react-use-storage-state";
 import WatchedGamesTable from "./WatchedGamesTable";
 import YourTournamentsTable from "./YourTournamentsTable";
+import YourLaddersTable from "./YourLaddersTable";
 import MyTurnTable from "./MyTurnTable";
 import TheirTurnTable from "./TheirTurnTable";
 import StandingChallengeTable from "./StandingChallengeTable";
@@ -17,10 +18,12 @@ import {
   DASHBOARD_TAB_CHALLENGES,
   DASHBOARD_TAB_GAMES,
   DASHBOARD_TAB_TOURNAMENTS,
+  DASHBOARD_TAB_LADDERS,
   dashboardTabAvailability,
   defaultTabbedDashboardTab,
   normalizeDashboardTab,
 } from "../../lib/dashboardLayout";
+import { ladderUiDisabled } from "../../lib/ladderUiDisabled";
 
 const columnShellClass =
   "columns dashboard-main-columns";
@@ -113,6 +116,14 @@ function DashboardTournamentsContent({ tournaments }) {
   return (
     <div className="indentedContainer">
       <YourTournamentsTable tournaments={tournaments} />
+    </div>
+  );
+}
+
+function DashboardLaddersContent({ memberships, onVacation }) {
+  return (
+    <div className="indentedContainer">
+      <YourLaddersTable memberships={memberships} onVacation={onVacation} />
     </div>
   );
 }
@@ -243,6 +254,7 @@ export default function DashboardMainContent(props) {
     setError,
     hasWatchedGames,
     hasYourTournaments,
+    hasYourLadders,
     challengesResponded,
     hasChallengesReceived,
     hasChallengesAwaitingResponse,
@@ -286,6 +298,10 @@ export default function DashboardMainContent(props) {
     [onLayoutChange, setActiveTab]
   );
 
+  const ladderMembershipsForUi = ladderUiDisabled()
+    ? []
+    : globalMe.ladderMemberships;
+
   const tabAvailability = useMemo(
     () =>
       dashboardTabAvailability({
@@ -293,6 +309,7 @@ export default function DashboardMainContent(props) {
         waiting,
         watchedGames: globalMe.watchedGames,
         currentTournaments: globalMe.currentTournaments,
+        ladderMemberships: ladderMembershipsForUi,
         challengesReceived: globalMe.challengesReceived,
         challengesAwaitingResponse: hasChallengesAwaitingResponse,
         openStandingChallenges: globalMe.standingChallenges,
@@ -304,6 +321,7 @@ export default function DashboardMainContent(props) {
       waiting,
       globalMe.watchedGames,
       globalMe.currentTournaments,
+      ladderMembershipsForUi,
       globalMe.challengesReceived,
       hasChallengesAwaitingResponse,
       globalMe.standingChallenges,
@@ -357,6 +375,13 @@ export default function DashboardMainContent(props) {
     <DashboardTournamentsContent tournaments={globalMe.currentTournaments} />
   ) : null;
 
+  const laddersContent = hasYourLadders ? (
+    <DashboardLaddersContent
+      memberships={ladderMembershipsForUi}
+      onVacation={globalMe?.onVacation === true}
+    />
+  ) : null;
+
   const adminContent = isAdmin ? (
     <DashboardAdminContent
       genericInput={genericInput}
@@ -408,6 +433,14 @@ export default function DashboardMainContent(props) {
             {tournamentsContent}
           </DashboardColumn>
         ) : null}
+        {hasYourLadders ? (
+          <DashboardColumn>
+            <p className="subtitle lined">
+              <span>{t("YourLadders")}</span>
+            </p>
+            {laddersContent}
+          </DashboardColumn>
+        ) : null}
         <DashboardColumn>
           <p className="subtitle lined">
             <span>{t("YourChallenges")}</span>
@@ -433,6 +466,14 @@ export default function DashboardMainContent(props) {
           {
             id: DASHBOARD_TAB_TOURNAMENTS,
             labelKey: "Dashboard.tab.tournaments",
+          },
+        ]
+      : []),
+    ...(tabAvailability[DASHBOARD_TAB_LADDERS]
+      ? [
+          {
+            id: DASHBOARD_TAB_LADDERS,
+            labelKey: "Dashboard.tab.ladders",
           },
         ]
       : []),
@@ -487,6 +528,7 @@ export default function DashboardMainContent(props) {
       <div className="dashboard-tab-panel">
         {resolvedTab === DASHBOARD_TAB_GAMES ? gamesContent : null}
         {resolvedTab === DASHBOARD_TAB_TOURNAMENTS ? tournamentsContent : null}
+        {resolvedTab === DASHBOARD_TAB_LADDERS ? laddersContent : null}
         {resolvedTab === DASHBOARD_TAB_CHALLENGES ? challengesContent : null}
         {resolvedTab === DASHBOARD_TAB_ADMIN ? adminContent : null}
       </div>

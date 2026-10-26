@@ -10,13 +10,20 @@ export function useChallengeResponse({ onError, onSuccess } = {}) {
           challenge,
           resp
         );
-        const res = await callAuthApi("challenge_response", {
+        const query =
+          challenge.ladderId !== undefined && challenge.ladderId !== ""
+            ? "respond_ladder_challenge"
+            : "challenge_response";
+        const pars = {
           id,
-          standing,
           metaGame,
           response: resp,
           comment: comment,
-        });
+        };
+        if (query === "challenge_response") {
+          pars.standing = standing;
+        }
+        const res = await callAuthApi(query, pars);
         if (!res) {
           return;
         }

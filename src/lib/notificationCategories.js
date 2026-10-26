@@ -17,6 +17,10 @@ const DIRECT_BODY_TYPE_TO_CATEGORY = new Set([
   "tournamentChat",
   "tournamentStart",
   "tournamentEnd",
+  "ladderChat",
+  "ladderDecay",
+  "ladderJoin",
+  "ladderLeave",
   "feedbackReply",
   "feedbackStatus",
   "feedbackDeleted",
@@ -36,6 +40,12 @@ export const NOTIFICATION_FILTER_CATEGORY_ORDER = [
   "tournamentChat",
   "tournamentStart",
   "tournamentEnd",
+  "ladderChat",
+  "ladderDecay",
+  "ladderPointsGain",
+  "ladderPointsLoss",
+  "ladderJoin",
+  "ladderLeave",
   "feedbackReply",
   "feedbackStatus",
   "feedbackDeleted",
@@ -54,6 +64,9 @@ export function notificationCategoryForBody(body) {
   }
   if (BOT_BODY_TYPES.has(type)) {
     return "bots";
+  }
+  if (type === "ladderPointsChange") {
+    return (body.delta ?? 0) < 0 ? "ladderPointsLoss" : "ladderPointsGain";
   }
   if (DIRECT_BODY_TYPE_TO_CATEGORY.has(type)) {
     return type;

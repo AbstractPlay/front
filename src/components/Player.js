@@ -32,6 +32,9 @@ import Response from "./Player/Response";
 import Coded from "./Player/Coded";
 import Designed from "./Player/Designed";
 import Tournaments from "./Player/Tournaments";
+import Ladders from "./Player/Ladders";
+import { fetchPlayerLadderRows } from "../lib/fetchLadder";
+import { ladderUiDisabled } from "../lib/ladderUiDisabled";
 import Hero from "./Player/Hero";
 import ProfileModule from "./Player/ProfileModule";
 import SummaryGate from "./shared/SummaryGate";
@@ -60,6 +63,7 @@ export const SummaryContext = createContext([null, () => {}]);
 export const AllRecsContext = createContext([null, () => []]);
 export const ResponsesContext = createContext([null, () => []]);
 export const TournamentContext = createContext([null, () => []]);
+export const LadderContext = createContext([null, () => []]);
 
 const code2component = {
   stars: Stars,
@@ -72,6 +76,7 @@ const code2component = {
   timeouts: Timeouts,
   response: Response,
   tournaments: Tournaments,
+  ladders: Ladders,
   history: History,
   highlights: Highlights,
 };
@@ -86,6 +91,7 @@ function Player() {
   const [user, userSetter] = useState(null);
   const [allRecs, allRecsSetter] = useState([]);
   const [tourneys, tourneysSetter] = useState([]);
+  const [ladders, laddersSetter] = useState([]);
   const [responses, responsesSetter] = useState([]);
   const [profileAbout, profileAboutSetter] = useState(null);
   const [pastDisplayNames, pastDisplayNamesSetter] = useState(null);
@@ -142,11 +148,12 @@ function Player() {
       summary,
       allRecs,
       tourneys,
+      ladders,
       responses,
       isCoder,
       isDesigner,
     }),
-    [user, summary, allRecs, tourneys, responses, isCoder, isDesigner]
+    [user, summary, allRecs, tourneys, ladders, responses, isCoder, isDesigner]
   );
 
   useEffect(() => {
@@ -195,6 +202,22 @@ function Player() {
         tourneysSetter(result);
       } catch (error) {
         tourneysSetter([]);
+      }
+    }
+    fetchData();
+  }, [user]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (ladderUiDisabled() || !user?.id) {
+        laddersSetter([]);
+        return;
+      }
+      try {
+        const result = await fetchPlayerLadderRows(user.id);
+        laddersSetter(result);
+      } catch {
+        laddersSetter([]);
       }
     }
     fetchData();
@@ -350,6 +373,7 @@ function Player() {
             <SummaryContext.Provider value={[summary, () => {}]}>
               <AllRecsContext.Provider value={[allRecs, allRecsSetter]}>
                 <TournamentContext.Provider value={[tourneys, tourneysSetter]}>
+                  <LadderContext.Provider value={[ladders, laddersSetter]}>
                   <ResponsesContext.Provider
                     value={[responses, responsesSetter]}
                   >
@@ -435,6 +459,7 @@ function Player() {
                       </div>
                     </div>
                   </ResponsesContext.Provider>
+                  </LadderContext.Provider>
                 </TournamentContext.Provider>
               </AllRecsContext.Provider>
             </SummaryContext.Provider>

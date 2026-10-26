@@ -16,6 +16,8 @@ import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 import BotAwareName from "../Bots/BotAwareName";
 import { minOpponentOnClockRemainingMs } from "../../lib/gameClockDisplay";
+import { GameEventContextCell } from "../shared/GameEventContextCell";
+import { ladderUiDisabled } from "../../lib/ladderUiDisabled";
 import { useTranslation } from "react-i18next";
 import {
   firstNamedListSortingFn,
@@ -87,6 +89,8 @@ function TheirTurnTable(props) {
           ),
           lastSeen: g.seen || 0,
           lastChat: g.lastChat || 0,
+          tournament: g.tournament,
+          ladderId: ladderUiDisabled() ? undefined : g.ladderId,
         };
         return ret;
       }),
@@ -183,6 +187,18 @@ function TheirTurnTable(props) {
           props.getValue() === undefined
             ? ""
             : showMilliseconds(props.getValue()),
+      }),
+      columnHelper.display({
+        id: "event",
+        header: t("tables.event"),
+        cell: (props) => (
+          <GameEventContextCell
+            tournament={props.row.original.tournament}
+            ladderId={props.row.original.ladderId}
+            metaGame={props.row.original.metaGame}
+          />
+        ),
+        enableSorting: false,
       }),
     ],
     [columnHelper, connections, allUsers, t, i18n.language]

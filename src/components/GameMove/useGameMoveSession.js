@@ -9,6 +9,8 @@ import { callAuthApi } from "../../lib/api";
 import { anyOnClockPlayerTimedOut } from "../../lib/gameClockDisplay";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
 import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
+import { ladderDetailPathFromGameRef } from "../../lib/ladderRoutes";
+import { ladderUiDisabled } from "../../lib/ladderUiDisabled";
 import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import {
   maybeSyncInProgressCommentedFlag,
@@ -915,6 +917,21 @@ export function useGameMoveSession(props) {
           parentheticalSetter((val) => [
             ...val,
             <Link to={tournamentLink}>{t("gameMove.tournamentLink")}</Link>,
+          ]);
+        }
+      }
+      if (
+        !ladderUiDisabled() &&
+        "ladderId" in game &&
+        game.ladderId !== undefined &&
+        game.ladderId !== null &&
+        game.ladderId !== ""
+      ) {
+        const ladderLink = ladderDetailPathFromGameRef(game.ladderId);
+        if (ladderLink !== null) {
+          parentheticalSetter((val) => [
+            ...val,
+            <Link to={ladderLink}>{t("gameMove.ladderLink")}</Link>,
           ]);
         }
       }

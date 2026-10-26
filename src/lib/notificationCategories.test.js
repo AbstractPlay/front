@@ -24,6 +24,18 @@ describe("notificationCategoryForBody", () => {
     expect(notificationCategoryForBody({ type: "feedbackNew" })).toBe("feedbackNew");
   });
 
+  it("maps ladderPointsChange to gain or loss pref from delta sign", () => {
+    expect(
+      notificationCategoryForBody({ type: "ladderPointsChange", delta: 12 }),
+    ).toBe("ladderPointsGain");
+    expect(
+      notificationCategoryForBody({ type: "ladderPointsChange", delta: -8 }),
+    ).toBe("ladderPointsLoss");
+    expect(
+      notificationCategoryForBody({ type: "ladderPointsChange", delta: 0 }),
+    ).toBe("ladderPointsGain");
+  });
+
   it("returns null for unknown types", () => {
     expect(notificationCategoryForBody({ type: "unknownType" })).toBe(null);
     expect(notificationCategoryForBody({})).toBe(null);

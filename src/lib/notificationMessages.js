@@ -9,6 +9,20 @@ import {
   tournamentDetailPathActive,
   tournamentDetailPathArchived,
 } from "./tournamentRoutes";
+import { ladderDetailPathActive } from "./ladderRoutes";
+import { ladderUiDisabled } from "./ladderUiDisabled";
+import {
+  formatLadderPoints,
+  formatLadderPointsDelta,
+} from "./formatLadderPoints";
+
+const LADDER_BODY_TYPES = new Set([
+  "ladderChat",
+  "ladderDecay",
+  "ladderPointsChange",
+  "ladderJoin",
+  "ladderLeave",
+]);
 
 function metaGameLabel(metaGame) {
   return getGameDisplayName(metaGame);
@@ -118,6 +132,10 @@ function gameEndNotificationMessage(body) {
 }
 
 export function NotificationMessage({ body }) {
+  if (ladderUiDisabled() && LADDER_BODY_TYPES.has(body?.type)) {
+    return null;
+  }
+
   const metaGame = metaGameLabel(body.metaGame);
 
   switch (body.type) {
@@ -153,10 +171,22 @@ export function NotificationMessage({ body }) {
         />
       );
     case "challengeIssued":
-      return challengeNotificationMessage(
-        "me.notifications.message.challengeIssued",
-        body.metaGame,
-        { challengerName: body.challengerName }
+      return (
+        <>
+          {challengeNotificationMessage(
+            "me.notifications.message.challengeIssued",
+            body.metaGame,
+            { challengerName: body.challengerName }
+          )}
+          {body.ladderId && !ladderUiDisabled() ? (
+            <>
+              {" "}
+              <Link to={ladderDetailPathActive(body.ladderId)}>
+                ({i18n.t("Ladder.badge")})
+              </Link>
+            </>
+          ) : null}
+        </>
       );
     case "challengeDeclined":
       return challengeNotificationMessage(
@@ -274,6 +304,111 @@ export function NotificationMessage({ body }) {
           />
           {variantsSuffix(body.metaGame, body.variants)}
         </>
+      );
+    case "ladderChat":
+      return (
+        <>
+          <Trans
+            i18nKey="me.notifications.message.ladderChat"
+            values={{
+              commenterName: body.commenterName,
+              metaGame: body.displayName ?? metaGame,
+            }}
+            components={{
+              ladderLink: (
+                <Link to={ladderDetailPathActive(body.ladderId)} />
+              ),
+            }}
+          />
+          {variantsSuffix(body.metaGame, body.variants)}
+        </>
+      );
+    case "ladderDecay":
+      return (
+        <>
+          <Trans
+            i18nKey="me.notifications.message.ladderDecay"
+            values={{
+              metaGame: body.displayName ?? metaGame,
+              pointsLost: formatLadderPoints(Math.abs(body.delta ?? 0)),
+              pointsAfter: formatLadderPoints(body.pointsAfter ?? 0),
+            }}
+            components={{
+              ladderLink: (
+                <Link to={ladderDetailPathActive(body.ladderId)} />
+              ),
+            }}
+          />
+        </>
+      );
+    case "ladderPointsChange": {
+      const delta = body.delta ?? 0;
+      const ladderLabel = body.displayName ?? metaGame;
+      const pointsAfter = formatLadderPoints(body.pointsAfter ?? 0);
+      if (delta < 0) {
+        return (
+          <>
+            <Trans
+              i18nKey="me.notifications.message.ladderPointsLoss"
+              values={{
+                metaGame: ladderLabel,
+                pointsLost: formatLadderPoints(Math.abs(delta)),
+                pointsAfter,
+              }}
+              components={{
+                ladderLink: (
+                  <Link to={ladderDetailPathActive(body.ladderId)} />
+                ),
+                gameLink: (
+                  <Link to={`/move/${body.metaGame}/1/${body.gameId}`} />
+                ),
+              }}
+            />
+            {variantsSuffix(body.metaGame, body.variants)}
+          </>
+        );
+      }
+      return (
+        <>
+          <Trans
+            i18nKey="me.notifications.message.ladderPointsGain"
+            values={{
+              metaGame: ladderLabel,
+              delta: formatLadderPointsDelta(delta),
+              pointsAfter,
+            }}
+            components={{
+              ladderLink: (
+                <Link to={ladderDetailPathActive(body.ladderId)} />
+              ),
+              gameLink: (
+                <Link to={`/move/${body.metaGame}/1/${body.gameId}`} />
+              ),
+            }}
+          />
+          {variantsSuffix(body.metaGame, body.variants)}
+        </>
+      );
+    }
+    case "ladderJoin":
+      return (
+        <Trans
+          i18nKey="me.notifications.message.ladderJoin"
+          values={{ displayName: body.displayName ?? metaGame }}
+          components={{
+            ladderLink: <Link to={ladderDetailPathActive(body.ladderId)} />,
+          }}
+        />
+      );
+    case "ladderLeave":
+      return (
+        <Trans
+          i18nKey="me.notifications.message.ladderLeave"
+          values={{ displayName: body.displayName ?? metaGame }}
+          components={{
+            ladderLink: <Link to={ladderDetailPathActive(body.ladderId)} />,
+          }}
+        />
       );
     case "botMoveFailed":
       return (

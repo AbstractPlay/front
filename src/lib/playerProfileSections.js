@@ -20,7 +20,7 @@ export const PROFILE_TABS = [
   {
     id: "record",
     nameKey: "player.tabs.record",
-    modules: ["history", "tournaments"],
+    modules: ["history", "tournaments", "ladders"],
   },
 ];
 
@@ -56,6 +56,7 @@ export const MODULE_NAME_KEYS = {
   timeouts: "player.modules.timeouts",
   response: "player.modules.response",
   tournaments: "player.modules.tournaments",
+  ladders: "player.modules.ladders",
   history: "player.modules.history",
   highlights: "player.modules.highlights",
 };
@@ -74,6 +75,7 @@ export const MODULE_WIDTH = {
   highlights: "half",
   history: "full",
   tournaments: "full",
+  ladders: "full",
 };
 
 export function getPlayerHIndex(summary, userId) {
@@ -215,7 +217,7 @@ export function getMedianResponseHours(responses) {
  * return false here and rely on returning null after load.
  */
 export function isModuleVisible(code, ctx) {
-  const { user, summary, allRecs, tourneys, responses, isCoder, isDesigner } =
+  const { user, summary, allRecs, tourneys, ladders, responses, isCoder, isDesigner } =
     ctx;
 
   switch (code) {
@@ -254,6 +256,8 @@ export function isModuleVisible(code, ctx) {
       return Array.isArray(responses) && responses.length > 0;
     case "tournaments":
       return Array.isArray(tourneys) && tourneys.length > 0;
+    case "ladders":
+      return Array.isArray(ladders) && ladders.length > 0;
     case "history":
       return Array.isArray(allRecs) && allRecs.length > 0;
     case "highlights":

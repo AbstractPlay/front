@@ -10,6 +10,7 @@ import { useStore } from "../../stores";
 import { formatPlayerDisplayName } from "../Bots/botUtils";
 import { useChallengePositionPreview } from "../../hooks/useChallengePositionPreview";
 import ChallengePositionPreview from "./ChallengePositionPreview";
+import { ChallengeLadderBadge } from "../shared/ChallengeLadderBadge";
 
 const ChallengeResponseModal = React.memo(function ChallengeResponseModal({
   respond,
@@ -155,6 +156,11 @@ const ChallengeResponseModal = React.memo(function ChallengeResponseModal({
         </p>
         <p>{challenge.clockHard ? t("HardTime") : t("SoftTime")}</p>
         <p>{challenge.rated ? t("RatedGame") : t("UnratedGame")}</p>
+        {challenge.ladderId ? (
+          <p>
+            <ChallengeLadderBadge ladderId={challenge.ladderId} />
+          </p>
+        ) : null}
         <p>
           <strong>
             {challenge.teachingMode ? t("TeachingGameLabel") : ""}

@@ -56,6 +56,7 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
           comment: g.comment,
           challenger: g.challenger,
           accepted: g.players.filter((p) => p.id !== g.challenger.id),
+          ladderId: g.ladderId,
           fullRec: g,
         };
         return ret;
@@ -74,9 +75,16 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
             return <>Unknown</>;
           } else {
             return (
-              <Link to={`/games/${props.row.original.metaGame}`}>
-                {props.getValue()}
-              </Link>
+              <>
+                {props.row.original.ladderId ? (
+                  <span className="tag is-info is-light mr-1">
+                    {t("Ladder.badge")}
+                  </span>
+                ) : null}
+                <Link to={`/games/${props.row.original.metaGame}`}>
+                  {props.getValue()}
+                </Link>
+              </>
             );
           }
         },

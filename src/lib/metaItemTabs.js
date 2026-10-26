@@ -7,6 +7,7 @@ export const META_TABS = [
   { id: "completed", nameKey: "meta.tabs.completedGames" },
   { id: "players", nameKey: "meta.tabs.players" },
   { id: "tournaments", nameKey: "meta.tabs.tournaments" },
+  { id: "ladders", nameKey: "meta.tabs.ladders" },
   { id: "history", nameKey: "meta.tabs.historicalData" },
 ];
 
