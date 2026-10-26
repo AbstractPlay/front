@@ -443,6 +443,10 @@
     "src": "Games",
     "out": "Spiele"
   },
+  "Dashboard.tab.ladders": {
+    "src": "Ladders",
+    "out": "Ranglisten"
+  },
   "Dashboard.tab.tournaments": {
     "src": "Tournaments",
     "out": "Turniere"
@@ -1303,6 +1307,30 @@
     "src": "Game started",
     "out": "Spiel gestartet"
   },
+  "InAppNotifyLabel-ladderChat": {
+    "src": "Ladder chat",
+    "out": "Ranglisten-Chat"
+  },
+  "InAppNotifyLabel-ladderDecay": {
+    "src": "Ladder inactivity decay",
+    "out": "Ranglisten-Inaktivitätsverfall"
+  },
+  "InAppNotifyLabel-ladderJoin": {
+    "src": "Joined a ladder",
+    "out": "Einer Rangliste beigetreten"
+  },
+  "InAppNotifyLabel-ladderLeave": {
+    "src": "Left a ladder",
+    "out": "Eine Rangliste verlassen"
+  },
+  "InAppNotifyLabel-ladderPointsGain": {
+    "src": "Ladder points gained",
+    "out": "Ranglistenpunkte gewonnen"
+  },
+  "InAppNotifyLabel-ladderPointsLoss": {
+    "src": "Ladder points lost",
+    "out": "Ranglistenpunkte verloren"
+  },
   "InAppNotifyLabel-ratingChange": {
     "src": "Rating changes",
     "out": "Wertungsänderungen"
@@ -1358,6 +1386,230 @@
   "Lab": {
     "src": "Playground",
     "out": "Spielplatz"
+  },
+  "Ladder.actionFailed": {
+    "src": "Could not complete that action.",
+    "out": "Aktion konnte nicht ausgeführt werden."
+  },
+  "Ladder.activeGames": {
+    "src": "Active games",
+    "out": "Aktive Spiele"
+  },
+  "Ladder.badge": {
+    "src": "Ladder",
+    "out": "Rangliste"
+  },
+  "Ladder.challenge": {
+    "src": "Challenge",
+    "out": "Herausfordern"
+  },
+  "Ladder.challengeNearest": {
+    "src": "Challenge nearest player anyway ({{name}}, {{points}} pts)",
+    "out": "Trotzdem nächstgelegenen Spieler herausfordern ({{name}}, {{points}} Pkt.)"
+  },
+  "Ladder.chat": {
+    "src": "Ladder chat",
+    "out": "Ranglisten-Chat"
+  },
+  "Ladder.clockCopy": {
+    "src": "All ladder games use hard Fischer clocks: 36 hours per move, 120 hours starting bank, 120 hours maximum.",
+    "out": "Alle Ranglistenspiele nutzen harte Fischer-Uhren: 36 Stunden pro Zug, 120 Stunden Startguthaben, 120 Stunden Maximum."
+  },
+  "Ladder.createButton": {
+    "src": "Create ladder",
+    "out": "Rangliste erstellen"
+  },
+  "Ladder.createHelp": {
+    "src": "Start a continuous delta ladder for a two-player game and variant set. One ladder exists per series.",
+    "out": "Starte eine fortlaufende Delta-Rangliste für ein Zweipersonenspiel und Variantenset. Es gibt eine Rangliste pro Serie."
+  },
+  "Ladder.createTitle": {
+    "src": "Create a ladder",
+    "out": "Rangliste erstellen"
+  },
+  "Ladder.dashboardJoinPool": {
+    "src": "Join pool",
+    "out": "Pool beitreten"
+  },
+  "Ladder.dashboardPool": {
+    "src": "Pool",
+    "out": "Pool"
+  },
+  "Ladder.downloadRecords": {
+    "src": "Download all game records for this ladder",
+    "out": "Alle Spielaufzeichnungen für diese Rangliste herunterladen"
+  },
+  "Ladder.duplicate": {
+    "src": "A ladder already exists for this game and variants.",
+    "out": "Für dieses Spiel und diese Varianten existiert bereits eine Rangliste."
+  },
+  "Ladder.findMatch": {
+    "src": "Find match (pool)",
+    "out": "Spiel suchen (Pool)"
+  },
+  "Ladder.incomingChallenge": {
+    "src": "Challenge from {{name}}",
+    "out": "Herausforderung von {{name}}"
+  },
+  "Ladder.introCollapse": {
+    "src": "Show less",
+    "out": "Weniger anzeigen"
+  },
+  "Ladder.introExpand": {
+    "src": "Read full rules",
+    "out": "Vollständige Regeln lesen"
+  },
+  "Ladder.introFull": {
+    "src": "Join or create a ladder for a game and variant series. You start near your Glicko rating low. Wins and losses adjust ladder points (upsets earn more). After 30 days without an active ladder game, inactive members lose a small fraction of points daily. While on site vacation, decay pauses and you cannot issue or accept new ladder matches. You may have up to seven active ladder games per ladder.",
+    "out": "Tritt einer Rangliste für eine Spiel- und Variantenserie bei oder erstelle eine. Du startest nahe deinem niedrigsten Glicko-Wertungswert. Siege und Niederlagen passen die Ranglistenpunkte an (Überraschungssiege bringen mehr). Nach 30 Tagen ohne aktives Ranglistenspiel verlieren inaktive Mitglieder täglich einen kleinen Teil ihrer Punkte. Während des Website-Urlaubs pausiert der Punkteverfall und du kannst keine neuen Ranglisten-Herausforderungen aussprechen oder annehmen. Du kannst bis zu sieben aktive Ranglistenspiele pro Rangliste haben."
+  },
+  "Ladder.introSummary": {
+    "src": "Continuous correspondence ladders: ladder points move on each rated game result. Match opponents within ±20% ladder points, or use the pool. Hard 36h/120h clocks; all ladder games are rated.",
+    "out": "Fortlaufende Korrespondenz-Ranglisten: Ranglistenpunkte verändern sich bei jedem gewerteten Spielergebnis. Fordere Gegner innerhalb von ±20 % der Ranglistenpunkte heraus oder nutze den Pool. Harte 36h/120h-Uhren; alle Ranglistenspiele werden gewertet."
+  },
+  "Ladder.join": {
+    "src": "Join ladder",
+    "out": "Rangliste beitreten"
+  },
+  "Ladder.leaderboard": {
+    "src": "Leaderboard",
+    "out": "Bestenliste"
+  },
+  "Ladder.leave": {
+    "src": "Leave ladder",
+    "out": "Rangliste verlassen"
+  },
+  "Ladder.leavePool": {
+    "src": "Leave pool",
+    "out": "Pool verlassen"
+  },
+  "Ladder.leftPreview": {
+    "src": "You left this ladder with {{points}} ladder points.",
+    "out": "Du hast diese Rangliste mit {{points}} Ranglistenpunkten verlassen."
+  },
+  "Ladder.listLink": {
+    "src": "Ladders",
+    "out": "Ranglisten"
+  },
+  "Ladder.listTitle": {
+    "src": "Ladders",
+    "out": "Ranglisten"
+  },
+  "Ladder.loading": {
+    "src": "Loading ladder…",
+    "out": "Rangliste wird geladen…"
+  },
+  "Ladder.loadingList": {
+    "src": "Loading ladders…",
+    "out": "Ranglisten werden geladen…"
+  },
+  "Ladder.matchmaking": {
+    "src": "Find a match",
+    "out": "Spiel suchen"
+  },
+  "Ladder.memberCount_one": {
+    "src": "{{count}} member ({{min}} to activate)",
+    "out": "{{count}} Mitglied ({{min}} zum Aktivieren)"
+  },
+  "Ladder.memberCount_other": {
+    "src": "{{count}} members ({{min}} to activate)",
+    "out": "{{count}} Mitglieder ({{min}} zum Aktivieren)"
+  },
+  "Ladder.members": {
+    "src": "Members",
+    "out": "Mitglieder"
+  },
+  "Ladder.name": {
+    "src": "Ladder",
+    "out": "Rangliste"
+  },
+  "Ladder.noneListed": {
+    "src": "No ladders match your filters.",
+    "out": "Keine Ranglisten entsprechen deinen Filtern."
+  },
+  "Ladder.noneOnDashboard": {
+    "src": "You are not in any ladders.",
+    "out": "Du bist in keinen Ranglisten."
+  },
+  "Ladder.outgoingChallengePending": {
+    "src": "You have a pending outgoing ladder challenge.",
+    "out": "Du hast eine ausstehende ausgehende Ranglisten-Herausforderung."
+  },
+  "Ladder.participatingOnly": {
+    "src": "Only ladders I'm in",
+    "out": "Nur Ranglisten, in denen ich bin"
+  },
+  "Ladder.pendingChallenges": {
+    "src": "Pending ladder challenges",
+    "out": "Ausstehende Ranglisten-Herausforderungen"
+  },
+  "Ladder.points": {
+    "src": "Points",
+    "out": "Punkte"
+  },
+  "Ladder.poolWaiterCount_one": {
+    "src": "{{count}} player in the match pool",
+    "out": "{{count}} Spieler im Suchpool"
+  },
+  "Ladder.poolWaiterCount_other": {
+    "src": "{{count}} players in the match pool",
+    "out": "{{count}} Spieler im Suchpool"
+  },
+  "Ladder.poolWaiting": {
+    "src": "Waiting in pool…",
+    "out": "Warten im Pool…"
+  },
+  "Ladder.rank": {
+    "src": "Rank",
+    "out": "Rang"
+  },
+  "Ladder.rankPoints": {
+    "src": "Rank {{rank}} · {{points}} ladder points",
+    "out": "Rang {{rank}} · {{points}} Ranglistenpunkte"
+  },
+  "Ladder.reachBand": {
+    "src": "Challenge reach: {{low}}–{{high}} ladder points",
+    "out": "Herausforderungsbereich: {{low}}–{{high}} Ranglistenpunkte"
+  },
+  "Ladder.rejoin": {
+    "src": "Rejoin",
+    "out": "Wieder beitreten"
+  },
+  "Ladder.status.active": {
+    "src": "Active",
+    "out": "Aktiv"
+  },
+  "Ladder.status.forming": {
+    "src": "Forming",
+    "out": "In Gründung"
+  },
+  "Ladder.status.suspended": {
+    "src": "Suspended",
+    "out": "Ausgesetzt"
+  },
+  "Ladder.tabs.all": {
+    "src": "All ladders",
+    "out": "Alle Ranglisten"
+  },
+  "Ladder.title": {
+    "src": "{{metaGame}} ladder",
+    "out": "{{metaGame}}-Rangliste"
+  },
+  "Ladder.titleVariants": {
+    "src": "{{metaGame}} ladder ({{variants}})",
+    "out": "{{metaGame}}-Rangliste ({{variants}})"
+  },
+  "Ladder.unsupportedGame": {
+    "src": "This game does not support rated two-player ladders.",
+    "out": "Dieses Spiel unterstützt keine gewerteten Zweipersonen-Ranglisten."
+  },
+  "Ladder.vacationBlocked": {
+    "src": "Ladder matchmaking is unavailable while you are on vacation.",
+    "out": "Die Ranglisten-Spielersuche ist während deines Urlaubs nicht verfügbar."
+  },
+  "Ladder.yourStanding": {
+    "src": "Your standing",
+    "out": "Deine Platzierung"
   },
   "LeaveMultiPlayerChallenge": {
     "src": "Leave challenge",
@@ -2251,6 +2503,10 @@
     "src": "Filter by game…",
     "out": "Nach Spiel filtern…"
   },
+  "Tournament.introSummary": {
+    "src": "Recurring round-robin tournaments per game and variant. Registration opens for two weeks; play uses hard 36h/120h Fischer clocks. Divisions split players by rating at start.",
+    "out": "Wiederkehrende Jeder-gegen-Jeden-Turniere pro Spiel und Variante. Die Anmeldung ist zwei Wochen lang geöffnet; gespielt wird mit harten 36h/120h-Fischer-Uhren. Die Divisionen teilen die Spieler zu Beginn nach Wertung auf."
+  },
   "Tournament.loadErrorBody": {
     "src": "Something went wrong while loading this tournament. You can try again later or return to the tournaments list.",
     "out": "Beim Laden dieses Turniers ist ein Fehler aufgetreten. Du kannst es später erneut versuchen oder zur Turnierliste zurückkehren."
@@ -2434,6 +2690,10 @@
   "YourGames": {
     "src": "Your games",
     "out": "Deine Spiele"
+  },
+  "YourLadders": {
+    "src": "Your ladders",
+    "out": "Deine Ranglisten"
   },
   "YourMove": {
     "src": "Your move",
@@ -4911,6 +5171,10 @@
     "src": "exploration disabled",
     "out": "Erkundung deaktiviert"
   },
+  "gameMove.ladderLink": {
+    "src": "ladder",
+    "out": "Rangliste"
+  },
   "gameMove.layout.cardDescription": {
     "src": "Single inbox card optimized for playing through your queue",
     "out": "Einzelne Karte, optimiert für das Abarbeiten deiner Warteschlange"
@@ -5631,6 +5895,30 @@
     "src": "{{opponentName}} started a game of <gameLink>{{metaGame}}</gameLink> with you",
     "out": "{{opponentName}} hat eine Partie {{metaGame}} mit dir gestartet"
   },
+  "me.notifications.message.ladderChat": {
+    "src": "{{commenterName}} posted in <ladderLink>{{metaGame}}</ladderLink> ladder chat",
+    "out": "{{commenterName}} hat im Ranglisten-Chat von <ladderLink>{{metaGame}}</ladderLink> geschrieben"
+  },
+  "me.notifications.message.ladderDecay": {
+    "src": "Your ladder points on <ladderLink>{{metaGame}}</ladderLink> decreased by {{pointsLost}} (now {{pointsAfter}}) due to inactivity",
+    "out": "Deine Ranglistenpunkte bei <ladderLink>{{metaGame}}</ladderLink> haben sich wegen Inaktivität um {{pointsLost}} verringert (jetzt {{pointsAfter}})"
+  },
+  "me.notifications.message.ladderJoin": {
+    "src": "You joined <ladderLink>{{displayName}}</ladderLink>",
+    "out": "Du bist <ladderLink>{{displayName}}</ladderLink> beigetreten"
+  },
+  "me.notifications.message.ladderLeave": {
+    "src": "You left <ladderLink>{{displayName}}</ladderLink>",
+    "out": "Du hast <ladderLink>{{displayName}}</ladderLink> verlassen"
+  },
+  "me.notifications.message.ladderPointsGain": {
+    "src": "You gained {{delta}} ladder points on <ladderLink>{{metaGame}}</ladderLink> (now {{pointsAfter}}) after a <gameLink>rated game</gameLink>",
+    "out": "Du hast nach einem <gameLink>gewerteten Spiel</gameLink> {{delta}} Ranglistenpunkte bei <ladderLink>{{metaGame}}</ladderLink> erhalten (jetzt {{pointsAfter}})"
+  },
+  "me.notifications.message.ladderPointsLoss": {
+    "src": "You lost {{pointsLost}} ladder points on <ladderLink>{{metaGame}}</ladderLink> (now {{pointsAfter}}) after a <gameLink>rated game</gameLink>",
+    "out": "Du hast nach einem <gameLink>gewerteten Spiel</gameLink> {{pointsLost}} Ranglistenpunkte bei <ladderLink>{{metaGame}}</ladderLink> verloren (jetzt {{pointsAfter}})"
+  },
   "me.notifications.message.ratingChange": {
     "src": "Your rating for <gameLink>{{metaGame}}</gameLink>{{variantsInline}} changed {{delta}} points from {{oldRatingDisplay}} to {{newRatingDisplay}}.",
     "out": "Deine Wertung für <gameLink>{{metaGame}}</gameLink>{{variantsInline}} hat sich um {{delta}} Punkte von {{oldRatingDisplay}} auf {{newRatingDisplay}} geändert."
@@ -5706,6 +5994,10 @@
   "meta.tabs.historicalData": {
     "src": "Historical Data",
     "out": "Historische Daten"
+  },
+  "meta.tabs.ladders": {
+    "src": "Ladders",
+    "out": "Ranglisten"
   },
   "meta.tabs.players": {
     "src": "Players",
@@ -5954,6 +6246,10 @@
   "player.modules.history": {
     "src": "Game History",
     "out": "Spielverlauf"
+  },
+  "player.modules.ladders": {
+    "src": "Ladder memberships",
+    "out": "Ranglisten-Mitgliedschaften"
   },
   "player.modules.opponents": {
     "src": "Opponents",
@@ -7006,6 +7302,10 @@
   "tables.ended": {
     "src": "Ended",
     "out": "Beendet"
+  },
+  "tables.event": {
+    "src": "Event",
+    "out": "Event"
   },
   "tables.explorationDisabled": {
     "src": "Exploration disabled?",
