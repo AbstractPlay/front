@@ -18,6 +18,8 @@ import {
 } from "../../lib/effectiveGameFlags";
 import { useStorageState } from "react-use-storage-state";
 import { useGameCustomCss } from "../../hooks/useGameCustomCss";
+import { useViewportWidth } from "../../hooks/useViewportWidth";
+import { isNarrowViewport } from "../../lib/viewport";
 import { useStore } from "../../stores";
 import GameMoves from "./GameMoves";
 import GameStatus from "./GameStatus";
@@ -203,7 +205,7 @@ function LabSession({
   const [gameDeets, gameDeetsSetter] = useState(null);
   const [designerString, designerStringSetter] = useState("");
   const [coderString, coderStringSetter] = useState("");
-  const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
+  const screenWidth = useViewportWidth();
   const [verticalLayout, verticalLayoutSetter] = useStorageState(
     "play-vertical-layout",
     false
@@ -327,12 +329,6 @@ function LabSession({
       debouncedPersist();
     }
   }, [focus, debouncedPersist]);
-
-  useEffect(() => {
-    const onResize = () => screenWidthSetter(window.innerWidth);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
 
   useEffect(() => {
     const info = gameinfo.get(metaGame);
@@ -1453,7 +1449,7 @@ function LabSession({
   return (
     <>
       <article>
-        {screenWidth < 770 || verticalLayout ? (
+        {isNarrowViewport(screenWidth) || verticalLayout ? (
           <>
             <div style={{ paddingBottom: "1em" }}>{statusSection}</div>
             <div style={{ paddingBottom: "1em" }}>{boardSection}</div>
@@ -1463,7 +1459,7 @@ function LabSession({
           <div className="columns">
             <div className="column is-one-fifth">{statusSection}</div>
             <div className="column">{boardSection}</div>
-            <div className="column is-narrow" style={{ maxWidth: "15vw" }}>
+            <div className="column is-narrow game-move-classic-sidebar">
               {movesSection}
             </div>
           </div>

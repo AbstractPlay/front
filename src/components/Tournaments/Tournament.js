@@ -12,6 +12,8 @@ import BotAwareName from "../Bots/BotAwareName";
 import { formatVariantsJoined } from "../../lib/expandVariants";
 import TournamentFormatBadge from "./TournamentFormatBadge";
 import { shouldNormalizeTournamentDetailUrl } from "../../lib/seoCanonical";
+import { useViewportWidth } from "../../hooks/useViewportWidth";
+import { isNarrowViewport } from "../../lib/viewport";
 import {
   isConcreteMetaGame,
   tournamentDetailPathActive,
@@ -66,7 +68,7 @@ function Tournament(props) {
   const [divisions, divisionsSetter] = useState([]);
   const [comments, commentsSetter] = useState([]);
   const [tournamentPlayerRows, tournamentPlayerRowsSetter] = useState([]);
-  const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
+  const screenWidth = useViewportWidth();
   const { tournamentid } = useParams();
   const { metaGame } = useParams();
   const location = useLocation();
@@ -273,14 +275,6 @@ function Tournament(props) {
     );
   }, [fetchStatus, tournament, tournamentid, metaGame, navigate]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      screenWidthSetter(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const metaGameName = tournament
     ? gameinfo.get(tournament.metaGame)?.name
     : "";
@@ -461,14 +455,14 @@ function Tournament(props) {
                                       <React.Fragment key={k}>
                                         {k > 0 ? " · " : null}
                                         {leg[2] === null ? (
-                                          leg[screenWidth >= 770 ? 0 : 1]
+                                          leg[!isNarrowViewport(screenWidth) ? 0 : 1]
                                         ) : (
                                           <Link
                                             to={`/move/${tournament.metaGame}/${
                                               leg[0] === "_" ? "0" : "1"
                                             }/${leg[2]}`}
                                           >
-                                            {leg[screenWidth >= 770 ? 0 : 1]}
+                                            {leg[!isNarrowViewport(screenWidth) ? 0 : 1]}
                                           </Link>
                                         )}
                                       </React.Fragment>
@@ -480,7 +474,7 @@ function Tournament(props) {
                                       o[0] === "_" ? "0" : "1"
                                     }/${o[2]}`}
                                   >
-                                    {o[screenWidth >= 770 ? 0 : 1]}
+                                    {o[!isNarrowViewport(screenWidth) ? 0 : 1]}
                                   </Link>
                                 )}
                               </td>

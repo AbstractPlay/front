@@ -3035,6 +3035,13 @@ span.hardTime::after {
   color: var(--secondary-font-color);
 }
 
+/* Classic / Lab move list + chat: cap width only when Bulma columns are horizontal */
+@media screen and (min-width: 769px) {
+  .game-move-classic-sidebar.column.is-narrow {
+    max-width: 15vw;
+  }
+}
+
 .game-move-classic-header__title-row,
 .game-move-narrative-header__title-row {
   display: flex;

@@ -20,6 +20,7 @@ import PageLoading from "../shared/PageLoading";
 import LayoutPickerTrigger from "./LayoutPickerTrigger";
 import MetaGameLinks from "../shared/MetaGameLinks";
 import { buildMoveEntryProps } from "../../lib/GameMove/gameMoveLayoutHelpers";
+import { isNarrowViewport } from "../../lib/viewport";
 
 export default function GameMoveClassicLayout({ session }) {
   const {
@@ -243,7 +244,7 @@ export default function GameMoveClassicLayout({ session }) {
             </div>
           </div>
         )}
-        {screenWidth < 770 || verticalLayout ? (
+        {isNarrowViewport(screenWidth) || verticalLayout ? (
           /* Mobile, stacked layout */
           mobileOrder.map((key) => {
             let title;
@@ -314,7 +315,7 @@ export default function GameMoveClassicLayout({ session }) {
                       )}
                     </p>
                     {key === "board" ? (
-                      <LayoutPickerTrigger compact={screenWidth < 768} />
+                      <LayoutPickerTrigger compact={isNarrowViewport(screenWidth)} />
                     ) : null}
                     <button
                       className="card-header-icon"
@@ -517,7 +518,7 @@ export default function GameMoveClassicLayout({ session }) {
                     )}
                   </span>
                 </h1>
-                <LayoutPickerTrigger compact={screenWidth < 768} />
+                <LayoutPickerTrigger compact={isNarrowViewport(screenWidth)} />
               </div>
               <Board
                 metaGame={metaGame}
@@ -558,12 +559,7 @@ export default function GameMoveClassicLayout({ session }) {
               />
             </div>
             {/***************** GameMoves *****************/}
-            <div
-              className={`column is-narrow`}
-              style={
-                screenWidth < 770 || verticalLayout ? {} : { maxWidth: "15vw" }
-              }
-            >
+            <div className="column is-narrow game-move-classic-sidebar">
               <div className="tourMoveList">
                 <h1 className="subtitle lined">
                   <span>{t("Moves")}</span>

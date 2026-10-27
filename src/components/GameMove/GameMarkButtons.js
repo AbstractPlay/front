@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { isNarrowViewport } from "../../lib/viewport";
 
 function MarkIconButton({
   title,
@@ -46,7 +47,7 @@ function GameMarkButtons({
   const { t } = useTranslation();
   const [menuOpen, menuOpenSetter] = useState(false);
   const menuRef = useRef(null);
-  const compact = screenWidth < 770;
+  const compact = isNarrowViewport(screenWidth);
 
   useEffect(() => {
     if (!menuOpen) return;
