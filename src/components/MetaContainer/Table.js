@@ -16,7 +16,6 @@ import { stringColumnSortingFn } from "../../lib/compareStrings";
 import { tournamentListPath } from "../../lib/tournamentSections";
 import { ladderListPath } from "../../lib/ladderRoutes";
 import { ladderPlaySupported } from "../../lib/ladderGame";
-import { ladderUiDisabled } from "../../lib/ladderUiDisabled";
 import { useTranslation } from "react-i18next";
 import { getUiLocaleBundleKey } from "../../i18n";
 import ReactMarkdown from "react-markdown";
@@ -458,7 +457,7 @@ function Table({
             <Link to={tournamentListPath("open", props.row.original.id)}>
               {t("TournamentsLink")}
             </Link>
-            {!ladderUiDisabled() && ladderPlaySupported(props.row.original.id) ? (
+            {ladderPlaySupported(props.row.original.id) ? (
               <>
                 {" · "}
                 <Link to={ladderListPath(props.row.original.id)}>

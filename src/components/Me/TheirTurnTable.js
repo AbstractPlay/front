@@ -17,7 +17,6 @@ import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 import BotAwareName from "../Bots/BotAwareName";
 import { minOpponentOnClockRemainingMs } from "../../lib/gameClockDisplay";
 import { GameEventContextCell } from "../shared/GameEventContextCell";
-import { ladderUiDisabled } from "../../lib/ladderUiDisabled";
 import { useTranslation } from "react-i18next";
 import {
   firstNamedListSortingFn,
@@ -90,7 +89,7 @@ function TheirTurnTable(props) {
           lastSeen: g.seen || 0,
           lastChat: g.lastChat || 0,
           tournament: g.tournament,
-          ladderId: ladderUiDisabled() ? undefined : g.ladderId,
+          ladderId: g.ladderId,
         };
         return ret;
       }),

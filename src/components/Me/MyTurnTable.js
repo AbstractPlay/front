@@ -25,7 +25,6 @@ import {
   tickActivePlayerRemainingMs,
 } from "../../lib/gameClockDisplay";
 import { GameEventContextCell } from "../shared/GameEventContextCell";
-import { ladderUiDisabled } from "../../lib/ladderUiDisabled";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 function showMilliseconds(ms) {
@@ -93,7 +92,7 @@ function MyTurnTable({ games, fetching }) {
           lastSeen: g.seen || 0,
           lastChat: g.lastChat || 0,
           tournament: g.tournament,
-          ladderId: ladderUiDisabled() ? undefined : g.ladderId,
+          ladderId: g.ladderId,
         };
         return ret;
       }),

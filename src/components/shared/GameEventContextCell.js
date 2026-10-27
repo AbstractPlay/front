@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ladderUiDisabled } from "../../lib/ladderUiDisabled";
 import { ladderDetailPathFromGameRef } from "../../lib/ladderRoutes";
 import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
 
@@ -9,8 +8,7 @@ import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
  */
 export function GameEventContextCell({ tournament, ladderId, metaGame }) {
   const { t } = useTranslation();
-  const ladderPath =
-    !ladderUiDisabled() ? ladderDetailPathFromGameRef(ladderId) : null;
+  const ladderPath = ladderDetailPathFromGameRef(ladderId);
   const tournamentPath = tournamentDetailPathFromGameRef(
     tournament,
     metaGame,

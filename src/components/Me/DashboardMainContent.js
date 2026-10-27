@@ -23,7 +23,6 @@ import {
   defaultTabbedDashboardTab,
   normalizeDashboardTab,
 } from "../../lib/dashboardLayout";
-import { ladderUiDisabled } from "../../lib/ladderUiDisabled";
 
 const columnShellClass =
   "columns dashboard-main-columns";
@@ -298,9 +297,7 @@ export default function DashboardMainContent(props) {
     [onLayoutChange, setActiveTab]
   );
 
-  const ladderMembershipsForUi = ladderUiDisabled()
-    ? []
-    : globalMe.ladderMemberships;
+  const ladderMembershipsForUi = globalMe.ladderMemberships;
 
   const tabAvailability = useMemo(
     () =>

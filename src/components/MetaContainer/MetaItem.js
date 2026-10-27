@@ -29,7 +29,6 @@ import {
 } from "../../lib/metaItemTabs";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
 import { ladderPlaySupported } from "../../lib/ladderGame";
-import { ladderUiDisabled } from "../../lib/ladderUiDisabled";
 import SoloMetaStatsPanel from "../Stats/SoloMetaStatsPanel";
 import SoloSeedLeaderboard from "../Stats/SoloSeedLeaderboard";
 import { soloPlaySupported } from "../../lib/soloPlay";
@@ -211,7 +210,7 @@ const MetaItem = React.forwardRef(
         return tournamentPlaySupported(game.uid);
       }
       if (tab.id === "ladders") {
-        return !ladderUiDisabled() && ladderPlaySupported(game.uid);
+        return ladderPlaySupported(game.uid);
       }
       return true;
     });
@@ -504,9 +503,7 @@ const MetaItem = React.forwardRef(
             {activeTab !== "tournaments" || !tournamentPlaySupported(game.uid) ? null : (
               <Tournaments />
             )}
-            {activeTab !== "ladders" ||
-            ladderUiDisabled() ||
-            !ladderPlaySupported(game.uid) ? null : (
+            {activeTab !== "ladders" || !ladderPlaySupported(game.uid) ? null : (
               <Ladders />
             )}
           </div>

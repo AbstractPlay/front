@@ -31,7 +31,6 @@ import Tournaments from "../components/Tournaments/Tournaments";
 import TournamentsOld from "../components/Tournaments/TournamentsOld";
 import Ladders from "../components/Ladders/Ladders";
 import LadderHub from "../components/Ladder/LadderHub";
-import { LadderUiRedirect } from "../components/Ladders/LadderUiRedirect";
 import NotFound from "../components/NotFound";
 import Event from "../components/Event";
 import Events from "../components/Events";
@@ -267,22 +266,8 @@ function Bones(props) {
                   path="/tournaments/:tab?/:metaGame?"
                   element={<Tournaments />}
                 />
-                <Route
-                  path="/ladders/:tab?/:metaGame?"
-                  element={
-                    <LadderUiRedirect>
-                      <Ladders />
-                    </LadderUiRedirect>
-                  }
-                />
-                <Route
-                  path="/ladder/:ladderid"
-                  element={
-                    <LadderUiRedirect>
-                      <LadderHub />
-                    </LadderUiRedirect>
-                  }
-                />
+                <Route path="/ladders/:tab?/:metaGame?" element={<Ladders />} />
+                <Route path="/ladder/:ladderid" element={<LadderHub />} />
                 <Route path="/play" element={<Play />} />
                 <Route
                   path="/customize/site-theme"

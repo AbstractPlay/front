@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ladderUiDisabled } from "../../lib/ladderUiDisabled";
 import { ladderDetailPathFromGameRef } from "../../lib/ladderRoutes";
 
 /** Ladder indicator for challenge modals (matches dashboard challenge table chip). */
 export function ChallengeLadderBadge({ ladderId }) {
   const { t } = useTranslation();
-  if (!ladderId || ladderUiDisabled()) {
+  if (!ladderId) {
     return null;
   }
   const path = ladderDetailPathFromGameRef(ladderId);

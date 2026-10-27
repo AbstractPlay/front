@@ -26,7 +26,6 @@ import StandingChallengeModal from "./StandingChallengeModal";
 import DashboardMainContent from "./Me/DashboardMainContent";
 import PlayerVacationDetail from "./PlayerVacationDetail";
 import { vacationHasStint } from "../lib/vacationDisplay";
-import { ladderUiDisabled } from "../lib/ladderUiDisabled";
 import { useStore } from "../stores";
 
 function dashboardVacationSnapshot(globalMe) {
@@ -477,7 +476,6 @@ function Me(props) {
       Array.isArray(globalMe.currentTournaments) &&
       globalMe.currentTournaments.length > 0;
     const hasYourLadders =
-      !ladderUiDisabled() &&
       Array.isArray(globalMe.ladderMemberships) &&
       globalMe.ladderMemberships.length > 0;
     const hasChallengesReceived =

@@ -10,19 +10,10 @@ import {
   tournamentDetailPathArchived,
 } from "./tournamentRoutes";
 import { ladderDetailPathActive } from "./ladderRoutes";
-import { ladderUiDisabled } from "./ladderUiDisabled";
 import {
   formatLadderPoints,
   formatLadderPointsDelta,
 } from "./formatLadderPoints";
-
-const LADDER_BODY_TYPES = new Set([
-  "ladderChat",
-  "ladderDecay",
-  "ladderPointsChange",
-  "ladderJoin",
-  "ladderLeave",
-]);
 
 function metaGameLabel(metaGame) {
   return getGameDisplayName(metaGame);
@@ -132,10 +123,6 @@ function gameEndNotificationMessage(body) {
 }
 
 export function NotificationMessage({ body }) {
-  if (ladderUiDisabled() && LADDER_BODY_TYPES.has(body?.type)) {
-    return null;
-  }
-
   const metaGame = metaGameLabel(body.metaGame);
 
   switch (body.type) {
@@ -178,7 +165,7 @@ export function NotificationMessage({ body }) {
             body.metaGame,
             { challengerName: body.challengerName }
           )}
-          {body.ladderId && !ladderUiDisabled() ? (
+          {body.ladderId ? (
             <>
               {" "}
               <Link to={ladderDetailPathActive(body.ladderId)}>

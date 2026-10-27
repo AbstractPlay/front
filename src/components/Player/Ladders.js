@@ -5,7 +5,6 @@ import { LadderContext } from "../Player";
 import DataTable, { PROFILE_TABLE_PROPS } from "../shared/DataTable";
 import { useTranslation } from "react-i18next";
 import { ladderDetailPathActive } from "../../lib/ladderRoutes";
-import { ladderUiDisabled } from "../../lib/ladderUiDisabled";
 import { formatLadderPoints } from "../../lib/formatLadderPoints";
 
 function Ladders() {
@@ -28,14 +27,11 @@ function Ladders() {
     () => [
       columnHelper.accessor("displayName", {
         header: t("Ladder.name"),
-        cell: (props) =>
-          ladderUiDisabled() ? (
-            props.getValue()
-          ) : (
-            <Link to={ladderDetailPathActive(props.row.original.ladderId)}>
-              {props.getValue()}
-            </Link>
-          ),
+        cell: (props) => (
+          <Link to={ladderDetailPathActive(props.row.original.ladderId)}>
+            {props.getValue()}
+          </Link>
+        ),
       }),
       columnHelper.accessor("rank", {
         header: t("Ladder.rank"),

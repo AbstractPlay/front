@@ -34,7 +34,6 @@ import Designed from "./Player/Designed";
 import Tournaments from "./Player/Tournaments";
 import Ladders from "./Player/Ladders";
 import { fetchPlayerLadderRows } from "../lib/fetchLadder";
-import { ladderUiDisabled } from "../lib/ladderUiDisabled";
 import Hero from "./Player/Hero";
 import ProfileModule from "./Player/ProfileModule";
 import SummaryGate from "./shared/SummaryGate";
@@ -209,7 +208,7 @@ function Player() {
 
   useEffect(() => {
     async function fetchData() {
-      if (ladderUiDisabled() || !user?.id) {
+      if (!user?.id) {
         laddersSetter([]);
         return;
       }
