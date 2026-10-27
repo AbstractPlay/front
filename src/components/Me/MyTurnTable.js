@@ -24,6 +24,7 @@ import BotAwareName from "../Bots/BotAwareName";
 import {
   tickActivePlayerRemainingMs,
 } from "../../lib/gameClockDisplay";
+import { GameEventContextCell } from "../shared/GameEventContextCell";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 function showMilliseconds(ms) {
@@ -90,6 +91,8 @@ function MyTurnTable({ games, fetching }) {
           ),
           lastSeen: g.seen || 0,
           lastChat: g.lastChat || 0,
+          tournament: g.tournament,
+          ladderId: g.ladderId,
         };
         return ret;
       }),
@@ -176,6 +179,18 @@ function MyTurnTable({ games, fetching }) {
           </span>
         ),
       }),
+      columnHelper.display({
+        id: "event",
+        header: t("tables.event"),
+        cell: (props) => (
+          <GameEventContextCell
+            tournament={props.row.original.tournament}
+            ladderId={props.row.original.ladderId}
+            metaGame={props.row.original.metaGame}
+          />
+        ),
+        enableSorting: false,
+      }),
     ],
     [columnHelper, connections, allUsers, t, i18n.language]
   );
@@ -252,6 +267,8 @@ function MyTurnTable({ games, fetching }) {
                 key={row.id}
                 className={`${
                   row.original.tournament !== undefined ? "tourneyGame" : ""
+                } ${
+                  row.original.ladderId ? "ladderGame" : ""
                 } ${
                   row.original.lastChat > row.original.lastSeen ? "newChat" : ""
                 }`}

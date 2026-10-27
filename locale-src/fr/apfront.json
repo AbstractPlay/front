@@ -443,6 +443,10 @@
     "src": "Games",
     "out": "Parties"
   },
+  "Dashboard.tab.ladders": {
+    "src": "Ladders",
+    "out": "Échelles"
+  },
   "Dashboard.tab.tournaments": {
     "src": "Tournaments",
     "out": "Tournois"
@@ -1303,6 +1307,30 @@
     "src": "Game started",
     "out": "Partie commencée"
   },
+  "InAppNotifyLabel-ladderChat": {
+    "src": "Ladder chat",
+    "out": "Discussion d'échelle"
+  },
+  "InAppNotifyLabel-ladderDecay": {
+    "src": "Ladder inactivity decay",
+    "out": "Perte de points d'échelle pour inactivité"
+  },
+  "InAppNotifyLabel-ladderJoin": {
+    "src": "Joined a ladder",
+    "out": "Échelle rejointe"
+  },
+  "InAppNotifyLabel-ladderLeave": {
+    "src": "Left a ladder",
+    "out": "Échelle quittée"
+  },
+  "InAppNotifyLabel-ladderPointsGain": {
+    "src": "Ladder points gained",
+    "out": "Points d'échelle gagnés"
+  },
+  "InAppNotifyLabel-ladderPointsLoss": {
+    "src": "Ladder points lost",
+    "out": "Points d'échelle perdus"
+  },
   "InAppNotifyLabel-ratingChange": {
     "src": "Rating changes",
     "out": "Changements de classement"
@@ -1358,6 +1386,242 @@
   "Lab": {
     "src": "Playground",
     "out": "Laboratoire"
+  },
+  "Ladder.actionFailed": {
+    "src": "Could not complete that action.",
+    "out": "Impossible d'effectuer cette action."
+  },
+  "Ladder.activeGames": {
+    "src": "Active games",
+    "out": "Parties actives"
+  },
+  "Ladder.badge": {
+    "src": "Ladder",
+    "out": "Échelle"
+  },
+  "Ladder.challenge": {
+    "src": "Challenge",
+    "out": "Défier"
+  },
+  "Ladder.challengeNearest": {
+    "src": "Challenge nearest player anyway ({{name}}, {{points}} pts)",
+    "out": "Défier le joueur le plus proche quand même ({{name}}, {{points}} pts)"
+  },
+  "Ladder.chat": {
+    "src": "Ladder chat",
+    "out": "Discussion d'échelle"
+  },
+  "Ladder.clockCopy": {
+    "src": "All ladder games use hard Fischer clocks: 36 hours per move, 120 hours starting bank, 120 hours maximum.",
+    "out": "Toutes les parties d'échelle utilisent des pendules Fischer strictes : 36 heures par coup, réserve initiale de 120 heures, maximum de 120 heures."
+  },
+  "Ladder.createButton": {
+    "src": "Create ladder",
+    "out": "Créer l'échelle"
+  },
+  "Ladder.createHelp": {
+    "src": "Start a continuous delta ladder for a two-player game and variant set. One ladder exists per series.",
+    "out": "Lancez une échelle delta continue pour un ensemble de jeu à deux joueurs et de variantes. Une seule échelle existe par série."
+  },
+  "Ladder.createTitle": {
+    "src": "Create a ladder",
+    "out": "Créer une échelle"
+  },
+  "Ladder.dashboardJoinPool": {
+    "src": "Join pool",
+    "out": "Rejoindre le bassin"
+  },
+  "Ladder.dashboardPool": {
+    "src": "Pool",
+    "out": "Bassin"
+  },
+  "Ladder.downloadRecords": {
+    "src": "Download all game records for this ladder",
+    "out": "Télécharger tous les historiques de parties de cette échelle"
+  },
+  "Ladder.duplicate": {
+    "src": "A ladder already exists for this game and variants.",
+    "out": "Une échelle existe déjà pour ce jeu et ces variantes."
+  },
+  "Ladder.findMatch": {
+    "src": "Find match (pool)",
+    "out": "Trouver une partie (bassin)"
+  },
+  "Ladder.incomingChallenge": {
+    "src": "Challenge from {{name}}",
+    "out": "Défi de {{name}}"
+  },
+  "Ladder.introCollapse": {
+    "src": "Show less",
+    "out": "Afficher moins"
+  },
+  "Ladder.introExpand": {
+    "src": "Read full rules",
+    "out": "Lire toutes les règles"
+  },
+  "Ladder.introFull": {
+    "src": "Join or create a ladder for a game and variant series. You start near your Glicko rating low. Wins and losses adjust ladder points (upsets earn more). After 30 days without an active ladder game, inactive members lose a small fraction of points daily. While on site vacation, decay pauses and you cannot issue or accept new ladder matches. You may have up to seven active ladder games per ladder.",
+    "out": "Rejoignez ou créez une échelle pour un jeu et une série de variantes. Vous commencez près de la borne basse de votre classement Glicko. Les victoires et les défaites ajustent vos points d'échelle (les victoires contre des joueurs mieux classés en rapportent plus). Après 30 jours sans partie d'échelle active, les membres inactifs perdent une petite fraction de leurs points chaque jour. Pendant vos vacances sur le site, l'érosion des points est suspendue et vous ne pouvez ni proposer ni accepter de nouveaux défis d'échelle. Vous pouvez avoir jusqu'à sept parties d'échelle actives par échelle."
+  },
+  "Ladder.introSummary": {
+    "src": "Continuous correspondence ladders: ladder points move on each rated game result. Match opponents within ±20% ladder points, or use the pool. Hard 36h/120h clocks; all ladder games are rated.",
+    "out": "Échelles continues par correspondance : les points d'échelle évoluent à chaque résultat de partie classée. Affrontez des adversaires dans une plage de ±20 % de vos points d'échelle, ou utilisez le bassin d'appariement. Pendules strictes de 36h/120h ; toutes les parties d'échelle sont classées."
+  },
+  "Ladder.join": {
+    "src": "Join ladder",
+    "out": "Rejoindre l'échelle"
+  },
+  "Ladder.leaderboard": {
+    "src": "Leaderboard",
+    "out": "Classement"
+  },
+  "Ladder.leave": {
+    "src": "Leave ladder",
+    "out": "Quitter l'échelle"
+  },
+  "Ladder.leavePool": {
+    "src": "Leave pool",
+    "out": "Quitter le bassin"
+  },
+  "Ladder.leftPreview": {
+    "src": "You left this ladder with {{points}} ladder points.",
+    "out": "Vous avez quitté cette échelle avec {{points}} points d'échelle."
+  },
+  "Ladder.listLink": {
+    "src": "Ladders",
+    "out": "Échelles"
+  },
+  "Ladder.listTitle": {
+    "src": "Ladders",
+    "out": "Échelles"
+  },
+  "Ladder.loading": {
+    "src": "Loading ladder…",
+    "out": "Chargement de l'échelle…"
+  },
+  "Ladder.loadingList": {
+    "src": "Loading ladders…",
+    "out": "Chargement des échelles…"
+  },
+  "Ladder.matchmaking": {
+    "src": "Find a match",
+    "out": "Trouver une partie"
+  },
+  "Ladder.memberCountForming_one": {
+    "src": "{{count}} member ({{min}} to activate)",
+    "out": "{{count}} membre ({{min}} pour activer)"
+  },
+  "Ladder.memberCountForming_other": {
+    "src": "{{count}} members ({{min}} to activate)",
+    "out": "{{count}} membres ({{min}} pour activer)"
+  },
+  "Ladder.memberCount_one": {
+    "src": "{{count}} member",
+    "out": "{{count}} membre"
+  },
+  "Ladder.memberCount_other": {
+    "src": "{{count}} members",
+    "out": "{{count}} membres"
+  },
+  "Ladder.members": {
+    "src": "Members",
+    "out": "Membres"
+  },
+  "Ladder.name": {
+    "src": "Ladder",
+    "out": "Échelle"
+  },
+  "Ladder.noneListed": {
+    "src": "No ladders match your filters.",
+    "out": "Aucune échelle ne correspond à vos filtres."
+  },
+  "Ladder.noneOnDashboard": {
+    "src": "You are not in any ladders.",
+    "out": "Vous n'êtes dans aucune échelle."
+  },
+  "Ladder.outgoingChallengePending": {
+    "src": "You have a pending outgoing ladder challenge.",
+    "out": "Vous avez un défi d'échelle envoyé en attente."
+  },
+  "Ladder.participatingOnly": {
+    "src": "Only ladders I'm in",
+    "out": "Uniquement mes échelles"
+  },
+  "Ladder.pendingChallenges": {
+    "src": "Pending ladder challenges",
+    "out": "Défis d'échelle en attente"
+  },
+  "Ladder.points": {
+    "src": "Points",
+    "out": "Points"
+  },
+  "Ladder.poolWaiterCount_one": {
+    "src": "{{count}} player in the match pool",
+    "out": "{{count}} joueur dans le bassin d'appariement"
+  },
+  "Ladder.poolWaiterCount_other": {
+    "src": "{{count}} players in the match pool",
+    "out": "{{count}} joueurs dans le bassin d'appariement"
+  },
+  "Ladder.poolWaiting": {
+    "src": "Waiting in pool…",
+    "out": "En attente dans le bassin…"
+  },
+  "Ladder.proposeNew": {
+    "src": "Request a new ladder",
+    "out": "Demander un nouveau classement"
+  },
+  "Ladder.rank": {
+    "src": "Rank",
+    "out": "Rang"
+  },
+  "Ladder.rankPoints": {
+    "src": "Rank {{rank}} · {{points}} ladder points",
+    "out": "Rang {{rank}} · {{points}} points d'échelle"
+  },
+  "Ladder.reachBand": {
+    "src": "Challenge reach: {{low}}–{{high}} ladder points",
+    "out": "Portée de défi : {{low}}–{{high}} points d'échelle"
+  },
+  "Ladder.rejoin": {
+    "src": "Rejoin",
+    "out": "Rejoindre à nouveau"
+  },
+  "Ladder.status.active": {
+    "src": "Active",
+    "out": "Active"
+  },
+  "Ladder.status.forming": {
+    "src": "Forming",
+    "out": "En formation"
+  },
+  "Ladder.status.suspended": {
+    "src": "Suspended",
+    "out": "Suspendue"
+  },
+  "Ladder.tabs.all": {
+    "src": "All ladders",
+    "out": "Toutes les échelles"
+  },
+  "Ladder.title": {
+    "src": "{{metaGame}} ladder",
+    "out": "Échelle {{metaGame}}"
+  },
+  "Ladder.titleVariants": {
+    "src": "{{metaGame}} ladder ({{variants}})",
+    "out": "Échelle {{metaGame}} ({{variants}})"
+  },
+  "Ladder.unsupportedGame": {
+    "src": "This game does not support rated two-player ladders.",
+    "out": "Ce jeu ne prend pas en charge les échelles classées à deux joueurs."
+  },
+  "Ladder.vacationBlocked": {
+    "src": "Ladder matchmaking is unavailable while you are on vacation.",
+    "out": "La recherche de partie d'échelle est indisponible pendant vos vacances."
+  },
+  "Ladder.yourStanding": {
+    "src": "Your standing",
+    "out": "Votre position"
   },
   "LeaveMultiPlayerChallenge": {
     "src": "Leave challenge",
@@ -2251,6 +2515,10 @@
     "src": "Filter by game…",
     "out": "Filtrer par jeu…"
   },
+  "Tournament.introSummary": {
+    "src": "Recurring round-robin tournaments per game and variant. Registration opens for two weeks; play uses hard 36h/120h Fischer clocks. Divisions split players by rating at start.",
+    "out": "Tournois récurrents toutes rondes par jeu et variante. Les inscriptions sont ouvertes pendant deux semaines ; les parties utilisent des pendules Fischer strictes de 36h/120h. Les divisions répartissent les joueurs selon leur classement au début."
+  },
   "Tournament.loadErrorBody": {
     "src": "Something went wrong while loading this tournament. You can try again later or return to the tournaments list.",
     "out": "Une erreur est survenue lors du chargement de ce tournoi. Vous pouvez réessayer plus tard ou retourner à la liste des tournois."
@@ -2434,6 +2702,10 @@
   "YourGames": {
     "src": "Your games",
     "out": "Vos parties"
+  },
+  "YourLadders": {
+    "src": "Your ladders",
+    "out": "Vos échelles"
   },
   "YourMove": {
     "src": "Your move",
@@ -4911,6 +5183,10 @@
     "src": "exploration disabled",
     "out": "exploration désactivée"
   },
+  "gameMove.ladderLink": {
+    "src": "ladder",
+    "out": "échelle"
+  },
   "gameMove.layout.cardDescription": {
     "src": "Single inbox card optimized for playing through your queue",
     "out": "Carte unique optimisée pour enchaîner vos parties en attente"
@@ -5631,6 +5907,30 @@
     "src": "{{opponentName}} started a game of <gameLink>{{metaGame}}</gameLink> with you",
     "out": "{{opponentName}} a commencé une partie de {{metaGame}} avec vous"
   },
+  "me.notifications.message.ladderChat": {
+    "src": "{{commenterName}} posted in <ladderLink>{{metaGame}}</ladderLink> ladder chat",
+    "out": "{{commenterName}} a publié un message dans la discussion de l'échelle <ladderLink>{{metaGame}}</ladderLink>"
+  },
+  "me.notifications.message.ladderDecay": {
+    "src": "Your ladder points on <ladderLink>{{metaGame}}</ladderLink> decreased by {{pointsLost}} (now {{pointsAfter}}) due to inactivity",
+    "out": "Vos points d'échelle sur <ladderLink>{{metaGame}}</ladderLink> ont diminué de {{pointsLost}} (désormais {{pointsAfter}}) en raison de votre inactivité"
+  },
+  "me.notifications.message.ladderJoin": {
+    "src": "You joined <ladderLink>{{displayName}}</ladderLink>",
+    "out": "Vous avez rejoint <ladderLink>{{displayName}}</ladderLink>"
+  },
+  "me.notifications.message.ladderLeave": {
+    "src": "You left <ladderLink>{{displayName}}</ladderLink>",
+    "out": "Vous avez quitté <ladderLink>{{displayName}}</ladderLink>"
+  },
+  "me.notifications.message.ladderPointsGain": {
+    "src": "You gained {{delta}} ladder points on <ladderLink>{{metaGame}}</ladderLink> (now {{pointsAfter}}) after a <gameLink>rated game</gameLink>",
+    "out": "Vous avez gagné {{delta}} points d'échelle sur <ladderLink>{{metaGame}}</ladderLink> (désormais {{pointsAfter}}) après une <gameLink>partie classée</gameLink>"
+  },
+  "me.notifications.message.ladderPointsLoss": {
+    "src": "You lost {{pointsLost}} ladder points on <ladderLink>{{metaGame}}</ladderLink> (now {{pointsAfter}}) after a <gameLink>rated game</gameLink>",
+    "out": "Vous avez perdu {{pointsLost}} points d'échelle sur <ladderLink>{{metaGame}}</ladderLink> (désormais {{pointsAfter}}) après une <gameLink>partie classée</gameLink>"
+  },
   "me.notifications.message.ratingChange": {
     "src": "Your rating for <gameLink>{{metaGame}}</gameLink>{{variantsInline}} changed {{delta}} points from {{oldRatingDisplay}} to {{newRatingDisplay}}.",
     "out": "Votre classement pour <gameLink>{{metaGame}}</gameLink>{{variantsInline}} a changé de {{delta}} points, passant de {{oldRatingDisplay}} à {{newRatingDisplay}}."
@@ -5706,6 +6006,10 @@
   "meta.tabs.historicalData": {
     "src": "Historical Data",
     "out": "Données historiques"
+  },
+  "meta.tabs.ladders": {
+    "src": "Ladders",
+    "out": "Échelles"
   },
   "meta.tabs.players": {
     "src": "Players",
@@ -5954,6 +6258,10 @@
   "player.modules.history": {
     "src": "Game History",
     "out": "Historique des parties"
+  },
+  "player.modules.ladders": {
+    "src": "Ladder memberships",
+    "out": "Membres d'échelles"
   },
   "player.modules.opponents": {
     "src": "Opponents",
@@ -7006,6 +7314,10 @@
   "tables.ended": {
     "src": "Ended",
     "out": "Terminé"
+  },
+  "tables.event": {
+    "src": "Event",
+    "out": "Événement"
   },
   "tables.explorationDisabled": {
     "src": "Exploration disabled?",

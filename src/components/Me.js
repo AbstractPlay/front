@@ -475,6 +475,9 @@ function Me(props) {
     const hasYourTournaments =
       Array.isArray(globalMe.currentTournaments) &&
       globalMe.currentTournaments.length > 0;
+    const hasYourLadders =
+      Array.isArray(globalMe.ladderMemberships) &&
+      globalMe.ladderMemberships.length > 0;
     const hasChallengesReceived =
       Array.isArray(globalMe.challengesReceived) &&
       globalMe.challengesReceived.length > 0;
@@ -512,6 +515,7 @@ function Me(props) {
           setError={errorSetter}
           hasWatchedGames={hasWatchedGames}
           hasYourTournaments={hasYourTournaments}
+          hasYourLadders={hasYourLadders}
           challengesResponded={challengesResponded}
           hasChallengesReceived={hasChallengesReceived}
           hasChallengesAwaitingResponse={hasChallengesAwaitingResponse}

@@ -29,6 +29,8 @@ import Legal from "../components/Legal";
 import Players from "../components/Players";
 import Tournaments from "../components/Tournaments/Tournaments";
 import TournamentsOld from "../components/Tournaments/TournamentsOld";
+import Ladders from "../components/Ladders/Ladders";
+import LadderHub from "../components/Ladder/LadderHub";
 import NotFound from "../components/NotFound";
 import Event from "../components/Event";
 import Events from "../components/Events";
@@ -264,6 +266,8 @@ function Bones(props) {
                   path="/tournaments/:tab?/:metaGame?"
                   element={<Tournaments />}
                 />
+                <Route path="/ladders/:tab?/:metaGame?" element={<Ladders />} />
+                <Route path="/ladder/:ladderid" element={<LadderHub />} />
                 <Route path="/play" element={<Play />} />
                 <Route
                   path="/customize/site-theme"

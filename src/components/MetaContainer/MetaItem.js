@@ -15,6 +15,7 @@ import Ratings from "../Ratings";
 import StandingChallenges from "../StandingChallenges";
 import ListGames from "../ListGames";
 import Tournaments from "../Tournaments/Tournaments";
+import Ladders from "../Ladders/Ladders";
 import GameDisplays from "../GameDisplays";
 import GameVariants from "../GameVariants";
 import Thumbnail from "../Thumbnail";
@@ -27,6 +28,7 @@ import {
   metaTabHash,
 } from "../../lib/metaItemTabs";
 import { tournamentPlaySupported } from "../../lib/tournamentGame";
+import { ladderPlaySupported } from "../../lib/ladderGame";
 import SoloMetaStatsPanel from "../Stats/SoloMetaStatsPanel";
 import SoloSeedLeaderboard from "../Stats/SoloSeedLeaderboard";
 import { soloPlaySupported } from "../../lib/soloPlay";
@@ -203,10 +205,15 @@ const MetaItem = React.forwardRef(
       return;
     };
 
-    const visibleTabs = META_TABS.filter(
-      (tab) =>
-        tab.id !== "tournaments" || tournamentPlaySupported(game.uid)
-    );
+    const visibleTabs = META_TABS.filter((tab) => {
+      if (tab.id === "tournaments") {
+        return tournamentPlaySupported(game.uid);
+      }
+      if (tab.id === "ladders") {
+        return ladderPlaySupported(game.uid);
+      }
+      return true;
+    });
 
     return (
       <div ref={ref}>
@@ -495,6 +502,9 @@ const MetaItem = React.forwardRef(
             )}
             {activeTab !== "tournaments" || !tournamentPlaySupported(game.uid) ? null : (
               <Tournaments />
+            )}
+            {activeTab !== "ladders" || !ladderPlaySupported(game.uid) ? null : (
+              <Ladders />
             )}
           </div>
           <div className="column">

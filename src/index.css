@@ -1635,6 +1635,17 @@ abbr.glicko-hint {
 /* Can be nested to create ever-more indented containers.
  * Used for the dashboard.
  */
+.ladder-dashboard-pool-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
+.ladder-dashboard-pool-cell .help {
+  color: var(--secondary-font-color);
+}
+
 .indentedContainer {
   padding-left: 2em;
   padding-bottom: 1em;
@@ -2724,6 +2735,96 @@ span.hardTime::after {
 
   #tournamentsPage .tournaments-tab-panel {
     margin-top: 0.5rem;
+  }
+
+  #laddersPage .ladders-page-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 1em;
+  }
+
+  #laddersPage .ladders-page-toolbar-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  #laddersPage .ladders-page-filter-checkbox {
+    white-space: nowrap;
+  }
+
+  #ladderHub.ladder-hub .ladder-hub-section {
+    margin-bottom: 1.5rem;
+  }
+
+  #ladderHub.ladder-hub .ladder-hub-section-body {
+    background: var(--secondary-color-3-bg);
+    border: 1px solid var(--tag-background-color);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    color: var(--main-font-color);
+  }
+
+  #ladderHub.ladder-hub .ladder-hub-card.card {
+    background: var(--main-bg-color);
+    border: 1px solid var(--tag-background-color);
+    color: var(--main-font-color);
+    box-shadow: none;
+  }
+
+  #ladderHub.ladder-hub .ladder-hub-card .card-header {
+    background: var(--secondary-color-3-bg);
+    border-bottom: 1px solid var(--tag-background-color);
+  }
+
+  #ladderHub.ladder-hub .ladder-hub-card .card-header-title {
+    color: var(--main-heading-color);
+  }
+
+  #ladderHub.ladder-hub .ladder-hub-table-wrap .table.apTable {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  #ladderHub.ladder-hub .apTable th,
+  #ladderHub.ladder-hub .apTable td {
+    vertical-align: middle;
+  }
+
+  #ladderHub.ladder-hub .apTable tr.ladder-within-reach {
+    box-shadow: inset 3px 0 0 var(--secondary-color-3);
+  }
+
+  #ladderHub.ladder-hub .field.is-grouped {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  #ladderHub.ladder-hub .field.is-grouped .control:first-child {
+    flex: 1 1 16rem;
+    min-width: min(100%, 16rem);
+  }
+
+  #ladderHub.ladder-hub .game-comment-short__input {
+    width: 100%;
+    min-height: 2.5rem;
+  }
+
+  #ladderHub.ladder-hub .ladder-rules-intro .button.is-text {
+    color: var(--secondary-color-3);
+  }
+
+  #ladderHub.ladder-hub .ladder-rules-intro .button.is-text:hover,
+  #ladderHub.ladder-hub .ladder-rules-intro .button.is-text:focus-visible {
+    color: var(--secondary-color-3-lighter);
+    background: var(--tag-background-color);
   }
 
   #leaderboard .stats-page-tabs {

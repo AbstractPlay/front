@@ -3,12 +3,14 @@ export const DASHBOARD_LAYOUT_TABBED = "tabbed";
 
 export const DASHBOARD_TAB_GAMES = "games";
 export const DASHBOARD_TAB_TOURNAMENTS = "tournaments";
+export const DASHBOARD_TAB_LADDERS = "ladders";
 export const DASHBOARD_TAB_CHALLENGES = "challenges";
 export const DASHBOARD_TAB_ADMIN = "admin";
 
 const DASHBOARD_TABS = [
   DASHBOARD_TAB_GAMES,
   DASHBOARD_TAB_TOURNAMENTS,
+  DASHBOARD_TAB_LADDERS,
   DASHBOARD_TAB_CHALLENGES,
   DASHBOARD_TAB_ADMIN,
 ];
@@ -30,6 +32,7 @@ export function dashboardTabAvailability({
   waiting,
   watchedGames,
   currentTournaments,
+  ladderMemberships,
   challengesReceived,
   challengesAwaitingResponse,
   openStandingChallenges,
@@ -39,6 +42,7 @@ export function dashboardTabAvailability({
   // Games tab always available in tabbed mode (move tables are always shown).
   const games = true;
   const tournaments = (currentTournaments?.length ?? 0) > 0;
+  const ladders = (ladderMemberships?.length ?? 0) > 0;
   const challenges =
     (challengesReceived?.length ?? 0) > 0 ||
     challengesAwaitingResponse ||
@@ -47,6 +51,7 @@ export function dashboardTabAvailability({
   return {
     [DASHBOARD_TAB_GAMES]: games,
     [DASHBOARD_TAB_TOURNAMENTS]: tournaments,
+    [DASHBOARD_TAB_LADDERS]: ladders,
     [DASHBOARD_TAB_CHALLENGES]: challenges,
     [DASHBOARD_TAB_ADMIN]: isAdmin === true,
   };

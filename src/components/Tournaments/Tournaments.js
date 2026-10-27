@@ -10,8 +10,6 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import { useStorageState } from "react-use-storage-state";
 import { API_ENDPOINT_OPEN } from "../../config";
 import NewTournamentModal from "./NewTournamentModal";
@@ -46,6 +44,7 @@ import {
   visibleTournamentTabs,
 } from "../../lib/tournamentSections";
 import PageLoading from "../shared/PageLoading";
+import { RulesIntroExpandable } from "../shared/RulesIntroExpandable";
 import HistoricalTournamentsTable from "./HistoricalTournamentsTable";
 import { TableNavSearch } from "../shared/DataTable";
 import { trimmedGlobalIncludesStringFilterFn } from "../../lib/tableGlobalFilter";
@@ -1145,9 +1144,11 @@ function Tournaments(props) {
         <h1 className="title has-text-centered">
           {t("Tournament.Tournaments")}
         </h1>
-        <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
-          {t("Tournament.Description")}
-        </ReactMarkdown>
+        <RulesIntroExpandable
+          summaryKey="Tournament.introSummary"
+          fullKey="Tournament.Description"
+          numLines={4}
+        />
         <div className="tournaments-page-toolbar">
           <div className="tournaments-page-toolbar-filters">
             {isEmbedded ? null : (

@@ -9,6 +9,12 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
+## [1.0.0-ci] - 2026-10-26
+
+### Added
+
+- **Continuous Delta Ladder:** Ladder list and hub UI (`/ladders`, `/ladder/:id`), dashboard Ladders tab (join match pool per ladder when eligible), game-list Event column, profile ladder module, `watchLadders` WebSocket refresh, in-app notification copy/prefs (`ladderChat`, `ladderDecay`, `ladderPointsGain` / `ladderPointsLoss`, `ladderJoin`, `ladderLeave`); ladder surfaces visible in prod (kill-switch removed).
+
 ## [1.0.0-ci] - 2026-10-25
 
 ### Changed
