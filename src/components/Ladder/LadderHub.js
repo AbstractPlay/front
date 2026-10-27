@@ -20,6 +20,7 @@ import { ladderDetailPathActive } from "../../lib/ladderRoutes";
 import { canCommentLadderChat, ladderChatPlayers } from "../../lib/ladderChat";
 import { fetchDashboard } from "../../lib/globalMeBootstrap";
 import { formatLadderPoints } from "../../lib/formatLadderPoints";
+import { formatLadderMemberCount } from "../../lib/ladderMemberCount";
 import { RulesIntroExpandable } from "../shared/RulesIntroExpandable";
 
 function LadderSection({ title, children }) {
@@ -311,9 +312,10 @@ function LadderHub() {
         <p className="has-text-centered">
           <span className="tag">{t(`Ladder.status.${ladder.status}`, ladder.status)}</span>
           &nbsp;
-          {t("Ladder.memberCount", {
+          {formatLadderMemberCount(t, {
             count: ladder.activeMemberCount ?? 0,
             min: ladder.minActiveMembers,
+            status: ladder.status,
           })}
         </p>
         <RulesIntroExpandable

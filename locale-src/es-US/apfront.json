@@ -1507,13 +1507,21 @@
     "src": "Find a match",
     "out": "Buscar partida"
   },
-  "Ladder.memberCount_one": {
+  "Ladder.memberCountForming_one": {
     "src": "{{count}} member ({{min}} to activate)",
     "out": "{{count}} miembro ({{min}} para activar)"
   },
-  "Ladder.memberCount_other": {
+  "Ladder.memberCountForming_other": {
     "src": "{{count}} members ({{min}} to activate)",
     "out": "{{count}} miembros ({{min}} para activar)"
+  },
+  "Ladder.memberCount_one": {
+    "src": "{{count}} member",
+    "out": "{{count}} miembro"
+  },
+  "Ladder.memberCount_other": {
+    "src": "{{count}} members",
+    "out": "{{count}} miembros"
   },
   "Ladder.members": {
     "src": "Members",
@@ -1558,6 +1566,10 @@
   "Ladder.poolWaiting": {
     "src": "Waiting in pool…",
     "out": "Esperando en el grupo…"
+  },
+  "Ladder.proposeNew": {
+    "src": "Request a new ladder",
+    "out": "Solicitar una nueva clasificación"
   },
   "Ladder.rank": {
     "src": "Rank",

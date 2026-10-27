@@ -37,6 +37,7 @@ import { fetchLaddersList } from "../../lib/fetchLadder";
 import NewLadderModal from "./NewLadderModal";
 import { RulesIntroExpandable } from "../shared/RulesIntroExpandable";
 import { variantSelectionSortingFn } from "../../lib/variantTableSort";
+import { formatLadderMemberCount } from "../../lib/ladderMemberCount";
 
 function Ladders() {
   const { t, i18n } = useTranslation();
@@ -165,9 +166,10 @@ function Ladders() {
         header: t("Ladder.members"),
         cell: (props) => {
           const row = props.row.original;
-          return t("Ladder.memberCount", {
+          return formatLadderMemberCount(t, {
             count: props.getValue() ?? 0,
             min: row.minActiveMembers,
+            status: row.status,
           });
         },
       }),
@@ -231,7 +233,7 @@ function Ladders() {
   return (
     <>
       <PageHelmet title={pageTitle} canonicalPath={ladderListPathForTab("all", filterMeta)} />
-      <article className="content">
+      <article id="laddersPage" className="content">
         {!isEmbedded ? (
           <h1 className="title has-text-centered">{pageTitle}</h1>
         ) : null}
@@ -239,46 +241,52 @@ function Ladders() {
           summaryKey="Ladder.introSummary"
           fullKey="Ladder.introFull"
         />
-        <div className="field is-grouped is-flex-wrap-wrap mb-4">
-          {filterMeta === null ? (
-            <div className="control">
-              <GamePickerTrigger
-                value=""
-                onChange={(g) =>
-                  goToList(isValidLadderMetaGame(g) ? g : null)
-                }
-                includeAllGamesOption
-              />
-            </div>
-          ) : null}
-          <div className="control">
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={starredOnly}
-                onChange={(e) => starredOnlySetter(e.target.checked)}
-              />
-              &nbsp;{t("Tournament.starredOnly")}
-            </label>
-          </div>
-          <div className="control">
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={registeredOnly}
-                onChange={(e) => registeredOnlySetter(e.target.checked)}
-              />
-              &nbsp;{t("Ladder.participatingOnly")}
-            </label>
+        <div className="ladders-page-toolbar">
+          <div className="ladders-page-toolbar-filters">
+            {filterMeta === null ? (
+              <div className="control">
+                <GamePickerTrigger
+                  value=""
+                  onChange={(g) =>
+                    goToList(isValidLadderMetaGame(g) ? g : null)
+                  }
+                  includeAllGamesOption
+                />
+              </div>
+            ) : null}
+            {globalMe?.id ? (
+              <>
+                <div className="control">
+                  <label className="checkbox ladders-page-filter-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={starredOnly}
+                      onChange={(e) => starredOnlySetter(e.target.checked)}
+                    />
+                    {t("Tournament.starredOnly")}
+                  </label>
+                </div>
+                <div className="control">
+                  <label className="checkbox ladders-page-filter-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={registeredOnly}
+                      onChange={(e) => registeredOnlySetter(e.target.checked)}
+                    />
+                    {t("Ladder.participatingOnly")}
+                  </label>
+                </div>
+              </>
+            ) : null}
           </div>
           {showCreateButton ? (
             <div className="control">
               <button
                 type="button"
-                className="button apButton"
+                className="button is-small apButton"
                 onClick={() => showNewLadderModalSetter(true)}
               >
-                {t("Ladder.createButton")}
+                {t("Ladder.proposeNew")}
               </button>
             </div>
           ) : null}

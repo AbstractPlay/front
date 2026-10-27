@@ -2737,6 +2737,28 @@ span.hardTime::after {
     margin-top: 0.5rem;
   }
 
+  #laddersPage .ladders-page-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 1em;
+  }
+
+  #laddersPage .ladders-page-toolbar-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  #laddersPage .ladders-page-filter-checkbox {
+    white-space: nowrap;
+  }
+
   #ladderHub.ladder-hub .ladder-hub-section {
     margin-bottom: 1.5rem;
   }

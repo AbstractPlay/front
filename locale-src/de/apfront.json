@@ -1507,13 +1507,21 @@
     "src": "Find a match",
     "out": "Spiel suchen"
   },
-  "Ladder.memberCount_one": {
+  "Ladder.memberCountForming_one": {
     "src": "{{count}} member ({{min}} to activate)",
     "out": "{{count}} Mitglied ({{min}} zum Aktivieren)"
   },
-  "Ladder.memberCount_other": {
+  "Ladder.memberCountForming_other": {
     "src": "{{count}} members ({{min}} to activate)",
     "out": "{{count}} Mitglieder ({{min}} zum Aktivieren)"
+  },
+  "Ladder.memberCount_one": {
+    "src": "{{count}} member",
+    "out": "{{count}} Mitglied"
+  },
+  "Ladder.memberCount_other": {
+    "src": "{{count}} members",
+    "out": "{{count}} Mitglieder"
   },
   "Ladder.members": {
     "src": "Members",
@@ -1558,6 +1566,10 @@
   "Ladder.poolWaiting": {
     "src": "Waiting in pool…",
     "out": "Warten im Pool…"
+  },
+  "Ladder.proposeNew": {
+    "src": "Request a new ladder",
+    "out": "Neue Rangliste anfordern"
   },
   "Ladder.rank": {
     "src": "Rank",
