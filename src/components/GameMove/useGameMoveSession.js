@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
+import { useViewportWidth } from "../../hooks/useViewportWidth";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { render } from "@abstractplay/renderer";
@@ -217,7 +218,7 @@ export function useGameMoveSession(props) {
   const [cssActive, cssActiveSetter] = useState(true);
   const [gameNote, gameNoteSetter] = useState(null);
   const [interimNote, interimNoteSetter] = useState("");
-  const [screenWidth, screenWidthSetter] = useState(window.innerWidth);
+  const screenWidth = useViewportWidth();
   const [mobileOrder, mobileOrderSetter] = useStorageState(
     "play-mobile-order",
     [...defaultChunkOrder]
@@ -1517,14 +1518,6 @@ export function useGameMoveSession(props) {
       errorSetter(true);
     }
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      screenWidthSetter(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   // when the user clicks on the list of moves (or move list navigation)
   const handleGameMoveClick = (foc, altDisplayOverride) => {

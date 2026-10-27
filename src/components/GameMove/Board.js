@@ -4,6 +4,7 @@ import useStorageState from "react-use-storage-state";
 import BoardNav from "./BoardNav";
 import GameMarkButtons from "./GameMarkButtons";
 import { useStore } from "../../stores";
+import { isNarrowViewport } from "../../lib/viewport";
 
 function Board({
   metaGame,
@@ -193,7 +194,7 @@ function Board({
       )}
 
       <TransformWrapper
-        disabled={screenWidth < 770 || verticalLayout || !zoomEnabled}
+        disabled={isNarrowViewport(screenWidth) || verticalLayout || !zoomEnabled}
         doubleClick={{ disabled: true }}
         centerOnInit={false}
       >
@@ -292,7 +293,7 @@ function Board({
             <i className="fa fa-film"></i>
           </button>
         ) : null}
-        {screenWidth < 770 ? null : (
+        {isNarrowViewport(screenWidth) ? null : (
           <button
             className="fabtn align-right"
             onClick={() => {
@@ -367,7 +368,7 @@ function Board({
             <i className="fa fa-paint-brush"></i>
           </button>
         )}
-        {screenWidth < 770 ? null : (
+        {isNarrowViewport(screenWidth) ? null : (
           <button
             className="fabtn align-right"
             onClick={() => verticalLayoutSetter((val) => !val)}
