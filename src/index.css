@@ -2817,6 +2817,51 @@ span.hardTime::after {
     min-height: 2.5rem;
   }
 
+  .ladder-rules-intro .rules-intro-body--interactive {
+    cursor: pointer;
+  }
+
+  .ladder-rules-intro .rules-intro-body--collapsed {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ladder-rules-intro .rules-intro-body--collapsed.rules-intro-body--fade::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3rem;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      var(--main-bg-color)
+    );
+    pointer-events: none;
+  }
+
+  .ladder-rules-intro .rules-intro-body--expanded {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .ladder-rules-intro .rules-intro-toggle-wrap {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .ladder-rules-intro .rules-intro-toggle {
+    color: var(--secondary-color-3);
+    text-decoration: underline;
+  }
+
+  .ladder-rules-intro .rules-intro-toggle:hover,
+  .ladder-rules-intro .rules-intro-toggle:focus-visible {
+    color: var(--secondary-color-3-lighter);
+    background: var(--tag-background-color);
+  }
+
   #ladderHub.ladder-hub .ladder-rules-intro .button.is-text {
     color: var(--secondary-color-3);
   }

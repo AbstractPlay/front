@@ -1144,11 +1144,7 @@ function Tournaments(props) {
         <h1 className="title has-text-centered">
           {t("Tournament.Tournaments")}
         </h1>
-        <RulesIntroExpandable
-          summaryKey="Tournament.introSummary"
-          fullKey="Tournament.Description"
-          numLines={4}
-        />
+        <RulesIntroExpandable textKey="Tournament.Description" />
         <div className="tournaments-page-toolbar">
           <div className="tournaments-page-toolbar-filters">
             {isEmbedded ? null : (

@@ -27,7 +27,7 @@ import {
   isValidLadderMetaGame,
 } from "../../lib/ladderSections";
 import PageLoading from "../shared/PageLoading";
-import { TableNavSearch } from "../shared/DataTable";
+import { TablePaginationNav } from "../shared/DataTable";
 import { trimmedGlobalIncludesStringFilterFn } from "../../lib/tableGlobalFilter";
 import {
   useResetTablePageIndex,
@@ -57,7 +57,7 @@ function Ladders() {
     false
   );
   const [globalFilter, setGlobalFilter] = useState("");
-  const [showState] = useStorageState("ladders-show", 20);
+  const [showState, showStateSetter] = useStorageState("ladders-show", 20);
   const [sorting, setSorting] = useState([{ id: "metaGame", desc: false }]);
 
   const route = resolveLadderRouteContext({
@@ -188,6 +188,7 @@ function Ladders() {
     getFilteredRowModel: getFilteredRowModel(),
     globalFilterFn: trimmedGlobalIncludesStringFilterFn,
     onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
   });
 
   useResetTablePageIndex(table, globalFilter);
@@ -237,10 +238,7 @@ function Ladders() {
         {!isEmbedded ? (
           <h1 className="title has-text-centered">{pageTitle}</h1>
         ) : null}
-        <RulesIntroExpandable
-          summaryKey="Ladder.introSummary"
-          fullKey="Ladder.introFull"
-        />
+        <RulesIntroExpandable textKey="Ladder.intro" />
         <div className="ladders-page-toolbar">
           <div className="ladders-page-toolbar-filters">
             {filterMeta === null ? (
@@ -291,7 +289,12 @@ function Ladders() {
             </div>
           ) : null}
         </div>
-        <TableNavSearch value={globalFilter} onChange={setGlobalFilter} />
+        <TablePaginationNav
+          table={table}
+          onPageSizeChange={showStateSetter}
+          globalFilter={globalFilter}
+          onGlobalFilterChange={setGlobalFilter}
+        />
         <table className="table apTable">
           <thead>
             {table.getHeaderGroups().map((hg) => (
@@ -322,6 +325,12 @@ function Ladders() {
             )}
           </tbody>
         </table>
+        <TablePaginationNav
+          table={table}
+          onPageSizeChange={showStateSetter}
+          globalFilter={globalFilter}
+          onGlobalFilterChange={setGlobalFilter}
+        />
       </article>
       <NewLadderModal
         show={showNewLadderModal}
