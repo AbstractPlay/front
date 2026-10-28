@@ -26,6 +26,13 @@ export function tickActivePlayerRemainingMs(player, game, toMove, playerIndex, n
     return player?.time ?? 0;
   }
   if (
+    game?.playMode === "arena"
+    && player?.time !== undefined
+    && game?.lastMoveTime !== undefined
+  ) {
+    return player.time - (now - game.lastMoveTime);
+  }
+  if (
     player?.effectiveRemainingMs !== undefined
     && game?.clockDisplayServerTime !== undefined
   ) {

@@ -42,6 +42,7 @@ export default function LayoutSwitcher({
         resolvedFrom,
         metaGame,
         storedLayout: readLayoutPreference(playContext),
+        playContext,
       });
     }
     writeLayoutPreference(toLayoutId, playContext);

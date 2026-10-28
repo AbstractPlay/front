@@ -20,12 +20,15 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 - **Arena landing:** variant picker (`GameVariants`) when creating a table or quick match; variants are sent to `create_arena_table` / `join_arena_queue` and shown in the open-tables list.
 - **Arena table lobby:** choose play-page layout before ready-up (name + short description; separate `gameMoveLayoutLive` storage). Launch navigates to `/arena/play/...?layout=…`.
-- **Play layouts:** arena play/watch resolve and persist layout from the live storage key; in-game layout picker links stay on `/arena/play` or `/arena/watch` routes.
+- **Play layouts:** fifth **live** layout (clock-first bar, move dock, drawer) for arena and correspondence; arena play/watch default to **live** via `gameMoveLayoutLive`; in-game layout picker links stay on `/arena/play` or `/arena/watch` routes.
 - **Tournaments / ladders:** rules intro on the tournaments list, ladder list, and ladder hub keeps the full description in place with a fade and expand/collapse toggle (same pattern as the player profile about box), instead of swapping short and long copy.
 - **Ladder list:** paginated ladder table with the shared TanStack table nav (search, page controls, page size).
 
 ### Fixed
 
+- **Arena landing:** seated players in a live game get **Return to game** (play URL) instead of only **Watch**; banner when you have an active table.
+- **Arena play:** moves use `submit_arena_move` when the loaded game is `playMode: arena` (including after opening via `/move/…`); auto-redirect to `/arena/play/…`; layout switcher links use correct arena paths without a stray `cbits` segment.
+- **Arena clocks:** timeloss polling aligns with server Fischer math (500 ms poll, `lastMoveTime` tick); benign timeloss races refresh the game instead of showing a checkTime error.
 - **Play (Classic layout):** narrow viewports no longer squeeze the move list and chat into a ~15vw column when orientation or mobile browser chrome leaves a stale wide `innerWidth`; sidebar width is CSS-gated at Bulma’s tablet breakpoint and viewport width tracks `visualViewport`, `orientationchange`, and `matchMedia`.
 
 ## [1.0.0-ci] - 2026-10-25

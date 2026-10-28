@@ -51,7 +51,7 @@ describe("participantTimelossPoll", () => {
   it("participant poll runs for hard-clock in-progress games", () => {
     const { game } = arenaTimedOutGame();
     expect(shouldParticipantPollTimeloss(game)).toBe(true);
-    expect(participantTimelossPollIntervalMs(game)).toBe(1500);
+    expect(participantTimelossPollIntervalMs(game)).toBe(500);
   });
 
   it("does not poll when game is over or correspondence soft clock", () => {

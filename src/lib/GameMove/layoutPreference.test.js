@@ -5,6 +5,7 @@ import {
   DEFAULT_LIVE_LAYOUT,
   LAYOUT_CARD,
   LAYOUT_CLASSIC,
+  LAYOUT_LIVE,
   LAYOUT_NARRATIVE,
   LAYOUT_STRIP,
   PLAY_CONTEXT_CORRESPONDENCE,
@@ -92,12 +93,23 @@ describe("layoutPreference", () => {
   });
 
   it("defaults live context to DEFAULT_LIVE_LAYOUT when unset", () => {
+    expect(DEFAULT_LIVE_LAYOUT).to.equal(LAYOUT_LIVE);
     expect(
       resolveGameMoveLayout("", { playContext: PLAY_CONTEXT_LIVE })
     ).to.deep.equal({
-      layoutId: DEFAULT_LIVE_LAYOUT,
+      layoutId: LAYOUT_LIVE,
       resolvedFrom: "default",
     });
+  });
+
+  it("includes live in ALL_LAYOUTS and arena path query", () => {
+    expect(ALL_LAYOUTS).to.include(LAYOUT_LIVE);
+    expect(
+      gameMovePath("hex", 0, "tid", {
+        layout: LAYOUT_LIVE,
+        basePath: "/arena/play",
+      })
+    ).to.equal("/arena/play/hex/tid?layout=live");
   });
 
   it("infers live play context from arena routes", () => {
@@ -115,7 +127,7 @@ describe("layoutPreference", () => {
         layout: LAYOUT_STRIP,
         basePath: "/arena/play",
       })
-    ).to.equal("/arena/play/hex/0/tid?layout=strip");
+    ).to.equal("/arena/play/hex/tid?layout=strip");
   });
 
   it("migrates legacy queue layout to card", () => {

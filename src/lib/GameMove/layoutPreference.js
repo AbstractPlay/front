@@ -1,3 +1,5 @@
+import { isArenaPlayOrWatchBase } from "../arena/arenaMoveBase.js";
+
 export const MOVE_BASE = "/move";
 
 /** @deprecated use MOVE_BASE */
@@ -10,6 +12,7 @@ export const LAYOUT_CLASSIC = "classic";
 export const LAYOUT_STRIP = "strip";
 export const LAYOUT_CARD = "card";
 export const LAYOUT_NARRATIVE = "narrative";
+export const LAYOUT_LIVE = "live";
 
 /** @deprecated use LAYOUT_CARD */
 export const LAYOUT_QUEUE = LAYOUT_CARD;
@@ -19,6 +22,7 @@ export const ALL_LAYOUTS = [
   LAYOUT_STRIP,
   LAYOUT_CARD,
   LAYOUT_NARRATIVE,
+  LAYOUT_LIVE,
 ];
 
 /** @deprecated use ALL_LAYOUTS without classic */
@@ -37,8 +41,7 @@ export const STORAGE_LAYOUT_HINT_DISMISSED = "gameMoveLayoutHintDismissed";
 export const PLAY_CONTEXT_CORRESPONDENCE = "correspondence";
 export const PLAY_CONTEXT_LIVE = "live";
 
-/** Default for arena until dedicated `live` layout ships (see live layout plan). */
-export const DEFAULT_LIVE_LAYOUT = LAYOUT_STRIP;
+export const DEFAULT_LIVE_LAYOUT = LAYOUT_LIVE;
 
 /** @deprecated migrated to STORAGE_LAYOUT */
 export const STORAGE_BETA_LAYOUT = "gameMoveBetaLayout";
@@ -112,7 +115,9 @@ export function gameMovePath(
     return `${legacyPath}?layout=${encodeURIComponent(normalized)}`;
   }
 
-  const path = `${moveBase}/${metaGame}/${cbits}/${gameID}`;
+  const path = isArenaPlayOrWatchBase(moveBase)
+    ? `${moveBase}/${metaGame}/${gameID}`
+    : `${moveBase}/${metaGame}/${cbits ?? 0}/${gameID}`;
   return appendLayoutQuery(path, layout);
 }
 
@@ -218,6 +223,8 @@ export function layoutLabelKey(layoutId) {
       return "gameMove.layout.cardName";
     case LAYOUT_NARRATIVE:
       return "gameMove.layout.narrativeName";
+    case LAYOUT_LIVE:
+      return "gameMove.layout.liveName";
     default:
       return "gameMove.layout.classicName";
   }
@@ -231,6 +238,8 @@ export function layoutDescriptionKey(layoutId) {
       return "gameMove.layout.cardDescription";
     case LAYOUT_NARRATIVE:
       return "gameMove.layout.narrativeDescription";
+    case LAYOUT_LIVE:
+      return "gameMove.layout.liveDescription";
     default:
       return "gameMove.layout.classicDescription";
   }

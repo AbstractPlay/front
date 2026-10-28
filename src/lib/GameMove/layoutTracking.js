@@ -98,6 +98,7 @@ async function postLayoutEvent(pars) {
  *   resolvedFrom: string,
  *   metaGame: string,
  *   storedLayout?: string | null,
+ *   playContext?: string,
  * }} params
  */
 export function trackLayoutSessionStart({
@@ -105,6 +106,7 @@ export function trackLayoutSessionStart({
   resolvedFrom,
   metaGame,
   storedLayout,
+  playContext,
 }) {
   if (!layoutId || !resolvedFrom || !metaGame) {
     return;
@@ -116,6 +118,7 @@ export function trackLayoutSessionStart({
       resolvedFrom,
       metaGame,
       ...(storedLayout ? { storedLayout } : {}),
+      ...(playContext ? { playContext } : {}),
     })
   );
 }
@@ -127,6 +130,7 @@ export function trackLayoutSessionStart({
  *   resolvedFrom: string,
  *   metaGame: string,
  *   storedLayout?: string | null,
+ *   playContext?: string,
  * }} params
  */
 export function trackLayoutSwitch({
@@ -135,6 +139,7 @@ export function trackLayoutSwitch({
   resolvedFrom,
   metaGame,
   storedLayout,
+  playContext,
 }) {
   if (!from || !to || from === to || !resolvedFrom || !metaGame) {
     return;
@@ -148,6 +153,7 @@ export function trackLayoutSwitch({
       from,
       to,
       ...(storedLayout ? { storedLayout } : {}),
+      ...(playContext ? { playContext } : {}),
     })
   );
 }

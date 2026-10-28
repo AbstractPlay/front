@@ -36,5 +36,5 @@ export function shouldParticipantCallTimelossCheck(game, now = Date.now()) {
 }
 
 export function participantTimelossPollIntervalMs(game) {
-  return isArenaGame(game) ? 1500 : 3000;
+  return isArenaGame(game) ? 500 : 3000;
 }

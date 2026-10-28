@@ -51,6 +51,10 @@
     "src": "Arena action failed.",
     "out": "Error en la acción de arena."
   },
+  "Arena.activeGameBanner": {
+    "src": "You have a live arena game in progress.",
+    "out": "Tienes una partida de arena en vivo en curso."
+  },
   "Arena.backToLobby": {
     "src": "Back to Arena",
     "out": "Volver a la Arena"
@@ -306,6 +310,10 @@
   "Arena.rejectSwap": {
     "src": "Decline swap",
     "out": "Rechazar cambio"
+  },
+  "Arena.returnToGame": {
+    "src": "Return to game",
+    "out": "Volver a la partida"
   },
   "Arena.seat": {
     "src": "Seat {{n}}",
@@ -5622,6 +5630,14 @@
   "gameMove.layout.lastMoveLabel": {
     "src": "Last move:",
     "out": "Último movimiento:"
+  },
+  "gameMove.layout.liveDescription": {
+    "src": "Clock-first layout for live and arena games",
+    "out": "Diseño centrado en el reloj para partidas en vivo y de arena"
+  },
+  "gameMove.layout.liveName": {
+    "src": "Live",
+    "out": "En vivo"
   },
   "gameMove.layout.moreActions": {
     "src": "More",

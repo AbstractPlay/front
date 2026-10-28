@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useGameMoveSession } from "./GameMove/useGameMoveSession";
 import { useGameMoveLayout } from "../hooks/useGameMoveLayout";
+import { isArenaGame } from "../lib/arena/arenaGame";
+import { arenaPlayPath } from "../lib/arena/arenaRoutes";
 import {
   LAYOUT_CARD,
   LAYOUT_CLASSIC,
+  LAYOUT_LIVE,
   LAYOUT_NARRATIVE,
   LAYOUT_STRIP,
   MOVE_BASE,
@@ -16,6 +19,7 @@ import GameMoveClassicLayout from "./GameMove/GameMoveClassicLayout";
 import GameMoveStripLayout from "./GameMove/layouts/GameMoveStripLayout";
 import GameMoveCardLayout from "./GameMove/layouts/GameMoveCardLayout";
 import GameMoveNarrativeLayout from "./GameMove/layouts/GameMoveNarrativeLayout";
+import GameMoveLiveLayout from "./GameMove/layouts/GameMoveLiveLayout";
 import { LayoutPickerProvider } from "./GameMove/LayoutPickerContext";
 import LayoutPickerModal from "./GameMove/LayoutPickerModal";
 import BoardExportGifModal from "./BoardExport/BoardExportGifModal";
@@ -34,6 +38,8 @@ function GameMoveLayout({ session, layoutId }) {
       return <GameMoveCardLayout session={session} />;
     case LAYOUT_NARRATIVE:
       return <GameMoveNarrativeLayout session={session} />;
+    case LAYOUT_LIVE:
+      return <GameMoveLiveLayout session={session} />;
     case LAYOUT_STRIP:
     default:
       return <GameMoveStripLayout session={session} />;
@@ -41,12 +47,14 @@ function GameMoveLayout({ session, layoutId }) {
 }
 
 function GameMoveShell({
-  moveBasePath,
+  moveBasePath: moveBasePathProp,
   submitMoveQuery,
   arenaLiveClock,
 }) {
   const params = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
+  const moveBasePath = moveBasePathProp ?? MOVE_BASE;
   const { t } = useTranslation();
   const { layoutId, resolvedFrom, playContext } = useGameMoveLayout();
   const [showLayoutPicker, setShowLayoutPicker] = useState(false);
@@ -77,11 +85,49 @@ function GameMoveShell({
 
   const session = useGameMoveSession({
     routerState: location.state,
-    moveBasePath: moveBasePath ?? MOVE_BASE,
+    moveBasePath,
     submitMoveQuery,
     arenaLiveClock,
     replayReady: replayGate === "ready",
   });
+
+  useEffect(() => {
+    if (replayGate !== "ready" || session.isGameLoading || session.error) {
+      return;
+    }
+    if (!session.game || !isArenaGame(session.game)) {
+      return;
+    }
+    if (moveBasePath !== MOVE_BASE) {
+      return;
+    }
+    if (
+      isGameMoveReplayEnabled() &&
+      new URLSearchParams(location.search).get("replay")?.trim()
+    ) {
+      return;
+    }
+    const target = arenaPlayPath(params.metaGame, params.gameID, {
+      layout: layoutId,
+    });
+    if (location.pathname + location.search === target) {
+      return;
+    }
+    navigate(target, { replace: true, state: location.state });
+  }, [
+    replayGate,
+    session.isGameLoading,
+    session.error,
+    session.game,
+    moveBasePath,
+    params.metaGame,
+    params.gameID,
+    layoutId,
+    location.pathname,
+    location.search,
+    location.state,
+    navigate,
+  ]);
 
   const openLayoutPicker = useCallback(() => {
     setShowLayoutPicker(true);
@@ -114,6 +160,7 @@ function GameMoveShell({
       resolvedFrom,
       metaGame: params.metaGame,
       storedLayout: readLayoutPreference(playContext),
+      playContext,
     });
   }, [
     session.isGameLoading,
@@ -165,7 +212,7 @@ function GameMoveShell({
           onClose={closeLayoutPicker}
           layoutId={layoutId}
         />
-        {submitMoveQuery === "submit_arena_move" ? (
+        {isArenaGame(session.game) || submitMoveQuery === "submit_arena_move" ? (
           <ArenaFeedbackModal
             game={session.game}
             metaGame={params.metaGame}

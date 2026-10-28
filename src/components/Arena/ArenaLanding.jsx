@@ -9,6 +9,7 @@ import GameVariants from "../GameVariants";
 import { RulesIntroExpandable } from "../shared/RulesIntroExpandable";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { arenaPlaySupported } from "../../lib/arena/arenaGame";
+import { useStore } from "../../stores";
 import {
   arenaTableAction,
   fetchArenaTables,
@@ -17,9 +18,10 @@ import {
   writeArenaPreferredTcId,
 } from "../../lib/arena/fetchArena";
 import {
+  arenaListTableHref,
   arenaTablePath,
-  arenaWatchPath,
 } from "../../lib/arena/arenaRoutes";
+import { readArenaTableLayoutChoice } from "./ArenaTableLayoutPicker";
 import { useArenaPoll } from "../../lib/arena/useArenaPoll";
 import { formatVariantsJoined } from "../../lib/expandVariants";
 import { validateChallengeVariantSelection } from "../../lib/variantChallengeValidation";
@@ -35,6 +37,7 @@ function tierLabel(t, tier) {
 export default function ArenaLanding() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const globalMe = useStore((state) => state.globalMe);
   const [metaGame, metaGameSetter] = useState("");
   const [selectedVariants, setSelectedVariants] = useState([]);
   const { variantsValid, onValidityChange, resetVariantValidity } =
@@ -194,6 +197,22 @@ export default function ArenaLanding() {
 
   const tableRows = tables ?? [];
 
+  const myLiveTable = useMemo(() => {
+    const userId = globalMe?.id;
+    if (!userId) {
+      return null;
+    }
+    return (
+      tableRows.find(
+        (row) =>
+          row.state === "playing" &&
+          row.seatUserIds?.includes(userId)
+      ) ?? null
+    );
+  }, [tableRows, globalMe?.id]);
+
+  const liveLayout = readArenaTableLayoutChoice();
+
   return (
     <>
       <PageHelmet title={t("Arena.pageTitle")} />
@@ -290,6 +309,22 @@ export default function ArenaLanding() {
           </div>
         </div>
 
+        {myLiveTable ? (
+          <div className="notification is-info is-light arena-active-game">
+            <p className="arena-active-game__text">
+              {t("Arena.activeGameBanner")}
+            </p>
+            <Link
+              className="button apButton"
+              to={arenaListTableHref(myLiveTable, globalMe.id, {
+                layout: liveLayout,
+              })}
+            >
+              {t("Arena.returnToGame")}
+            </Link>
+          </div>
+        ) : null}
+
         <div className="arena-panel">
           <div className="level is-mobile">
             <div className="level-left">
@@ -351,10 +386,16 @@ export default function ArenaLanding() {
                         row.variants
                       );
                       const seatCount = row.seatUserIds?.length ?? 0;
-                      const href =
-                        row.state === "playing"
-                          ? arenaWatchPath(row.metaGame, row.tableId)
-                          : arenaTablePath(row.metaGame, row.tableId);
+                      const seatedOnRow = row.seatUserIds?.includes(globalMe?.id);
+                      const href = arenaListTableHref(row, globalMe?.id, {
+                        layout: liveLayout,
+                      });
+                      let actionLabel = t("Arena.join");
+                      if (row.state === "playing") {
+                        actionLabel = seatedOnRow
+                          ? t("Arena.returnToGame")
+                          : t("Arena.watch");
+                      }
                       return (
                         <tr key={row.tableId} className="arena-table-row">
                           <td>
@@ -366,9 +407,7 @@ export default function ArenaLanding() {
                           <td>{seatCount}/2</td>
                           <td>
                             <Link className="apButton button is-small" to={href}>
-                              {row.state === "playing"
-                                ? t("Arena.watch")
-                                : t("Arena.join")}
+                              {actionLabel}
                             </Link>
                           </td>
                         </tr>

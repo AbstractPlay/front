@@ -96,3 +96,19 @@
   text-align: center;
   margin-bottom: 0;
 }
+
+.arena-active-game {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  background: var(--secondary-color-3-bg);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+}
+
+.arena-active-game__text {
+  margin: 0;
+}

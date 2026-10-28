@@ -17,7 +17,7 @@ import { parseAuthResponse } from "../../lib/parseAuthResponse";
 import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
 import { ladderDetailPathFromGameRef } from "../../lib/ladderRoutes";
 import { arenaTablePath } from "../../lib/arena/arenaRoutes";
-import { isArenaGame } from "../../lib/arena/arenaGame";
+import { isArenaGame, resolveSubmitMoveQuery } from "../../lib/arena/arenaGame";
 import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import {
   maybeSyncInProgressCommentedFlag,
@@ -886,6 +886,10 @@ export function useGameMoveSession(props) {
       if (!res) return;
       const parsed = await parseAuthResponse(res);
       if (!parsed.ok) {
+        if (query === "timeloss") {
+          setRefresh((val) => val + 1);
+          return;
+        }
         setError(
           `checkTime with query: ${query} for metaGame ${gameRef.current.metaGame} and game ${gameRef.current.id} failed: ${parsed.error}`
         );
@@ -894,13 +898,19 @@ export function useGameMoveSession(props) {
       const game0 = parsed.data;
       if (game0 !== "not_a_timeloss" && game0 !== "not_abandoned") {
         dbgameSetter(game0);
+      } else if (query === "timeloss") {
+        setRefresh((val) => val + 1);
       }
     } catch (err) {
+      if (query === "timeloss") {
+        setRefresh((val) => val + 1);
+        return;
+      }
       setError(
         `checkTime with query: ${query} for metaGame ${gameRef.current.metaGame} and game ${gameRef.current.id} and failed with error: ${err.message}`
       );
     }
-  }, []);
+  }, [dbgameSetter]);
 
   useEffect(() => {
     if (!shouldParticipantPollTimeloss(dbgame)) {
@@ -2310,9 +2320,13 @@ export function useGameMoveSession(props) {
           gameRef.current.players,
           globalMe.id
         );
+        const moveQuery = resolveSubmitMoveQuery(
+          gameRef.current,
+          submitMoveQuery
+        );
         const moveSentAt =
-          submitMoveQuery === "submit_arena_move" ? Date.now() : undefined;
-        const res = await callAuthApi(submitMoveQuery, {
+          moveQuery === "submit_arena_move" ? Date.now() : undefined;
+        const res = await callAuthApi(moveQuery, {
           id: gameRef.current.id,
           metaGame: gameRef.current.metaGame,
           cbit: cbit,

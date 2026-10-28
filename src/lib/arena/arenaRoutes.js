@@ -23,3 +23,21 @@ export function arenaWatchPath(metaGame, gameId, { layout } = {}) {
 export function isArenaPath(pathname = "") {
   return pathname === ARENA_BASE || pathname.startsWith(`${ARENA_BASE}/`);
 }
+
+export function isSeatedOnArenaTableRow(row, userId) {
+  if (!userId || !row?.seatUserIds?.length) {
+    return false;
+  }
+  return row.seatUserIds.includes(userId);
+}
+
+/** Open-table list: seated players rejoin live play; others watch or join lobby. */
+export function arenaListTableHref(row, userId, { layout } = {}) {
+  if (row.state === "playing" && isSeatedOnArenaTableRow(row, userId)) {
+    return arenaPlayPath(row.metaGame, row.tableId, { layout });
+  }
+  if (row.state === "playing") {
+    return arenaWatchPath(row.metaGame, row.tableId, { layout });
+  }
+  return arenaTablePath(row.metaGame, row.tableId);
+}

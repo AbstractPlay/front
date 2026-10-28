@@ -6,7 +6,7 @@ The game move page is the core gameplay UI.
 
 | Route | Behaviour |
 |-------|-----------|
-| `/move/:metaGame/:cbits/:gameID` | Primary play page; optional `?layout=classic\|strip\|card\|narrative` |
+| `/move/:metaGame/:cbits/:gameID` | Primary play page; optional `?layout=classic\|strip\|card\|narrative\|live` |
 | `/arena/play/:metaGame/:gameID` | Arena live play; optional `?layout=` (uses `gameMoveLayoutLive`) |
 | `/arena/watch/:metaGame/:gameID` | Arena spectate; optional `?layout=` (uses `gameMoveLayoutLive`) |
 | `/move-beta/:metaGame/:cbits/:gameID` | Legacy preview URL → redirects to `/move/...` preserving `?layout=` |
@@ -15,21 +15,22 @@ The game move page is the core gameplay UI.
 
 1. Valid `?layout=` in the URL → use for this visit (shareable deep links); persisted to the matching localStorage key for the route kind
 2. **Correspondence** (`/move/…`): `localStorage` key `gameMoveLayout` (migrated from `gameMoveBetaLayout`); default **strip**
-3. **Live arena** (`/arena/play`, `/arena/watch`): `localStorage` key `gameMoveLayoutLive`; default **strip** until the dedicated live layout ships
+3. **Live arena** (`/arena/play`, `/arena/watch`): `localStorage` key `gameMoveLayoutLive`; default **live**
 4. Arena table lobby offers layout choice (text description) before launch
 
-Preferences are **localStorage only** (per browser/device). Correspondence and live arena remember **separate** layout choices. No account setting.
+Preferences are **localStorage only** (per browser/device). Correspondence and live arena remember **separate** layout choices. Layout switcher links on arena routes stay on `/arena/play` or `/arena/watch` (via `gameMovePath` `basePath`). No account setting.
 
 ## Layouts
 
 | ID | Component | Summary |
 |----|-----------|---------|
 | `classic` | [`GameMoveClassicLayout.js`](../src/components/GameMove/GameMoveClassicLayout.js) | Original full-page layout |
-| `strip` | [`GameMoveStripLayout.js`](../src/components/GameMove/layouts/GameMoveStripLayout.js) | Board hero, sticky dock, tabbed drawer (default) |
+| `strip` | [`GameMoveStripLayout.js`](../src/components/GameMove/layouts/GameMoveStripLayout.js) | Board hero, sticky dock, tabbed drawer (default on `/move`) |
 | `card` | [`GameMoveCardLayout.js`](../src/components/GameMove/layouts/GameMoveCardLayout.js) | Queue card for playing through your inbox |
 | `narrative` | [`GameMoveNarrativeLayout.js`](../src/components/GameMove/layouts/GameMoveNarrativeLayout.js) | Story column beside the board |
+| `live` | [`GameMoveLiveLayout.js`](../src/components/GameMove/layouts/GameMoveLiveLayout.js) | Clock-first bar, move dock, drawer (default on arena) |
 
-All four layouts are available to anonymous and logged-in users.
+All five layouts are available to anonymous and logged-in users on both correspondence and arena routes (each context remembers its own choice).
 
 ## Key files
 
@@ -48,7 +49,7 @@ All four layouts are available to anonymous and logged-in users.
 
 ## Discoverability
 
-- **Layout picker** — header trigger (`LayoutPickerTrigger`) on all four layouts opens a modal (`LayoutPickerModal`) with descriptions for each layout (`LayoutSwitcher`).
+- **Layout picker** — header trigger (`LayoutPickerTrigger`) on all five layouts opens a modal (`LayoutPickerModal`) with descriptions for each layout (`LayoutSwitcher`).
 - **First-visit hint** — on strip when the user has no saved layout and no `?layout=` URL, a dismissible notice (`LayoutHint`) offers “Change layout”. Dismissal is stored in `gameMoveLayoutHintDismissed`.
 
 There is no permanent floating layout bar.
