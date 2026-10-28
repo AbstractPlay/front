@@ -9,6 +9,8 @@ export function RulesIntroExpandable({
   textKey,
   /** @deprecated use textKey */
   fullKey,
+  expandKey = "Ladder.introExpand",
+  collapseKey = "Ladder.introCollapse",
   collapsedMaxHeight = "6rem",
 }) {
   const { t } = useTranslation();
@@ -89,7 +91,7 @@ export function RulesIntroExpandable({
               toggleExpanded();
             }}
           >
-            {expanded ? t("Ladder.introCollapse") : t("Ladder.introExpand")}
+            {expanded ? t(collapseKey) : t(expandKey)}
           </button>
         </p>
       ) : null}

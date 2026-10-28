@@ -165,7 +165,11 @@ export default function ArenaLanding() {
         <h1 className="title has-text-centered lined">
           <span>{t("Arena.pageTitle")}</span>
         </h1>
-        <RulesIntroExpandable textKey="Arena.intro" />
+        <RulesIntroExpandable
+          textKey="Arena.intro"
+          expandKey="Arena.introExpand"
+          collapseKey="Arena.introCollapse"
+        />
         <p className="help has-text-centered">{t("Arena.clockCopy")}</p>
 
         <div className="arena-panel">
