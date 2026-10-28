@@ -934,7 +934,7 @@
   "Arena": {
     "navTitle": "Arena (dal vivo)",
     "pageTitle": "Arena",
-    "intro": "Gioca a partite dal vivo per due giocatori con orologi Fischer (da bullet a live). Mettiti in coda per una partita o crea un tavolo, preparati e gioca in tempo reale. In questa versione, tutte le partite arena sono non classificate.",
+    "intro": "Gioca a partite dal vivo a due giocatori con orologi Fischer—dalla modalità bullet ai livelli live. Usa l'Abbinamento rapido per trovare un avversario con lo stesso gioco e controllo del tempo, oppure crea un tavolo aperto e dichiarati pronto quando si unisce un ospite. Tutte le partite dell'arena sono non classificate in questa versione.\n\nSono elencati solo i giochi che supportano la modalità a due giocatori. Gli orologi sono rigidi: quando la tua riserva di tempo raggiunge lo zero, perdi per tempo. La vacanza per la modalità corrispondenza non mette in pausa gli orologi dell'arena.\n\nSfoglia i tavoli aperti qui sotto per unirti a una lobby o guardare una partita in corso. La chat del tavolo è disponibile nella lobby; i giocatori seduti possono chattare durante la partita dal vivo e chiunque può chattare da spettatore al termine della partita. Arena utilizza la tavola di gioco in tempo reale, non la dashboard per corrispondenza, e non modifica i punteggi Glicko finché le partite rimangono non classificate.",
     "introExpand": "Leggi di più",
     "introCollapse": "Mostra meno",
     "clockCopy": "L'Arena utilizza gli orologi Fischer rigidi del catalogo del sito. Le ferie delle partite per corrispondenza non mettono in pausa gli orologi dell'arena.",

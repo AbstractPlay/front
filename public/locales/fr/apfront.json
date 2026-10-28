@@ -934,7 +934,7 @@
   "Arena": {
     "navTitle": "Arène (en direct)",
     "pageTitle": "Arène",
-    "intro": "Jouez des parties à deux joueurs en direct avec pendules Fischer (du bullet au jeu en direct). Rejoignez la file d'attente ou créez une table, préparez-vous, puis jouez en temps réel. Toutes les parties d'arène sont non classées dans cette version.",
+    "intro": "Jouez en direct à deux joueurs avec des pendules Fischer — du format bullet aux cadences en direct. Utilisez la Partie rapide pour trouver un adversaire sur le même jeu et avec la même cadence, ou créez une table ouverte et indiquez que vous êtes prêt lorsqu'un invité la rejoint. Toutes les parties en arène sont non classées dans cette version.\n\nSeuls les jeux prenant en charge le jeu à deux joueurs sont répertoriés. Les pendules sont strictes : lorsque votre réserve de temps atteint zéro, vous perdez au temps. Le mode vacances par correspondance ne met pas les pendules d'arène en pause.\n\nParcourez les tables ouvertes ci-dessous pour rejoindre un salon ou regarder une partie en cours. Le tchat de table est disponible dans le salon ; les joueurs installés à la table peuvent discuter pendant la partie en direct, et tout le monde peut kibitzer une fois la partie terminée. L'Arène utilise le plateau de jeu en temps réel, et non le tableau de bord par correspondance, et ne modifie pas les classements Glicko tant que les parties restent non classées.",
     "introExpand": "En savoir plus",
     "introCollapse": "Réduire",
     "clockCopy": "L'Arène utilise des pendules Fischer strictes issues du catalogue du site. Les vacances pour les parties par correspondance ne suspendent pas les pendules d'arène.",

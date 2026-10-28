@@ -934,7 +934,7 @@
   "Arena": {
     "navTitle": "Arena (Live)",
     "pageTitle": "Arena",
-    "intro": "Spiele Live-Partien für zwei Spieler mit Fischer-Uhren (von Bullet bis Live). Reihe dich für eine Partie ein oder erstelle einen Tisch, mache dich bereit und spiele in Echtzeit. Alle Arena-Partien sind in dieser Version ungewertet.",
+    "intro": "Spiele Live-Partien für zwei Spieler mit Fischer-Uhren – von Bullet bis hin zu allen Live-Stufen. Nutze die Schnellsuche, um dich mit jemandem für dasselbe Spiel und dieselbe Zeitkontrolle zu paaren, oder erstelle einen offenen Tisch und mache dich bereit, wenn ein Gast beitritt. Alle Arena-Partien sind in dieser Version ungewertet.\n\nEs werden nur Spiele aufgeführt, die Partien für zwei Spieler unterstützen. Die Uhren sind strikt: Wenn dein Zeitkonto null erreicht, verlierst du auf Zeit. Der Urlaubsmodus für Fernschach pausiert keine Arena-Uhren.\n\nDurchsuche unten die offenen Tische, um einer Lobby beizutreten oder eine laufende Partie zu verfolgen. Der Tisch-Chat ist in der Lobby verfügbar; am Tisch sitzende Spieler können während der Live-Partie chatten, und nach Spielende darf jeder kibitzen. Arena nutzt das Echtzeit-Spielfeld, nicht das Fernschach-Dashboard, und ändert keine Glicko-Wertungen, solange die Partien ungewertet bleiben.",
     "introExpand": "Mehr lesen",
     "introCollapse": "Weniger anzeigen",
     "clockCopy": "Die Arena verwendet feste Fischer-Uhren aus dem Katalog der Website. Urlaubszeiten für Korrespondenzpartien halten Arena-Uhren nicht an.",

@@ -934,7 +934,7 @@
   "Arena": {
     "navTitle": "Arena (en vivo)",
     "pageTitle": "Arena",
-    "intro": "Juega partidas en vivo de dos jugadores con relojes Fischer (desde bullet hasta en vivo). Ponte en cola para una partida o crea una mesa, confírmate como listo y juega en tiempo real. Todas las partidas de arena no son clasificatorias en esta versión.",
+    "intro": "Juega partidas en vivo para dos jugadores con relojes Fischer, desde categorías bullet hasta niveles en vivo. Usa el Emparejamiento rápido para asociarte con alguien en el mismo juego y control de tiempo, o crea una mesa abierta y ponte listo cuando se una un invitado. Todas las partidas de arena son sin clasificación en esta versión.\n\nSolo se muestran los juegos que admiten dos jugadores. Los relojes son estrictos: cuando tu reserva de tiempo llegue a cero, pierdes por tiempo. Las vacaciones de correspondencia no pausan los relojes de la arena.\n\nExplora las mesas abiertas a continuación para unirte a una sala o ver una partida en curso. El chat de mesa está disponible en la sala; los jugadores sentados pueden chatear durante la partida en vivo y cualquiera puede comentar una vez que la partida termine. Arena utiliza el tablero de juego en tiempo real, no el panel de correspondencia, y no altera las puntuaciones Glicko mientras las partidas no tengan clasificación.",
     "introExpand": "Leer más",
     "introCollapse": "Mostrar menos",
     "clockCopy": "Arena utiliza relojes Fischer estrictos del catálogo del sitio. Las vacaciones de correspondencia no pausarán los relojes de arena.",
