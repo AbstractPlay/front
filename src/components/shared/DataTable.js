@@ -14,6 +14,100 @@ import { useSyncTablePageSize, useResetTablePageIndex } from "../../hooks/useTan
 
 const ALL_SIZE = Number.MAX_SAFE_INTEGER;
 
+/** @param {{ table: import("@tanstack/react-table").Table<any>, onPageSizeChange: (size: number) => void, globalFilter?: string, onGlobalFilterChange?: (value: string) => void, showSearch?: boolean, navClassName?: string }} props */
+export function TablePaginationNav({
+  table,
+  onPageSizeChange,
+  globalFilter = "",
+  onGlobalFilterChange,
+  showSearch = true,
+  navClassName = "data-table-nav",
+}) {
+  const { t } = useTranslation();
+  const pageIndex = table.getState().pagination.pageIndex + 1;
+  const pageCount = table.getPageCount();
+  const totalRows = table.getPrePaginationRowModel().rows.length;
+
+  return (
+    <div className={`level smallerText tableNav ${navClassName}`.trim()}>
+      <div className="level-left data-table-nav-controls">
+        {showSearch && onGlobalFilterChange ? (
+          <TableNavSearch value={globalFilter} onChange={onGlobalFilterChange} />
+        ) : null}
+        <div className="level-item data-table-nav-pager">
+          <button
+            className="button is-small"
+            type="button"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <span className="icon is-small">
+              <i className="fa fa-angle-double-left" aria-hidden="true"></i>
+            </span>
+          </button>
+          <button
+            className="button is-small"
+            type="button"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <span className="icon is-small">
+              <i className="fa fa-angle-left" aria-hidden="true"></i>
+            </span>
+          </button>
+          <button
+            className="button is-small"
+            type="button"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <span className="icon is-small">
+              <i className="fa fa-angle-right" aria-hidden="true"></i>
+            </span>
+          </button>
+          <button
+            className="button is-small"
+            type="button"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            <span className="icon is-small">
+              <i className="fa fa-angle-double-right" aria-hidden="true"></i>
+            </span>
+          </button>
+        </div>
+        <div className="level-item data-table-nav-status">
+          <p>
+            {t("stats.table.page")} <strong>{pageIndex}</strong>{" "}
+            {t("stats.table.of")} <strong>{pageCount}</strong> ({totalRows}{" "}
+            {t("stats.table.rows")})
+          </p>
+        </div>
+        <div className="level-item data-table-nav-size">
+          <div className="control">
+            <div className="select is-small">
+              <select
+                value={table.getState().pagination.pageSize}
+                onChange={(e) => {
+                  onPageSizeChange(Number(e.target.value));
+                }}
+              >
+                {[10, 20, 30, 40, 50, ALL_SIZE].map((pageSize) => (
+                  <option key={pageSize} value={pageSize}>
+                    {pageSize === ALL_SIZE
+                      ? t("stats.table.showAll")
+                      : t("stats.table.showCount", { count: pageSize })}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export const STATS_TABLE_PROPS = {
   pageSizeKey: "stats-show",
   wrapTable: true,

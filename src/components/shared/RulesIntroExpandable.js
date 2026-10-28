@@ -1,35 +1,98 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import ExpandableDiv from "../ExpandableDiv";
 
 /**
- * Short rules blurb with fade + expand (click to read full text).
+ * Long rules blurb: full text always in the DOM, collapsed with fade until expanded
+ * (same pattern as the player profile about section).
  */
-export function RulesIntroExpandable({ summaryKey, fullKey, numLines = 3 }) {
+export function RulesIntroExpandable({
+  textKey,
+  /** @deprecated use textKey */
+  fullKey,
+  collapsedMaxHeight = "6rem",
+}) {
   const { t } = useTranslation();
+  const resolvedKey = textKey ?? fullKey;
+  const text = resolvedKey ? t(resolvedKey) : "";
   const [expanded, setExpanded] = useState(false);
-  const summary = t(summaryKey);
-  const full = t(fullKey);
-  if (!summary && !full) {
+  const [needsCollapse, setNeedsCollapse] = useState(false);
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    if (!text || /^\s*$/.test(text) || expanded) {
+      setNeedsCollapse(false);
+      return;
+    }
+    const el = contentRef.current;
+    if (!el) {
+      return;
+    }
+    const raf = requestAnimationFrame(() => {
+      setNeedsCollapse(el.scrollHeight > el.clientHeight + 2);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [text, expanded, collapsedMaxHeight]);
+
+  if (!text || /^\s*$/.test(text)) {
     return null;
   }
-  const body = expanded ? full || summary : summary || full;
+
+  const interactive = needsCollapse || expanded;
+
+  const toggleExpanded = () => {
+    setExpanded((v) => !v);
+  };
+
+  const bodyClassName = [
+    "rules-intro-body",
+    expanded ? "rules-intro-body--expanded" : "rules-intro-body--collapsed",
+    !expanded && needsCollapse ? "rules-intro-body--fade" : null,
+    interactive ? "rules-intro-body--interactive" : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <div className="content ladder-rules-intro mb-4">
-      <ExpandableDiv
-        expanded={expanded}
-        numLines={numLines}
-        handleClick={() => setExpanded((v) => !v)}
+      <div
+        ref={contentRef}
+        className={bodyClassName}
+        role={interactive ? "button" : undefined}
+        tabIndex={interactive ? 0 : undefined}
+        aria-expanded={interactive ? expanded : undefined}
+        onClick={interactive ? toggleExpanded : undefined}
+        onKeyDown={
+          interactive
+            ? (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  toggleExpanded();
+                }
+              }
+            : undefined
+        }
+        style={
+          expanded
+            ? undefined
+            : { maxHeight: collapsedMaxHeight }
+        }
       >
-        <p style={{ margin: 0, whiteSpace: "pre-wrap" }}>{body}</p>
-      </ExpandableDiv>
-      <button
-        type="button"
-        className="button is-small apButtonNeutral mt-1"
-        onClick={() => setExpanded((v) => !v)}
-      >
-        {expanded ? t("Ladder.introCollapse") : t("Ladder.introExpand")}
-      </button>
+        <p style={{ margin: 0, whiteSpace: "pre-wrap" }}>{text}</p>
+      </div>
+      {needsCollapse || expanded ? (
+        <p className="has-text-centered rules-intro-toggle-wrap">
+          <button
+            type="button"
+            className="button is-small is-text rules-intro-toggle"
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleExpanded();
+            }}
+          >
+            {expanded ? t("Ladder.introCollapse") : t("Ladder.introExpand")}
+          </button>
+        </p>
+      ) : null}
     </div>
   );
 }

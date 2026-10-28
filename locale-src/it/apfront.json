@@ -1451,6 +1451,10 @@
     "src": "Challenge from {{name}}",
     "out": "Sfida da {{name}}"
   },
+  "Ladder.intro": {
+    "src": "Continuous correspondence ladders: ladder points move on each rated game result. Match opponents within ±20% ladder points, or use the pool. Hard 36h/120h clocks; all ladder games are rated. Join or create a ladder for a game and variant series. You start near your Glicko rating low. Wins and losses adjust ladder points (upsets earn more). After 30 days without an active ladder game, inactive members lose a small fraction of points daily. While on site vacation, decay pauses and you cannot issue or accept new ladder matches. You may have up to seven active ladder games per ladder.",
+    "out": "Classifiche continue per corrispondenza: i punti classifica variano a ogni risultato di una partita classificata. Trova avversari entro il ±20% dei punti classifica, oppure usa il pool. Tempo di gioco rigido 36h/120h; tutte le partite di classifica sono classificate. Unisciti a una classifica o creane una per un gioco e una serie di varianti. Inizi vicino al limite inferiore del tuo rating Glicko. Vittorie e sconfitte regolano i punti classifica (le vittorie a sorpresa ne fanno guadagnare di più). Dopo 30 giorni senza una partita di classifica attiva, i membri inattivi perdono ogni giorno una piccola frazione di punti. Durante la modalità vacanza sul sito, il decadimento dei punti è sospeso e non puoi inviare o accettare nuove sfide di classifica. Puoi avere fino a sette partite di classifica attive per ciascuna classifica."
+  },
   "Ladder.introCollapse": {
     "src": "Show less",
     "out": "Mostra meno"
@@ -6048,8 +6052,8 @@
     "out": "Personalizza tema"
   },
   "nav.explore": {
-    "src": "Lists",
-    "out": "Liste"
+    "src": "Game lists",
+    "out": "Elenco giochi"
   },
   "nav.featureIdeas": {
     "src": "Feature ideas",

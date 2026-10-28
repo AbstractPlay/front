@@ -318,10 +318,7 @@ function LadderHub() {
             status: ladder.status,
           })}
         </p>
-        <RulesIntroExpandable
-          summaryKey="Ladder.introSummary"
-          fullKey="Ladder.introFull"
-        />
+        <RulesIntroExpandable textKey="Ladder.intro" />
         <p className="help has-text-centered">{t("Ladder.clockCopy")}</p>
         <div className="control has-text-centered mb-4">
           <a

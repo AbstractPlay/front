@@ -1451,6 +1451,10 @@
     "src": "Challenge from {{name}}",
     "out": "Herausforderung von {{name}}"
   },
+  "Ladder.intro": {
+    "src": "Continuous correspondence ladders: ladder points move on each rated game result. Match opponents within ±20% ladder points, or use the pool. Hard 36h/120h clocks; all ladder games are rated. Join or create a ladder for a game and variant series. You start near your Glicko rating low. Wins and losses adjust ladder points (upsets earn more). After 30 days without an active ladder game, inactive members lose a small fraction of points daily. While on site vacation, decay pauses and you cannot issue or accept new ladder matches. You may have up to seven active ladder games per ladder.",
+    "out": "Fortlaufende Korrespondenz-Ranglisten: Ranglistenpunkte verändern sich mit jedem gewerteten Spielergebnis. Finde Gegner innerhalb von ±20 % der Ranglistenpunkte oder nutze den Pool. Strenge 36h/120h-Bedenkzeiten; alle Ranglistenspiele werden gewertet. Tritt einer Rangliste für eine Spiel- und Variantenreihe bei oder erstelle eine. Du startest nahe dem unteren Ende deiner Glicko-Wertung. Siege und Niederlagen passen die Ranglistenpunkte an (Überraschungssiege bringen mehr). Nach 30 Tagen ohne aktives Ranglistenspiel verlieren inaktive Mitglieder täglich einen kleinen Teil ihrer Punkte. Während des Website-Urlaubs pausiert der Verfall und du kannst keine neuen Ranglisten-Matches anfordern oder annehmen. Du kannst bis zu sieben aktive Ranglistenspiele pro Rangliste haben."
+  },
   "Ladder.introCollapse": {
     "src": "Show less",
     "out": "Weniger anzeigen"
@@ -6048,8 +6052,8 @@
     "out": "Design anpassen"
   },
   "nav.explore": {
-    "src": "Lists",
-    "out": "Listen"
+    "src": "Game lists",
+    "out": "Spielelisten"
   },
   "nav.featureIdeas": {
     "src": "Feature ideas",
