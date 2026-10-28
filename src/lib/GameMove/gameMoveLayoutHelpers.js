@@ -2,6 +2,7 @@ import { getGameDisplayName } from "../../lib/gameOptions";
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 import { canCycleBoardDisplay } from "../displaySettings.js";
 import { isMyTurnForPlayUi } from "./playUiToMove.js";
+import { clockDisplayNow } from "./clockDisplayNow.js";
 
 /**
  * Build props objects and context strings shared by beta layout shells.
@@ -156,6 +157,7 @@ export function buildMoveEntryProps(session, { forceUndoRight = false } = {}) {
     onCommit: moveEntryHandlers[0],
     commitMoveDraft,
     onTextareaModeChange: handleTextareaModeChange,
+    clockDisplayNow: clockDisplayNow(session),
   };
 }
 

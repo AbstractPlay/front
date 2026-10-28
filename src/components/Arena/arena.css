@@ -28,8 +28,47 @@
   color: var(--high-contrast-font-color);
 }
 
-.arena-table-row:hover {
-  background: var(--tag-background-color);
+/* Bulma is-hoverable uses scheme vars that fight color-mode; keep hover on AP tokens */
+.arena-panel .table {
+  background-color: var(--main-bg-color);
+  color: var(--main-font-color);
+}
+
+.arena-panel .table thead th {
+  color: var(--main-heading-color);
+}
+
+.arena-panel .table.is-hoverable tbody tr.arena-table-row:hover,
+.arena-panel .table.is-hoverable tbody tr.arena-table-row:hover td {
+  background-color: var(--tag-background-color);
+  color: var(--main-font-color);
+}
+
+.arena-seat-column {
+  text-align: center;
+}
+
+.arena-seat-occupant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.arena-seat-player-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--main-heading-color);
+  margin-bottom: 0;
+}
+
+.arena-seat-player-name a {
+  color: var(--secondary-color-1);
+}
+
+.arena-seat-player-name a:hover,
+.arena-seat-player-name a:focus-visible {
+  color: var(--secondary-color-3);
 }
 
 .arena-live-banner {

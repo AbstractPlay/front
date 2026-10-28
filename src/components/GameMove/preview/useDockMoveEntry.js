@@ -37,6 +37,7 @@ export function useDockMoveEntry(props) {
   const handlePie = props.handlers[8];
   const handleDeleteExploration = props.handlers[9];
   const handlePremove = props.handlers[10];
+  const clockNow = props.clockDisplayNow ?? Date.now();
 
   const { t } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
@@ -190,7 +191,7 @@ export function useDockMoveEntry(props) {
 
   let canClaimTimeout = false;
   if (uiState === 0 && !submitting && !teachingReview) {
-    const now = Date.now();
+    const now = clockNow;
     if (game.simultaneous) {
       canClaimTimeout =
         game.players.some(

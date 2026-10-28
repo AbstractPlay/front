@@ -32,7 +32,7 @@ function tierLabel(t, tier) {
 export default function ArenaLanding() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [metaGame, metaGameSetter] = useState("hex");
+  const [metaGame, metaGameSetter] = useState("");
   const [arenaTcId, arenaTcSetter] = useState(() => readArenaPreferredTcId() || "blitz_5_3");
   const [controls, controlsSetter] = useState(null);
   const [filterMeta, filterMetaSetter] = useState("");
@@ -82,6 +82,9 @@ export default function ArenaLanding() {
     [controls, arenaTcId]
   );
 
+  const gameChosen =
+    metaGame !== "" && metaGame != null && arenaPlaySupported(metaGame);
+
   const runAction = async (fn) => {
     actionErrorSetter("");
     busySetter(true);
@@ -97,6 +100,9 @@ export default function ArenaLanding() {
 
   const handleCreateTable = () =>
     runAction(async () => {
+      if (!gameChosen) {
+        throw new Error(t("Arena.chooseGameFirst"));
+      }
       if (!arenaPlaySupported(metaGame)) {
         throw new Error(t("Arena.twoPlayerOnly"));
       }
@@ -117,6 +123,9 @@ export default function ArenaLanding() {
 
   const handleQuickMatch = () =>
     runAction(async () => {
+      if (!gameChosen) {
+        throw new Error(t("Arena.chooseGameFirst"));
+      }
       if (!arenaPlaySupported(metaGame)) {
         throw new Error(t("Arena.twoPlayerOnly"));
       }
@@ -135,6 +144,9 @@ export default function ArenaLanding() {
 
   const handleLeaveQueue = () =>
     runAction(async () => {
+      if (!gameChosen) {
+        throw new Error(t("Arena.chooseGameFirst"));
+      }
       const result = await arenaTableAction("leave_arena_queue", {
         metaGame,
         arenaTcId,
@@ -204,7 +216,7 @@ export default function ArenaLanding() {
             <button
               type="button"
               className="button apButton"
-              disabled={busy || !selectedControl}
+              disabled={busy || !selectedControl || !gameChosen}
               onClick={handleCreateTable}
             >
               {t("Arena.createTable")}
@@ -212,7 +224,7 @@ export default function ArenaLanding() {
             <button
               type="button"
               className="button apButton"
-              disabled={busy || !selectedControl}
+              disabled={busy || !selectedControl || !gameChosen}
               onClick={handleQuickMatch}
             >
               {t("Arena.quickMatch")}
@@ -220,7 +232,7 @@ export default function ArenaLanding() {
             <button
               type="button"
               className="button apButtonNeutral"
-              disabled={busy || !selectedControl}
+              disabled={busy || !selectedControl || !gameChosen}
               onClick={handleLeaveQueue}
             >
               {t("Arena.leaveQueue")}

@@ -7,16 +7,20 @@ import {
 import PlayerOnlineIcon from "./PlayerOnlineIcon";
 
 function CardTurnBar({ session }) {
-  const { game } = session;
+  const { game, liveClockTicking, liveClockNow } = session;
   const users = useStore((state) => state.users);
-  const [now, setNow] = useState(Date.now());
+  const [localNow, setLocalNow] = useState(() => Date.now());
   const liveToMove = game?.toMove ?? "";
 
   useEffect(() => {
-    if (!game || liveToMove === "") return undefined;
-    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    if (liveClockTicking || !game || liveToMove === "") {
+      return undefined;
+    }
+    const id = window.setInterval(() => setLocalNow(Date.now()), 1000);
     return () => window.clearInterval(id);
-  }, [game, liveToMove]);
+  }, [game, liveClockTicking, liveToMove]);
+
+  const now = liveClockTicking ? liveClockNow : localNow;
 
   if (!game || liveToMove === "") {
     return null;

@@ -6,6 +6,15 @@ describe("collectWatchGames", () => {
     expect(games).toEqual([{ meta: "chess", id: "abc123" }]);
   });
 
+  it("includes arena play and watch routes (not on me_dashboard)", () => {
+    expect(collectWatchGames(null, "/arena/play/abande/table-uuid")).toEqual([
+      { meta: "abande", id: "table-uuid" },
+    ]);
+    expect(collectWatchGames(null, "/arena/watch/abande/table-uuid")).toEqual([
+      { meta: "abande", id: "table-uuid" },
+    ]);
+  });
+
   it("includes active games from activeGames", () => {
     const globalMe = {
       activeGames: [

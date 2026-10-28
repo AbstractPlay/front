@@ -62,6 +62,34 @@ export function anyOnClockPlayerTimedOut(game, now = Date.now()) {
   return game.players.some((p, i) => isPlayerTimedOut(p, game, game.toMove, i, now));
 }
 
+/** Match server arena flag grace before calling timeloss(check). */
+export const ARENA_TIMELOSS_HINT_GRACE_MS = 750;
+
+/**
+ * Hard-clock games: client may call timeloss(check) when display passes this threshold.
+ * Arena uses grace aligned with backend ARENA_CLOCK_GRACE_MS; correspondence at <= 0.
+ */
+export function anyOnClockPlayerTimedOutForTimelossHint(game, now = Date.now()) {
+  if (!game?.players || game.toMove === "" || game.toMove === undefined) {
+    return false;
+  }
+  const graceMs =
+    game.playMode === "arena" ? ARENA_TIMELOSS_HINT_GRACE_MS : 0;
+  return game.players.some((p, i) => {
+    if (!isPlayerIndexOnMove(i, game.toMove)) {
+      return false;
+    }
+    const remaining = tickActivePlayerRemainingMs(
+      p,
+      game,
+      game.toMove,
+      i,
+      now
+    );
+    return remaining <= -graceMs;
+  });
+}
+
 /**
  * Minimum ticking clock among opponents still to move (sequential or simultaneous).
  * @param {number} myPlayerIndex seat index of the viewer; excluded from the scan

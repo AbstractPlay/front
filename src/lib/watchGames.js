@@ -12,10 +12,24 @@ export function collectWatchGames(globalMe, pathname) {
     }
   }
 
-  const routeMatch = pathname.match(/^\/move\/([^/]+)\/[^/]+\/([^/]+)/);
-  if (routeMatch) {
-    const meta = routeMatch[1];
-    const id = routeMatch[2];
+  const moveRouteMatch = pathname.match(/^\/move\/([^/]+)\/[^/]+\/([^/]+)/);
+  if (moveRouteMatch) {
+    const meta = moveRouteMatch[1];
+    const id = moveRouteMatch[2];
+    keys.set(`${meta}#${id}`, { meta, id });
+  }
+
+  const arenaPlayMatch = pathname.match(/^\/arena\/play\/([^/]+)\/([^/]+)/);
+  if (arenaPlayMatch) {
+    const meta = arenaPlayMatch[1];
+    const id = arenaPlayMatch[2];
+    keys.set(`${meta}#${id}`, { meta, id });
+  }
+
+  const arenaWatchMatch = pathname.match(/^\/arena\/watch\/([^/]+)\/([^/]+)/);
+  if (arenaWatchMatch) {
+    const meta = arenaWatchMatch[1];
+    const id = arenaWatchMatch[2];
     keys.set(`${meta}#${id}`, { meta, id });
   }
 

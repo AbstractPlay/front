@@ -140,6 +140,16 @@ export default function ArenaTableLobby() {
       }
     });
 
+  const handleRejectSwap = () =>
+    runAction(async () => {
+      const result = await arenaTableAction("reject_arena_seat_swap", {
+        tableId,
+      });
+      if (!result.ok) {
+        throw new Error(result.error ?? t("Arena.actionFailed"));
+      }
+    });
+
   const submitComment = async (comment) => {
     if (!comment || /^\s*$/.test(comment) || !table) {
       return;
@@ -173,7 +183,13 @@ export default function ArenaTableLobby() {
   const variants = formatVariantsJoined(table.metaGame, table.variants);
   const mySeat = table.seats?.find((s) => s.userId === globalMe?.id);
   const bothSeated = table.seats?.filter((s) => s.userId).length === 2;
-  const swapPending = table.swapProposalUserId;
+  const swapOfferedBy = table.swapProposalUserId;
+  const iOfferedSwap =
+    swapOfferedBy && swapOfferedBy === globalMe?.id;
+  const opponentOfferedSwap =
+    swapOfferedBy && swapOfferedBy !== globalMe?.id;
+  const showOfferSwap =
+    bothSeated && table.viewer?.seated && !swapOfferedBy;
 
   return (
     <>
@@ -207,17 +223,26 @@ export default function ArenaTableLobby() {
           </p>
           <div className="columns">
             {table.seats?.map((seat) => (
-              <div className="column" key={seat.seatIndex}>
+              <div className="column arena-seat-column" key={seat.seatIndex}>
                 <p className="heading">{t("Arena.seat", { n: seat.seatIndex + 1 })}</p>
                 {seat.userId ? (
-                  <>
-                    <BotAwareName userid={seat.userId} link />
+                  <div className="arena-seat-occupant">
+                    <p className="arena-seat-player-name">
+                      <BotAwareName
+                        id={seat.userId}
+                        name={
+                          allUsers?.find((u) => u.id === seat.userId)?.name
+                        }
+                        users={allUsers}
+                        link
+                      />
+                    </p>
                     {seat.ready ? (
-                      <span className="tag is-success ml-2">{t("Arena.ready")}</span>
+                      <span className="tag is-success">{t("Arena.ready")}</span>
                     ) : (
-                      <span className="tag ml-2">{t("Arena.notReady")}</span>
+                      <span className="tag">{t("Arena.notReady")}</span>
                     )}
-                  </>
+                  </div>
                 ) : (
                   <span className="help">{t("Arena.emptySeat")}</span>
                 )}
@@ -280,31 +305,42 @@ export default function ArenaTableLobby() {
                 {t("Arena.cancelTable")}
               </button>
             ) : null}
-            {bothSeated && table.viewer?.seated ? (
+            {showOfferSwap ? (
+              <button
+                type="button"
+                className="button apButtonNeutral"
+                disabled={busy}
+                onClick={handleProposeSwap}
+              >
+                {t("Arena.offerSwap")}
+              </button>
+            ) : null}
+            {bothSeated && table.viewer?.seated && opponentOfferedSwap ? (
               <>
+                <button
+                  type="button"
+                  className="button apButton"
+                  disabled={busy}
+                  onClick={handleAcceptSwap}
+                >
+                  {t("Arena.acceptSwap")}
+                </button>
                 <button
                   type="button"
                   className="button apButtonNeutral"
                   disabled={busy}
-                  onClick={handleProposeSwap}
+                  onClick={handleRejectSwap}
                 >
-                  {t("Arena.proposeSwap")}
+                  {t("Arena.rejectSwap")}
                 </button>
-                {swapPending && swapPending !== globalMe?.id ? (
-                  <button
-                    type="button"
-                    className="button apButton"
-                    disabled={busy}
-                    onClick={handleAcceptSwap}
-                  >
-                    {t("Arena.acceptSwap")}
-                  </button>
-                ) : null}
               </>
             ) : null}
           </div>
-          {swapPending ? (
-            <p className="help has-text-centered">{t("Arena.swapPending")}</p>
+          {iOfferedSwap ? (
+            <p className="help has-text-centered">{t("Arena.swapWaitingOpponent")}</p>
+          ) : null}
+          {opponentOfferedSwap ? (
+            <p className="help has-text-centered">{t("Arena.swapRespond")}</p>
           ) : null}
         </div>
 

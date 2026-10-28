@@ -8,6 +8,11 @@ import { API_ENDPOINT_OPEN } from "../../config";
 import { apPerfRun } from "../../lib/apPerf.js";
 import { callAuthApi } from "../../lib/api";
 import { anyOnClockPlayerTimedOut } from "../../lib/gameClockDisplay";
+import {
+  participantTimelossPollIntervalMs,
+  shouldParticipantCallTimelossCheck,
+  shouldParticipantPollTimeloss,
+} from "../../lib/GameMove/participantTimelossPoll";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
 import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
 import { ladderDetailPathFromGameRef } from "../../lib/ladderRoutes";
@@ -179,6 +184,8 @@ export function useGameMoveSession(props) {
     setTextareaMode: setTextareaModeBase,
   } = useMoveEntryDraft(move);
   const [refresh, setRefresh] = useState(0);
+  /** Display-only clock tick for arena Fischer countdown (must not trigger get_game). */
+  const [liveClockNow, setLiveClockNow] = useState(() => Date.now());
   const [watchCount, watchCountSetter] = useState(0);
   const [marksBusy, marksBusySetter] = useState(false);
   const [locked, setLocked] = useState(false);
@@ -299,18 +306,34 @@ export function useGameMoveSession(props) {
   const cbit = parseInt(cbits, 10);
 
   useEffect(() => {
-    if (!arenaLiveClock && !isArenaGame(gameRef.current)) {
+    if (!arenaLiveClock && !isArenaGame(dbgame)) {
       return undefined;
     }
-    const game = gameRef.current ?? dbgame;
-    if (!game || game.gameOver || game.toMove === "") {
+    if (!dbgame || dbgame.gameOver || dbgame.toMove === "") {
       return undefined;
     }
     const id = window.setInterval(() => {
-      setRefresh((val) => val + 1);
+      setLiveClockNow(Date.now());
     }, 250);
     return () => window.clearInterval(id);
   }, [arenaLiveClock, dbgame, dbgame?.gameOver, dbgame?.toMove, dbgame?.playMode]);
+
+  const liveClockTicking = useMemo(
+    () =>
+      Boolean(
+        dbgame &&
+          !dbgame.gameOver &&
+          dbgame.toMove !== "" &&
+          (arenaLiveClock || isArenaGame(dbgame))
+      ),
+    [
+      arenaLiveClock,
+      dbgame,
+      dbgame?.gameOver,
+      dbgame?.toMove,
+      dbgame?.playMode,
+    ]
+  );
 
   const altDisplays = useMemo(
     () => getAltDisplaysForMetaGame(metaGame),
@@ -878,6 +901,33 @@ export function useGameMoveSession(props) {
       );
     }
   }, []);
+
+  useEffect(() => {
+    if (!shouldParticipantPollTimeloss(dbgame)) {
+      return undefined;
+    }
+
+    const pollMs = participantTimelossPollIntervalMs(dbgame);
+
+    const maybeHintTimeloss = () => {
+      const game = gameRef.current;
+      if (!shouldParticipantCallTimelossCheck(game, Date.now())) {
+        return;
+      }
+      checkTime("timeloss");
+    };
+
+    maybeHintTimeloss();
+    const id = window.setInterval(maybeHintTimeloss, pollMs);
+    return () => window.clearInterval(id);
+  }, [
+    checkTime,
+    dbgame,
+    dbgame?.clockHard,
+    dbgame?.gameOver,
+    dbgame?.toMove,
+    dbgame?.playMode,
+  ]);
 
   useEffect(() => {
     if (dbgame === null) return;
@@ -3099,6 +3149,8 @@ export function useGameMoveSession(props) {
 
   return {
     moveBasePath,
+    liveClockNow,
+    liveClockTicking,
     error,
     isGameLoading: dbgame === null && !error,
     errorMessageRef,
