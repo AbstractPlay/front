@@ -52,7 +52,6 @@ import { resolveAuthSession } from "../lib/authSession";
 import ErrorBoundary from "../components/ErrorBoundary";
 import ChunkLoadRecoveryBoot from "../components/ChunkLoadRecoveryBoot";
 import RecentApUrlRecorder from "../components/Feedback/RecentApUrlRecorder";
-import ArenaGate from "../components/Arena/ArenaGate";
 import ArenaLanding from "../components/Arena/ArenaLanding";
 import ArenaTableLobby from "../components/Arena/ArenaTableLobby";
 import ArenaPlayShell from "../components/Arena/ArenaPlayShell";
@@ -273,37 +272,18 @@ function Bones(props) {
                 />
                 <Route path="/ladders/:tab?/:metaGame?" element={<Ladders />} />
                 <Route path="/ladder/:ladderid" element={<LadderHub />} />
-                <Route
-                  path="/arena"
-                  element={
-                    <ArenaGate>
-                      <ArenaLanding />
-                    </ArenaGate>
-                  }
-                />
+                <Route path="/arena" element={<ArenaLanding />} />
                 <Route
                   path="/arena/table/:metaGame/:tableId"
-                  element={
-                    <ArenaGate>
-                      <ArenaTableLobby />
-                    </ArenaGate>
-                  }
+                  element={<ArenaTableLobby />}
                 />
                 <Route
                   path="/arena/play/:metaGame/:gameID"
-                  element={
-                    <ArenaGate>
-                      <ArenaPlayShell />
-                    </ArenaGate>
-                  }
+                  element={<ArenaPlayShell />}
                 />
                 <Route
                   path="/arena/watch/:metaGame/:gameID"
-                  element={
-                    <ArenaGate>
-                      <ArenaWatchShell />
-                    </ArenaGate>
-                  }
+                  element={<ArenaWatchShell />}
                 />
                 <Route path="/play" element={<Play />} />
                 <Route

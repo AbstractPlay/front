@@ -21,6 +21,7 @@ import LayoutPickerModal from "./GameMove/LayoutPickerModal";
 import BoardExportGifModal from "./BoardExport/BoardExportGifModal";
 import PageLoading from "./shared/PageLoading";
 import ReplayModeBanner from "./GameMove/ReplayModeBanner";
+import ArenaFeedbackModal from "./Arena/ArenaFeedbackModal";
 import MoveTreeMobileChrome from "./GameMove/MoveTreeMobileChrome";
 import { isGameMoveReplayEnabled } from "../lib/GameMove/replay/replayEnabled";
 import { activateReplayFromSearchParams } from "../lib/GameMove/replay/shimEntry.js";
@@ -163,6 +164,13 @@ function GameMoveShell({
           onClose={closeLayoutPicker}
           layoutId={layoutId}
         />
+        {submitMoveQuery === "submit_arena_move" ? (
+          <ArenaFeedbackModal
+            game={session.game}
+            metaGame={params.metaGame}
+            gameId={params.gameID}
+          />
+        ) : null}
       </div>
     </LayoutPickerProvider>
   );

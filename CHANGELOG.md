@@ -13,7 +13,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Added
 
-- **Realtime Arena (front, dev):** `/arena` landing (table list poll, create table, quick match), table lobby (ready, seat swap, kibitz chat), `/arena/play` and `/arena/watch` shells with `submit_arena_move` and live Fischer clocks; **`VITE_ARENA_UI_DISABLED=true`** on prod builds until launch (S6).
+- **Realtime Arena (front):** `/arena` landing (table list poll, create table, quick match), table lobby (ready, seat swap, kibitz chat), `/arena/play` and `/arena/watch` shells with `submit_arena_move` and live Fischer clocks; post-game feedback modal (`submit_arena_feedback`); **Arena visible on prod** (removed `VITE_ARENA_UI_DISABLED`).
 - **Continuous Delta Ladder:** Ladder list and hub UI (`/ladders`, `/ladder/:id`), dashboard Ladders tab (join match pool per ladder when eligible), game-list Event column, profile ladder module, `watchLadders` WebSocket refresh, in-app notification copy/prefs (`ladderChat`, `ladderDecay`, `ladderPointsGain` / `ladderPointsLoss`, `ladderJoin`, `ladderLeave`); ladder surfaces visible in prod (kill-switch removed).
 
 ### Changed

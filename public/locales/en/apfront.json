@@ -994,6 +994,29 @@
       "playing": "In progress",
       "ended": "Ended",
       "abandoned": "Abandoned"
+    },
+    "feedback": {
+      "title": "How was this arena game?",
+      "intro": "Optional feedback helps us tune clocks and responsiveness during the beta. Once per game.",
+      "clockFairness": "How fair did the clock feel?",
+      "responsiveness": "How responsive were moves (lag, delay)?",
+      "tcFit": "Was this time control a good fit for this game?",
+      "unfairFlag": "Did you lose on time in a way that felt unfair?",
+      "unfairNa": "N/A (did not lose on time)",
+      "unfairNo": "No",
+      "unfairYes": "Yes",
+      "queueAgain": "Would you queue again at this game and time control?",
+      "queueYes": "Yes",
+      "queueMaybe": "Maybe",
+      "queueNo": "No",
+      "comment": "Anything else? (optional)",
+      "submit": "Send feedback",
+      "dismiss": "Not now",
+      "likert_1": "1 — Poor",
+      "likert_2": "2",
+      "likert_3": "3 — OK",
+      "likert_4": "4",
+      "likert_5": "5 — Great"
     }
   },
   "Ladder": {
