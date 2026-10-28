@@ -48,7 +48,7 @@ function GameMoveShell({
   const params = useParams();
   const location = useLocation();
   const { t } = useTranslation();
-  const { layoutId, resolvedFrom } = useGameMoveLayout();
+  const { layoutId, resolvedFrom, playContext } = useGameMoveLayout();
   const [showLayoutPicker, setShowLayoutPicker] = useState(false);
   const sessionTrackedRef = useRef(null);
   const [replayGate, setReplayGate] = useState(() => {
@@ -113,7 +113,7 @@ function GameMoveShell({
       layoutId,
       resolvedFrom,
       metaGame: params.metaGame,
-      storedLayout: readLayoutPreference(),
+      storedLayout: readLayoutPreference(playContext),
     });
   }, [
     session.isGameLoading,
@@ -121,6 +121,7 @@ function GameMoveShell({
     params.gameID,
     layoutId,
     resolvedFrom,
+    playContext,
   ]);
 
   if (replayGate === "loading" || session.isGameLoading) {

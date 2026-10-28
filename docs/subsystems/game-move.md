@@ -7,15 +7,18 @@ The game move page is the core gameplay UI.
 | Route | Behaviour |
 |-------|-----------|
 | `/move/:metaGame/:cbits/:gameID` | Primary play page; optional `?layout=classic\|strip\|card\|narrative` |
+| `/arena/play/:metaGame/:gameID` | Arena live play; optional `?layout=` (uses `gameMoveLayoutLive`) |
+| `/arena/watch/:metaGame/:gameID` | Arena spectate; optional `?layout=` (uses `gameMoveLayoutLive`) |
 | `/move-beta/:metaGame/:cbits/:gameID` | Legacy preview URL → redirects to `/move/...` preserving `?layout=` |
 
 **Layout resolution** (see [`layoutPreference.js`](../src/lib/GameMove/layoutPreference.js)):
 
-1. Valid `?layout=` in the URL → use for this visit (shareable deep links); persisted to localStorage
-2. `localStorage` key `gameMoveLayout` (migrated from `gameMoveBetaLayout`)
-3. Site default: **strip**
+1. Valid `?layout=` in the URL → use for this visit (shareable deep links); persisted to the matching localStorage key for the route kind
+2. **Correspondence** (`/move/…`): `localStorage` key `gameMoveLayout` (migrated from `gameMoveBetaLayout`); default **strip**
+3. **Live arena** (`/arena/play`, `/arena/watch`): `localStorage` key `gameMoveLayoutLive`; default **strip** until the dedicated live layout ships
+4. Arena table lobby offers layout choice (text description) before launch
 
-Preferences are **localStorage only** (per browser/device). No account setting.
+Preferences are **localStorage only** (per browser/device). Correspondence and live arena remember **separate** layout choices. No account setting.
 
 ## Layouts
 

@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import PageHelmet from "../PageHelmet";
 import PageLoading from "../shared/PageLoading";
 import GamePickerTrigger from "../GamePickerTrigger";
+import GameVariants from "../GameVariants";
 import { RulesIntroExpandable } from "../shared/RulesIntroExpandable";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { arenaPlaySupported } from "../../lib/arena/arenaGame";
@@ -21,6 +22,8 @@ import {
 } from "../../lib/arena/arenaRoutes";
 import { useArenaPoll } from "../../lib/arena/useArenaPoll";
 import { formatVariantsJoined } from "../../lib/expandVariants";
+import { validateChallengeVariantSelection } from "../../lib/variantChallengeValidation";
+import { useVariantSelectionValidity } from "../../hooks/useVariantSelectionValidity";
 import "./arena.css";
 
 const TIERS = ["bullet", "blitz", "rapid", "live"];
@@ -33,6 +36,9 @@ export default function ArenaLanding() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [metaGame, metaGameSetter] = useState("");
+  const [selectedVariants, setSelectedVariants] = useState([]);
+  const { variantsValid, onValidityChange, resetVariantValidity } =
+    useVariantSelectionValidity();
   const [arenaTcId, arenaTcSetter] = useState(() => readArenaPreferredTcId() || "blitz_5_3");
   const [controls, controlsSetter] = useState(null);
   const [filterMeta, filterMetaSetter] = useState("");
@@ -85,6 +91,41 @@ export default function ArenaLanding() {
   const gameChosen =
     metaGame !== "" && metaGame != null && arenaPlaySupported(metaGame);
 
+  const variantSummary = useMemo(
+    () =>
+      gameChosen ? formatVariantsJoined(metaGame, selectedVariants) : "",
+    [gameChosen, metaGame, selectedVariants]
+  );
+
+  const handleMetaGameChange = useCallback(
+    (game) => {
+      metaGameSetter(game);
+      setSelectedVariants([]);
+      resetVariantValidity();
+    },
+    [resetVariantValidity]
+  );
+
+  const handleVariantValidityChange = useCallback(
+    (valid) => {
+      onValidityChange(valid);
+    },
+    [onValidityChange]
+  );
+
+  const assertVariantsOk = () => {
+    const check = validateChallengeVariantSelection(metaGame, selectedVariants);
+    if (!check.ok) {
+      throw new Error(t("InvalidVariantCombination"));
+    }
+  };
+
+  const arenaMatchPars = () => ({
+    metaGame,
+    arenaTcId,
+    variants: selectedVariants,
+  });
+
   const runAction = async (fn) => {
     actionErrorSetter("");
     busySetter(true);
@@ -106,9 +147,9 @@ export default function ArenaLanding() {
       if (!arenaPlaySupported(metaGame)) {
         throw new Error(t("Arena.twoPlayerOnly"));
       }
+      assertVariantsOk();
       const result = await arenaTableAction("create_arena_table", {
-        metaGame,
-        arenaTcId,
+        ...arenaMatchPars(),
         open: true,
       });
       if (!result.ok) {
@@ -129,10 +170,8 @@ export default function ArenaLanding() {
       if (!arenaPlaySupported(metaGame)) {
         throw new Error(t("Arena.twoPlayerOnly"));
       }
-      const result = await arenaTableAction("join_arena_queue", {
-        metaGame,
-        arenaTcId,
-      });
+      assertVariantsOk();
+      const result = await arenaTableAction("join_arena_queue", arenaMatchPars());
       if (!result.ok) {
         throw new Error(result.error ?? t("Arena.actionFailed"));
       }
@@ -147,10 +186,7 @@ export default function ArenaLanding() {
       if (!gameChosen) {
         throw new Error(t("Arena.chooseGameFirst"));
       }
-      const result = await arenaTableAction("leave_arena_queue", {
-        metaGame,
-        arenaTcId,
-      });
+      const result = await arenaTableAction("leave_arena_queue", arenaMatchPars());
       if (!result.ok) {
         throw new Error(result.error ?? t("Arena.actionFailed"));
       }
@@ -183,10 +219,20 @@ export default function ArenaLanding() {
             <GamePickerTrigger
               id="arena-meta-picker"
               value={metaGame}
-              onChange={metaGameSetter}
+              onChange={handleMetaGameChange}
               tournamentOnly
             />
           </div>
+          {gameChosen ? (
+            <GameVariants
+              metaGame={metaGame}
+              variantsSetter={setSelectedVariants}
+              onValidityChange={handleVariantValidityChange}
+            />
+          ) : null}
+          {variantSummary ? (
+            <p className="help">{t("Arena.selectedVariants", { label: variantSummary })}</p>
+          ) : null}
           <p className="label">{t("Arena.timeControl")}</p>
           <div className="buttons are-small is-flex is-flex-wrap-wrap">
             {TIERS.map((tier) =>
@@ -220,7 +266,7 @@ export default function ArenaLanding() {
             <button
               type="button"
               className="button apButton"
-              disabled={busy || !selectedControl || !gameChosen}
+              disabled={busy || !selectedControl || !gameChosen || !variantsValid}
               onClick={handleCreateTable}
             >
               {t("Arena.createTable")}
@@ -228,7 +274,7 @@ export default function ArenaLanding() {
             <button
               type="button"
               className="button apButton"
-              disabled={busy || !selectedControl || !gameChosen}
+              disabled={busy || !selectedControl || !gameChosen || !variantsValid}
               onClick={handleQuickMatch}
             >
               {t("Arena.quickMatch")}

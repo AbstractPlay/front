@@ -30,7 +30,15 @@ export const DEFAULT_LAYOUT = LAYOUT_STRIP;
 export const DEFAULT_BETA_LAYOUT = DEFAULT_LAYOUT;
 
 export const STORAGE_LAYOUT = "gameMoveLayout";
+/** Arena play/watch layout (separate from correspondence `/move`). */
+export const STORAGE_LAYOUT_LIVE = "gameMoveLayoutLive";
 export const STORAGE_LAYOUT_HINT_DISMISSED = "gameMoveLayoutHintDismissed";
+
+export const PLAY_CONTEXT_CORRESPONDENCE = "correspondence";
+export const PLAY_CONTEXT_LIVE = "live";
+
+/** Default for arena until dedicated `live` layout ships (see live layout plan). */
+export const DEFAULT_LIVE_LAYOUT = LAYOUT_STRIP;
 
 /** @deprecated migrated to STORAGE_LAYOUT */
 export const STORAGE_BETA_LAYOUT = "gameMoveBetaLayout";
@@ -58,7 +66,40 @@ function normalizeLayout(layout) {
   return layout;
 }
 
-export function gameMovePath(metaGame, cbits, gameID, { layout, beta } = {}) {
+export function inferPlayContextFromPathname(pathname = "") {
+  if (/^\/arena\/(?:play|watch)\//.test(pathname)) {
+    return PLAY_CONTEXT_LIVE;
+  }
+  return PLAY_CONTEXT_CORRESPONDENCE;
+}
+
+function storageKeyForPlayContext(playContext) {
+  return playContext === PLAY_CONTEXT_LIVE ? STORAGE_LAYOUT_LIVE : STORAGE_LAYOUT;
+}
+
+function defaultLayoutForPlayContext(playContext) {
+  return playContext === PLAY_CONTEXT_LIVE ? DEFAULT_LIVE_LAYOUT : DEFAULT_LAYOUT;
+}
+
+export function appendLayoutQuery(path, layout) {
+  if (!layout) {
+    return path;
+  }
+  const normalized = normalizeLayout(layout);
+  if (!ALL_LAYOUTS.includes(normalized)) {
+    return path;
+  }
+  const sep = path.includes("?") ? "&" : "?";
+  return `${path}${sep}layout=${encodeURIComponent(normalized)}`;
+}
+
+export function gameMovePath(
+  metaGame,
+  cbits,
+  gameID,
+  { layout, beta, basePath } = {}
+) {
+  const moveBase = basePath ?? MOVE_BASE;
   if (beta) {
     const legacyPath = `${MOVE_BETA_BASE}/${metaGame}/${cbits}/${gameID}`;
     if (!layout || layout === LAYOUT_CLASSIC) {
@@ -71,15 +112,8 @@ export function gameMovePath(metaGame, cbits, gameID, { layout, beta } = {}) {
     return `${legacyPath}?layout=${encodeURIComponent(normalized)}`;
   }
 
-  const path = `${MOVE_BASE}/${metaGame}/${cbits}/${gameID}`;
-  if (!layout) {
-    return path;
-  }
-  const normalized = normalizeLayout(layout);
-  if (!ALL_LAYOUTS.includes(normalized)) {
-    return path;
-  }
-  return `${path}?layout=${encodeURIComponent(normalized)}`;
+  const path = `${moveBase}/${metaGame}/${cbits}/${gameID}`;
+  return appendLayoutQuery(path, layout);
 }
 
 /** @deprecated unified /move/ route */
@@ -87,16 +121,21 @@ export function isBetaGameMovePath(pathname = "") {
   return pathname.startsWith(`${MOVE_BETA_BASE}/`);
 }
 
-export function readLayoutPreference() {
-  const fromNew = normalizeLayout(readStorage(STORAGE_LAYOUT));
+export function readLayoutPreference(
+  playContext = PLAY_CONTEXT_CORRESPONDENCE,
+) {
+  const key = storageKeyForPlayContext(playContext);
+  const fromNew = normalizeLayout(readStorage(key));
   if (ALL_LAYOUTS.includes(fromNew)) {
     return fromNew;
   }
 
-  const fromLegacy = normalizeLayout(readStorage(STORAGE_BETA_LAYOUT));
-  if (ALL_LAYOUTS.includes(fromLegacy)) {
-    writeStorage(STORAGE_LAYOUT, fromLegacy);
-    return fromLegacy;
+  if (playContext === PLAY_CONTEXT_CORRESPONDENCE) {
+    const fromLegacy = normalizeLayout(readStorage(STORAGE_BETA_LAYOUT));
+    if (ALL_LAYOUTS.includes(fromLegacy)) {
+      writeStorage(STORAGE_LAYOUT, fromLegacy);
+      return fromLegacy;
+    }
   }
 
   return null;
@@ -107,12 +146,15 @@ export function readBetaLayoutPreference() {
   return readLayoutPreference() ?? DEFAULT_LAYOUT;
 }
 
-export function writeLayoutPreference(layout) {
+export function writeLayoutPreference(
+  layout,
+  playContext = PLAY_CONTEXT_CORRESPONDENCE,
+) {
   const normalized = normalizeLayout(layout);
   if (!ALL_LAYOUTS.includes(normalized)) {
     return;
   }
-  writeStorage(STORAGE_LAYOUT, normalized);
+  writeStorage(storageKeyForPlayContext(playContext), normalized);
 }
 
 /** @deprecated use writeLayoutPreference */
@@ -120,20 +162,26 @@ export function writeBetaLayoutPreference(layout) {
   writeLayoutPreference(layout);
 }
 
-export function resolveGameMoveLayout(search = "") {
+export function resolveGameMoveLayout(
+  search = "",
+  { playContext = PLAY_CONTEXT_CORRESPONDENCE } = {},
+) {
   const params = new URLSearchParams(search);
   const fromUrl = normalizeLayout(params.get("layout"));
   if (ALL_LAYOUTS.includes(fromUrl)) {
-    writeLayoutPreference(fromUrl);
+    writeLayoutPreference(fromUrl, playContext);
     return { layoutId: fromUrl, resolvedFrom: "url" };
   }
 
-  const stored = readLayoutPreference();
+  const stored = readLayoutPreference(playContext);
   if (stored) {
     return { layoutId: stored, resolvedFrom: "localStorage" };
   }
 
-  return { layoutId: DEFAULT_LAYOUT, resolvedFrom: "default" };
+  return {
+    layoutId: defaultLayoutForPlayContext(playContext),
+    resolvedFrom: "default",
+  };
 }
 
 /** @deprecated use resolveGameMoveLayout */

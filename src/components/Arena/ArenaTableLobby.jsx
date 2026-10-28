@@ -17,6 +17,9 @@ import {
   fetchArenaTable,
 } from "../../lib/arena/fetchArena";
 import { arenaLandingPath, arenaPlayPath } from "../../lib/arena/arenaRoutes";
+import ArenaTableLayoutPicker, {
+  readArenaTableLayoutChoice,
+} from "./ArenaTableLayoutPicker";
 import { useArenaPoll } from "../../lib/arena/useArenaPoll";
 import {
   arenaTableChatPlayers,
@@ -53,7 +56,10 @@ export default function ArenaTableLobby() {
       return;
     }
     if (table.state === "playing") {
-      navigate(arenaPlayPath(table.metaGame, table.tableId), { replace: true });
+      const layout = readArenaTableLayoutChoice();
+      navigate(arenaPlayPath(table.metaGame, table.tableId, { layout }), {
+        replace: true,
+      });
     }
   }, [table, metaParam, navigate]);
 
@@ -116,7 +122,8 @@ export default function ArenaTableLobby() {
         throw new Error(result.error ?? t("Arena.actionFailed"));
       }
       if (result.data?.launched) {
-        navigate(arenaPlayPath(metaParam, tableId));
+        const layout = readArenaTableLayoutChoice();
+        navigate(arenaPlayPath(metaParam, tableId, { layout }));
       }
     });
 
@@ -190,6 +197,11 @@ export default function ArenaTableLobby() {
     swapOfferedBy && swapOfferedBy !== globalMe?.id;
   const showOfferSwap =
     bothSeated && table.viewer?.seated && !swapOfferedBy;
+
+  const showLayoutPicker =
+    table.state === "open" ||
+    table.state === "seated" ||
+    table.state === "launching";
 
   return (
     <>
@@ -343,6 +355,15 @@ export default function ArenaTableLobby() {
             <p className="help has-text-centered">{t("Arena.swapRespond")}</p>
           ) : null}
         </div>
+
+        {showLayoutPicker ? (
+          <div className="arena-panel">
+            <p className="subtitle lined">
+              <span>{t("Arena.lobbyLayout.title")}</span>
+            </p>
+            <ArenaTableLayoutPicker />
+          </div>
+        ) : null}
 
         <div className="arena-panel">
           <p className="subtitle lined">

@@ -940,6 +940,7 @@
     "clockCopy": "Arena uses hard Fischer clocks from the site catalog. Correspondence vacation does not pause arena clocks.",
     "findGame": "Find a live game",
     "metaGame": "Game",
+    "selectedVariants": "Variants: {{label}}",
     "chooseGameFirst": "Choose a game first.",
     "timeControl": "Time control",
     "tcDescription": "Fischer {{label}}, hard clock.",
@@ -981,6 +982,11 @@
     "swapRespond": "Your opponent offered to swap seats. Accept or decline, then ready again.",
     "swapPending": "Seat swap proposed — both players must accept and ready again.",
     "tableChat": "Table chat",
+    "lobbyLayout": {
+      "title": "Play page layout",
+      "intro": "Choose how the board opens when this game starts. Saved separately from correspondence games on this device.",
+      "switcherAria": "Arena play page layout"
+    },
     "tier": {
       "bullet": "Bullet",
       "blitz": "Blitz",
@@ -2039,7 +2045,7 @@
     },
     "layout": {
       "pickerTitle": "Choose play page layout",
-      "pickerIntro": "Pick how the game page is arranged on this device. Your choice is remembered in this browser.",
+      "pickerIntro": "Pick how the game page is arranged on this device. Correspondence and live arena each remember their own choice in this browser.",
       "pickerOpen": "Change layout (currently {{layout}})",
       "hintBody": "You're using Strip and dock.",
       "hintChange": "Change layout",

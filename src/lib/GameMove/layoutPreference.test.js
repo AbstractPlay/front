@@ -2,15 +2,20 @@ import { expect } from "chai";
 import {
   ALL_LAYOUTS,
   DEFAULT_LAYOUT,
+  DEFAULT_LIVE_LAYOUT,
   LAYOUT_CARD,
   LAYOUT_CLASSIC,
   LAYOUT_NARRATIVE,
   LAYOUT_STRIP,
+  PLAY_CONTEXT_CORRESPONDENCE,
+  PLAY_CONTEXT_LIVE,
   STORAGE_BETA_LAYOUT,
   STORAGE_LAYOUT,
+  STORAGE_LAYOUT_LIVE,
   STORAGE_LAYOUT_HINT_DISMISSED,
   dismissLayoutHint,
   gameMovePath,
+  inferPlayContextFromPathname,
   readLayoutPreference,
   resolveGameMoveLayout,
   shouldShowLayoutHint,
@@ -20,6 +25,7 @@ import {
 describe("layoutPreference", () => {
   beforeEach(() => {
     localStorage.removeItem(STORAGE_LAYOUT);
+    localStorage.removeItem(STORAGE_LAYOUT_LIVE);
     localStorage.removeItem(STORAGE_BETA_LAYOUT);
     localStorage.removeItem(STORAGE_LAYOUT_HINT_DISMISSED);
   });
@@ -60,6 +66,56 @@ describe("layoutPreference", () => {
       layoutId: LAYOUT_CLASSIC,
       resolvedFrom: "localStorage",
     });
+  });
+
+  it("keeps live and correspondence layout prefs separate", () => {
+    writeLayoutPreference(LAYOUT_NARRATIVE, PLAY_CONTEXT_CORRESPONDENCE);
+    writeLayoutPreference(LAYOUT_CLASSIC, PLAY_CONTEXT_LIVE);
+
+    expect(readLayoutPreference(PLAY_CONTEXT_CORRESPONDENCE)).to.equal(
+      LAYOUT_NARRATIVE
+    );
+    expect(readLayoutPreference(PLAY_CONTEXT_LIVE)).to.equal(LAYOUT_CLASSIC);
+
+    expect(
+      resolveGameMoveLayout("", { playContext: PLAY_CONTEXT_LIVE })
+    ).to.deep.equal({
+      layoutId: LAYOUT_CLASSIC,
+      resolvedFrom: "localStorage",
+    });
+    expect(
+      resolveGameMoveLayout("", { playContext: PLAY_CONTEXT_CORRESPONDENCE })
+    ).to.deep.equal({
+      layoutId: LAYOUT_NARRATIVE,
+      resolvedFrom: "localStorage",
+    });
+  });
+
+  it("defaults live context to DEFAULT_LIVE_LAYOUT when unset", () => {
+    expect(
+      resolveGameMoveLayout("", { playContext: PLAY_CONTEXT_LIVE })
+    ).to.deep.equal({
+      layoutId: DEFAULT_LIVE_LAYOUT,
+      resolvedFrom: "default",
+    });
+  });
+
+  it("infers live play context from arena routes", () => {
+    expect(inferPlayContextFromPathname("/arena/play/hex/abc")).to.equal(
+      PLAY_CONTEXT_LIVE
+    );
+    expect(inferPlayContextFromPathname("/move/hex/0/abc")).to.equal(
+      PLAY_CONTEXT_CORRESPONDENCE
+    );
+  });
+
+  it("builds arena play paths with layout query", () => {
+    expect(
+      gameMovePath("hex", 0, "tid", {
+        layout: LAYOUT_STRIP,
+        basePath: "/arena/play",
+      })
+    ).to.equal("/arena/play/hex/0/tid?layout=strip");
   });
 
   it("migrates legacy queue layout to card", () => {

@@ -18,6 +18,9 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Changed
 
+- **Arena landing:** variant picker (`GameVariants`) when creating a table or quick match; variants are sent to `create_arena_table` / `join_arena_queue` and shown in the open-tables list.
+- **Arena table lobby:** choose play-page layout before ready-up (name + short description; separate `gameMoveLayoutLive` storage). Launch navigates to `/arena/play/...?layout=…`.
+- **Play layouts:** arena play/watch resolve and persist layout from the live storage key; in-game layout picker links stay on `/arena/play` or `/arena/watch` routes.
 - **Tournaments / ladders:** rules intro on the tournaments list, ladder list, and ladder hub keeps the full description in place with a fade and expand/collapse toggle (same pattern as the player profile about box), instead of swapping short and long copy.
 - **Ladder list:** paginated ladder table with the shared TanStack table nav (search, page controls, page size).
 

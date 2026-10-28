@@ -79,3 +79,20 @@
   border-radius: 4px;
   margin-bottom: 1rem;
 }
+
+.arena-table-layout-picker__intro {
+  margin-bottom: 0.75rem;
+}
+
+.arena-table-layout-picker__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.arena-table-layout-picker__description {
+  text-align: center;
+  margin-bottom: 0;
+}
