@@ -219,6 +219,18 @@
     "src": "Loading tables…",
     "out": "Lade Tische…"
   },
+  "Arena.lobbyLayout.intro": {
+    "src": "Choose how the board opens when this game starts. Saved separately from correspondence games on this device.",
+    "out": "Wähle, wie das Spielbrett beim Start dieses Spiels geöffnet wird. Wird auf diesem Gerät getrennt von Korrespondenzspielen gespeichert."
+  },
+  "Arena.lobbyLayout.switcherAria": {
+    "src": "Arena play page layout",
+    "out": "Layout der Arena-Spielseite"
+  },
+  "Arena.lobbyLayout.title": {
+    "src": "Play page layout",
+    "out": "Layout der Spielseite"
+  },
   "Arena.lobbyState.abandoned": {
     "src": "Abandoned",
     "out": "Abgebrochen"
@@ -302,6 +314,10 @@
   "Arena.seats": {
     "src": "Seats",
     "out": "Plätze"
+  },
+  "Arena.selectedVariants": {
+    "src": "Variants: {{label}}",
+    "out": "Varianten: {{label}}"
   },
   "Arena.swapPending": {
     "src": "Seat swap proposed — both players must accept and ready again.",
@@ -5632,8 +5648,8 @@
     "out": "Narrativ"
   },
   "gameMove.layout.pickerIntro": {
-    "src": "Pick how the game page is arranged on this device. Your choice is remembered in this browser.",
-    "out": "Wähle, wie die Spielseite auf diesem Gerät angeordnet wird. Deine Auswahl wird in diesem Browser gespeichert."
+    "src": "Pick how the game page is arranged on this device. Correspondence and live arena each remember their own choice in this browser.",
+    "out": "Wähle, wie die Spielseite auf diesem Gerät angeordnet wird. Korrespondenz- und Live-Arena-Spiele speichern jeweils ihre eigene Einstellung in diesem Browser."
   },
   "gameMove.layout.pickerOpen": {
     "src": "Change layout (currently {{layout}})",

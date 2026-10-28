@@ -940,6 +940,7 @@
     "clockCopy": "Die Arena verwendet feste Fischer-Uhren aus dem Katalog der Website. Urlaubszeiten für Korrespondenzpartien halten Arena-Uhren nicht an.",
     "findGame": "Live-Partie suchen",
     "metaGame": "Spiel",
+    "selectedVariants": "Varianten: {{label}}",
     "chooseGameFirst": "Wähle zuerst ein Spiel aus.",
     "timeControl": "Bedenkzeit",
     "tcDescription": "Fischer {{label}}, feste Uhr.",
@@ -981,6 +982,11 @@
     "swapRespond": "Dein Gegner hat einen Platztausch angeboten. Nimm an oder lehne ab und mache dich dann wieder bereit.",
     "swapPending": "Platztausch vorgeschlagen — beide Spieler müssen zustimmen und sich erneut bereit machen.",
     "tableChat": "Tisch-Chat",
+    "lobbyLayout": {
+      "title": "Layout der Spielseite",
+      "intro": "Wähle, wie das Spielbrett beim Start dieses Spiels geöffnet wird. Wird auf diesem Gerät getrennt von Korrespondenzspielen gespeichert.",
+      "switcherAria": "Layout der Arena-Spielseite"
+    },
     "tier": {
       "bullet": "Bullet",
       "blitz": "Blitz",
@@ -2039,7 +2045,7 @@
     },
     "layout": {
       "pickerTitle": "Layout der Spielseite wählen",
-      "pickerIntro": "Wähle, wie die Spielseite auf diesem Gerät angeordnet wird. Deine Auswahl wird in diesem Browser gespeichert.",
+      "pickerIntro": "Wähle, wie die Spielseite auf diesem Gerät angeordnet wird. Korrespondenz- und Live-Arena-Spiele speichern jeweils ihre eigene Einstellung in diesem Browser.",
       "pickerOpen": "Layout ändern (aktuell {{layout}})",
       "hintBody": "Du nutzt Strip und Dock.",
       "hintChange": "Layout ändern",

@@ -940,6 +940,7 @@
     "clockCopy": "L'Arena utilizza gli orologi Fischer rigidi del catalogo del sito. Le ferie delle partite per corrispondenza non mettono in pausa gli orologi dell'arena.",
     "findGame": "Trova una partita dal vivo",
     "metaGame": "Gioco",
+    "selectedVariants": "Varianti: {{label}}",
     "chooseGameFirst": "Scegli prima un gioco.",
     "timeControl": "Controllo del tempo",
     "tcDescription": "Fischer {{label}}, orologio rigido.",
@@ -981,6 +982,11 @@
     "swapRespond": "Il tuo avversario ha proposto di scambiare i posti. Accetta o rifiuta, poi conferma nuovamente di essere pronto.",
     "swapPending": "Scambio posto proposto — entrambi i giocatori devono accettare e confermare di essere pronti.",
     "tableChat": "Chat del tavolo",
+    "lobbyLayout": {
+      "title": "Layout pagina di gioco",
+      "intro": "Scegli come si apre la scacchiera all'inizio di questa partita. Impostazione salvata separatamente dalle partite per corrispondenza su questo dispositivo.",
+      "switcherAria": "Layout pagina di gioco Arena"
+    },
     "tier": {
       "bullet": "Bullet",
       "blitz": "Blitz",
@@ -2039,7 +2045,7 @@
     },
     "layout": {
       "pickerTitle": "Scegli il layout della pagina di gioco",
-      "pickerIntro": "Scegli come disporre la pagina di gioco su questo dispositivo. La tua scelta verrà memorizzata in questo browser.",
+      "pickerIntro": "Scegli la disposizione della pagina di gioco su questo dispositivo. Le partite per corrispondenza e l'arena dal vivo ricordano ciascuna la propria preferenza in questo browser.",
       "pickerOpen": "Cambia layout (attualmente {{layout}})",
       "hintBody": "Stai usando Strip e dock.",
       "hintChange": "Cambia layout",

@@ -940,6 +940,7 @@
     "clockCopy": "Arena utiliza relojes Fischer estrictos del catálogo del sitio. Las vacaciones de correspondencia no pausarán los relojes de arena.",
     "findGame": "Buscar una partida en vivo",
     "metaGame": "Juego",
+    "selectedVariants": "Variantes: {{label}}",
     "chooseGameFirst": "Elige un juego primero.",
     "timeControl": "Control de tiempo",
     "tcDescription": "Fischer {{label}}, reloj estricto.",
@@ -981,6 +982,11 @@
     "swapRespond": "Tu oponente ofreció cambiar de asiento. Acepta o rechaza, y luego vuelve a confirmar que estás listo.",
     "swapPending": "Se propuso un intercambio de asientos; ambos jugadores deben aceptar y confirmarse como listos de nuevo.",
     "tableChat": "Chat de la mesa",
+    "lobbyLayout": {
+      "title": "Diseño de la página de juego",
+      "intro": "Elige cómo se abre el tablero cuando empieza esta partida. Se guarda por separado de las partidas por correspondencia en este dispositivo.",
+      "switcherAria": "Diseño de la página de juego de Arena"
+    },
     "tier": {
       "bullet": "Bullet",
       "blitz": "Blitz",
@@ -2039,7 +2045,7 @@
     },
     "layout": {
       "pickerTitle": "Elige el diseño de la página de juego",
-      "pickerIntro": "Elige cómo se organiza la página de juego en este dispositivo. Tu elección se guardará en este navegador.",
+      "pickerIntro": "Elige cómo se organiza la página de la partida en este dispositivo. Las partidas por correspondencia y la arena en vivo recuerdan cada una su elección en este navegador.",
       "pickerOpen": "Cambiar diseño (actualmente {{layout}})",
       "hintBody": "Estás usando Strip y dock.",
       "hintChange": "Cambiar diseño",
