@@ -59,6 +59,10 @@
     "src": "Cancel table",
     "out": "Annuler la table"
   },
+  "Arena.chooseGameFirst": {
+    "src": "Choose a game first.",
+    "out": "Choisissez d'abord un jeu."
+  },
   "Arena.clockCopy": {
     "src": "Arena uses hard Fischer clocks from the site catalog. Correspondence vacation does not pause arena clocks.",
     "out": "L'Arène utilise des pendules Fischer strictes issues du catalogue du site. Les vacances pour les parties par correspondance ne suspendent pas les pendules d'arène."
@@ -255,6 +259,10 @@
     "src": "Not ready",
     "out": "Pas prêt"
   },
+  "Arena.offerSwap": {
+    "src": "Offer seat swap",
+    "out": "Proposer d'échanger les places"
+  },
   "Arena.openTables": {
     "src": "Open tables",
     "out": "Tables ouvertes"
@@ -283,6 +291,10 @@
     "src": "Refresh",
     "out": "Actualiser"
   },
+  "Arena.rejectSwap": {
+    "src": "Decline swap",
+    "out": "Refuser l'échange"
+  },
   "Arena.seat": {
     "src": "Seat {{n}}",
     "out": "Place {{n}}"
@@ -294,6 +306,14 @@
   "Arena.swapPending": {
     "src": "Seat swap proposed — both players must accept and ready again.",
     "out": "Échange de places proposé — les deux joueurs doivent accepter et se déclarer à nouveau prêts."
+  },
+  "Arena.swapRespond": {
+    "src": "Your opponent offered to swap seats. Accept or decline, then ready again.",
+    "out": "Votre adversaire a proposé d'échanger les places. Acceptez ou refusez, puis indiquez à nouveau que vous êtes prêt."
+  },
+  "Arena.swapWaitingOpponent": {
+    "src": "Seat swap offered — waiting for your opponent to accept or decline.",
+    "out": "Échange de places proposé — en attente de l'acceptation ou du refus de votre adversaire."
   },
   "Arena.tableChat": {
     "src": "Table chat",
