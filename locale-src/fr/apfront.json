@@ -43,6 +43,234 @@
     "src": "Where would you like this choice applied?",
     "out": "Où souhaitez-vous que ce choix soit appliqué ?"
   },
+  "Arena.acceptSwap": {
+    "src": "Accept swap",
+    "out": "Accepter l'échange"
+  },
+  "Arena.actionFailed": {
+    "src": "Arena action failed.",
+    "out": "L'action dans l'arène a échoué."
+  },
+  "Arena.backToLobby": {
+    "src": "Back to Arena",
+    "out": "Retour à l'Arène"
+  },
+  "Arena.cancelTable": {
+    "src": "Cancel table",
+    "out": "Annuler la table"
+  },
+  "Arena.clockCopy": {
+    "src": "Arena uses hard Fischer clocks from the site catalog. Correspondence vacation does not pause arena clocks.",
+    "out": "L'Arène utilise des pendules Fischer strictes issues du catalogue du site. Les vacances pour les parties par correspondance ne suspendent pas les pendules d'arène."
+  },
+  "Arena.colGame": {
+    "src": "Game",
+    "out": "Jeu"
+  },
+  "Arena.colSeats": {
+    "src": "Seats",
+    "out": "Places"
+  },
+  "Arena.colState": {
+    "src": "State",
+    "out": "État"
+  },
+  "Arena.colTc": {
+    "src": "TC",
+    "out": "Cadence"
+  },
+  "Arena.createTable": {
+    "src": "Create open table",
+    "out": "Créer une table ouverte"
+  },
+  "Arena.emptySeat": {
+    "src": "Open",
+    "out": "Libre"
+  },
+  "Arena.filterMetaPlaceholder": {
+    "src": "Filter by game id…",
+    "out": "Filtrer par ID de jeu…"
+  },
+  "Arena.findGame": {
+    "src": "Find a live game",
+    "out": "Trouver une partie en direct"
+  },
+  "Arena.intro": {
+    "src": "Play live two-player games with Fischer clocks (bullet through live). Queue for a match or host a table, ready up, then play in real time. All arena games are unrated in this release.",
+    "out": "Jouez des parties à deux joueurs en direct avec pendules Fischer (du bullet au jeu en direct). Rejoignez la file d'attente ou créez une table, préparez-vous, puis jouez en temps réel. Toutes les parties d'arène sont non classées dans cette version."
+  },
+  "Arena.introCollapse": {
+    "src": "Show less",
+    "out": "Réduire"
+  },
+  "Arena.introExpand": {
+    "src": "Read more",
+    "out": "En savoir plus"
+  },
+  "Arena.join": {
+    "src": "Join",
+    "out": "Rejoindre"
+  },
+  "Arena.joinTable": {
+    "src": "Join table",
+    "out": "Rejoindre la table"
+  },
+  "Arena.leaveQueue": {
+    "src": "Leave queue",
+    "out": "Quitter la file d'attente"
+  },
+  "Arena.leaveTable": {
+    "src": "Leave",
+    "out": "Quitter"
+  },
+  "Arena.loadingTable": {
+    "src": "Loading table…",
+    "out": "Chargement de la table…"
+  },
+  "Arena.loadingTables": {
+    "src": "Loading tables…",
+    "out": "Chargement des tables…"
+  },
+  "Arena.lobbyState.abandoned": {
+    "src": "Abandoned",
+    "out": "Abandonnée"
+  },
+  "Arena.lobbyState.ended": {
+    "src": "Ended",
+    "out": "Terminée"
+  },
+  "Arena.lobbyState.launching": {
+    "src": "Starting…",
+    "out": "Lancement…"
+  },
+  "Arena.lobbyState.open": {
+    "src": "Open",
+    "out": "Ouverte"
+  },
+  "Arena.lobbyState.playing": {
+    "src": "In progress",
+    "out": "En cours"
+  },
+  "Arena.lobbyState.seated": {
+    "src": "Seated",
+    "out": "Occupée"
+  },
+  "Arena.metaGame": {
+    "src": "Game",
+    "out": "Jeu"
+  },
+  "Arena.navTitle": {
+    "src": "Arena (live)",
+    "out": "Arène (en direct)"
+  },
+  "Arena.noTables": {
+    "src": "No open arena tables right now.",
+    "out": "Aucune table d'arène ouverte pour le moment."
+  },
+  "Arena.notReady": {
+    "src": "Not ready",
+    "out": "Pas prêt"
+  },
+  "Arena.openTables": {
+    "src": "Open tables",
+    "out": "Tables ouvertes"
+  },
+  "Arena.pageTitle": {
+    "src": "Arena",
+    "out": "Arène"
+  },
+  "Arena.proposeSwap": {
+    "src": "Propose seat swap",
+    "out": "Proposer d'échanger les places"
+  },
+  "Arena.quickMatch": {
+    "src": "Quick match",
+    "out": "Partie rapide"
+  },
+  "Arena.ready": {
+    "src": "Ready",
+    "out": "Prêt"
+  },
+  "Arena.readyUp": {
+    "src": "Ready",
+    "out": "Prêt"
+  },
+  "Arena.refresh": {
+    "src": "Refresh",
+    "out": "Actualiser"
+  },
+  "Arena.seat": {
+    "src": "Seat {{n}}",
+    "out": "Place {{n}}"
+  },
+  "Arena.seats": {
+    "src": "Seats",
+    "out": "Places"
+  },
+  "Arena.swapPending": {
+    "src": "Seat swap proposed — both players must accept and ready again.",
+    "out": "Échange de places proposé — les deux joueurs doivent accepter et se déclarer à nouveau prêts."
+  },
+  "Arena.tableChat": {
+    "src": "Table chat",
+    "out": "Discussion de table"
+  },
+  "Arena.tableState.playing": {
+    "src": "In progress",
+    "out": "En cours"
+  },
+  "Arena.tableState.seated": {
+    "src": "Negotiating",
+    "out": "En négociation"
+  },
+  "Arena.tableState.waiting": {
+    "src": "Waiting",
+    "out": "En attente"
+  },
+  "Arena.tableTc": {
+    "src": "Time control: {{tc}} ({{label}} Fischer)",
+    "out": "Cadence : {{tc}} (Fischer {{label}})"
+  },
+  "Arena.tableTitle": {
+    "src": "{{game}} — Arena table",
+    "out": "{{game}} — Table d'arène"
+  },
+  "Arena.tcDescription": {
+    "src": "Fischer {{label}}, hard clock.",
+    "out": "Fischer {{label}}, pendule stricte."
+  },
+  "Arena.tier.blitz": {
+    "src": "Blitz",
+    "out": "Blitz"
+  },
+  "Arena.tier.bullet": {
+    "src": "Bullet",
+    "out": "Bullet"
+  },
+  "Arena.tier.live": {
+    "src": "Live",
+    "out": "En direct"
+  },
+  "Arena.tier.rapid": {
+    "src": "Rapid",
+    "out": "Rapide"
+  },
+  "Arena.timeControl": {
+    "src": "Time control",
+    "out": "Cadence"
+  },
+  "Arena.twoPlayerOnly": {
+    "src": "This game does not support two-player arena play.",
+    "out": "Ce jeu ne prend pas en charge le mode arène à deux joueurs."
+  },
+  "Arena.unready": {
+    "src": "Cancel ready",
+    "out": "Annuler prêt"
+  },
+  "Arena.watch": {
+    "src": "Watch",
+    "out": "Observer"
+  },
   "AutoMoveToast": {
     "src": "At least one forced move was automatically made. Review the move tree to see each individual state.",
     "out": "Au moins un coup forcé a été joué automatiquement. Consultez l'arbre des coups pour voir chaque état individuel."
@@ -5090,6 +5318,14 @@
   "gameMarks.watching": {
     "src": "Watching",
     "out": "Observée"
+  },
+  "gameMove.arenaLive": {
+    "src": "live arena",
+    "out": "arène en direct"
+  },
+  "gameMove.arenaTableLink": {
+    "src": "arena table",
+    "out": "table d'arène"
   },
   "gameMove.boardNav.jumpToFirst": {
     "src": "Jump to first frame",
