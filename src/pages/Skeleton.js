@@ -52,6 +52,11 @@ import { resolveAuthSession } from "../lib/authSession";
 import ErrorBoundary from "../components/ErrorBoundary";
 import ChunkLoadRecoveryBoot from "../components/ChunkLoadRecoveryBoot";
 import RecentApUrlRecorder from "../components/Feedback/RecentApUrlRecorder";
+import ArenaGate from "../components/Arena/ArenaGate";
+import ArenaLanding from "../components/Arena/ArenaLanding";
+import ArenaTableLobby from "../components/Arena/ArenaTableLobby";
+import ArenaPlayShell from "../components/Arena/ArenaPlayShell";
+import ArenaWatchShell from "../components/Arena/ArenaWatchShell";
 import { useStore } from "../stores";
 import { isAnonymousFriendlyPath } from "../lib/publicPaths";
 import DefaultDocumentTitle from "../components/DefaultDocumentTitle";
@@ -268,6 +273,38 @@ function Bones(props) {
                 />
                 <Route path="/ladders/:tab?/:metaGame?" element={<Ladders />} />
                 <Route path="/ladder/:ladderid" element={<LadderHub />} />
+                <Route
+                  path="/arena"
+                  element={
+                    <ArenaGate>
+                      <ArenaLanding />
+                    </ArenaGate>
+                  }
+                />
+                <Route
+                  path="/arena/table/:metaGame/:tableId"
+                  element={
+                    <ArenaGate>
+                      <ArenaTableLobby />
+                    </ArenaGate>
+                  }
+                />
+                <Route
+                  path="/arena/play/:metaGame/:gameID"
+                  element={
+                    <ArenaGate>
+                      <ArenaPlayShell />
+                    </ArenaGate>
+                  }
+                />
+                <Route
+                  path="/arena/watch/:metaGame/:gameID"
+                  element={
+                    <ArenaGate>
+                      <ArenaWatchShell />
+                    </ArenaGate>
+                  }
+                />
                 <Route path="/play" element={<Play />} />
                 <Route
                   path="/customize/site-theme"

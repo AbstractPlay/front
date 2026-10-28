@@ -101,6 +101,7 @@ jobs:
       run: npm run build-prod
       env:
         CI: false
+        VITE_ARENA_UI_DISABLED: "true"
 
     - name: Configure AWS credentials
       uses: Fooji/create-aws-profile-action@v1

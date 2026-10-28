@@ -11,6 +11,8 @@ import { anyOnClockPlayerTimedOut } from "../../lib/gameClockDisplay";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
 import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
 import { ladderDetailPathFromGameRef } from "../../lib/ladderRoutes";
+import { arenaTablePath } from "../../lib/arena/arenaRoutes";
+import { isArenaGame } from "../../lib/arena/arenaGame";
 import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import {
   maybeSyncInProgressCommentedFlag,
@@ -153,6 +155,8 @@ function gamePlayfieldChanged(prev, next) {
 
 export function useGameMoveSession(props) {
   const moveBasePath = props.moveBasePath ?? "/move";
+  const submitMoveQuery = props.submitMoveQuery ?? "submit_move";
+  const arenaLiveClock = props.arenaLiveClock === true;
   const replayReady = props.replayReady !== false;
   const [dbgame, dbgameSetter] = useState(null);
   const [renderrep, renderrepSetter] = useState(null);
@@ -289,9 +293,24 @@ export function useGameMoveSession(props) {
   // State is passed as a prop from GameMoveWrapper
   const state = props.routerState;
 
-  const { metaGame, cbits, gameID } = useParams();
+  const { metaGame, cbits: cbitsParam, gameID } = useParams();
+  const cbits = cbitsParam ?? "0";
   const effectiveCustomCss = useGameCustomCss(metaGame, globalMe, customCSS);
   const cbit = parseInt(cbits, 10);
+
+  useEffect(() => {
+    if (!arenaLiveClock && !isArenaGame(gameRef.current)) {
+      return undefined;
+    }
+    const game = gameRef.current ?? dbgame;
+    if (!game || game.gameOver || game.toMove === "") {
+      return undefined;
+    }
+    const id = window.setInterval(() => {
+      setRefresh((val) => val + 1);
+    }, 250);
+    return () => window.clearInterval(id);
+  }, [arenaLiveClock, dbgame, dbgame?.gameOver, dbgame?.toMove, dbgame?.playMode]);
 
   const altDisplays = useMemo(
     () => getAltDisplaysForMetaGame(metaGame),
@@ -942,6 +961,15 @@ export function useGameMoveSession(props) {
       }
       if (game.rated === false) {
         parentheticalSetter((val) => [...val, t("gameMove.unrated")]);
+      }
+      if (isArenaGame(game)) {
+        parentheticalSetter((val) => [
+          ...val,
+          <Link to={arenaTablePath(game.metaGame, game.id)} key="arena-table">
+            {t("gameMove.arenaTableLink")}
+          </Link>,
+          <span key="arena-live">{t("gameMove.arenaLive")}</span>,
+        ]);
       }
       if (game.teachingMode === true) {
         parentheticalSetter((val) => [...val, t("gameMove.teaching")]);
@@ -2232,7 +2260,9 @@ export function useGameMoveSession(props) {
           gameRef.current.players,
           globalMe.id
         );
-        const res = await callAuthApi("submit_move", {
+        const moveSentAt =
+          submitMoveQuery === "submit_arena_move" ? Date.now() : undefined;
+        const res = await callAuthApi(submitMoveQuery, {
           id: gameRef.current.id,
           metaGame: gameRef.current.metaGame,
           cbit: cbit,
@@ -2245,6 +2275,7 @@ export function useGameMoveSession(props) {
             explorationRef.current.nodes,
             explorationRef.current.nodes.length
           ),
+          ...(moveSentAt !== undefined ? { moveSentAt } : {}),
         });
         if (!res) {
           return;
@@ -2289,6 +2320,7 @@ export function useGameMoveSession(props) {
       cbit,
       fetchGameAfterSubmitMismatch,
       globalMe?.id,
+      submitMoveQuery,
     ]
   );
 

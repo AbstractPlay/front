@@ -39,7 +39,11 @@ function GameMoveLayout({ session, layoutId }) {
   }
 }
 
-function GameMoveShell() {
+function GameMoveShell({
+  moveBasePath,
+  submitMoveQuery,
+  arenaLiveClock,
+}) {
   const params = useParams();
   const location = useLocation();
   const { t } = useTranslation();
@@ -72,7 +76,9 @@ function GameMoveShell() {
 
   const session = useGameMoveSession({
     routerState: location.state,
-    moveBasePath: MOVE_BASE,
+    moveBasePath: moveBasePath ?? MOVE_BASE,
+    submitMoveQuery,
+    arenaLiveClock,
     replayReady: replayGate === "ready",
   });
 

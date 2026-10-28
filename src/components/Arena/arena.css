@@ -1,0 +1,42 @@
+.arena-panel {
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.arena-panel .subtitle.lined span {
+  background: var(--main-bg-color);
+  color: var(--main-heading-color);
+}
+
+.arena-tc-chip {
+  margin: 0.25rem;
+}
+
+.arena-tc-chip.is-selected {
+  background: var(--secondary-color-3);
+  color: var(--high-contrast-font-color);
+  border-color: var(--secondary-color-3);
+}
+
+.arena-tc-chip.is-selected:hover,
+.arena-tc-chip.is-selected:focus-visible {
+  background: var(--secondary-color-3-lighter);
+  color: var(--high-contrast-font-color);
+}
+
+.arena-table-row:hover {
+  background: var(--tag-background-color);
+}
+
+.arena-live-banner {
+  background: var(--secondary-color-3-bg);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
