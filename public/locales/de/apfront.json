@@ -994,6 +994,29 @@
       "playing": "Laufend",
       "ended": "Beendet",
       "abandoned": "Abgebrochen"
+    },
+    "feedback": {
+      "title": "Wie war dieses Arena-Spiel?",
+      "intro": "Optionales Feedback hilft uns dabei, Bedenkzeiten und Reaktionszeiten während der Beta anzupassen. Einmal pro Spiel.",
+      "clockFairness": "Wie fair fühlte sich die Uhr an?",
+      "responsiveness": "Wie reaktionsschnell waren die Züge (Lag, Verzögerung)?",
+      "tcFit": "War diese Bedenkzeit für dieses Spiel gut geeignet?",
+      "unfairFlag": "Hast du auf Zeit verloren, was sich unfair anfühlte?",
+      "unfairNa": "N/A (nicht auf Zeit verloren)",
+      "unfairNo": "Nein",
+      "unfairYes": "Ja",
+      "queueAgain": "Würdest du dich für dieses Spiel und diese Bedenkzeit erneut einreihen?",
+      "queueYes": "Ja",
+      "queueMaybe": "Vielleicht",
+      "queueNo": "Nein",
+      "comment": "Sonst noch etwas? (optional)",
+      "submit": "Feedback senden",
+      "dismiss": "Nicht jetzt",
+      "likert_1": "1 — Schlecht",
+      "likert_2": "2",
+      "likert_3": "3 — OK",
+      "likert_4": "4",
+      "likert_5": "5 — Großartig"
     }
   },
   "Ladder": {

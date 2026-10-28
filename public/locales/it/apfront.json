@@ -994,6 +994,29 @@
       "playing": "In corso",
       "ended": "Terminato",
       "abandoned": "Abbandonato"
+    },
+    "feedback": {
+      "title": "Com'è stata questa partita arena?",
+      "intro": "Un feedback facoltativo ci aiuta a calibrare orologi e reattività durante la beta. Una volta per partita.",
+      "clockFairness": "Quanto ti è sembrato equo l'orologio?",
+      "responsiveness": "Quanto sono state reattive le mosse (lag, ritardi)?",
+      "tcFit": "Questo controllo del tempo era adatto a questo gioco?",
+      "unfairFlag": "Hai perso per il tempo in un modo che ti è sembrato ingiusto?",
+      "unfairNa": "N/D (non ho perso per il tempo)",
+      "unfairNo": "No",
+      "unfairYes": "Sì",
+      "queueAgain": "Ti metteresti di nuovo in coda per questo gioco con questo controllo del tempo?",
+      "queueYes": "Sì",
+      "queueMaybe": "Forse",
+      "queueNo": "No",
+      "comment": "Altro? (opzionale)",
+      "submit": "Invia feedback",
+      "dismiss": "Non ora",
+      "likert_1": "1 — Scarso",
+      "likert_2": "2",
+      "likert_3": "3 — OK",
+      "likert_4": "4",
+      "likert_5": "5 — Ottimo"
     }
   },
   "Ladder": {

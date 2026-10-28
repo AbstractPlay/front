@@ -994,6 +994,29 @@
       "playing": "En progreso",
       "ended": "Finalizada",
       "abandoned": "Abandonada"
+    },
+    "feedback": {
+      "title": "¿Cómo estuvo esta partida de arena?",
+      "intro": "Los comentarios opcionales nos ayudan a ajustar los relojes y la rapidez de respuesta durante la beta. Una vez por partida.",
+      "clockFairness": "¿Qué tan justo sentiste el reloj?",
+      "responsiveness": "¿Qué tan rápida fue la respuesta de las jugadas (lag, retraso)?",
+      "tcFit": "¿Este control de tiempo fue adecuado para este juego?",
+      "unfairFlag": "¿Perdiste por tiempo de una manera que sentiste injusta?",
+      "unfairNa": "N/A (no perdí por tiempo)",
+      "unfairNo": "No",
+      "unfairYes": "Sí",
+      "queueAgain": "¿Volverías a hacer cola para este juego y control de tiempo?",
+      "queueYes": "Sí",
+      "queueMaybe": "Tal vez",
+      "queueNo": "No",
+      "comment": "¿Algo más? (opcional)",
+      "submit": "Enviar comentarios",
+      "dismiss": "Ahora no",
+      "likert_1": "1 — Malo",
+      "likert_2": "2",
+      "likert_3": "3 — Regular",
+      "likert_4": "4",
+      "likert_5": "5 — Excelente"
     }
   },
   "Ladder": {

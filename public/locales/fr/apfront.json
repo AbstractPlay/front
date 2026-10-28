@@ -994,6 +994,29 @@
       "playing": "En cours",
       "ended": "Terminée",
       "abandoned": "Abandonnée"
+    },
+    "feedback": {
+      "title": "Comment s'est passée cette partie d'Arène ?",
+      "intro": "Ces retours facultatifs nous aident à ajuster la pendule et la réactivité pendant la bêta. Un seul avis par partie.",
+      "clockFairness": "La pendule vous a-t-elle paru équitable ?",
+      "responsiveness": "Quelle était la réactivité des coups (latence, délai) ?",
+      "tcFit": "Cette cadence de jeu était-elle adaptée à ce jeu ?",
+      "unfairFlag": "Avez-vous perdu au temps d'une manière qui vous a semblé injuste ?",
+      "unfairNa": "N/A (pas de défaite au temps)",
+      "unfairNo": "Non",
+      "unfairYes": "Oui",
+      "queueAgain": "Rejoindriez-vous la file d'attente pour ce jeu avec cette cadence ?",
+      "queueYes": "Oui",
+      "queueMaybe": "Peut-être",
+      "queueNo": "Non",
+      "comment": "Autre chose ? (facultatif)",
+      "submit": "Envoyer l'avis",
+      "dismiss": "Pas maintenant",
+      "likert_1": "1 — Mauvais",
+      "likert_2": "2",
+      "likert_3": "3 — Correct",
+      "likert_4": "4",
+      "likert_5": "5 — Excellent"
     }
   },
   "Ladder": {

@@ -87,6 +87,90 @@
     "src": "Open",
     "out": "Libre"
   },
+  "Arena.feedback.clockFairness": {
+    "src": "How fair did the clock feel?",
+    "out": "La pendule vous a-t-elle paru équitable ?"
+  },
+  "Arena.feedback.comment": {
+    "src": "Anything else? (optional)",
+    "out": "Autre chose ? (facultatif)"
+  },
+  "Arena.feedback.dismiss": {
+    "src": "Not now",
+    "out": "Pas maintenant"
+  },
+  "Arena.feedback.intro": {
+    "src": "Optional feedback helps us tune clocks and responsiveness during the beta. Once per game.",
+    "out": "Ces retours facultatifs nous aident à ajuster la pendule et la réactivité pendant la bêta. Un seul avis par partie."
+  },
+  "Arena.feedback.likert_1": {
+    "src": "1 — Poor",
+    "out": "1 — Mauvais"
+  },
+  "Arena.feedback.likert_2": {
+    "src": "2",
+    "out": "2"
+  },
+  "Arena.feedback.likert_3": {
+    "src": "3 — OK",
+    "out": "3 — Correct"
+  },
+  "Arena.feedback.likert_4": {
+    "src": "4",
+    "out": "4"
+  },
+  "Arena.feedback.likert_5": {
+    "src": "5 — Great",
+    "out": "5 — Excellent"
+  },
+  "Arena.feedback.queueAgain": {
+    "src": "Would you queue again at this game and time control?",
+    "out": "Rejoindriez-vous la file d'attente pour ce jeu avec cette cadence ?"
+  },
+  "Arena.feedback.queueMaybe": {
+    "src": "Maybe",
+    "out": "Peut-être"
+  },
+  "Arena.feedback.queueNo": {
+    "src": "No",
+    "out": "Non"
+  },
+  "Arena.feedback.queueYes": {
+    "src": "Yes",
+    "out": "Oui"
+  },
+  "Arena.feedback.responsiveness": {
+    "src": "How responsive were moves (lag, delay)?",
+    "out": "Quelle était la réactivité des coups (latence, délai) ?"
+  },
+  "Arena.feedback.submit": {
+    "src": "Send feedback",
+    "out": "Envoyer l'avis"
+  },
+  "Arena.feedback.tcFit": {
+    "src": "Was this time control a good fit for this game?",
+    "out": "Cette cadence de jeu était-elle adaptée à ce jeu ?"
+  },
+  "Arena.feedback.title": {
+    "src": "How was this arena game?",
+    "out": "Comment s'est passée cette partie d'Arène ?"
+  },
+  "Arena.feedback.unfairFlag": {
+    "src": "Did you lose on time in a way that felt unfair?",
+    "out": "Avez-vous perdu au temps d'une manière qui vous a semblé injuste ?"
+  },
+  "Arena.feedback.unfairNa": {
+    "src": "N/A (did not lose on time)",
+    "out": "N/A (pas de défaite au temps)"
+  },
+  "Arena.feedback.unfairNo": {
+    "src": "No",
+    "out": "Non"
+  },
+  "Arena.feedback.unfairYes": {
+    "src": "Yes",
+    "out": "Oui"
+  },
   "Arena.filterMetaPlaceholder": {
     "src": "Filter by game id…",
     "out": "Filtrer par ID de jeu…"
