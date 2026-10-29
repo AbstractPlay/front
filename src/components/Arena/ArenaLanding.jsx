@@ -18,6 +18,7 @@ import {
   arenaTableAction,
   fetchArenaTables,
   fetchArenaTimeControls,
+  fetchMyArenaTable,
   readArenaPreferredTcId,
   writeArenaPreferredTcId,
 } from "../../lib/arena/fetchArena";
@@ -87,6 +88,19 @@ export default function ArenaLanding() {
     activeMs: 10000,
     idleMs: 25000,
   });
+
+  const loadMyArenaTable = React.useCallback(async () => {
+    if (!globalMe?.id) {
+      return null;
+    }
+    return fetchMyArenaTable();
+  }, [globalMe?.id]);
+
+  const { data: myArenaTable } = useArenaPoll(
+    loadMyArenaTable,
+    [loadMyArenaTable],
+    { activeMs: 10000, idleMs: 25000 }
+  );
 
   const controlsByTier = useMemo(() => {
     const map = {};
@@ -165,6 +179,9 @@ export default function ArenaLanding() {
 
   const handleCreateTable = (open) =>
     runAction(async () => {
+      if (myArenaTable) {
+        throw new Error(t("Arena.activeTableBanner"));
+      }
       if (!gameChosen) {
         throw new Error(t("Arena.chooseGameFirst"));
       }
@@ -197,20 +214,14 @@ export default function ArenaLanding() {
   const handleCreateClosedTable = () => handleCreateTable(false);
 
   const tableRows = tables ?? [];
-
-  const myLiveTable = useMemo(() => {
-    const userId = globalMe?.id;
-    if (!userId) {
-      return null;
-    }
-    return (
-      tableRows.find(
-        (row) =>
-          row.state === "playing" &&
-          row.seatUserIds?.includes(userId)
-      ) ?? null
-    );
-  }, [tableRows, globalMe?.id]);
+  const activeTableId = myArenaTable?.tableId ?? null;
+  const hasActiveArenaTable = Boolean(activeTableId);
+  const createDisabled =
+    busy ||
+    !selectedControl ||
+    !gameChosen ||
+    !variantsValid ||
+    hasActiveArenaTable;
 
   const liveLayout = readArenaTableLayoutChoice();
 
@@ -281,7 +292,7 @@ export default function ArenaLanding() {
             <button
               type="button"
               className="button apButton"
-              disabled={busy || !selectedControl || !gameChosen || !variantsValid}
+              disabled={createDisabled}
               onClick={handleCreateOpenTable}
             >
               {t("Arena.createTable")}
@@ -313,10 +324,7 @@ export default function ArenaLanding() {
                 type="button"
                 className="button apButtonNeutral"
                 disabled={
-                  busy ||
-                  !selectedControl ||
-                  !gameChosen ||
-                  !variantsValid ||
+                  createDisabled ||
                   !closedInviteUserId
                 }
                 onClick={handleCreateClosedTable}
@@ -332,18 +340,22 @@ export default function ArenaLanding() {
           ) : null}
         </div>
 
-        {myLiveTable ? (
+        {myArenaTable ? (
           <div className="notification is-info is-light arena-active-game">
             <p className="arena-active-game__text">
-              {t("Arena.activeGameBanner")}
+              {myArenaTable.state === "playing"
+                ? t("Arena.activeGameBanner")
+                : t("Arena.activeTableBanner")}
             </p>
             <Link
               className="button apButton"
-              to={arenaListTableHref(myLiveTable, globalMe.id, {
+              to={arenaListTableHref(myArenaTable, globalMe.id, {
                 layout: liveLayout,
               })}
             >
-              {t("Arena.returnToGame")}
+              {myArenaTable.state === "playing"
+                ? t("Arena.returnToGame")
+                : t("Arena.returnToTable")}
             </Link>
           </div>
         ) : null}
@@ -411,6 +423,9 @@ export default function ArenaLanding() {
                       const seatCount = row.seatUserIds?.length ?? 0;
                       const seatedOnRow = row.seatUserIds?.includes(globalMe?.id);
                       const closedRow = row.open === false;
+                      const canJoinRow =
+                        row.state !== "playing" &&
+                        canTakeSeatOnArenaTableRow(row, globalMe?.id, activeTableId);
                       const href = arenaListTableHref(row, globalMe?.id, {
                         layout: liveLayout,
                       });
@@ -421,9 +436,11 @@ export default function ArenaLanding() {
                           : t("Arena.watch");
                       } else if (
                         closedRow &&
-                        !canTakeSeatOnArenaTableRow(row, globalMe?.id)
+                        !canTakeSeatOnArenaTableRow(row, globalMe?.id, activeTableId)
                       ) {
                         actionLabel = t("Arena.viewTable");
+                      } else if (!canJoinRow && hasActiveArenaTable && !seatedOnRow) {
+                        actionLabel = t("Arena.joinBlockedActiveTable");
                       }
                       return (
                         <tr key={row.tableId} className="arena-table-row">
@@ -440,9 +457,13 @@ export default function ArenaLanding() {
                           <td>{t(`Arena.tableState.${row.state}`, row.state)}</td>
                           <td>{seatCount}/2</td>
                           <td>
-                            <Link className="apButton button is-small" to={href}>
-                              {actionLabel}
-                            </Link>
+                            {canJoinRow || row.state === "playing" || seatedOnRow ? (
+                              <Link className="apButton button is-small" to={href}>
+                                {actionLabel}
+                              </Link>
+                            ) : (
+                              <span className="help">{actionLabel}</span>
+                            )}
                           </td>
                         </tr>
                       );

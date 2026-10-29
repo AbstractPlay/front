@@ -55,6 +55,10 @@
     "src": "You have a live arena game in progress.",
     "out": "Vous avez une partie d'arène en direct en cours."
   },
+  "Arena.activeTableBanner": {
+    "src": "You are already seated at an arena table. Return to it before creating or joining another.",
+    "out": "Vous êtes déjà assis à une table d'arène. Retournez-y avant d'en créer ou d'en rejoindre une autre."
+  },
   "Arena.backToLobby": {
     "src": "Back to Arena",
     "out": "Retour à l'Arène"
@@ -235,6 +239,10 @@
     "src": "Join",
     "out": "Rejoindre"
   },
+  "Arena.joinBlockedActiveTable": {
+    "src": "Leave your current table first",
+    "out": "Quittez d'abord votre table actuelle"
+  },
   "Arena.joinTable": {
     "src": "Take a seat",
     "out": "Prendre place"
@@ -338,6 +346,10 @@
   "Arena.returnToGame": {
     "src": "Return to game",
     "out": "Retourner à la partie"
+  },
+  "Arena.returnToTable": {
+    "src": "Return to my table",
+    "out": "Retourner à ma table"
   },
   "Arena.seat": {
     "src": "Seat {{n}}",

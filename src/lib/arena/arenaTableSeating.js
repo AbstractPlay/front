@@ -1,6 +1,9 @@
 /** True when `userId` may call `join_arena_table` for this lobby payload. */
-export function canTakeSeatOnArenaTable(table, userId) {
+export function canTakeSeatOnArenaTable(table, userId, activeTableId = null) {
   if (!table || !userId) {
+    return false;
+  }
+  if (activeTableId && activeTableId !== table.tableId) {
     return false;
   }
   if (table.viewer?.seated) {
@@ -24,7 +27,10 @@ export function isClosedArenaTable(table) {
 }
 
 /** Public list row (no viewer.seated). */
-export function canTakeSeatOnArenaTableRow(row, userId) {
+export function canTakeSeatOnArenaTableRow(row, userId, activeTableId = null) {
+  if (activeTableId && row?.tableId !== activeTableId) {
+    return false;
+  }
   if (!row || row.open !== false) {
     return Boolean(userId);
   }

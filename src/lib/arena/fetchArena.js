@@ -51,6 +51,19 @@ export async function fetchArenaTable(tableId) {
   return parsed.ok ? parsed.data : null;
 }
 
+/** Current user's seated arena table/game (ARENAUSER), or null. */
+export async function fetchMyArenaTable() {
+  const res = await callAuthApi("get_my_arena_table", {}, false);
+  if (!res) {
+    return null;
+  }
+  const parsed = await parseAuthResponse(res);
+  if (!parsed.ok) {
+    return null;
+  }
+  return parsed.data?.table ?? null;
+}
+
 export async function arenaTableAction(query, pars) {
   const res = await callAuthApi(query, pars);
   if (!res) {

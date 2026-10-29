@@ -30,15 +30,32 @@ describe("arenaTableSeating", () => {
   it("list row mirrors closed invite rule", () => {
     expect(
       canTakeSeatOnArenaTableRow(
-        { open: false, inviteUserId: "guest" },
+        { open: false, inviteUserId: "guest", tableId: "t1" },
         "guest"
       )
     ).toBe(true);
     expect(
       canTakeSeatOnArenaTableRow(
-        { open: false, inviteUserId: "guest" },
+        { open: false, inviteUserId: "guest", tableId: "t1" },
         "other"
       )
     ).toBe(false);
+  });
+
+  it("blocks join when user is seated on another table", () => {
+    expect(
+      canTakeSeatOnArenaTableRow(
+        { open: true, tableId: "other" },
+        "u1",
+        "mine"
+      )
+    ).toBe(false);
+    expect(
+      canTakeSeatOnArenaTableRow(
+        { open: true, tableId: "mine" },
+        "u1",
+        "mine"
+      )
+    ).toBe(true);
   });
 });

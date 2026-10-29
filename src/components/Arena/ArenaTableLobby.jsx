@@ -14,6 +14,7 @@ import { formatVariantsJoined } from "../../lib/expandVariants";
 import {
   arenaTableAction,
   fetchArenaTable,
+  fetchMyArenaTable,
 } from "../../lib/arena/fetchArena";
 import { arenaLandingPath, arenaPlayPath, arenaTablePath } from "../../lib/arena/arenaRoutes";
 import ArenaTableLayoutPicker, {
@@ -53,6 +54,19 @@ export default function ArenaTableLobby() {
     activeMs: 5000,
     idleMs: 15000,
   });
+
+  const loadMyArenaTable = useCallback(async () => {
+    if (!globalMe?.id) {
+      return null;
+    }
+    return fetchMyArenaTable();
+  }, [globalMe?.id]);
+
+  const { data: myArenaTable } = useArenaPoll(
+    loadMyArenaTable,
+    [loadMyArenaTable],
+    { activeMs: 10000, idleMs: 25000 }
+  );
 
   useEffect(() => {
     if (!table || !metaParam) {
@@ -209,7 +223,16 @@ export default function ArenaTableLobby() {
   const showOfferSwap =
     bothSeated && table.viewer?.seated && !swapOfferedBy;
   const closedTable = isClosedArenaTable(table);
-  const canJoinSeat = canTakeSeatOnArenaTable(table, globalMe?.id);
+  const activeTableId = myArenaTable?.tableId ?? null;
+  const seatedOnAnotherTable =
+    activeTableId &&
+    activeTableId !== table.tableId &&
+    !table.viewer?.seated;
+  const canJoinSeat = canTakeSeatOnArenaTable(
+    table,
+    globalMe?.id,
+    activeTableId
+  );
   const inviteDisplayName = table.inviteUserId
     ? formatUserDisplayName(
         allUsers?.find((u) => u.id === table.inviteUserId) ?? {
@@ -251,10 +274,22 @@ export default function ArenaTableLobby() {
             {t("Arena.closedTableLobbyInvite", { name: inviteDisplayName })}
           </p>
         ) : null}
-        {closedTable && !table.viewer?.seated && !canJoinSeat ? (
+        {closedTable && !table.viewer?.seated && !canJoinSeat && !seatedOnAnotherTable ? (
           <p className="has-text-centered help">
             {t("Arena.closedTableSpectateOnly")}
           </p>
+        ) : null}
+
+        {seatedOnAnotherTable && myArenaTable ? (
+          <div className="notification is-info is-light arena-active-game">
+            <p className="arena-active-game__text">{t("Arena.activeTableBanner")}</p>
+            <Link
+              className="button apButton"
+              to={arenaTablePath(myArenaTable.metaGame, myArenaTable.tableId)}
+            >
+              {t("Arena.returnToTable")}
+            </Link>
+          </div>
         ) : null}
 
         {table.state === "playing" && tableView ? (
