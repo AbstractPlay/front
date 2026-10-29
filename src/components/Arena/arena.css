@@ -138,6 +138,14 @@
   margin: 0;
 }
 
+.arena-panel--locked {
+  opacity: 0.85;
+}
+
+.arena-panel__locked-hint {
+  margin-bottom: 1rem;
+}
+
 .arena-start-overlay {
   position: fixed;
   inset: 0;

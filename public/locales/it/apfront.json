@@ -970,6 +970,7 @@
     "activeTableBanner": "Sei già seduto a un tavolo dell'arena. Torna al tuo tavolo prima di crearne o unirti a un altro.",
     "returnToTable": "Torna al mio tavolo",
     "joinBlockedActiveTable": "Prima abbandona il tuo tavolo attuale",
+    "createSectionLockedHint": "Termina o abbandona il tuo tavolo arena attuale prima di iniziarne uno nuovo.",
     "twoPlayerOnly": "Questo gioco non supporta la modalità arena a due giocatori.",
     "actionFailed": "Azione arena non riuscita.",
     "loadingTable": "Caricamento tavolo…",

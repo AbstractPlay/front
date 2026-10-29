@@ -970,6 +970,7 @@
     "activeTableBanner": "Du sitzt bereits an einem Arena-Tisch. Kehre dorthin zurück, bevor du einen anderen erstellst oder einem beitrittst.",
     "returnToTable": "Zurück zu meinem Tisch",
     "joinBlockedActiveTable": "Verlasse zuerst deinen aktuellen Tisch",
+    "createSectionLockedHint": "Beende oder verlasse deinen aktuellen Arenatisch, bevor du einen neuen erstellst.",
     "twoPlayerOnly": "Dieses Spiel unterstützt kein Arena-Spiel für zwei Spieler.",
     "actionFailed": "Arena-Aktion fehlgeschlagen.",
     "loadingTable": "Lade Tisch…",

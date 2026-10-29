@@ -970,6 +970,7 @@
     "activeTableBanner": "Ya estás sentado en una mesa de la arena. Regresa a ella antes de crear o unirte a otra.",
     "returnToTable": "Volver a mi mesa",
     "joinBlockedActiveTable": "Abandona tu mesa actual primero",
+    "createSectionLockedHint": "Termina o abandona tu mesa actual de la arena antes de comenzar una nueva.",
     "twoPlayerOnly": "Este juego no admite el modo arena para dos jugadores.",
     "actionFailed": "Error en la acción de arena.",
     "loadingTable": "Cargando mesa…",

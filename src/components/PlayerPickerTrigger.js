@@ -18,6 +18,7 @@ function PlayerPickerTrigger({
   ratingsReady,
   onChange,
   size = "small",
+  disabled = false,
 }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -41,7 +42,12 @@ function PlayerPickerTrigger({
         type="button"
         id={id}
         className={`button is-${size} apButtonNeutral`}
-        onClick={() => setOpen(true)}
+        disabled={disabled}
+        onClick={() => {
+          if (!disabled) {
+            setOpen(true);
+          }
+        }}
       >
         {selectedLabel ?? t("playerPicker.choose")}
         {selectedUser ? <OnVacationBadge user={selectedUser} /> : null}

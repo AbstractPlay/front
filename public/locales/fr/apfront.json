@@ -970,6 +970,7 @@
     "activeTableBanner": "Vous êtes déjà assis à une table d'arène. Retournez-y avant d'en créer ou d'en rejoindre une autre.",
     "returnToTable": "Retourner à ma table",
     "joinBlockedActiveTable": "Quittez d'abord votre table actuelle",
+    "createSectionLockedHint": "Terminez ou quittez votre table d'arène actuelle avant d'en commencer une nouvelle.",
     "twoPlayerOnly": "Ce jeu ne prend pas en charge le mode arène à deux joueurs.",
     "actionFailed": "L'action dans l'arène a échoué.",
     "loadingTable": "Chargement de la table…",

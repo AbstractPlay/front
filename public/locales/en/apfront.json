@@ -970,6 +970,7 @@
     "activeTableBanner": "You are already seated at an arena table. Return to it before creating or joining another.",
     "returnToTable": "Return to my table",
     "joinBlockedActiveTable": "Leave your current table first",
+    "createSectionLockedHint": "Finish or leave your current arena table before starting a new one.",
     "twoPlayerOnly": "This game does not support two-player arena play.",
     "actionFailed": "Arena action failed.",
     "loadingTable": "Loading table…",

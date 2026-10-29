@@ -222,6 +222,7 @@ export default function ArenaLanding() {
     !gameChosen ||
     !variantsValid ||
     hasActiveArenaTable;
+  const tableCreateLocked = hasActiveArenaTable || busy;
 
   const liveLayout = readArenaTableLayoutChoice();
 
@@ -239,10 +240,37 @@ export default function ArenaLanding() {
         />
         <p className="help has-text-centered">{t("Arena.clockCopy")}</p>
 
-        <div className="arena-panel">
+        {myArenaTable ? (
+          <div className="notification is-info is-light arena-active-game">
+            <p className="arena-active-game__text">
+              {myArenaTable.state === "playing"
+                ? t("Arena.activeGameBanner")
+                : t("Arena.activeTableBanner")}
+            </p>
+            <Link
+              className="button apButton"
+              to={arenaListTableHref(myArenaTable, globalMe.id, {
+                layout: liveLayout,
+              })}
+            >
+              {myArenaTable.state === "playing"
+                ? t("Arena.returnToGame")
+                : t("Arena.returnToTable")}
+            </Link>
+          </div>
+        ) : null}
+
+        <div
+          className={`arena-panel${tableCreateLocked ? " arena-panel--locked" : ""}`}
+        >
           <p className="subtitle lined">
             <span>{t("Arena.findGame")}</span>
           </p>
+          {tableCreateLocked && hasActiveArenaTable ? (
+            <p className="help arena-panel__locked-hint" role="status">
+              {t("Arena.createSectionLockedHint")}
+            </p>
+          ) : null}
           <div className="field">
             <label className="label" htmlFor="arena-meta-picker">
               {t("Arena.metaGame")}
@@ -252,6 +280,7 @@ export default function ArenaLanding() {
               value={metaGame}
               onChange={handleMetaGameChange}
               tournamentOnly
+              disabled={tableCreateLocked}
             />
           </div>
           {gameChosen ? (
@@ -259,6 +288,7 @@ export default function ArenaLanding() {
               metaGame={metaGame}
               variantsSetter={setSelectedVariants}
               onValidityChange={handleVariantValidityChange}
+              disableFields={tableCreateLocked}
             />
           ) : null}
           {variantSummary ? (
@@ -275,6 +305,7 @@ export default function ArenaLanding() {
                     "button arena-tc-chip" +
                     (tc.id === arenaTcId ? " is-selected apButton" : " apButtonNeutral")
                   }
+                  disabled={tableCreateLocked}
                   onClick={() => arenaTcSetter(tc.id)}
                 >
                   {tc.label}{" "}
@@ -316,6 +347,7 @@ export default function ArenaLanding() {
                 playerCount={2}
                 highestMap={highestGlickoMap}
                 ratingsReady={ratingsReady}
+                disabled={tableCreateLocked}
                 onChange={({ id }) => closedInviteUserIdSetter(id || "")}
               />
             </div>
@@ -339,26 +371,6 @@ export default function ArenaLanding() {
             </p>
           ) : null}
         </div>
-
-        {myArenaTable ? (
-          <div className="notification is-info is-light arena-active-game">
-            <p className="arena-active-game__text">
-              {myArenaTable.state === "playing"
-                ? t("Arena.activeGameBanner")
-                : t("Arena.activeTableBanner")}
-            </p>
-            <Link
-              className="button apButton"
-              to={arenaListTableHref(myArenaTable, globalMe.id, {
-                layout: liveLayout,
-              })}
-            >
-              {myArenaTable.state === "playing"
-                ? t("Arena.returnToGame")
-                : t("Arena.returnToTable")}
-            </Link>
-          </div>
-        ) : null}
 
         <div className="arena-panel">
           <div className="level is-mobile">

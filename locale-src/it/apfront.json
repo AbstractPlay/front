@@ -123,6 +123,10 @@
     "src": "Create closed table",
     "out": "Crea tavolo chiuso"
   },
+  "Arena.createSectionLockedHint": {
+    "src": "Finish or leave your current arena table before starting a new one.",
+    "out": "Termina o abbandona il tuo tavolo arena attuale prima di iniziarne uno nuovo."
+  },
   "Arena.createTable": {
     "src": "Create open table",
     "out": "Crea tavolo aperto"
