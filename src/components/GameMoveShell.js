@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useGameMoveSession } from "./GameMove/useGameMoveSession";
 import { useGameMoveLayout } from "../hooks/useGameMoveLayout";
 import { isArenaGame } from "../lib/arena/arenaGame";
-import { arenaPlayPath } from "../lib/arena/arenaRoutes";
+import { arenaPlayPathFromLegacyMove, playLocationMatchesTarget } from "../lib/arena/arenaRoutes";
 import {
   LAYOUT_CARD,
   LAYOUT_CLASSIC,
@@ -12,6 +12,8 @@ import {
   LAYOUT_NARRATIVE,
   LAYOUT_STRIP,
   MOVE_BASE,
+  DEFAULT_LIVE_LAYOUT,
+  PLAY_CONTEXT_LIVE,
   readLayoutPreference,
 } from "../lib/GameMove/layoutPreference";
 import { trackLayoutSessionStart } from "../lib/GameMove/layoutTracking";
@@ -56,6 +58,7 @@ function GameMoveShell({
   const location = useLocation();
   const navigate = useNavigate();
   const moveBasePath = moveBasePathProp ?? MOVE_BASE;
+  const legacyArenaRedirectIssuedRef = useRef(null);
   const { t } = useTranslation();
   const { layoutId, resolvedFrom, playContext } = useGameMoveLayout();
   const [showLayoutPicker, setShowLayoutPicker] = useState(false);
@@ -92,43 +95,62 @@ function GameMoveShell({
     replayReady: replayGate === "ready",
   });
 
-  useEffect(() => {
+  const legacyArenaCanonicalTo = useMemo(() => {
     if (replayGate !== "ready" || session.isGameLoading || session.error) {
-      return;
+      return null;
     }
     if (!session.game || !isArenaGame(session.game)) {
-      return;
+      return null;
     }
     if (moveBasePath !== MOVE_BASE) {
-      return;
+      return null;
     }
     if (
       isGameMoveReplayEnabled() &&
       new URLSearchParams(location.search).get("replay")?.trim()
     ) {
-      return;
+      return null;
     }
-    const target = arenaPlayPath(params.metaGame, params.gameID, {
-      layout: layoutId,
-    });
-    if (location.pathname + location.search === target) {
-      return;
+    const layout =
+      readLayoutPreference(PLAY_CONTEXT_LIVE) ?? DEFAULT_LIVE_LAYOUT;
+    const target = arenaPlayPathFromLegacyMove(
+      params.metaGame,
+      params.gameID,
+      { layout, search: location.search },
+    );
+    if (playLocationMatchesTarget(location.pathname, location.search, target)) {
+      return null;
     }
-    navigate(target, { replace: true, state: location.state });
+    return target;
   }, [
     replayGate,
     session.isGameLoading,
     session.error,
-    session.game,
+    session.game?.playMode,
+    session.game?.id,
     moveBasePath,
     params.metaGame,
     params.gameID,
-    layoutId,
     location.pathname,
     location.search,
-    location.state,
-    navigate,
   ]);
+
+  useLayoutEffect(() => {
+    if (!legacyArenaCanonicalTo) {
+      return;
+    }
+    if (legacyArenaRedirectIssuedRef.current === legacyArenaCanonicalTo) {
+      return;
+    }
+    legacyArenaRedirectIssuedRef.current = legacyArenaCanonicalTo;
+    navigate(legacyArenaCanonicalTo, { replace: true, state: location.state });
+  }, [legacyArenaCanonicalTo, navigate, location.state]);
+
+  useEffect(() => {
+    if (moveBasePath !== MOVE_BASE) {
+      legacyArenaRedirectIssuedRef.current = null;
+    }
+  }, [moveBasePath, params.gameID]);
 
   const openLayoutPicker = useCallback(() => {
     setShowLayoutPicker(true);
@@ -180,6 +202,10 @@ function GameMoveShell({
     return (
       <p className="notification is-danger">{t("gameMove.replay.loadFailed")}</p>
     );
+  }
+
+  if (legacyArenaCanonicalTo) {
+    return <PageLoading message={t("gameMove.loading")} />;
   }
 
   const {

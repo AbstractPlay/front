@@ -28,6 +28,7 @@ import { toast } from "react-toastify";
 import { useStore } from "../../stores";
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 import { buildEngineMoveResults } from "../engineMoveResults";
+import { applyArenaSiteFieldsToGameRecord } from "../arena/arenaGameRecord.js";
 import { buildRenderDisplayOpts } from "../displaySettings.js";
 import { stackExpandingForRender } from "../renderOutput.js";
 import { buildGameMoveRenderExtras } from "./renderExtras.js";
@@ -359,20 +360,23 @@ export function setupGame(
   // TODO: Add "event" and "round" should those ever be implemented.
   if (engine.gameover && engine.stack.length >= engine.numplayers) {
     gameRecSetter(
-      engine.genRecord({
-        uid: game0.id,
-        players: game0.players.map((p) => {
-          return {
-            name: p.name,
-            uid: p.id,
-          };
+      applyArenaSiteFieldsToGameRecord(
+        engine.genRecord({
+          uid: game0.id,
+          players: game0.players.map((p) => {
+            return {
+              name: p.name,
+              uid: p.id,
+            };
+          }),
+          unrated: !game0.rated,
+          pied:
+            "pieInvoked" in game0 && game0.pieInvoked
+              ? game0.pieInvoked
+              : undefined,
         }),
-        unrated: !game0.rated,
-        pied:
-          "pieInvoked" in game0 && game0.pieInvoked
-            ? game0.pieInvoked
-            : undefined,
-      })
+        game0
+      )
     );
   }
 

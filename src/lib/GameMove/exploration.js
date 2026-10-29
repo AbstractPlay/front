@@ -9,6 +9,9 @@ import {
   filterPersistableExplorationTree,
 } from "./explorationMoves";
 import { deriveParentExplorationOutcome } from "./explorationOutcome.js";
+import {
+  normalizePlaySearch,
+} from "../arena/arenaRoutes.js";
 
 export {
   assertValidMoveHasComplete,
@@ -30,21 +33,36 @@ export function isExplorer(explorer, me) {
 }
 
 export function setURL(exploration, focus, game, navigate) {
-  let newQueryString;
-  if (game.gameOver) {
-    if (focus.exPath.length === 0) {
-      newQueryString = new URLSearchParams({
-        move: focus.moveNumber,
-      }).toString();
-    } else {
-      let node = getFocusNode(exploration, game, focus);
-      newQueryString = new URLSearchParams({
-        move: focus.moveNumber,
-        nodeid: node.id,
-      }).toString();
-    }
-    navigate(`?${newQueryString}`, { replace: true });
+  if (!game.gameOver) {
+    return;
   }
+  if (
+    typeof window !== "undefined" &&
+    game.playMode === "arena" &&
+    window.location.pathname.startsWith("/move/")
+  ) {
+    return;
+  }
+  const params = new URLSearchParams(
+    typeof window !== "undefined" ? window.location.search : "",
+  );
+  params.set("move", String(focus.moveNumber));
+  if (focus.exPath.length === 0) {
+    params.delete("nodeid");
+  } else {
+    const node = getFocusNode(exploration, game, focus);
+    params.set("nodeid", node.id);
+  }
+  const merged = params.toString();
+  const nextSearch = merged ? `?${merged}` : "";
+  if (
+    typeof window !== "undefined" &&
+    normalizePlaySearch(nextSearch) ===
+      normalizePlaySearch(window.location.search)
+  ) {
+    return;
+  }
+  navigate(merged ? `?${merged}` : ".", { replace: true });
 }
 
 export function setCanPublish(game, explorer, me, canPublishSetter) {
