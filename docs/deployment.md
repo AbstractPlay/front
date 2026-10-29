@@ -1,6 +1,6 @@
 # Deployment
 
-The front end is a static SPA deployed to S3 and served through CloudFront. Infrastructure (bucket, distribution, SPA routing) is defined in the Serverless stack; **routine releases** upload `build/` with [`scripts/deploy-static.mjs`](../scripts/deploy-static.mjs) (no bucket wipe, `index.html` last).
+The front end is a static SPA deployed to S3 and served through CloudFront. Infrastructure (bucket, distribution, SPA routing) is defined in the Serverless stack; **routine releases** upload `build/` with `scripts/deploy-static.mjs` (no bucket wipe, `index.html` last).
 
 ## Stages
 
@@ -68,9 +68,9 @@ The legacy **`serverless client deploy`** (`serverless-finch`) path is no longer
 
 We **do not** use S3 lifecycle **expiration** on `static/` or `flags/` (that would delete every object N days after **upload**, including the only copy of the live site if you stop deploying for N days).
 
-After each deploy, CI runs [`scripts/prune-stale-static.mjs`](../scripts/prune-stale-static.mjs):
+After each deploy, CI runs `scripts/prune-stale-static.mjs`:
 
-1. Read [`_ops/static-inventory.json`](../scripts/staticDeployInventory.mjs) uploaded by [`deploy-static.mjs`](../scripts/deploy-static.mjs) (all `static/` and `flags/` keys from that build).
+1. Read `_ops/static-inventory.json` uploaded by `deploy-static.mjs` (all `static/` and `flags/` keys from that build; see `scripts/staticDeployInventory.mjs`).
 2. List objects under `static/` and `flags/`.
 3. **Delete** objects that are **not** in the inventory and whose **LastModified** is older than **7 days** (grace for tabs still on the previous release).
 
@@ -80,7 +80,7 @@ Dry-run locally: `node scripts/prune-stale-static.mjs --stage dev --dry-run`.
 
 ## Cache headers
 
-[`serverless.yml`](../serverless.yml) documents the intended cache headers; [`scripts/staticDeployCache.mjs`](../scripts/staticDeployCache.mjs) applies the same values on upload:
+[`serverless.yml`](../serverless.yml) documents the intended cache headers; `scripts/staticDeployCache.mjs` applies the same values on upload:
 
 - Fingerprinted assets (`static/**`, `flags/**`): `max-age=31536000, immutable`
 - `index.html`, `error.html`: `no-cache, no-store, must-revalidate`
