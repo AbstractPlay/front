@@ -13,6 +13,7 @@ import {
   STORAGE_BETA_LAYOUT,
   STORAGE_LAYOUT,
   STORAGE_LAYOUT_LIVE,
+  STORAGE_LAYOUT_LIVE_EXPLICIT,
   STORAGE_LAYOUT_HINT_DISMISSED,
   dismissLayoutHint,
   gameMovePath,
@@ -27,6 +28,7 @@ describe("layoutPreference", () => {
   beforeEach(() => {
     localStorage.removeItem(STORAGE_LAYOUT);
     localStorage.removeItem(STORAGE_LAYOUT_LIVE);
+    localStorage.removeItem(STORAGE_LAYOUT_LIVE_EXPLICIT);
     localStorage.removeItem(STORAGE_BETA_LAYOUT);
     localStorage.removeItem(STORAGE_LAYOUT_HINT_DISMISSED);
   });
@@ -100,6 +102,22 @@ describe("layoutPreference", () => {
       layoutId: LAYOUT_LIVE,
       resolvedFrom: "default",
     });
+  });
+
+  it("ignores stale live layout without explicit user choice", () => {
+    localStorage.setItem(STORAGE_LAYOUT_LIVE, LAYOUT_STRIP);
+    expect(readLayoutPreference(PLAY_CONTEXT_LIVE)).to.equal(null);
+    expect(
+      resolveGameMoveLayout("", { playContext: PLAY_CONTEXT_LIVE })
+    ).to.deep.equal({
+      layoutId: LAYOUT_LIVE,
+      resolvedFrom: "default",
+    });
+  });
+
+  it("keeps non-live live layout after explicit write", () => {
+    writeLayoutPreference(LAYOUT_STRIP, PLAY_CONTEXT_LIVE);
+    expect(readLayoutPreference(PLAY_CONTEXT_LIVE)).to.equal(LAYOUT_STRIP);
   });
 
   it("includes live in ALL_LAYOUTS and arena path query", () => {

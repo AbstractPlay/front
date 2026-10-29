@@ -36,6 +36,8 @@ export const DEFAULT_BETA_LAYOUT = DEFAULT_LAYOUT;
 export const STORAGE_LAYOUT = "gameMoveLayout";
 /** Arena play/watch layout (separate from correspondence `/move`). */
 export const STORAGE_LAYOUT_LIVE = "gameMoveLayoutLive";
+/** Set when the user picks a live-context layout (lobby, switcher, or ?layout=). */
+export const STORAGE_LAYOUT_LIVE_EXPLICIT = "gameMoveLayoutLiveExplicit";
 export const STORAGE_LAYOUT_HINT_DISMISSED = "gameMoveLayoutHintDismissed";
 
 export const PLAY_CONTEXT_CORRESPONDENCE = "correspondence";
@@ -126,12 +128,23 @@ export function isBetaGameMovePath(pathname = "") {
   return pathname.startsWith(`${MOVE_BETA_BASE}/`);
 }
 
+function liveLayoutExplicitlyChosen() {
+  return readStorage(STORAGE_LAYOUT_LIVE_EXPLICIT) === "1";
+}
+
 export function readLayoutPreference(
   playContext = PLAY_CONTEXT_CORRESPONDENCE,
 ) {
   const key = storageKeyForPlayContext(playContext);
   const fromNew = normalizeLayout(readStorage(key));
   if (ALL_LAYOUTS.includes(fromNew)) {
+    if (
+      playContext === PLAY_CONTEXT_LIVE
+      && fromNew !== DEFAULT_LIVE_LAYOUT
+      && !liveLayoutExplicitlyChosen()
+    ) {
+      return null;
+    }
     return fromNew;
   }
 
@@ -160,6 +173,9 @@ export function writeLayoutPreference(
     return;
   }
   writeStorage(storageKeyForPlayContext(playContext), normalized);
+  if (playContext === PLAY_CONTEXT_LIVE) {
+    writeStorage(STORAGE_LAYOUT_LIVE_EXPLICIT, "1");
+  }
 }
 
 /** @deprecated use writeLayoutPreference */

@@ -60,6 +60,8 @@ Deployments do **not** use CloudFront invalidations. Cache freshness is handled 
 2. **Other root assets** (favicons, `robots.txt`, …) — one-hour cache; `index.html` / `error.html` excluded.
 3. **`error.html`**, then **`index.html`** — `no-cache`, so a new shell never points at JS that is not uploaded yet.
 
+Tabs that were already open **before** a deploy keep the previous JS bundle in memory until a full reload (lazy chunks can self-heal via `chunkLoadRecovery`; the main bundle does not). After arena or WebSocket changes, players in live games should **refresh once** if moves stop updating while notifications still arrive. New releases also merge the current `/arena/play` or `/move/…` route into every `watchGames` sync so strict move fan-out works even when the hook lags behind navigation.
+
 The legacy **`serverless client deploy`** (`serverless-finch`) path is no longer used in CI. It **emptied** the bucket by default and could serve [`error.html`](../public/error.html) during upload. Finch remains in `devDependencies` only if you need a one-off bucket website config upload; infra creation is still `npx serverless deploy`.
 
 [`error.html`](../public/error.html) auto-retries with backoff if a client still hits the S3 error document (should be rare once the upload strategy above is in place).

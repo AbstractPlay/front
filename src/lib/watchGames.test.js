@@ -1,4 +1,4 @@
-import { collectWatchGames, gameUpdateMatchesGame } from "./watchGames";
+import { collectWatchGames, gameUpdateMatchesGame, watchGamesForSend } from "./watchGames";
 
 describe("collectWatchGames", () => {
   it("includes the current game route", () => {
@@ -35,6 +35,18 @@ describe("collectWatchGames", () => {
     };
     const games = collectWatchGames(globalMe, "/move/chess/0/abc123");
     expect(games).toEqual([{ meta: "chess", id: "abc123" }]);
+  });
+
+  it("watchGamesForSend merges store list with current pathname", () => {
+    const merged = watchGamesForSend(
+      [{ meta: "go", id: "g1" }],
+      null,
+      "/arena/play/abande/table-uuid",
+    );
+    expect(merged).toEqual([
+      { meta: "go", id: "g1" },
+      { meta: "abande", id: "table-uuid" },
+    ]);
   });
 
   it("ignores globalMe without activeGames off-dashboard", () => {

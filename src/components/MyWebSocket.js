@@ -7,6 +7,7 @@ import {
   cancelWatchGamesSync,
   scheduleWatchGamesSync,
 } from "../lib/wsWatchSync";
+import { watchGamesForSend } from "../lib/watchGames";
 import { scheduleNotificationsRefresh } from "../lib/scheduleNotificationsRefresh";
 
 const WS_CLOSE_CODES = {
@@ -30,6 +31,22 @@ const WS_CLOSE_CODES = {
 const INITIAL_RECONNECT_DELAY = 2000;
 const MAX_RECONNECT_DELAY = 30000;
 const PRESENCE_RESYNC_INTERVAL_MS = 10 * 60 * 1000;
+
+async function parseWsMessageData(data) {
+  if (typeof data === "string") {
+    return JSON.parse(data);
+  }
+  if (data instanceof Blob) {
+    return JSON.parse(await data.text());
+  }
+  if (data instanceof ArrayBuffer) {
+    return JSON.parse(new TextDecoder().decode(data));
+  }
+  if (ArrayBuffer.isView(data)) {
+    return JSON.parse(new TextDecoder().decode(data));
+  }
+  return JSON.parse(String(data));
+}
 
 export default function MyWebSocket() {
   const wsRef = useRef(null);
@@ -153,7 +170,12 @@ export default function MyWebSocket() {
         }
 
         try {
-          const games = useStore.getState().desiredWatchGames;
+          const state = useStore.getState();
+          const games = watchGamesForSend(
+            state.desiredWatchGames,
+            state.globalMe,
+            window.location.pathname,
+          );
           ws.send(
             JSON.stringify({
               action: "subscribe",
@@ -208,14 +230,15 @@ export default function MyWebSocket() {
       };
 
       ws.onmessage = (event) => {
-        let msg;
-        try {
-          msg = JSON.parse(event.data);
-        } catch (e) {
-          console.warn("WS: Invalid message format", event.data);
-          return;
-        }
-        console.log(`WS: Received message: ${JSON.stringify(msg)}`);
+        void (async () => {
+          let msg;
+          try {
+            msg = await parseWsMessageData(event.data);
+          } catch (e) {
+            console.warn("WS: Invalid message format", event.data);
+            return;
+          }
+          console.log(`WS: Received message: ${JSON.stringify(msg)}`);
 
         if (msg.verb === "game") {
           window.dispatchEvent(new CustomEvent("refresh-me"));
@@ -288,6 +311,7 @@ export default function MyWebSocket() {
         } else if (msg.verb === "test") {
           toast(`Test message: ${msg.payload}`);
         }
+        })();
       };
     };
 
