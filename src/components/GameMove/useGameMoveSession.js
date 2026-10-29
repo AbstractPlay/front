@@ -1040,12 +1040,14 @@ export function useGameMoveSession(props) {
           t("gameMove.explorationDisabled"),
         ]);
       }
-      if (game.toMove !== "" && !game.players.some((p) => p.id === me?.id)) {
-        if (game.clockHard) {
-          if (anyOnClockPlayerTimedOut(game)) {
-            checkTime("timeloss");
-          }
-        }
+      if (
+        game.toMove !== "" &&
+        !game.players.some((p) => p.id === me?.id) &&
+        game.clockHard &&
+        !isArenaGame(game) &&
+        anyOnClockPlayerTimedOut(game)
+      ) {
+        checkTime("timeloss");
       }
     };
 

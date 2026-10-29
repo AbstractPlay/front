@@ -28,7 +28,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 - **Arena landing:** seated players in a live game get **Return to game** (play URL) instead of only **Watch**; banner when you have an active table.
 - **Arena play:** moves use `submit_arena_move` when the loaded game is `playMode: arena` (including after opening via `/move/…`); auto-redirect to `/arena/play/…`; layout switcher links use correct arena paths without a stray `cbits` segment.
-- **Arena clocks:** timeloss polling aligns with server Fischer math (500 ms poll, `lastMoveTime` tick); benign timeloss races refresh the game instead of showing a checkTime error.
+- **Arena clocks:** arena end-of-game uses server EventBridge timeloss only (no client `timeloss` polling); play page refreshes on WebSocket `game` updates. **Claim win on time** is hidden. Correspondence hard-clock games still use participant/spectator `timeloss` hints.
 - **Play (Classic layout):** narrow viewports no longer squeeze the move list and chat into a ~15vw column when orientation or mobile browser chrome leaves a stale wide `innerWidth`; sidebar width is CSS-gated at Bulma’s tablet breakpoint and viewport width tracks `visualViewport`, `orientationchange`, and `matchMedia`.
 
 ## [1.0.0-ci] - 2026-10-25

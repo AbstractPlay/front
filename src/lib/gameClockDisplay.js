@@ -74,14 +74,14 @@ export const ARENA_TIMELOSS_HINT_GRACE_MS = 750;
 
 /**
  * Hard-clock games: client may call timeloss(check) when display passes this threshold.
- * Arena uses grace aligned with backend ARENA_CLOCK_GRACE_MS; correspondence at <= 0.
+ * Arena: poll from <= 0; backend ARENA_CLOCK_GRACE_MS (see ARENA_TIMELOSS_HINT_GRACE_MS) decides acceptance.
+ * Correspondence: at <= 0.
  */
 export function anyOnClockPlayerTimedOutForTimelossHint(game, now = Date.now()) {
   if (!game?.players || game.toMove === "" || game.toMove === undefined) {
     return false;
   }
-  const graceMs =
-    game.playMode === "arena" ? ARENA_TIMELOSS_HINT_GRACE_MS : 0;
+  const graceMs = 0;
   return game.players.some((p, i) => {
     if (!isPlayerIndexOnMove(i, game.toMove)) {
       return false;

@@ -9,6 +9,7 @@ import { getFocusNode } from "./moveEntryUtils";
 import { formatSoloOutcome, isSoloGame } from "../../../lib/soloPlay";
 import { isPlayerTimedOut } from "../../../lib/gameClockDisplay";
 import { isTeachingUndoReviewAtCurrentTip } from "../../../lib/teachingModeChallenge";
+import { isArenaGame } from "../../../lib/arena/arenaGame";
 
 export function useDockMoveEntry(props) {
   const [drawoffer, drawofferSetter] = useState(false);
@@ -216,6 +217,9 @@ export function useDockMoveEntry(props) {
           now
         );
     }
+  }
+  if (isArenaGame(game)) {
+    canClaimTimeout = false;
   }
 
   const drawOffered = game.players.some((p) => p.draw);

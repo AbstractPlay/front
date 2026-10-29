@@ -73,7 +73,9 @@ Logged-in users call auth `log_gamemove_layout_event`. Anonymous users call the 
 4. **Submit move** — auth query (e.g. `submit_move`) via `callAuthApi`.
 5. **Real-time updates** — WebSocket messages refresh game state when opponent moves.
 
-Backend semantics: [Games and moves](/backend/subsystems/games-and-moves/).
+**Arena time loss:** Hard-clock arena games end on the server (EventBridge Scheduler → `arenaFlagWorker` → `timeloss`). The play page does **not** call auth `timeloss` for `playMode: 'arena'`; seated players and spectators rely on the existing `verb: "game"` WebSocket → `refresh-data` → `get_game` after the server archives the game. Correspondence hard-clock games still use client `timeloss` hints where there is no scheduler.
+
+Backend semantics: [Games and moves](/backend/subsystems/games-and-moves/), [Realtime Arena](/backend/subsystems/arena/).
 
 ## Move entry
 

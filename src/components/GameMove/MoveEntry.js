@@ -16,6 +16,7 @@ import {
   isPlayerTimedOut,
   tickActivePlayerRemainingMs,
 } from "../../lib/gameClockDisplay";
+import { isArenaGame } from "../../lib/arena/arenaGame";
 import {
   EXPLORATION_OUTCOME_DRAW,
   EXPLORATION_OUTCOME_UNDECIDED,
@@ -321,6 +322,9 @@ function MoveEntry(props) {
             now
           );
       }
+    }
+    if (isArenaGame(game)) {
+      canClaimTimeout = false;
     }
     const drawOffered = game.players.some((p) => p.draw);
     // Am I the last player that needs to agree to a draw?

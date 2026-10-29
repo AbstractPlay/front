@@ -9,6 +9,9 @@ export function shouldSpectatorRefreshHintTimeloss(game, viewerPlayerId) {
   if (!game || game.toMove === "" || game.toMove === undefined) {
     return false;
   }
+  if (isArenaGame(game)) {
+    return false;
+  }
   if (game.players?.some((p) => p.id === viewerPlayerId)) {
     return false;
   }
@@ -20,6 +23,9 @@ export function shouldSpectatorRefreshHintTimeloss(game, viewerPlayerId) {
 
 export function shouldParticipantPollTimeloss(game) {
   if (!game || game.gameOver || game.toMove === "" || game.toMove === undefined) {
+    return false;
+  }
+  if (isArenaGame(game)) {
     return false;
   }
   if (!game.clockHard) {
@@ -35,6 +41,6 @@ export function shouldParticipantCallTimelossCheck(game, now = Date.now()) {
   return anyOnClockPlayerTimedOutForTimelossHint(game, now);
 }
 
-export function participantTimelossPollIntervalMs(game) {
-  return isArenaGame(game) ? 500 : 3000;
+export function participantTimelossPollIntervalMs() {
+  return 3000;
 }

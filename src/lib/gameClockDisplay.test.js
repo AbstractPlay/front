@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
   anyOnClockPlayerTimedOutForTimelossHint,
-  ARENA_TIMELOSS_HINT_GRACE_MS,
 } from "./gameClockDisplay.js";
 
 describe("anyOnClockPlayerTimedOutForTimelossHint", () => {
@@ -16,13 +15,9 @@ describe("anyOnClockPlayerTimedOutForTimelossHint", () => {
     ],
   };
 
-  it("waits for arena grace before hinting", () => {
-    const now = 1000 + 500 + ARENA_TIMELOSS_HINT_GRACE_MS - 1;
-    expect(anyOnClockPlayerTimedOutForTimelossHint(baseGame, now)).toBe(false);
-    const afterGrace = 1000 + 500 + ARENA_TIMELOSS_HINT_GRACE_MS + 1;
-    expect(anyOnClockPlayerTimedOutForTimelossHint(baseGame, afterGrace)).toBe(
-      true
-    );
+  it("hints once display passes zero for arena (server applies grace)", () => {
+    expect(anyOnClockPlayerTimedOutForTimelossHint(baseGame, 1499)).toBe(false);
+    expect(anyOnClockPlayerTimedOutForTimelossHint(baseGame, 1500)).toBe(true);
   });
 
   it("hints at zero for correspondence", () => {
