@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import PageHelmet from "../PageHelmet";
 import PageLoading from "../shared/PageLoading";
-import NotFound from "../NotFound";
 import UserChats from "../GameMove/UserChats";
 import BotAwareName from "../Bots/BotAwareName";
 import { useStore } from "../../stores";
@@ -187,7 +186,7 @@ export default function ArenaTableLobby() {
   }
 
   if (!table) {
-    return <NotFound />;
+    return <Navigate to={arenaLandingPath()} replace />;
   }
 
   if (table.metaGame !== metaParam) {

@@ -13,37 +13,18 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Added
 
-- **Realtime Arena (front):** `/arena` landing (table list poll, create open/closed table), table lobby (ready, seat swap, kibitz chat), `/arena/play` and `/arena/watch` shells with `submit_arena_move` and live Fischer clocks; post-game feedback modal (`submit_arena_feedback`); **Arena visible on prod** (removed `VITE_ARENA_UI_DISABLED`).
+- **Realtime Arena:** `/arena` landing to browse live tables and create **open** or **invite-only closed** tables (game, Fischer time control, variants); table lobby (ready-up, seat swap, play layout choice, kibitz chat); live play and spectate via `/arena/play` and `/arena/watch` with `submit_arena_move`, synchronized start, server-driven Fischer clocks, and optional post-game feedback. Arena is enabled on prod (removed `VITE_ARENA_UI_DISABLED`).
 - **Continuous Delta Ladder:** Ladder list and hub UI (`/ladders`, `/ladder/:id`), dashboard Ladders tab (join match pool per ladder when eligible), game-list Event column, profile ladder module, `watchLadders` WebSocket refresh, in-app notification copy/prefs (`ladderChat`, `ladderDecay`, `ladderPointsGain` / `ladderPointsLoss`, `ladderJoin`, `ladderLeave`); ladder surfaces visible in prod (kill-switch removed).
 
 ### Changed
 
-- **Arena play:** game title parenthetical links to **`/arena`** (not the table lobby row); chat stays on the play page **`GAMECOMMENTS`** thread.
-- **Arena play:** after game over, queue / next-game controls return to **`/arena`** instead of the correspondence dashboard.
-- **Arena landing:** variant picker (`GameVariants`) when creating a table; variants are sent to `create_arena_table` and shown in the open-tables list.
-- **Arena landing:** **Create closed table** with player picker (`inviteUserId`); closed rows show an invite-only badge; lobby hides **Take a seat** except for the invitee (spectators can still watch and kibitz).
-- **Arena table lobby:** choose play-page layout before ready-up (name + short description; separate `gameMoveLayoutLive` storage). Launch navigates to `/arena/play/...?layout=…`.
 - **Play layouts:** fifth **live** layout (clock-first bar, move dock, drawer) for arena and correspondence; arena play/watch default to **live** via `gameMoveLayoutLive`; in-game layout picker links stay on `/arena/play` or `/arena/watch` routes.
 - **Tournaments / ladders:** rules intro on the tournaments list, ladder list, and ladder hub keeps the full description in place with a fade and expand/collapse toggle (same pattern as the player profile about box), instead of swapping short and long copy.
 - **Ladder list:** paginated ladder table with the shared TanStack table nav (search, page controls, page size).
 
 ### Fixed
 
-- **Arena landing:** seated players in a live game get **Return to game** (play URL) instead of only **Watch**; banner when you have an active table.
-- **Arena play:** moves use `submit_arena_move` when the loaded game is `playMode: arena` (including after opening via `/move/…`); auto-redirect to `/arena/play/…`; layout switcher links use correct arena paths without a stray `cbits` segment.
-- **Arena clocks:** arena end-of-game uses server EventBridge timeloss only (no client `timeloss` polling); play page refreshes on WebSocket `game` updates. **Claim win on time** is hidden. Correspondence hard-clock games still use participant/spectator `timeloss` hints.
-- **Arena clocks:** rare client `timeloss` backup only after ~3s display overtime (every 5s) if the scheduler missed; backend re-arms overdue one-shot schedules in the near future instead of past `at()` times.
-- **Arena play:** completed games refresh on the board after timeloss (WebSocket `game` broadcast from backend; clock-only `get_game` sync no longer keeps `gameOver: false`).
-- **Arena start sync:** Fischer clocks stay frozen until `arenaClockStartAt` is applied; `arena_sync` / `arena_play_ready` update `lastMoveTime` with the server; poll `get_game` and re-call `arena_play_ready` if the WebSocket sync is missed so both clients share the same countdown and clock. Start overlay uses a dedicated tick and a ref so a missed React state update cannot leave “waiting for opponent” up after the other side’s countdown. **Server clock offset** (`serverTime` / `clockDisplayServerTime`) aligns countdown, overlay dismissal, and Fischer display across browsers.
-- **Arena clocks:** after the first moves, active-player Fischer display stays aligned when one client applies `submit_arena_move` and the other refreshes via `get_game` (backend display seeds use move `lastMoveTime`, not game start).
-- **Arena timeloss:** seated players poll `timeloss(check)` ~750ms after display passes zero (server grace) every 3s when the scheduler is slow; fixes games stuck at negative clocks until a late refresh.
-- **Arena clocks:** single Fischer display model on play pages (`player.time` + `lastMoveTime` + one server offset); no correspondence display seeds; fix double server-offset on tick; start overlay no longer re-runs mid-game.
-- **Arena start:** WebSocket `arena_launch` redirects both players to play; synchronized 3s countdown after both clients send `arena_play_ready` (Fischer clock starts at `arenaClockStartAt`, not at ready-up).
 - **Play (Classic layout):** narrow viewports no longer squeeze the move list and chat into a ~15vw column when orientation or mobile browser chrome leaves a stale wide `innerWidth`; sidebar width is CSS-gated at Bulma’s tablet breakpoint and viewport width tracks `visualViewport`, `orientationchange`, and `matchMedia`.
-
-### Removed
-
-- **Arena quick match:** `join_arena_queue` / `leave_arena_queue` UI and copy; matchmaking is create-or-join open tables only.
 
 ## [1.0.0-ci] - 2026-10-25
 
