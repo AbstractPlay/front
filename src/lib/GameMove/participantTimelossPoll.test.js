@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
-  ARENA_TIMELOSS_BACKUP_OVERDUE_MS,
   participantTimelossPollIntervalMs,
   shouldArenaTimelossBackupCall,
   shouldParticipantCallTimelossCheck,
   shouldParticipantPollTimeloss,
   shouldSpectatorRefreshHintTimeloss,
 } from "./participantTimelossPoll.js";
+import { ARENA_TIMELOSS_HINT_GRACE_MS } from "../gameClockDisplay.js";
 
 describe("participantTimelossPoll", () => {
   const onClockPlayerId = "player-on-clock";
@@ -46,11 +46,12 @@ describe("participantTimelossPoll", () => {
     expect(shouldParticipantCallTimelossCheck(game, now)).toBe(false);
   });
 
-  it("arena: backup timeloss only after deep overtime", () => {
+  it("arena: backup timeloss after server grace when display is overtime", () => {
     const { game } = hardClockTimedOutGame("arena");
     const now = game.lastMoveTime + game.players[0].time + 500;
     expect(shouldArenaTimelossBackupCall(game, now)).toBe(false);
-    const overdue = game.lastMoveTime + game.players[0].time + ARENA_TIMELOSS_BACKUP_OVERDUE_MS + 100;
+    const overdue =
+      game.lastMoveTime + game.players[0].time + ARENA_TIMELOSS_HINT_GRACE_MS + 50;
     expect(shouldArenaTimelossBackupCall(game, overdue)).toBe(true);
   });
 

@@ -277,30 +277,7 @@ export default function ArenaLanding() {
           {selectedControl ? (
             <p className="help">{t("Arena.tcDescription", { label: selectedControl.label })}</p>
           ) : null}
-          <p className="label">{t("Arena.closedTableInviteLabel")}</p>
-          <p className="help">{t("Arena.closedTableHelp")}</p>
-          <PlayerPickerTrigger
-            id="arena-closed-invite"
-            value={closedInviteUserId}
-            users={pickerUsers}
-            allUsers={allUsers}
-            slotIndex={0}
-            selectedOpponentIds={
-              closedInviteUserId ? [{ id: closedInviteUserId }] : []
-            }
-            metaGame={metaGame || undefined}
-            selectedVariants={selectedVariants}
-            playerCount={2}
-            highestMap={highestGlickoMap}
-            ratingsReady={ratingsReady}
-            onChange={({ id }) => closedInviteUserIdSetter(id || "")}
-          />
-          {actionError ? (
-            <p className="help has-text-danger" role="alert">
-              {actionError}
-            </p>
-          ) : null}
-          <div className="buttons">
+          <div className="arena-create-open">
             <button
               type="button"
               className="button apButton"
@@ -309,21 +286,50 @@ export default function ArenaLanding() {
             >
               {t("Arena.createTable")}
             </button>
-            <button
-              type="button"
-              className="button apButtonNeutral"
-              disabled={
-                busy ||
-                !selectedControl ||
-                !gameChosen ||
-                !variantsValid ||
-                !closedInviteUserId
-              }
-              onClick={handleCreateClosedTable}
-            >
-              {t("Arena.createClosedTable")}
-            </button>
           </div>
+          <div className="arena-closed-table-section">
+            <p className="label">{t("Arena.closedTableInviteLabel")}</p>
+            <p className="help">{t("Arena.closedTableHelp")}</p>
+            <div className="arena-closed-table-section__picker">
+              <PlayerPickerTrigger
+                id="arena-closed-invite"
+                value={closedInviteUserId}
+                users={pickerUsers}
+                allUsers={allUsers}
+                slotIndex={0}
+                selectedOpponentIds={
+                  closedInviteUserId ? [{ id: closedInviteUserId }] : []
+                }
+                metaGame={metaGame || undefined}
+                selectedVariants={selectedVariants}
+                playerCount={2}
+                highestMap={highestGlickoMap}
+                ratingsReady={ratingsReady}
+                onChange={({ id }) => closedInviteUserIdSetter(id || "")}
+              />
+            </div>
+            <div className="buttons arena-closed-table-section__actions">
+              <button
+                type="button"
+                className="button apButtonNeutral"
+                disabled={
+                  busy ||
+                  !selectedControl ||
+                  !gameChosen ||
+                  !variantsValid ||
+                  !closedInviteUserId
+                }
+                onClick={handleCreateClosedTable}
+              >
+                {t("Arena.createClosedTable")}
+              </button>
+            </div>
+          </div>
+          {actionError ? (
+            <p className="help has-text-danger" role="alert">
+              {actionError}
+            </p>
+          ) : null}
         </div>
 
         {myLiveTable ? (

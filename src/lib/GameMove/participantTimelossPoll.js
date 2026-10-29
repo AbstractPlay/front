@@ -1,4 +1,9 @@
-import { anyOnClockPlayerRemainingAtMost, anyOnClockPlayerTimedOut, anyOnClockPlayerTimedOutForTimelossHint } from "../gameClockDisplay.js";
+import {
+  anyOnClockPlayerRemainingAtMost,
+  anyOnClockPlayerTimedOut,
+  anyOnClockPlayerTimedOutForTimelossHint,
+  ARENA_TIMELOSS_HINT_GRACE_MS,
+} from "../gameClockDisplay.js";
 import { isArenaGame } from "../arena/arenaGame.js";
 
 /**
@@ -45,10 +50,7 @@ export function participantTimelossPollIntervalMs() {
   return 3000;
 }
 
-/** Rare arena backup when scheduler missed — only deep overtime, low call rate. */
-export const ARENA_TIMELOSS_BACKUP_OVERDUE_MS = 3000;
-export const ARENA_TIMELOSS_BACKUP_INTERVAL_MS = 5000;
-
+/** Client backup when EventBridge flag is slow or missed — after server grace (750ms). */
 export function shouldArenaTimelossBackupCall(game, now = Date.now()) {
   if (!isArenaGame(game) || game.gameOver || game.toMove === "" || game.toMove === undefined) {
     return false;
@@ -58,7 +60,7 @@ export function shouldArenaTimelossBackupCall(game, now = Date.now()) {
   }
   return anyOnClockPlayerRemainingAtMost(
     game,
-    -ARENA_TIMELOSS_BACKUP_OVERDUE_MS,
+    -ARENA_TIMELOSS_HINT_GRACE_MS,
     now
   );
 }

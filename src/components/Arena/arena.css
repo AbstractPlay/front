@@ -28,6 +28,31 @@
   color: var(--high-contrast-font-color);
 }
 
+.arena-create-open {
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.arena-closed-table-section {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--tag-background-color);
+}
+
+.arena-closed-table-section .label {
+  margin-bottom: 0.35rem;
+}
+
+.arena-closed-table-section__picker {
+  margin-top: 0.85rem;
+  margin-bottom: 1.15rem;
+}
+
+.arena-closed-table-section__actions {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 /* Bulma is-hoverable uses scheme vars that fight color-mode; keep hover on AP tokens */
 .arena-panel .table {
   background-color: var(--main-bg-color);

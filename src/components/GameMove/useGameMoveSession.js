@@ -13,7 +13,6 @@ import {
   shouldParticipantCallTimelossCheck,
   shouldParticipantPollTimeloss,
   shouldArenaTimelossBackupCall,
-  ARENA_TIMELOSS_BACKUP_INTERVAL_MS,
 } from "../../lib/GameMove/participantTimelossPoll";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
 import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
@@ -283,7 +282,6 @@ export function useGameMoveSession(props) {
   const boardImage = useRef();
   const stackImage = useRef();
   const gameRef = useRef(null);
-  const arenaTimelossBackupAtRef = useRef(0);
   const arenaPlayReadySentRef = useRef(null);
   const arenaClockStartAtRef = useRef(undefined);
   const arenaServerOffsetRef = useRef(0);
@@ -1131,21 +1129,23 @@ export function useGameMoveSession(props) {
   ]);
 
   useEffect(() => {
-    if (!liveClockTicking || !isArenaGame(dbgame)) {
+    if (!isArenaGame(dbgame) || dbgame.gameOver || dbgame.toMove === "") {
       return undefined;
     }
-    const game = gameRef.current;
-    if (!game || !shouldArenaTimelossBackupCall(game, liveClockNow)) {
-      return undefined;
-    }
-    const wall = Date.now();
-    if (wall - arenaTimelossBackupAtRef.current < ARENA_TIMELOSS_BACKUP_INTERVAL_MS) {
-      return undefined;
-    }
-    arenaTimelossBackupAtRef.current = wall;
-    checkTime("timeloss");
-    setRefresh((val) => val + 1);
-    return undefined;
+    const pollMs = participantTimelossPollIntervalMs();
+    const maybeHintTimeloss = () => {
+      const game = gameRef.current;
+      if (!game) {
+        return;
+      }
+      const now = arenaSyncedNow(game, Date.now());
+      if (shouldArenaTimelossBackupCall(game, now)) {
+        checkTime("timeloss");
+      }
+    };
+    maybeHintTimeloss();
+    const id = window.setInterval(maybeHintTimeloss, pollMs);
+    return () => window.clearInterval(id);
   }, [
     checkTime,
     dbgame,
@@ -1153,8 +1153,6 @@ export function useGameMoveSession(props) {
     dbgame?.id,
     dbgame?.playMode,
     dbgame?.toMove,
-    liveClockNow,
-    liveClockTicking,
   ]);
 
   useEffect(() => {
@@ -2445,6 +2443,21 @@ export function useGameMoveSession(props) {
 
   const applySubmitMoveResponse = useCallback(
     (game0) => {
+      let nextGame = game0;
+      if (isArenaGame(game0)) {
+        const prev = gameRef.current?.id === game0.id ? gameRef.current : null;
+        nextGame = seedArenaServerClockOffset({
+          ...game0,
+          ...(prev?.arenaServerClockOffsetMs != null
+            ? {
+                arenaServerClockOffsetMs:
+                  game0.arenaServerClockOffsetMs ?? prev.arenaServerClockOffsetMs,
+                clockDisplayServerTime:
+                  game0.clockDisplayServerTime ?? prev.clockDisplayServerTime,
+              }
+            : {}),
+        });
+      }
       setMyMove((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
       const priorNodeCount = explorationRef.current?.nodes?.length ?? 0;
       const priorTip =
@@ -2456,7 +2469,7 @@ export function useGameMoveSession(props) {
           ? game0.players.find((p) => p.id === sessionMe.id)?.settings
           : {};
       setupGame(
-        game0,
+        nextGame,
         gameRef,
         sessionMe,
         explorer,
@@ -2493,7 +2506,7 @@ export function useGameMoveSession(props) {
       if (gameRef.current.customColours) {
         publishGameColors({ state: engineRef.current.state() });
       }
-      dbgameSetter(game0);
+      dbgameSetter(nextGame);
     },
     [
       dbgameSetter,
