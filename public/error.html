@@ -2,6 +2,7 @@
 <html lang="en" color-mode="light">
   <head>
     <meta charset="utf-8" />
+    <meta id="noscript-refresh" http-equiv="refresh" content="15" />
     <!-- favicon generator stuff -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -17,23 +18,101 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <meta name="theme-color" content="#000000" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
     <link rel="manifest" href="/manifest.json" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <title>Abstract Play - Please Wait</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>You need to enable JavaScript to run this app. This page will refresh automatically in a few seconds.</noscript>
     <main id="root" class="container p-0">
         <h1 class="title">Please Wait</h1>
         <div class="content">
-            If you're seeing this page, then a new version of the code is being deployed. Please wait a minute and try again. If the problem persists, <a href="https://play.abstractplay.com/feedback/new?kind=bug">report a bug</a> or <a href="https://discord.abstractplay.com">join us on Discord</a>.
+            <p>A new version of the site is being deployed. Your games are stored on the server; this page will retry the same URL automatically.</p>
+            <p id="retry-status" class="help">Retrying soon…</p>
+            <p>If this keeps happening, <a href="/feedback/new?kind=bug">report a bug</a> or <a href="https://discord.abstractplay.com">join us on Discord</a>.</p>
         </div>
-        <p><a href="https://play.abstractplay.com">Refresh</a></p>
+        <p>
+          <a id="retry-now" href="#">Retry now</a>
+          <span class="help"> · </span>
+          <a href="/">Homepage</a>
+        </p>
     </main>
+    <script>
+      (function () {
+        var delayMs = 5000;
+        var maxMs = 30000;
+        var statusEl = document.getElementById("retry-status");
+        var retryNowEl = document.getElementById("retry-now");
+
+        function isErrorDocumentPath(pathname) {
+          return pathname === "/error.html" || pathname.endsWith("/error.html");
+        }
+
+        function sameOriginRetryPath(urlString) {
+          try {
+            var u = new URL(urlString, window.location.origin);
+            if (u.origin !== window.location.origin) {
+              return null;
+            }
+            if (isErrorDocumentPath(u.pathname)) {
+              return null;
+            }
+            return u.pathname + u.search + u.hash;
+          } catch (e) {
+            return null;
+          }
+        }
+
+        /** Path + query + hash for the request that led here (not site root). */
+        function resolveRetryPath() {
+          var here =
+            window.location.pathname
+            + window.location.search
+            + window.location.hash;
+          if (!isErrorDocumentPath(window.location.pathname)) {
+            return here;
+          }
+          if (document.referrer) {
+            var fromReferrer = sameOriginRetryPath(document.referrer);
+            if (fromReferrer) {
+              return fromReferrer;
+            }
+          }
+          return here;
+        }
+
+        var retryPath = resolveRetryPath();
+
+        if (retryNowEl) {
+          retryNowEl.href = retryPath;
+        }
+
+        var metaRefresh = document.getElementById("noscript-refresh");
+        if (metaRefresh && retryPath && retryPath !== "/error.html") {
+          metaRefresh.setAttribute("content", "15; url=" + retryPath);
+        }
+
+        function retryNow() {
+          window.location.assign(retryPath);
+        }
+
+        function scheduleRetry() {
+          var seconds = Math.max(1, Math.round(delayMs / 1000));
+          if (statusEl) {
+            statusEl.textContent =
+              "Retrying "
+              + retryPath
+              + " in "
+              + seconds
+              + " seconds…";
+          }
+          window.setTimeout(retryNow, delayMs);
+          delayMs = Math.min(Math.round(delayMs * 1.25), maxMs);
+        }
+
+        scheduleRetry();
+      })();
+    </script>
   </body>
 </html>

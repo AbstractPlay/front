@@ -127,7 +127,10 @@ jobs:
     #     aws-region: us-east-1
 
     - name: Deploy
-      run: npx serverless client deploy --no-confirm
+      run: node scripts/deploy-static.mjs --stage dev
+
+    - name: Prune orphaned static assets
+      run: node scripts/prune-stale-static.mjs --stage dev
 
     - name: Apply S3 cost allocation tags
       run: node scripts/apply-s3-cost-allocation-tags.mjs --stage dev
