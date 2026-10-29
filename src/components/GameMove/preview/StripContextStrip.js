@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "../../../stores";
 import { getLivePlayerClockChips } from "./moveEntryUtils";
+import { isArenaGame } from "../../../lib/arena/arenaGame";
 import PlayerColourChip from "./PlayerColourChip";
 import QueueNavButtons from "./QueueNavButtons";
 import LastMoveChip from "./LastMoveChip";
@@ -12,10 +13,11 @@ import PlayerVacationPauseIcon from "./PlayerVacationPauseIcon";
 const MOBILE_PANEL_MAX_WIDTH = 768;
 
 function StripContextStrip({ session, layoutContext }) {
-  const { t, handleNextGame, game, metaGame } = session;
+  const { t, handleNextGame, game, metaGame, liveClockTicking, liveClockNow } =
+    session;
   const liveToMove = game?.toMove ?? "";
   const users = useStore((state) => state.users);
-  const [now, setNow] = useState(Date.now());
+  const [localNow, setLocalNow] = useState(() => Date.now());
   const compact =
     (session.screenWidth ?? MOBILE_PANEL_MAX_WIDTH) <= MOBILE_PANEL_MAX_WIDTH;
 
@@ -30,16 +32,20 @@ function StripContextStrip({ session, layoutContext }) {
     moveNumber,
   } = layoutContext;
 
+  const now = liveClockTicking ? liveClockNow : localNow;
+
   const clockChips =
     uiStateActive(game, liveToMove) && game
       ? getLivePlayerClockChips(game, users, now)
       : [];
 
   useEffect(() => {
-    if (!game || liveToMove === "") return undefined;
-    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    if (liveClockTicking || !game || liveToMove === "") {
+      return undefined;
+    }
+    const id = window.setInterval(() => setLocalNow(Date.now()), 1000);
     return () => window.clearInterval(id);
-  }, [game, liveToMove]);
+  }, [game, liveClockTicking, liveToMove]);
 
   return (
     <header className="game-move-context-strip game-move-strip-context">
@@ -105,6 +111,7 @@ function StripContextStrip({ session, layoutContext }) {
             t={t}
             waitingCount={queueCount}
             onNextGame={handleNextGame}
+            arenaBack={isArenaGame(game) && game.gameOver}
           />
         ) : null}
         <LayoutPickerTrigger compact={compact} />

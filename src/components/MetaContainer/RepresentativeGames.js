@@ -6,6 +6,7 @@ import { API_ENDPOINT_OPEN } from "../../config";
 import BotAwareName from "../Bots/BotAwareName";
 import { formatUserDisplayName } from "../Bots/botUtils";
 import { useStore } from "../../stores";
+import { canonicalGamePlayPath } from "../../lib/gamePlayLinks";
 
 function dedupeByGameId(entries) {
   const seen = new Map();
@@ -58,6 +59,7 @@ function RepresentativeGames({ metaGame }) {
       return {
         gameId,
         meta,
+        playMode: entry.playMode,
         gameName,
         userId: entry.userId,
         userName: entry.userName,
@@ -80,7 +82,14 @@ function RepresentativeGames({ metaGame }) {
       <ul style={{ listStyle: "none", marginLeft: 0 }}>
         {rows.map((row) => (
           <li key={row.gameId} style={{ marginBottom: "0.35em" }}>
-            <Link to={`/move/${row.meta}/1/${row.gameId}`}>{row.gameName}</Link>
+            <Link
+              to={canonicalGamePlayPath(
+                { metaGame: row.meta, id: row.gameId, playMode: row.playMode },
+                { cbit: 1 },
+              )}
+            >
+              {row.gameName}
+            </Link>
             {row.players.length > 0 ? (
               <span style={{ fontSize: "smaller", marginLeft: "0.35em" }}>
                 (

@@ -29,7 +29,13 @@ function TurnIndicator({ img, mover, isMyTurn, className = "" }) {
 }
 
 function DockMoveEntry(props) {
-  const { expanded = false, pinExplorationToolbar = false } = props;
+  const {
+    expanded = false,
+    pinExplorationToolbar = false,
+    layoutVariant,
+    primaryOnly = false,
+    extrasOnly = false,
+  } = props;
   const state = useDockMoveEntry(props);
 
   if (!state.ready) {
@@ -73,8 +79,11 @@ function DockMoveEntry(props) {
   const isMyTurn = game.canSubmit && uiState === 0 && !teachingReview;
   const showInlineTurn = uiState === 0 && mover;
   const showPrimaryRow = focus.canExplore && !teachingReview;
+  const suppressMainlineExplore =
+    layoutVariant === "live" && uiState === 0 && focus.exPath.length === 0;
   const showExplorationToolbar =
     !teachingReview &&
+    !suppressMainlineExplore &&
     ((focus.exPath.length > 0 && game.canExplore) || uiState !== 0);
 
   const explorationToolbar = showExplorationToolbar ? (
@@ -92,6 +101,128 @@ function DockMoveEntry(props) {
       }
     />
   ) : null;
+
+  const expandedSection =
+    !teachingReview && (extrasOnly || (expanded && !primaryOnly)) ? (
+      <div className="game-move-dock-entry__expanded">
+        {showPieSeatSwapNotice(game, engine) ? (
+          <p className="game-move-dock-entry__note">{t("CanPie")}</p>
+        ) : null}
+
+        {showMoveControls && moves !== null ? (
+          <div className="game-move-dock-entry__chooser">
+            <div className="field is-grouped is-grouped-multiline">
+              <div className="control">
+                <div className="select is-small">
+                  <select
+                    name="moves"
+                    id={extrasOnly ? "selectmove-live-more" : "selectmove"}
+                    value=""
+                    onChange={(e) => handlers.handleMove(e.target.value)}
+                  >
+                    <option value="">{t("ChooseMove")}</option>
+                    {moves.sort(sortLenAlpha).map((moveOption, index) => (
+                      <option key={index} value={moveOption}>
+                        {moveOption}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              {game.customButtons ||
+              !Array.isArray(moves) ||
+              !moves.includes("pass") ? null : (
+                <div className="control">
+                  <button
+                    type="button"
+                    className="button is-small apButton"
+                    onClick={() => handlers.handleMove("pass")}
+                  >
+                    Pass
+                  </button>
+                </div>
+              )}
+              {game.customButtons
+                ? safeGetButtons(engine).map(({ label, move: btnMove }, idx) => (
+                    <div className="control" key={`MoveButton|${idx}`}>
+                      <button
+                        type="button"
+                        className="button is-small apButton"
+                        onClick={() => handlers.handleMove(btnMove)}
+                      >
+                        {resolveCustomButtonLabel(label, t)}
+                      </button>
+                    </div>
+                  ))
+                : null}
+            </div>
+          </div>
+        ) : null}
+
+        {showBotPing ? (
+          <div className="control">
+            <button
+              type="button"
+              className="button is-small apButtonNeutral"
+              onClick={handlers.pingBot}
+            >
+              Ping Bot
+            </button>
+          </div>
+        ) : null}
+
+        {moveToSubmit !== null &&
+        focus.exPath.length === 1 &&
+        !drawOffered ? (
+          <div className="field game-move-dock-entry__draw-offer">
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  handlers.handleDrawOfferChange(e.target.checked, {
+                    confirmOffer: true,
+                  })
+                }
+                checked={drawoffer}
+              />
+              {t("IncludeDrawOffer")}
+            </label>
+          </div>
+        ) : moveToSubmit !== null &&
+          focus.exPath.length === 1 &&
+          drawOffered &&
+          !canDraw ? (
+          <div className="field game-move-dock-entry__draw-offer">
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  handlers.handleDrawOfferChange(e.target.checked)
+                }
+                checked={drawoffer}
+              />
+              {t("IncludeAcceptDrawOffer")}
+            </label>
+          </div>
+        ) : null}
+
+        {uiState === 0 && game.canSubmit && !submitting && game.canPie ? (
+          <button
+            type="button"
+            className="button is-small apButton"
+            onClick={handlers.handlePie}
+          >
+            {t("InvokePie")}
+          </button>
+        ) : null}
+
+        {!pinExplorationToolbar && explorationToolbar}
+      </div>
+    ) : null;
+
+  if (extrasOnly) {
+    return expandedSection;
+  }
 
   return (
     <div className="game-move-dock-entry">
@@ -242,124 +373,7 @@ function DockMoveEntry(props) {
 
       {pinExplorationToolbar ? explorationToolbar : null}
 
-      {expanded && !teachingReview ? (
-        <div className="game-move-dock-entry__expanded">
-          {showPieSeatSwapNotice(game, engine) ? (
-            <p className="game-move-dock-entry__note">{t("CanPie")}</p>
-          ) : null}
-
-          {showMoveControls && moves !== null ? (
-            <div className="game-move-dock-entry__chooser">
-              <div className="field is-grouped is-grouped-multiline">
-                <div className="control">
-                  <div className="select is-small">
-                    <select
-                      name="moves"
-                      id="selectmove"
-                      value=""
-                      onChange={(e) => handlers.handleMove(e.target.value)}
-                    >
-                      <option value="">{t("ChooseMove")}</option>
-                      {moves.sort(sortLenAlpha).map((moveOption, index) => (
-                        <option key={index} value={moveOption}>
-                          {moveOption}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                {game.customButtons ||
-                !Array.isArray(moves) ||
-                !moves.includes("pass") ? null : (
-                  <div className="control">
-                    <button
-                      type="button"
-                      className="button is-small apButton"
-                      onClick={() => handlers.handleMove("pass")}
-                    >
-                      Pass
-                    </button>
-                  </div>
-                )}
-                {game.customButtons
-                  ? safeGetButtons(engine).map(
-                      ({ label, move: btnMove }, idx) => (
-                        <div className="control" key={`MoveButton|${idx}`}>
-                          <button
-                            type="button"
-                            className="button is-small apButton"
-                            onClick={() => handlers.handleMove(btnMove)}
-                          >
-                            {resolveCustomButtonLabel(label, t)}
-                          </button>
-                        </div>
-                      )
-                    )
-                  : null}
-              </div>
-            </div>
-          ) : null}
-
-          {showBotPing ? (
-            <div className="control">
-              <button
-                type="button"
-                className="button is-small apButtonNeutral"
-                onClick={handlers.pingBot}
-              >
-                Ping Bot
-              </button>
-            </div>
-          ) : null}
-
-          {moveToSubmit !== null &&
-          focus.exPath.length === 1 &&
-          !drawOffered ? (
-            <div className="field game-move-dock-entry__draw-offer">
-              <label className="checkbox">
-                <input
-                  type="checkbox"
-                  onChange={(e) =>
-                    handlers.handleDrawOfferChange(e.target.checked, {
-                      confirmOffer: true,
-                    })
-                  }
-                  checked={drawoffer}
-                />
-                {t("IncludeDrawOffer")}
-              </label>
-            </div>
-          ) : moveToSubmit !== null &&
-            focus.exPath.length === 1 &&
-            drawOffered &&
-            !canDraw ? (
-            <div className="field game-move-dock-entry__draw-offer">
-              <label className="checkbox">
-                <input
-                  type="checkbox"
-                  onChange={(e) =>
-                    handlers.handleDrawOfferChange(e.target.checked)
-                  }
-                  checked={drawoffer}
-                />
-                {t("IncludeAcceptDrawOffer")}
-              </label>
-            </div>
-          ) : null}
-
-          {uiState === 0 && game.canSubmit && !submitting && game.canPie ? (
-            <button
-              type="button"
-              className="button is-small apButton"
-              onClick={handlers.handlePie}
-            >
-              {t("InvokePie")}
-            </button>
-          ) : null}
-
-          {!pinExplorationToolbar && explorationToolbar}
-        </div>
-      ) : null}
+      {expandedSection}
 
       <Modal
         show={showDrawOfferConfirm}

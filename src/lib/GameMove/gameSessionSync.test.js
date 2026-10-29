@@ -182,4 +182,37 @@ describe("game session sync", () => {
     expect(nodes[0].state).to.be.null;
     expect(nodes[1].state).to.be.null;
   });
+
+  it("syncGameSessionFromApi marks game over when API returns completed row", () => {
+    const priorGame = {
+      id: "g1",
+      metaGame: "pinch",
+      toMove: 0,
+      players,
+      gameOver: false,
+      state: "{}",
+    };
+    const game = {
+      ...priorGame,
+      toMove: "",
+      gameEnded: 1_700_000_000_000,
+    };
+    const gameRef = { current: priorGame };
+
+    syncGameSessionFromApi({
+      game,
+      priorGame,
+      me: null,
+      explorer: false,
+      explorationRef: { current: null },
+      focusRef: { current: null },
+      focusSetter: vi.fn(),
+      movesRef: { current: null },
+      engineRef: { current: null },
+      gameRef,
+    });
+
+    expect(gameRef.current.gameOver).to.be.true;
+    expect(gameRef.current.toMove).to.equal("");
+  });
 });

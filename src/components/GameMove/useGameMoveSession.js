@@ -8,9 +8,18 @@ import { API_ENDPOINT_OPEN } from "../../config";
 import { apPerfRun } from "../../lib/apPerf.js";
 import { callAuthApi } from "../../lib/api";
 import { anyOnClockPlayerTimedOut } from "../../lib/gameClockDisplay";
+import {
+  participantTimelossPollIntervalMs,
+  shouldParticipantCallTimelossCheck,
+  shouldParticipantPollTimeloss,
+  shouldArenaTimelossBackupCall,
+} from "../../lib/GameMove/participantTimelossPoll";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
 import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
 import { ladderDetailPathFromGameRef } from "../../lib/ladderRoutes";
+import { arenaLandingPath } from "../../lib/arena/arenaRoutes";
+import { isArenaGame, resolveSubmitMoveQuery } from "../../lib/arena/arenaGame";
+import { mergeArenaClockSync, resolveArenaClockStartAt, normalizeArenaClientGame, arenaSyncedNow } from "../../lib/arena/applyArenaClockSync";
 import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import {
   maybeSyncInProgressCommentedFlag,
@@ -55,6 +64,7 @@ import {
   syncPlayRenderToFocus,
   populateChecked,
   processNewMove,
+  isFinishedGameSnapshot,
 } from "../../lib/GameMove/gameStuff";
 import { shouldCommitBoardRender } from "../../lib/GameMove/boardRenderCommit";
 import {
@@ -140,19 +150,22 @@ import {
 export const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
 
 /** True when setupGame must rebuild history (new move, state change, etc.). */
-function gamePlayfieldChanged(prev, next) {
+export function gamePlayfieldChanged(prev, next) {
   if (!prev || prev.id !== next.id) return true;
   if (prev.numMoves !== next.numMoves) return true;
   if (prev.toMove !== next.toMove) return true;
   if (prev.state !== next.state) return true;
   if (prev.partialMove !== next.partialMove) return true;
   if (prev.gameOver !== next.gameOver) return true;
+  if (prev.gameEnded !== next.gameEnded) return true;
   if (prev.pieInvoked !== next.pieInvoked) return true;
   return false;
 }
 
 export function useGameMoveSession(props) {
   const moveBasePath = props.moveBasePath ?? "/move";
+  const submitMoveQuery = props.submitMoveQuery ?? "submit_move";
+  const arenaLiveClock = props.arenaLiveClock === true;
   const replayReady = props.replayReady !== false;
   const [dbgame, dbgameSetter] = useState(null);
   const [renderrep, renderrepSetter] = useState(null);
@@ -175,6 +188,8 @@ export function useGameMoveSession(props) {
     setTextareaMode: setTextareaModeBase,
   } = useMoveEntryDraft(move);
   const [refresh, setRefresh] = useState(0);
+  /** Display-only clock tick for arena Fischer countdown (must not trigger get_game). */
+  const [liveClockNow, setLiveClockNow] = useState(() => Date.now());
   const [watchCount, watchCountSetter] = useState(0);
   const [marksBusy, marksBusySetter] = useState(false);
   const [locked, setLocked] = useState(false);
@@ -267,6 +282,11 @@ export function useGameMoveSession(props) {
   const boardImage = useRef();
   const stackImage = useRef();
   const gameRef = useRef(null);
+  const arenaPlayReadySentRef = useRef(null);
+  const arenaClockStartAtRef = useRef(undefined);
+  const arenaCountdownCompleteRef = useRef(false);
+  const arenaServerOffsetRef = useRef(0);
+  const [arenaSyncRevision, setArenaSyncRevision] = useState(0);
   // gameID and nodes, an array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
   // for completed games every node might hold a tree of explored moves.
   const explorationRef = useRef({ gameID: null, nodes: null });
@@ -289,9 +309,103 @@ export function useGameMoveSession(props) {
   // State is passed as a prop from GameMoveWrapper
   const state = props.routerState;
 
-  const { metaGame, cbits, gameID } = useParams();
+  const { metaGame, cbits: cbitsParam, gameID } = useParams();
+  const cbits = cbitsParam ?? "0";
   const effectiveCustomCss = useGameCustomCss(metaGame, globalMe, customCSS);
   const cbit = parseInt(cbits, 10);
+
+  const mergeIncomingArenaGame = useCallback((game0, prev) => {
+    if (!isArenaGame(game0)) {
+      return game0;
+    }
+    const startAt =
+      game0.arenaClockStartAt ??
+      prev?.arenaClockStartAt ??
+      arenaClockStartAtRef.current;
+    if (startAt !== undefined && startAt !== null) {
+      arenaClockStartAtRef.current = startAt;
+    }
+    return normalizeArenaClientGame(
+      {
+        ...game0,
+        ...(startAt !== undefined && startAt !== null
+          ? { arenaClockStartAt: startAt }
+          : {}),
+      },
+      prev,
+    );
+  }, []);
+
+  const applyArenaClockSync = useCallback((arenaClockStartAt, serverTime) => {
+    if (arenaClockStartAt === undefined || arenaClockStartAt === null) {
+      return;
+    }
+    arenaClockStartAtRef.current = arenaClockStartAt;
+    if (serverTime !== undefined && serverTime !== null) {
+      arenaServerOffsetRef.current = serverTime - Date.now();
+    }
+    setArenaSyncRevision((v) => v + 1);
+    dbgameSetter((prev) => {
+      if (!prev || prev.id !== gameID) {
+        return prev;
+      }
+      return mergeIncomingArenaGame(
+        mergeArenaClockSync(prev, { arenaClockStartAt, serverTime }),
+        prev,
+      );
+    });
+    if (gameRef.current?.id === gameID) {
+      gameRef.current = mergeIncomingArenaGame(
+        mergeArenaClockSync(gameRef.current, {
+          arenaClockStartAt,
+          serverTime,
+        }),
+        gameRef.current,
+      );
+    }
+  }, [dbgameSetter, gameID, mergeIncomingArenaGame]);
+
+  const resolvedArenaClockStartAt = useMemo(
+    () => resolveArenaClockStartAt(dbgame, arenaClockStartAtRef.current),
+    [dbgame, dbgame?.arenaClockStartAt, arenaSyncRevision]
+  );
+
+  useEffect(() => {
+    if (!arenaLiveClock && !isArenaGame(dbgame)) {
+      return undefined;
+    }
+    if (!dbgame || dbgame.gameOver || dbgame.toMove === "") {
+      return undefined;
+    }
+    const id = window.setInterval(() => {
+      setLiveClockNow(Date.now());
+    }, 250);
+    return () => window.clearInterval(id);
+  }, [arenaLiveClock, dbgame, dbgame?.gameOver, dbgame?.toMove, dbgame?.playMode]);
+
+  const liveClockTicking = useMemo(
+    () =>
+      Boolean(
+        dbgame &&
+          !dbgame.gameOver &&
+          dbgame.toMove !== "" &&
+          (arenaLiveClock || isArenaGame(dbgame))
+          && (
+            !isArenaGame(dbgame)
+            || resolvedArenaClockStartAt === undefined
+            || arenaSyncedNow(dbgame, liveClockNow) >= resolvedArenaClockStartAt
+          )
+      ),
+    [
+      arenaLiveClock,
+      dbgame,
+      resolvedArenaClockStartAt,
+      dbgame?.gameOver,
+      dbgame?.toMove,
+      dbgame?.playMode,
+      liveClockNow,
+    ]
+  );
 
   const altDisplays = useMemo(
     () => getAltDisplaysForMetaGame(metaGame),
@@ -320,6 +434,11 @@ export function useGameMoveSession(props) {
     if (sessionGameIDRef.current !== gameID) {
       sessionDisplayOverrideSetter(readSessionDisplayOverride(gameID));
       sessionGameIDRef.current = gameID;
+      arenaPlayReadySentRef.current = null;
+      arenaClockStartAtRef.current = undefined;
+      arenaCountdownCompleteRef.current = false;
+      arenaServerOffsetRef.current = 0;
+      setArenaSyncRevision((v) => v + 1);
     }
 
     const handleBeforeUnload = () => {
@@ -751,7 +870,15 @@ export function useGameMoveSession(props) {
             data.game.completedGameKey = state.key;
           }
           //   console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
-          dbgameSetter(data.game);
+          dbgameSetter((prev) => mergeIncomingArenaGame(data.game, prev));
+          if (data.game.arenaClockStartAt !== undefined && data.game.arenaClockStartAt !== null) {
+            arenaClockStartAtRef.current = data.game.arenaClockStartAt;
+          }
+          if (data.game.clockDisplayServerTime !== undefined && data.game.clockDisplayServerTime !== null) {
+            arenaServerOffsetRef.current =
+              data.game.clockDisplayServerTime - Date.now();
+          }
+          setArenaSyncRevision((v) => v + 1);
           watchCountSetter(
             typeof data.watchCount === "number" ? data.watchCount : 0
           );
@@ -799,7 +926,10 @@ export function useGameMoveSession(props) {
     }
 
     // Don't fetch data if user is refreshing a completed game. No point in fetching the game again, the only thing that could have changed is public exploration
-    if (explorationRef.current.gameID === gameID && game && game.gameOver) {
+    if (
+      explorationRef.current.gameID === gameID
+      && gameRef.current?.gameOver
+    ) {
       explorationFetchingRef.current = false;
       explorationFetchedSetter(false);
     } else {
@@ -834,6 +964,136 @@ export function useGameMoveSession(props) {
     return () => window.removeEventListener("refresh-data", handler);
   }, [gameID, metaGame]);
 
+  useEffect(() => {
+    const handler = (event) => {
+      const detail = event.detail;
+      if (!detail || detail.metaGame !== metaGame || detail.gameId !== gameID) {
+        return;
+      }
+      if (detail.arenaClockStartAt === undefined) {
+        return;
+      }
+      applyArenaClockSync(detail.arenaClockStartAt, detail.serverTime);
+      setRefresh((val) => val + 1);
+    };
+    window.addEventListener("arena-sync", handler);
+    return () => window.removeEventListener("arena-sync", handler);
+  }, [applyArenaClockSync, gameID, metaGame]);
+
+  useEffect(() => {
+    if (!replayReady || !metaGame || !gameID) {
+      return undefined;
+    }
+    const game = dbgame;
+    if (!game || !isArenaGame(game) || game.gameOver || game.toMove === "") {
+      return undefined;
+    }
+    if (arenaPlayReadySentRef.current === gameID) {
+      return undefined;
+    }
+    let cancelled = false;
+    (async () => {
+      const res = await callAuthApi("arena_play_ready", {
+        metaGame,
+        id: gameID,
+      });
+      if (!res) {
+        return;
+      }
+      const parsed = await parseAuthResponse(res);
+      if (!parsed.ok) {
+        return;
+      }
+      if (cancelled && parsed.data?.arenaClockStartAt === undefined) {
+        return;
+      }
+      arenaPlayReadySentRef.current = gameID;
+      if (parsed.data?.arenaClockStartAt !== undefined) {
+        applyArenaClockSync(
+          parsed.data.arenaClockStartAt,
+          parsed.data.serverTime
+        );
+        setRefresh((val) => val + 1);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    applyArenaClockSync,
+    dbgame,
+    dbgame?.id,
+    dbgame?.gameOver,
+    dbgame?.toMove,
+    gameID,
+    metaGame,
+    replayReady,
+  ]);
+
+  /** Recover arenaClockStartAt if arena_sync WS was missed (other client started countdown). */
+  useEffect(() => {
+    if (!isArenaGame(dbgame) || dbgame.gameOver || dbgame.toMove === "") {
+      return undefined;
+    }
+    if (resolvedArenaClockStartAt !== undefined) {
+      return undefined;
+    }
+    const id = window.setInterval(() => {
+      setRefresh((val) => val + 1);
+    }, 2000);
+    return () => window.clearInterval(id);
+  }, [
+    dbgame,
+    dbgame?.gameOver,
+    dbgame?.toMove,
+    resolvedArenaClockStartAt,
+  ]);
+
+  /** Re-fetch startAt via arena_play_ready while opponent may have started countdown. */
+  useEffect(() => {
+    if (!isArenaGame(dbgame) || dbgame.gameOver || dbgame.toMove === "") {
+      return undefined;
+    }
+    if (resolvedArenaClockStartAt !== undefined) {
+      return undefined;
+    }
+    if (arenaPlayReadySentRef.current !== gameID) {
+      return undefined;
+    }
+    let cancelled = false;
+    const id = window.setInterval(async () => {
+      const res = await callAuthApi("arena_play_ready", {
+        metaGame: dbgame.metaGame,
+        id: dbgame.id,
+      });
+      if (cancelled || !res) {
+        return;
+      }
+      const parsed = await parseAuthResponse(res);
+      if (!parsed.ok || parsed.data?.arenaClockStartAt === undefined) {
+        return;
+      }
+      applyArenaClockSync(
+        parsed.data.arenaClockStartAt,
+        parsed.data.serverTime
+      );
+      setRefresh((val) => val + 1);
+    }, 2500);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
+    };
+  }, [
+    applyArenaClockSync,
+    dbgame,
+    dbgame?.gameOver,
+    dbgame?.id,
+    dbgame?.metaGame,
+    dbgame?.toMove,
+    gameID,
+    resolvedArenaClockStartAt,
+  ]);
+
   const checkTime = useCallback(async (query) => {
     try {
       const res = await runCheckTimeQuery({
@@ -844,6 +1104,10 @@ export function useGameMoveSession(props) {
       if (!res) return;
       const parsed = await parseAuthResponse(res);
       if (!parsed.ok) {
+        if (query === "timeloss") {
+          setRefresh((val) => val + 1);
+          return;
+        }
         setError(
           `checkTime with query: ${query} for metaGame ${gameRef.current.metaGame} and game ${gameRef.current.id} failed: ${parsed.error}`
         );
@@ -852,13 +1116,73 @@ export function useGameMoveSession(props) {
       const game0 = parsed.data;
       if (game0 !== "not_a_timeloss" && game0 !== "not_abandoned") {
         dbgameSetter(game0);
+      } else if (query === "timeloss") {
+        setRefresh((val) => val + 1);
       }
     } catch (err) {
+      if (query === "timeloss") {
+        setRefresh((val) => val + 1);
+        return;
+      }
       setError(
         `checkTime with query: ${query} for metaGame ${gameRef.current.metaGame} and game ${gameRef.current.id} and failed with error: ${err.message}`
       );
     }
-  }, []);
+  }, [dbgameSetter]);
+
+  useEffect(() => {
+    if (!shouldParticipantPollTimeloss(dbgame)) {
+      return undefined;
+    }
+
+    const pollMs = participantTimelossPollIntervalMs(dbgame);
+
+    const maybeHintTimeloss = () => {
+      const game = gameRef.current;
+      if (!shouldParticipantCallTimelossCheck(game, Date.now())) {
+        return;
+      }
+      checkTime("timeloss");
+    };
+
+    maybeHintTimeloss();
+    const id = window.setInterval(maybeHintTimeloss, pollMs);
+    return () => window.clearInterval(id);
+  }, [
+    checkTime,
+    dbgame,
+    dbgame?.clockHard,
+    dbgame?.gameOver,
+    dbgame?.toMove,
+    dbgame?.playMode,
+  ]);
+
+  useEffect(() => {
+    if (!isArenaGame(dbgame) || dbgame.gameOver || dbgame.toMove === "") {
+      return undefined;
+    }
+    const pollMs = participantTimelossPollIntervalMs();
+    const maybeHintTimeloss = () => {
+      const game = gameRef.current;
+      if (!game) {
+        return;
+      }
+      const now = arenaSyncedNow(game, Date.now());
+      if (shouldArenaTimelossBackupCall(game, now)) {
+        checkTime("timeloss");
+      }
+    };
+    maybeHintTimeloss();
+    const id = window.setInterval(maybeHintTimeloss, pollMs);
+    return () => window.clearInterval(id);
+  }, [
+    checkTime,
+    dbgame,
+    dbgame?.gameOver,
+    dbgame?.id,
+    dbgame?.playMode,
+    dbgame?.toMove,
+  ]);
 
   useEffect(() => {
     if (dbgame === null) return;
@@ -943,6 +1267,14 @@ export function useGameMoveSession(props) {
       if (game.rated === false) {
         parentheticalSetter((val) => [...val, t("gameMove.unrated")]);
       }
+      if (isArenaGame(game)) {
+        parentheticalSetter((val) => [
+          ...val,
+          <Link to={arenaLandingPath()} key="arena-lobby">
+            {t("gameMove.arenaLobbyLink")}
+          </Link>,
+        ]);
+      }
       if (game.teachingMode === true) {
         parentheticalSetter((val) => [...val, t("gameMove.teaching")]);
       }
@@ -952,17 +1284,23 @@ export function useGameMoveSession(props) {
           t("gameMove.explorationDisabled"),
         ]);
       }
-      if (game.toMove !== "" && !game.players.some((p) => p.id === me?.id)) {
-        if (game.clockHard) {
-          if (anyOnClockPlayerTimedOut(game)) {
-            checkTime("timeloss");
-          }
-        }
+      if (
+        game.toMove !== "" &&
+        !game.players.some((p) => p.id === me?.id) &&
+        game.clockHard &&
+        !isArenaGame(game) &&
+        anyOnClockPlayerTimedOut(game)
+      ) {
+        checkTime("timeloss");
       }
     };
 
-    // Clock / metadata refresh only — keep exploration tree and move-tree focus.
-    if (!gamePlayfieldChanged(priorGame, game) && priorGame) {
+    // Clock / metadata refresh only — in-progress games; finished snapshots need setupGame.
+    if (
+      !gamePlayfieldChanged(priorGame, game)
+      && priorGame
+      && !isFinishedGameSnapshot(game)
+    ) {
       syncGameSessionFromApi({
         game,
         priorGame,
@@ -1606,6 +1944,7 @@ export function useGameMoveSession(props) {
   }
 
   const applyAuthGamePayload = (game0) => {
+    const nextGame = mergeIncomingArenaGame(game0, gameRef.current);
     const priorNodeCount = explorationRef.current?.nodes?.length ?? 0;
     const priorTip =
       priorNodeCount > 0
@@ -1616,7 +1955,7 @@ export function useGameMoveSession(props) {
         ? game0.players.find((p) => p.id === sessionMe.id)?.settings
         : {};
     setupGame(
-      game0,
+      nextGame,
       gameRef,
       sessionMe,
       explorer,
@@ -1653,7 +1992,7 @@ export function useGameMoveSession(props) {
     if (gameRef.current.customColours) {
       publishGameColors({ state: engineRef.current.state() });
     }
-    dbgameSetter(game0);
+    dbgameSetter(nextGame);
   };
 
   const runTeachingRpc = async (query) => {
@@ -2134,6 +2473,7 @@ export function useGameMoveSession(props) {
 
   const applySubmitMoveResponse = useCallback(
     (game0) => {
+      const nextGame = mergeIncomingArenaGame(game0, gameRef.current);
       setMyMove((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
       const priorNodeCount = explorationRef.current?.nodes?.length ?? 0;
       const priorTip =
@@ -2145,7 +2485,7 @@ export function useGameMoveSession(props) {
           ? game0.players.find((p) => p.id === sessionMe.id)?.settings
           : {};
       setupGame(
-        game0,
+        nextGame,
         gameRef,
         sessionMe,
         explorer,
@@ -2182,7 +2522,7 @@ export function useGameMoveSession(props) {
       if (gameRef.current.customColours) {
         publishGameColors({ state: engineRef.current.state() });
       }
-      dbgameSetter(game0);
+      dbgameSetter(nextGame);
     },
     [
       dbgameSetter,
@@ -2193,6 +2533,7 @@ export function useGameMoveSession(props) {
       sessionDisplayOverride,
       sessionMe,
       setMyMove,
+      mergeIncomingArenaGame,
     ]
   );
 
@@ -2232,7 +2573,13 @@ export function useGameMoveSession(props) {
           gameRef.current.players,
           globalMe.id
         );
-        const res = await callAuthApi("submit_move", {
+        const moveQuery = resolveSubmitMoveQuery(
+          gameRef.current,
+          submitMoveQuery
+        );
+        const moveSentAt =
+          moveQuery === "submit_arena_move" ? Date.now() : undefined;
+        const res = await callAuthApi(moveQuery, {
           id: gameRef.current.id,
           metaGame: gameRef.current.metaGame,
           cbit: cbit,
@@ -2245,6 +2592,7 @@ export function useGameMoveSession(props) {
             explorationRef.current.nodes,
             explorationRef.current.nodes.length
           ),
+          ...(moveSentAt !== undefined ? { moveSentAt } : {}),
         });
         if (!res) {
           return;
@@ -2289,6 +2637,7 @@ export function useGameMoveSession(props) {
       cbit,
       fetchGameAfterSubmitMismatch,
       globalMe?.id,
+      submitMoveQuery,
     ]
   );
 
@@ -3006,6 +3355,11 @@ export function useGameMoveSession(props) {
   };
 
   const handleNextGame = () => {
+    const current = gameRef.current;
+    if (current && isArenaGame(current) && current.gameOver) {
+      navigateToTop(arenaLandingPath());
+      return;
+    }
     // If the current game is in the list, move it to the end.
     const local = [...myMove];
     const idx = local.findIndex((x) => x.id === gameID);
@@ -3065,8 +3419,42 @@ export function useGameMoveSession(props) {
       ? resolvePlayUiToMove(game, explorationRef.current?.nodes, focus)
       : "";
 
+  const arenaOverlayGame = useMemo(() => {
+    if (!dbgame || !isArenaGame(dbgame)) {
+      return null;
+    }
+    return dbgame;
+  }, [dbgame]);
+
+  const arenaCountdownComplete = useMemo(() => {
+    if (arenaCountdownCompleteRef.current) {
+      return true;
+    }
+    if (!dbgame || !isArenaGame(dbgame)) {
+      return false;
+    }
+    if ((dbgame.numMoves ?? 0) > 0) {
+      return true;
+    }
+    const startAt = resolveArenaClockStartAt(dbgame, arenaClockStartAtRef.current);
+    if (startAt === undefined) {
+      return false;
+    }
+    return arenaSyncedNow(dbgame, liveClockNow) >= startAt;
+  }, [dbgame, liveClockNow, arenaSyncRevision]);
+
+  useEffect(() => {
+    if (arenaCountdownComplete) {
+      arenaCountdownCompleteRef.current = true;
+    }
+  }, [arenaCountdownComplete]);
+
   return {
     moveBasePath,
+    liveClockNow,
+    liveClockTicking,
+    arenaOverlayGame,
+    arenaCountdownComplete,
     error,
     isGameLoading: dbgame === null && !error,
     errorMessageRef,

@@ -6,27 +6,31 @@ The game move page is the core gameplay UI.
 
 | Route | Behaviour |
 |-------|-----------|
-| `/move/:metaGame/:cbits/:gameID` | Primary play page; optional `?layout=classic\|strip\|card\|narrative` |
+| `/move/:metaGame/:cbits/:gameID` | Primary play page; optional `?layout=classic\|strip\|card\|narrative\|live` |
+| `/arena/play/:metaGame/:gameID` | Arena live play; optional `?layout=` (uses `gameMoveLayoutLive`) |
+| `/arena/watch/:metaGame/:gameID` | Arena spectate; optional `?layout=` (uses `gameMoveLayoutLive`) |
 | `/move-beta/:metaGame/:cbits/:gameID` | Legacy preview URL → redirects to `/move/...` preserving `?layout=` |
 
 **Layout resolution** (see [`layoutPreference.js`](../src/lib/GameMove/layoutPreference.js)):
 
-1. Valid `?layout=` in the URL → use for this visit (shareable deep links); persisted to localStorage
-2. `localStorage` key `gameMoveLayout` (migrated from `gameMoveBetaLayout`)
-3. Site default: **strip**
+1. Valid `?layout=` in the URL → use for this visit (shareable deep links); persisted to the matching localStorage key for the route kind
+2. **Correspondence** (`/move/…`): `localStorage` key `gameMoveLayout` (migrated from `gameMoveBetaLayout`); default **strip**
+3. **Live arena** (`/arena/play`, `/arena/watch`): `localStorage` key `gameMoveLayoutLive`; default **live**
+4. Arena table lobby offers layout choice (text description) before launch
 
-Preferences are **localStorage only** (per browser/device). No account setting.
+Preferences are **localStorage only** (per browser/device). Correspondence and live arena remember **separate** layout choices. Layout switcher links on arena routes stay on `/arena/play` or `/arena/watch` (via `gameMovePath` `basePath`). No account setting.
 
 ## Layouts
 
 | ID | Component | Summary |
 |----|-----------|---------|
 | `classic` | [`GameMoveClassicLayout.js`](../src/components/GameMove/GameMoveClassicLayout.js) | Original full-page layout |
-| `strip` | [`GameMoveStripLayout.js`](../src/components/GameMove/layouts/GameMoveStripLayout.js) | Board hero, sticky dock, tabbed drawer (default) |
+| `strip` | [`GameMoveStripLayout.js`](../src/components/GameMove/layouts/GameMoveStripLayout.js) | Board hero, sticky dock, tabbed drawer (default on `/move`) |
 | `card` | [`GameMoveCardLayout.js`](../src/components/GameMove/layouts/GameMoveCardLayout.js) | Queue card for playing through your inbox |
 | `narrative` | [`GameMoveNarrativeLayout.js`](../src/components/GameMove/layouts/GameMoveNarrativeLayout.js) | Story column beside the board |
+| `live` | [`GameMoveLiveLayout.js`](../src/components/GameMove/layouts/GameMoveLiveLayout.js) | Clock-first bar, move dock, drawer (default on arena) |
 
-All four layouts are available to anonymous and logged-in users.
+All five layouts are available to anonymous and logged-in users on both correspondence and arena routes (each context remembers its own choice).
 
 ## Key files
 
@@ -45,7 +49,7 @@ All four layouts are available to anonymous and logged-in users.
 
 ## Discoverability
 
-- **Layout picker** — header trigger (`LayoutPickerTrigger`) on all four layouts opens a modal (`LayoutPickerModal`) with descriptions for each layout (`LayoutSwitcher`).
+- **Layout picker** — header trigger (`LayoutPickerTrigger`) on all five layouts opens a modal (`LayoutPickerModal`) with descriptions for each layout (`LayoutSwitcher`).
 - **First-visit hint** — on strip when the user has no saved layout and no `?layout=` URL, a dismissible notice (`LayoutHint`) offers “Change layout”. Dismissal is stored in `gameMoveLayoutHintDismissed`.
 
 There is no permanent floating layout bar.
@@ -69,7 +73,11 @@ Logged-in users call auth `log_gamemove_layout_event`. Anonymous users call the 
 4. **Submit move** — auth query (e.g. `submit_move`) via `callAuthApi`.
 5. **Real-time updates** — WebSocket messages refresh game state when opponent moves.
 
-Backend semantics: [Games and moves](/backend/subsystems/games-and-moves/).
+**Arena time loss:** Hard-clock arena games end on the server (EventBridge Scheduler → `arenaFlagWorker` → `timeloss`). The play page does **not** call auth `timeloss` for `playMode: 'arena'`; seated players and spectators rely on the existing `verb: "game"` WebSocket → `refresh-data` → `get_game` after the server archives the game. Correspondence hard-clock games still use client `timeloss` hints where there is no scheduler.
+
+**Arena start:** When both players ready, the server creates the game and pushes **`arena_launch`** (WebSocket) so both clients navigate to play without waiting on lobby poll. Each client calls **`arena_play_ready`** after the board renders; when both have pinged, the server sets **`arenaClockStartAt`** (now + 3s), broadcasts **`arena_sync`**, and Fischer time runs from that instant. A countdown overlay covers the board until then.
+
+Backend semantics: [Games and moves](/backend/subsystems/games-and-moves/), [Realtime Arena](/backend/subsystems/arena/).
 
 ## Move entry
 

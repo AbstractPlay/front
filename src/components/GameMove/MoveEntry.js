@@ -16,6 +16,7 @@ import {
   isPlayerTimedOut,
   tickActivePlayerRemainingMs,
 } from "../../lib/gameClockDisplay";
+import { isArenaGame } from "../../lib/arena/arenaGame";
 import {
   EXPLORATION_OUTCOME_DRAW,
   EXPLORATION_OUTCOME_UNDECIDED,
@@ -130,6 +131,7 @@ function MoveEntry(props) {
   const handlePie = props.handlers[8];
   const handleDeleteExploration = props.handlers[9];
   const handlePremove = props.handlers[10];
+  const clockNow = props.clockDisplayNow ?? Date.now();
   const { t } = useTranslation();
   // moveState should contain the class that defines the outline colour (see Bulma docs)
   const [moveState, moveStateSetter] = useState("is-success");
@@ -296,7 +298,7 @@ function MoveEntry(props) {
     }
     let canClaimTimeout = false;
     if (uiState === 0 && !submitting) {
-      const now = Date.now();
+      const now = clockNow;
       if (game.simultaneous)
         canClaimTimeout =
           game.players.some(
@@ -320,6 +322,9 @@ function MoveEntry(props) {
             now
           );
       }
+    }
+    if (isArenaGame(game)) {
+      canClaimTimeout = false;
     }
     const drawOffered = game.players.some((p) => p.draw);
     // Am I the last player that needs to agree to a draw?
@@ -403,7 +408,7 @@ function MoveEntry(props) {
                         game,
                         game.toMove,
                         ind,
-                        Date.now()
+                        clockNow
                       )
                     : p.time ?? 0;
                   const showPause = p.clockPaused === true || p.onVacation === true;

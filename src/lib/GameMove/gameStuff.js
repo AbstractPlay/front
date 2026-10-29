@@ -28,6 +28,7 @@ import { toast } from "react-toastify";
 import { useStore } from "../../stores";
 import { formatPlayerDisplayName } from "../../components/Bots/botUtils";
 import { buildEngineMoveResults } from "../engineMoveResults";
+import { applyArenaSiteFieldsToGameRecord } from "../arena/arenaGameRecord.js";
 import { buildRenderDisplayOpts } from "../displaySettings.js";
 import { stackExpandingForRender } from "../renderOutput.js";
 import { buildGameMoveRenderExtras } from "./renderExtras.js";
@@ -97,6 +98,14 @@ export function populateMovesRefIfNeeded(game, movesRef, engineRef) {
   else movesRef.current = engine.moves();
 }
 
+/** True when API payload represents a completed game (not just clock metadata). */
+export function isFinishedGameSnapshot(game) {
+  if (!game) {
+    return false;
+  }
+  return game.toMove === "" || game.gameEnded !== undefined;
+}
+
 /**
  * After a clock/metadata dbgame refresh, re-merge session fields without
  * rebuilding the exploration tree (fixes move UI when globalMe arrives late).
@@ -126,12 +135,30 @@ export function syncGameSessionFromApi({
     merged.variants = priorGame.variants;
     merged.name = priorGame.name;
     merged.hasNewChat = priorGame.hasNewChat;
-    if (priorGame.gameOver !== undefined) {
+    const incomingFinished =
+      game.toMove === "" || game.gameEnded !== undefined;
+    if (
+      priorGame.gameOver !== undefined
+      && !incomingFinished
+    ) {
       merged.gameOver = priorGame.gameOver;
+    }
+  }
+  if (game.toMove === "" || game.gameEnded !== undefined) {
+    if (merged.gameEnded !== undefined) {
+      merged.gameOver = true;
+    } else if (merged.toMove === "") {
+      const engine = GameFactory(merged.metaGame, merged.state);
+      merged.gameOver = Boolean(engine?.gameover);
     }
   }
   applyPlayerSessionFields(merged, me, explorer);
   gameRef.current = merged;
+
+  if (isFinishedGameSnapshot(merged) && merged.gameOver && focusRef.current && explorationRef.current?.nodes) {
+    invalidateExplorationSpineStates(explorationRef.current.nodes);
+    fixMoveOutcomes(explorationRef.current.nodes, focusRef.current.moveNumber);
+  }
 
   const focus = focusRef.current;
   const nodes = explorationRef.current?.nodes;
@@ -333,20 +360,23 @@ export function setupGame(
   // TODO: Add "event" and "round" should those ever be implemented.
   if (engine.gameover && engine.stack.length >= engine.numplayers) {
     gameRecSetter(
-      engine.genRecord({
-        uid: game0.id,
-        players: game0.players.map((p) => {
-          return {
-            name: p.name,
-            uid: p.id,
-          };
+      applyArenaSiteFieldsToGameRecord(
+        engine.genRecord({
+          uid: game0.id,
+          players: game0.players.map((p) => {
+            return {
+              name: p.name,
+              uid: p.id,
+            };
+          }),
+          unrated: !game0.rated,
+          pied:
+            "pieInvoked" in game0 && game0.pieInvoked
+              ? game0.pieInvoked
+              : undefined,
         }),
-        unrated: !game0.rated,
-        pied:
-          "pieInvoked" in game0 && game0.pieInvoked
-            ? game0.pieInvoked
-            : undefined,
-      })
+        game0
+      )
     );
   }
 

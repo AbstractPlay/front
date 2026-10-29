@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useGameMoveLayout } from "../../hooks/useGameMoveLayout";
 import {
@@ -6,10 +6,22 @@ import {
   gameMovePath,
   layoutDescriptionKey,
   layoutLabelKey,
+  PLAY_CONTEXT_LIVE,
   readLayoutPreference,
   writeLayoutPreference,
 } from "../../lib/GameMove/layoutPreference";
 import { trackLayoutSwitch } from "../../lib/GameMove/layoutTracking";
+import { ARENA_MOVE_BASE, ARENA_WATCH_BASE } from "../../lib/arena/arenaMoveBase";
+
+function moveBasePathForContext(playContext, pathname = "") {
+  if (playContext === PLAY_CONTEXT_LIVE) {
+    if (pathname.includes("/arena/watch/")) {
+      return ARENA_WATCH_BASE;
+    }
+    return ARENA_MOVE_BASE;
+  }
+  return undefined;
+}
 
 export default function LayoutSwitcher({
   layoutId,
@@ -18,7 +30,9 @@ export default function LayoutSwitcher({
 }) {
   const { t } = useTranslation();
   const { metaGame, cbits, gameID } = useParams();
-  const { resolvedFrom } = useGameMoveLayout();
+  const { resolvedFrom, playContext } = useGameMoveLayout();
+  const { pathname } = useLocation();
+  const basePath = moveBasePathForContext(playContext, pathname);
 
   const handleLayoutClick = (toLayoutId) => {
     if (toLayoutId !== layoutId) {
@@ -27,10 +41,11 @@ export default function LayoutSwitcher({
         to: toLayoutId,
         resolvedFrom,
         metaGame,
-        storedLayout: readLayoutPreference(),
+        storedLayout: readLayoutPreference(playContext),
+        playContext,
       });
     }
-    writeLayoutPreference(toLayoutId);
+    writeLayoutPreference(toLayoutId, playContext);
     onSelect?.();
   };
 
@@ -46,7 +61,10 @@ export default function LayoutSwitcher({
         {ALL_LAYOUTS.map((id) => (
           <Link
             key={id}
-            to={gameMovePath(metaGame, cbits, gameID, { layout: id })}
+            to={gameMovePath(metaGame, cbits, gameID, {
+              layout: id,
+              basePath,
+            })}
             className={`button is-small ${
               layoutId === id ? "apButton" : "apButtonNeutral"
             }${variant === "modal" ? " game-move-layout-switcher__option" : ""}`}

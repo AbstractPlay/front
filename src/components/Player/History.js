@@ -24,6 +24,7 @@ import {
 } from "../../lib/compareStrings";
 import { isHighlighted, toggleHighlight } from "../../lib/playerGameMarks";
 import { queryMatchesHaystack } from "../../lib/searchQuery";
+import { canonicalGamePlayPathFromRecordSite } from "../../lib/gamePlayLinks";
 import { toast } from "react-toastify";
 
 const columnHelper = createColumnHelper();
@@ -140,6 +141,7 @@ function History({ handleChallenge }) {
             winner,
             dateEnd: new Date(rec.header["date-end"]).getTime(),
             numMoves: Array.isArray(rec.moves) ? rec.moves.length : undefined,
+            playMode: rec.header?.site?.playMode,
           };
         })
         .sort((a, b) => b.dateEnd - a.dateEnd),
@@ -174,9 +176,11 @@ function History({ handleChallenge }) {
               cell: (props) => (
                 <>
                   <Link
-                    to={`/move/${
-                      props.row.original.meta
-                    }/1/${props.getValue()}`}
+                    to={canonicalGamePlayPathFromRecordSite(
+                      { playMode: props.row.original.playMode },
+                      props.row.original.meta,
+                      props.getValue(),
+                    )}
                   >
                     {props.row.original.gameName}
                   </Link>

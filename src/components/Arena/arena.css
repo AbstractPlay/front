@@ -1,0 +1,182 @@
+.arena-panel {
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.arena-panel .subtitle.lined span {
+  background: var(--main-bg-color);
+  color: var(--main-heading-color);
+}
+
+.arena-tc-chip {
+  margin: 0.25rem;
+}
+
+.arena-tc-chip.is-selected {
+  background: var(--secondary-color-3);
+  color: var(--high-contrast-font-color);
+  border-color: var(--secondary-color-3);
+}
+
+.arena-tc-chip.is-selected:hover,
+.arena-tc-chip.is-selected:focus-visible {
+  background: var(--secondary-color-3-lighter);
+  color: var(--high-contrast-font-color);
+}
+
+.arena-create-open {
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.arena-closed-table-section {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--tag-background-color);
+}
+
+.arena-closed-table-section .label {
+  margin-bottom: 0.35rem;
+}
+
+.arena-closed-table-section__picker {
+  margin-top: 0.85rem;
+  margin-bottom: 1.15rem;
+}
+
+.arena-closed-table-section__actions {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Bulma is-hoverable uses scheme vars that fight color-mode; keep hover on AP tokens */
+.arena-panel .table {
+  background-color: var(--main-bg-color);
+  color: var(--main-font-color);
+}
+
+.arena-panel .table thead th {
+  color: var(--main-heading-color);
+}
+
+.arena-panel .table.is-hoverable tbody tr.arena-table-row:hover,
+.arena-panel .table.is-hoverable tbody tr.arena-table-row:hover td {
+  background-color: var(--tag-background-color);
+  color: var(--main-font-color);
+}
+
+.arena-seat-column {
+  text-align: center;
+}
+
+.arena-seat-occupant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.arena-seat-player-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--main-heading-color);
+  margin-bottom: 0;
+}
+
+.arena-seat-player-name a {
+  color: var(--secondary-color-1);
+}
+
+.arena-seat-player-name a:hover,
+.arena-seat-player-name a:focus-visible {
+  color: var(--secondary-color-3);
+}
+
+.arena-live-banner {
+  background: var(--secondary-color-3-bg);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.arena-table-layout-picker__intro {
+  margin-bottom: 0.75rem;
+}
+
+.arena-table-layout-picker__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.arena-table-layout-picker__description {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.arena-active-game {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  background: var(--secondary-color-3-bg);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+}
+
+.arena-active-game__text {
+  margin: 0;
+}
+
+.arena-panel--locked {
+  opacity: 0.85;
+}
+
+.arena-panel__locked-hint {
+  margin-bottom: 1rem;
+}
+
+.arena-start-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--main-bg-color) 55%, transparent);
+  pointer-events: all;
+}
+
+.arena-start-overlay__card {
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 8px 32px var(--dropshadow-target-start);
+  max-width: min(90vw, 22rem);
+}
+
+.arena-start-overlay__title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--main-heading-color);
+}
+
+.arena-start-overlay__sub {
+  margin: 0.75rem 0 0;
+  font-size: 0.95rem;
+  color: var(--secondary-font-color);
+}

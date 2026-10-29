@@ -46,12 +46,17 @@ import { useStorageState } from "react-use-storage-state";
 import { loadAnnouncementsBellBootstrap } from "../lib/announcements/loadNews";
 import ThemeApplicator from "../components/ThemeApplicator";
 import MyWebSocket from "../components/MyWebSocket";
+import ArenaLaunchListener from "../components/Arena/ArenaLaunchListener";
 import GameWatch from "../components/GameWatch";
 import ProfileBootstrap from "../components/ProfileBootstrap";
 import { resolveAuthSession } from "../lib/authSession";
 import ErrorBoundary from "../components/ErrorBoundary";
 import ChunkLoadRecoveryBoot from "../components/ChunkLoadRecoveryBoot";
 import RecentApUrlRecorder from "../components/Feedback/RecentApUrlRecorder";
+import ArenaLanding from "../components/Arena/ArenaLanding";
+import ArenaTableLobby from "../components/Arena/ArenaTableLobby";
+import ArenaPlayShell from "../components/Arena/ArenaPlayShell";
+import ArenaWatchShell from "../components/Arena/ArenaWatchShell";
 import { useStore } from "../stores";
 import { isAnonymousFriendlyPath } from "../lib/publicPaths";
 import DefaultDocumentTitle from "../components/DefaultDocumentTitle";
@@ -201,13 +206,13 @@ function Bones(props) {
           <TimeAgoLocaleSync />
           <ThemeApplicator />
           <MyWebSocket />
+          <ArenaLaunchListener />
           <GameWatch />
           <ProfileBootstrap />
           <Navbar />
           <section className="section" id="main">
             <ErrorBoundary inline>
               <Routes>
-                <Route path="*" element={<NotFound />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/explore/:mode?" element={<Explore />} />
                 <Route path="/games/:metaGame" element={<Explore />} />
@@ -268,6 +273,19 @@ function Bones(props) {
                 />
                 <Route path="/ladders/:tab?/:metaGame?" element={<Ladders />} />
                 <Route path="/ladder/:ladderid" element={<LadderHub />} />
+                <Route path="/arena" element={<ArenaLanding />} />
+                <Route
+                  path="/arena/table/:metaGame/:tableId"
+                  element={<ArenaTableLobby />}
+                />
+                <Route
+                  path="/arena/play/:metaGame/:gameID"
+                  element={<ArenaPlayShell />}
+                />
+                <Route
+                  path="/arena/watch/:metaGame/:gameID"
+                  element={<ArenaWatchShell />}
+                />
                 <Route path="/play" element={<Play />} />
                 <Route
                   path="/customize/site-theme"
@@ -286,6 +304,7 @@ function Bones(props) {
                 <Route path="/feedback/history/:tab" element={<FeedbackHistory />} />
                 <Route path="/feedback/new" element={<FeedbackNew />} />
                 <Route path="/feedback/:id" element={<FeedbackDetail />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </ErrorBoundary>
           </section>

@@ -43,6 +43,418 @@
     "src": "Where would you like this choice applied?",
     "out": "Dove vorresti applicare questa scelta?"
   },
+  "Arena.acceptSwap": {
+    "src": "Accept swap",
+    "out": "Accetta scambio"
+  },
+  "Arena.actionFailed": {
+    "src": "Arena action failed.",
+    "out": "Azione arena non riuscita."
+  },
+  "Arena.activeGameBanner": {
+    "src": "You have a live arena game in progress.",
+    "out": "Hai una partita arena dal vivo in corso."
+  },
+  "Arena.activeTableBanner": {
+    "src": "You are already seated at an arena table. Return to it before creating or joining another.",
+    "out": "Sei già seduto a un tavolo dell'arena. Torna al tuo tavolo prima di crearne o unirti a un altro."
+  },
+  "Arena.backToLobby": {
+    "src": "Back to Arena",
+    "out": "Torna all'Arena"
+  },
+  "Arena.cancelTable": {
+    "src": "Cancel table",
+    "out": "Annulla tavolo"
+  },
+  "Arena.chooseGameFirst": {
+    "src": "Choose a game first.",
+    "out": "Scegli prima un gioco."
+  },
+  "Arena.clockCopy": {
+    "src": "Arena uses hard Fischer clocks from the site catalog. Correspondence vacation does not pause arena clocks.",
+    "out": "L'Arena utilizza gli orologi Fischer rigidi del catalogo del sito. Le ferie delle partite per corrispondenza non mettono in pausa gli orologi dell'arena."
+  },
+  "Arena.closedTableBadge": {
+    "src": "Invite only",
+    "out": "Solo su invito"
+  },
+  "Arena.closedTableHelp": {
+    "src": "Pick a player, then use Create closed table. Only they can take the empty seat; anyone can open the table page to watch or kibitz in lobby chat.",
+    "out": "Scegli un giocatore, quindi usa Crea tavolo chiuso. Solo quel giocatore potrà occupare il posto vuoto; chiunque può aprire la pagina del tavolo per assistere o commentare nella chat della lobby."
+  },
+  "Arena.closedTableInviteLabel": {
+    "src": "Closed table invite (optional)",
+    "out": "Invito al tavolo chiuso (opzionale)"
+  },
+  "Arena.closedTableLobbyInvite": {
+    "src": "Seat open for {{name}} only. Others can watch and use table chat.",
+    "out": "Posto libero solo per {{name}}. Gli altri possono assistere e usare la chat del tavolo."
+  },
+  "Arena.closedTablePickInvite": {
+    "src": "Choose who may take the seat on a closed table.",
+    "out": "Scegli chi può occupare il posto in un tavolo chiuso."
+  },
+  "Arena.closedTableSelfInvite": {
+    "src": "Closed tables must invite someone other than you.",
+    "out": "I tavoli chiusi devono invitare qualcuno diverso da te."
+  },
+  "Arena.closedTableSpectateOnly": {
+    "src": "You can watch and kibitz here; only the invited player can take a seat.",
+    "out": "Puoi assistere e commentare qui; solo il giocatore invitato può sedersi."
+  },
+  "Arena.colGame": {
+    "src": "Game",
+    "out": "Gioco"
+  },
+  "Arena.colSeats": {
+    "src": "Seats",
+    "out": "Posti"
+  },
+  "Arena.colState": {
+    "src": "State",
+    "out": "Stato"
+  },
+  "Arena.colTc": {
+    "src": "TC",
+    "out": "TC"
+  },
+  "Arena.createClosedTable": {
+    "src": "Create closed table",
+    "out": "Crea tavolo chiuso"
+  },
+  "Arena.createSectionLockedHint": {
+    "src": "Finish or leave your current arena table before starting a new one.",
+    "out": "Termina o abbandona il tuo tavolo arena attuale prima di iniziarne uno nuovo."
+  },
+  "Arena.createTable": {
+    "src": "Create open table",
+    "out": "Crea tavolo aperto"
+  },
+  "Arena.emptySeat": {
+    "src": "Open",
+    "out": "Libero"
+  },
+  "Arena.feedback.clockFairness": {
+    "src": "How fair did the clock feel?",
+    "out": "Quanto ti è sembrato equo l'orologio?"
+  },
+  "Arena.feedback.comment": {
+    "src": "Anything else? (optional)",
+    "out": "Altro? (opzionale)"
+  },
+  "Arena.feedback.dismiss": {
+    "src": "Not now",
+    "out": "Non ora"
+  },
+  "Arena.feedback.intro": {
+    "src": "Optional feedback helps us tune clocks and responsiveness during the beta. Once per game.",
+    "out": "Un feedback facoltativo ci aiuta a calibrare orologi e reattività durante la beta. Una volta per partita."
+  },
+  "Arena.feedback.likert_1": {
+    "src": "1 — Poor",
+    "out": "1 — Scarso"
+  },
+  "Arena.feedback.likert_2": {
+    "src": "2",
+    "out": "2"
+  },
+  "Arena.feedback.likert_3": {
+    "src": "3 — OK",
+    "out": "3 — OK"
+  },
+  "Arena.feedback.likert_4": {
+    "src": "4",
+    "out": "4"
+  },
+  "Arena.feedback.likert_5": {
+    "src": "5 — Great",
+    "out": "5 — Ottimo"
+  },
+  "Arena.feedback.queueAgain": {
+    "src": "Would you play Arena again at this game and time control?",
+    "out": "Giocheresti di nuovo in Arena con questo gioco e questo controllo del tempo?"
+  },
+  "Arena.feedback.queueMaybe": {
+    "src": "Maybe",
+    "out": "Forse"
+  },
+  "Arena.feedback.queueNo": {
+    "src": "No",
+    "out": "No"
+  },
+  "Arena.feedback.queueYes": {
+    "src": "Yes",
+    "out": "Sì"
+  },
+  "Arena.feedback.responsiveness": {
+    "src": "How responsive were moves (lag, delay)?",
+    "out": "Quanto sono state reattive le mosse (lag, ritardi)?"
+  },
+  "Arena.feedback.submit": {
+    "src": "Send feedback",
+    "out": "Invia feedback"
+  },
+  "Arena.feedback.tcFit": {
+    "src": "Was this time control a good fit for this game?",
+    "out": "Questo controllo del tempo era adatto a questo gioco?"
+  },
+  "Arena.feedback.title": {
+    "src": "How was this arena game?",
+    "out": "Com'è stata questa partita arena?"
+  },
+  "Arena.feedback.unfairFlag": {
+    "src": "Did you lose on time in a way that felt unfair?",
+    "out": "Hai perso per il tempo in un modo che ti è sembrato ingiusto?"
+  },
+  "Arena.feedback.unfairNa": {
+    "src": "N/A (did not lose on time)",
+    "out": "N/D (non ho perso per il tempo)"
+  },
+  "Arena.feedback.unfairNo": {
+    "src": "No",
+    "out": "No"
+  },
+  "Arena.feedback.unfairYes": {
+    "src": "Yes",
+    "out": "Sì"
+  },
+  "Arena.filterMetaPlaceholder": {
+    "src": "Filter by game id…",
+    "out": "Filtra per ID gioco…"
+  },
+  "Arena.findGame": {
+    "src": "Find a live game",
+    "out": "Trova una partita dal vivo"
+  },
+  "Arena.intro": {
+    "src": "Play live two-player games with Fischer clocks—from bullet through live tiers. Create an open table for anyone to join, or a closed table that only your invite can seat at (others can still watch and kibitz). All arena games are unrated in this release.\n\nOnly games that support two-player play are listed. Clocks are hard: when your bank reaches zero you lose on time. Correspondence vacation does not pause arena clocks.\n\nBrowse tables below to join someone else's lobby or watch a game in progress. Table chat is available in the lobby; seated players can chat during live play, and anyone may kibitz after the game ends. Arena uses the real-time play board, not the correspondence dashboard, and does not change Glicko ratings while games stay unrated.",
+    "out": "Gioca dal vivo partite a due giocatori con orologi Fischer—dalle modalità bullet ai livelli live. Crea un tavolo aperto a cui chiunque può unirsi, oppure un tavolo chiuso a cui può sedersi solo chi riceve il tuo invito (gli altri possono comunque guardare e commentare). In questa versione, tutte le partite arena sono non classificate.\n\nSono elencati solo i giochi che supportano le partite a due giocatori. Gli orologi sono rigidi: quando la tua riserva di tempo arriva a zero, perdi per il tempo. Le ferie della modalità per corrispondenza non mettono in pausa gli orologi dell'arena.\n\nEsplora i tavoli sottostanti per unirti alla lobby di un altro giocatore o assistere a una partita in corso. La chat del tavolo è disponibile nella lobby; i giocatori seduti possono chattare durante la partita dal vivo e chiunque può commentare a fine partita. L'Arena utilizza il tabellone di gioco in tempo reale, non la plancia della corrispondenza, e non modifica i punteggi Glicko finché le partite restano non classificate."
+  },
+  "Arena.introCollapse": {
+    "src": "Show less",
+    "out": "Mostra meno"
+  },
+  "Arena.introExpand": {
+    "src": "Read more",
+    "out": "Leggi di più"
+  },
+  "Arena.join": {
+    "src": "Join",
+    "out": "Entra"
+  },
+  "Arena.joinBlockedActiveTable": {
+    "src": "Leave your current table first",
+    "out": "Prima abbandona il tuo tavolo attuale"
+  },
+  "Arena.joinTable": {
+    "src": "Take a seat",
+    "out": "Prendi posto"
+  },
+  "Arena.leaveTable": {
+    "src": "Leave",
+    "out": "Esci"
+  },
+  "Arena.loadingTable": {
+    "src": "Loading table…",
+    "out": "Caricamento tavolo…"
+  },
+  "Arena.loadingTables": {
+    "src": "Loading tables…",
+    "out": "Caricamento tavoli…"
+  },
+  "Arena.lobbyLayout.intro": {
+    "src": "Choose how the board opens when this game starts. Saved separately from correspondence games on this device.",
+    "out": "Scegli come si apre la scacchiera all'inizio di questa partita. Impostazione salvata separatamente dalle partite per corrispondenza su questo dispositivo."
+  },
+  "Arena.lobbyLayout.switcherAria": {
+    "src": "Arena play page layout",
+    "out": "Layout pagina di gioco Arena"
+  },
+  "Arena.lobbyLayout.title": {
+    "src": "Play page layout",
+    "out": "Layout pagina di gioco"
+  },
+  "Arena.lobbyState.abandoned": {
+    "src": "Abandoned",
+    "out": "Abbandonato"
+  },
+  "Arena.lobbyState.ended": {
+    "src": "Ended",
+    "out": "Terminato"
+  },
+  "Arena.lobbyState.launching": {
+    "src": "Starting…",
+    "out": "Avvio in corso…"
+  },
+  "Arena.lobbyState.open": {
+    "src": "Open",
+    "out": "Aperto"
+  },
+  "Arena.lobbyState.playing": {
+    "src": "In progress",
+    "out": "In corso"
+  },
+  "Arena.lobbyState.seated": {
+    "src": "Seated",
+    "out": "Occupato"
+  },
+  "Arena.metaGame": {
+    "src": "Game",
+    "out": "Gioco"
+  },
+  "Arena.navTitle": {
+    "src": "Arena (live)",
+    "out": "Arena (dal vivo)"
+  },
+  "Arena.noTables": {
+    "src": "No open arena tables right now.",
+    "out": "Nessun tavolo arena aperto al momento."
+  },
+  "Arena.notReady": {
+    "src": "Not ready",
+    "out": "Non pronto"
+  },
+  "Arena.offerSwap": {
+    "src": "Offer seat swap",
+    "out": "Proponi scambio di posto"
+  },
+  "Arena.openTables": {
+    "src": "Live tables",
+    "out": "Tavoli dal vivo"
+  },
+  "Arena.pageTitle": {
+    "src": "Arena",
+    "out": "Arena"
+  },
+  "Arena.proposeSwap": {
+    "src": "Propose seat swap",
+    "out": "Proponi scambio posto"
+  },
+  "Arena.ready": {
+    "src": "Ready",
+    "out": "Pronto"
+  },
+  "Arena.readyUp": {
+    "src": "Ready",
+    "out": "Pronto"
+  },
+  "Arena.refresh": {
+    "src": "Refresh",
+    "out": "Aggiorna"
+  },
+  "Arena.rejectSwap": {
+    "src": "Decline swap",
+    "out": "Rifiuta scambio"
+  },
+  "Arena.returnToGame": {
+    "src": "Return to game",
+    "out": "Torna alla partita"
+  },
+  "Arena.returnToTable": {
+    "src": "Return to my table",
+    "out": "Torna al mio tavolo"
+  },
+  "Arena.seat": {
+    "src": "Seat {{n}}",
+    "out": "Posto {{n}}"
+  },
+  "Arena.seats": {
+    "src": "Seats",
+    "out": "Posti"
+  },
+  "Arena.selectedVariants": {
+    "src": "Variants: {{label}}",
+    "out": "Varianti: {{label}}"
+  },
+  "Arena.start.countdown": {
+    "src": "Starting in {{count}}…",
+    "out": "Inizio tra {{count}}…"
+  },
+  "Arena.start.countdownHint": {
+    "src": "The clock starts when this reaches zero.",
+    "out": "L'orologio parte quando questo raggiunge lo zero."
+  },
+  "Arena.start.waitingOpponent": {
+    "src": "Waiting for your opponent's board…",
+    "out": "In attesa della plancia del tuo avversario…"
+  },
+  "Arena.swapPending": {
+    "src": "Seat swap proposed — both players must accept and ready again.",
+    "out": "Scambio posto proposto — entrambi i giocatori devono accettare e confermare di essere pronti."
+  },
+  "Arena.swapRespond": {
+    "src": "Your opponent offered to swap seats. Accept or decline, then ready again.",
+    "out": "Il tuo avversario ha proposto di scambiare i posti. Accetta o rifiuta, poi conferma nuovamente di essere pronto."
+  },
+  "Arena.swapWaitingOpponent": {
+    "src": "Seat swap offered — waiting for your opponent to accept or decline.",
+    "out": "Scambio di posto proposto — in attesa che l'avversario accetti o rifiuti."
+  },
+  "Arena.tableChat": {
+    "src": "Table chat",
+    "out": "Chat del tavolo"
+  },
+  "Arena.tableState.playing": {
+    "src": "In progress",
+    "out": "In corso"
+  },
+  "Arena.tableState.seated": {
+    "src": "Negotiating",
+    "out": "In negoziazione"
+  },
+  "Arena.tableState.waiting": {
+    "src": "Waiting",
+    "out": "In attesa"
+  },
+  "Arena.tableTc": {
+    "src": "Time control: {{tc}} ({{label}} Fischer)",
+    "out": "Controllo del tempo: {{tc}} ({{label}} Fischer)"
+  },
+  "Arena.tableTitle": {
+    "src": "{{game}} — Arena table",
+    "out": "{{game}} — Tavolo arena"
+  },
+  "Arena.tcDescription": {
+    "src": "Fischer {{label}}, hard clock.",
+    "out": "Fischer {{label}}, orologio rigido."
+  },
+  "Arena.tier.blitz": {
+    "src": "Blitz",
+    "out": "Blitz"
+  },
+  "Arena.tier.bullet": {
+    "src": "Bullet",
+    "out": "Bullet"
+  },
+  "Arena.tier.live": {
+    "src": "Live",
+    "out": "Live"
+  },
+  "Arena.tier.rapid": {
+    "src": "Rapid",
+    "out": "Rapid"
+  },
+  "Arena.timeControl": {
+    "src": "Time control",
+    "out": "Controllo del tempo"
+  },
+  "Arena.twoPlayerOnly": {
+    "src": "This game does not support two-player arena play.",
+    "out": "Questo gioco non supporta la modalità arena a due giocatori."
+  },
+  "Arena.unready": {
+    "src": "Cancel ready",
+    "out": "Annulla stato pronto"
+  },
+  "Arena.viewTable": {
+    "src": "View",
+    "out": "Visualizza"
+  },
+  "Arena.watch": {
+    "src": "Watch",
+    "out": "Osserva"
+  },
   "AutoMoveToast": {
     "src": "At least one forced move was automatically made. Review the move tree to see each individual state.",
     "out": "È stata eseguita automaticamente almeno una mossa forzata. Esamina l'albero delle mosse per vedere ogni singolo stato."
@@ -5091,6 +5503,10 @@
     "src": "Watching",
     "out": "In osservazione"
   },
+  "gameMove.arenaLobbyLink": {
+    "src": "Arena",
+    "out": "Arena"
+  },
   "gameMove.boardNav.jumpToFirst": {
     "src": "Jump to first frame",
     "out": "Vai al primo frame"
@@ -5267,6 +5683,14 @@
     "src": "Last move:",
     "out": "Ultima mossa:"
   },
+  "gameMove.layout.liveDescription": {
+    "src": "Clock-first layout for live and arena games",
+    "out": "Layout incentrato sull'orologio per partite dal vivo e arena"
+  },
+  "gameMove.layout.liveName": {
+    "src": "Live",
+    "out": "Dal vivo"
+  },
   "gameMove.layout.moreActions": {
     "src": "More",
     "out": "Altro"
@@ -5292,8 +5716,8 @@
     "out": "Narrativo"
   },
   "gameMove.layout.pickerIntro": {
-    "src": "Pick how the game page is arranged on this device. Your choice is remembered in this browser.",
-    "out": "Scegli come disporre la pagina di gioco su questo dispositivo. La tua scelta verrà memorizzata in questo browser."
+    "src": "Pick how the game page is arranged on this device. Correspondence and live arena each remember their own choice in this browser.",
+    "out": "Scegli la disposizione della pagina di gioco su questo dispositivo. Le partite per corrispondenza e l'arena dal vivo ricordano ciascuna la propria preferenza in questo browser."
   },
   "gameMove.layout.pickerOpen": {
     "src": "Change layout (currently {{layout}})",

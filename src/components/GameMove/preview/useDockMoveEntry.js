@@ -9,6 +9,7 @@ import { getFocusNode } from "./moveEntryUtils";
 import { formatSoloOutcome, isSoloGame } from "../../../lib/soloPlay";
 import { isPlayerTimedOut } from "../../../lib/gameClockDisplay";
 import { isTeachingUndoReviewAtCurrentTip } from "../../../lib/teachingModeChallenge";
+import { isArenaGame } from "../../../lib/arena/arenaGame";
 
 export function useDockMoveEntry(props) {
   const [drawoffer, drawofferSetter] = useState(false);
@@ -37,6 +38,7 @@ export function useDockMoveEntry(props) {
   const handlePie = props.handlers[8];
   const handleDeleteExploration = props.handlers[9];
   const handlePremove = props.handlers[10];
+  const clockNow = props.clockDisplayNow ?? Date.now();
 
   const { t } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
@@ -190,7 +192,7 @@ export function useDockMoveEntry(props) {
 
   let canClaimTimeout = false;
   if (uiState === 0 && !submitting && !teachingReview) {
-    const now = Date.now();
+    const now = clockNow;
     if (game.simultaneous) {
       canClaimTimeout =
         game.players.some(
@@ -215,6 +217,9 @@ export function useDockMoveEntry(props) {
           now
         );
     }
+  }
+  if (isArenaGame(game)) {
+    canClaimTimeout = false;
   }
 
   const drawOffered = game.players.some((p) => p.draw);

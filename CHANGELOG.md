@@ -9,20 +9,25 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
-## [1.0.0-ci] - 2026-10-28
+## [1.0.0-ci] - 2026-10-29
 
 ### Added
 
+- **Realtime Arena:** `/arena` landing to browse live tables and create **open** or **invite-only closed** tables (game, Fischer time control, variants); table lobby (ready-up, seat swap, play layout choice, kibitz chat); live play and spectate via `/arena/play` and `/arena/watch` with `submit_arena_move`, synchronized start, server-driven Fischer clocks, and optional post-game feedback. Arena is enabled on prod (removed `VITE_ARENA_UI_DISABLED`). Landing and lobby block creating or joining a second table while `get_my_arena_table` reports an active seat.
 - **Continuous Delta Ladder:** Ladder list and hub UI (`/ladders`, `/ladder/:id`), dashboard Ladders tab (join match pool per ladder when eligible), game-list Event column, profile ladder module, `watchLadders` WebSocket refresh, in-app notification copy/prefs (`ladderChat`, `ladderDecay`, `ladderPointsGain` / `ladderPointsLoss`, `ladderJoin`, `ladderLeave`); ladder surfaces visible in prod (kill-switch removed).
 
 ### Changed
 
+- **Play layouts:** fifth **live** layout (clock-first bar, move dock, drawer) for arena and correspondence; arena play/watch default to **live** via `gameMoveLayoutLive`; in-game layout picker links stay on `/arena/play` or `/arena/watch` routes.
+- **Game links:** profile history, highlights, hub game lists, recent completed, dashboard tables, notifications, and meta recommended games link to **`/arena/play/...`** when the row or record has `playMode: arena` (via `canonicalGamePlayPath`); correspondence and legacy URLs still use `/move/...` (arena bookmarks redirect once).
 - **Tournaments / ladders:** rules intro on the tournaments list, ladder list, and ladder hub keeps the full description in place with a fade and expand/collapse toggle (same pattern as the player profile about box), instead of swapping short and long copy.
 - **Ladder list:** paginated ladder table with the shared TanStack table nav (search, page controls, page size).
+- **Deploy:** static releases use `scripts/deploy-static.mjs` (no S3 bucket wipe, hashed assets before `index.html`); `error.html` auto-retries during rare error-document responses; post-deploy `prune-stale-static.mjs` drops orphaned `static/` / `flags/` objects (inventory-based, not lifecycle expiry on the live site).
 
 ### Fixed
 
 - **Play (Classic layout):** narrow viewports no longer squeeze the move list and chat into a ~15vw column when orientation or mobile browser chrome leaves a stale wide `innerWidth`; sidebar width is CSS-gated at Bulma’s tablet breakpoint and viewport width tracks `visualViewport`, `orientationchange`, and `matchMedia`.
+- **Arena / WebSocket:** parse text frames when Firefox delivers `Blob`/`ArrayBuffer` payloads; arena table launch ignores stale `gameMoveLayoutLive` strip (etc.) unless the player explicitly chose a layout in the lobby or picker; **`watchGames` always merges the current play/watch URL at send time** so move pushes work after deploy without a hard refresh (avoids strict WS filtering when an old tab never registered `/arena/play` in the hook).
 
 ## [1.0.0-ci] - 2026-10-25
 
@@ -56,7 +61,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Composite board rendering:** Game Move and Lab call `renderComposite` when `render()` returns `kind: "composite"`; `panelId` on board clicks; stacking-expanding hover uses `renderColumn(col, row, panelId?)` for the side stack.
 - **Event log:** ply numbers link to that position on the board and move tree.
 - **Tournaments:** tournament chat on `/tournament/{id}` (Markdown, participant/admin post); `watchTournaments` WebSocket refresh; in-app `tournamentChat` notification preference and bell copy.
-- **Ops:** `ap:service` and `ap:stage` cost-allocation tags on the `apfront` Serverless stack, play S3 buckets (via `serverless client deploy`), and CloudFront distributions (via CSP sync).
+- **Ops:** `ap:service` and `ap:stage` cost-allocation tags on the `apfront` Serverless stack, play S3 buckets (via static deploy), and CloudFront distributions (via CSP sync).
 - **Bots:** edit bot screen lists supported games and variant combinations; add or remove entries and save via `update_bot`.
 - **Rules PDF mirrors:** link to hosted rules PDFs (when available) on game Summary and in the in-play game info (i) dialog, via shared `MetaGameLinks`.
 - **Feedback:** attach SVG and Markdown (`.md`) files on bug reports, features, and comments (with PNG/JPEG/WebP, `.txt`, and `.json`).

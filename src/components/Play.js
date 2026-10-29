@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { addResource } from "@abstractplay/gameslib";
 import { callAuthApi } from "../lib/api";
+import { canonicalGamePlayPathForActiveRow } from "../lib/gamePlayLinks";
 import { useStore } from "../stores";
 import PageLoading from "./shared/PageLoading";
 
@@ -47,7 +48,7 @@ function Play(props) {
       myMoveSetter(result);
       if (Array.isArray(result) && result.length > 0) {
         const next = result[0];
-        navigate(`/move/${next.metaGame}/0/${next.id}`);
+        navigate(canonicalGamePlayPathForActiveRow(next));
       } else {
         navigate("/");
       }

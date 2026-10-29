@@ -23,6 +23,7 @@ import LayoutPickerTrigger from "../LayoutPickerTrigger";
 import PlayerColourChip from "../preview/PlayerColourChip";
 import QueueNavButtons from "../preview/QueueNavButtons";
 import DockMiscButtons from "../preview/DockMiscButtons";
+import { isArenaGame } from "../../../lib/arena/arenaGame";
 
 export default function GameMoveNarrativeLayout({ session }) {
   const { t } = useTranslation();
@@ -74,6 +75,7 @@ export default function GameMoveNarrativeLayout({ session }) {
                 t={t}
                 waitingCount={queueCount}
                 onNextGame={handleNextGame}
+                arenaBack={isArenaGame(game) && game.gameOver}
               />
             ) : null}
           </header>

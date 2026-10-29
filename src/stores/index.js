@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { watchGamesForSend } from "../lib/watchGames";
 
 export const useStore = create((set, get) => ({
   authSession: {
@@ -183,8 +184,14 @@ export const useStore = create((set, get) => ({
       desiredWatchGames: Array.isArray(games) ? games : [],
     }),
   syncWatchGames: () => {
-    const { wsSend, desiredWatchGames } = get();
-    wsSend?.("watchGames", { games: desiredWatchGames });
+    const { wsSend, desiredWatchGames, globalMe } = get();
+    if (!wsSend) {
+      return;
+    }
+    const pathname =
+      typeof window !== "undefined" ? window.location.pathname : "";
+    const games = watchGamesForSend(desiredWatchGames, globalMe, pathname);
+    wsSend("watchGames", { games });
   },
 
   invisible: false,

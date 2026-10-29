@@ -17,6 +17,7 @@ import BotAwareName from "../Bots/BotAwareName";
 import { useTranslation } from "react-i18next";
 import { firstNamedListSortingFn } from "../../lib/compareStrings";
 import { unhighlightGame } from "../../lib/playerGameMarks";
+import { canonicalGamePlayPath } from "../../lib/gamePlayLinks";
 import { toast } from "react-toastify";
 import LocalizedTimeAgo from "../LocalizedTimeAgo";
 
@@ -38,6 +39,7 @@ function HighlightsTable({
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
+          playMode: g.playMode,
           gameName: getGameDisplayName(g.metaGame, "Unknown"),
           opponents: (g.players ?? []).filter((p) => p.id !== user.id),
           gameEnded: g.gameEnded || 0,
@@ -54,7 +56,7 @@ function HighlightsTable({
         header: t("tables.game"),
         cell: (props) => (
           <Link
-            to={`/move/${props.row.original.metaGame}/1/${props.row.original.id}`}
+            to={canonicalGamePlayPath(props.row.original, { cbit: 1 })}
           >
             {props.getValue()}
           </Link>

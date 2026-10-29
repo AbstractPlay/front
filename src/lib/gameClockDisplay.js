@@ -3,7 +3,29 @@
  * Falls back to legacy bank math when seeds are absent (older API responses).
  */
 
+import { arenaSyncedNow } from "./arena/applyArenaClockSync.js";
+
+function clockNowForGame(game, now) {
+  return game?.playMode === "arena" ? arenaSyncedNow(game, now) : now;
+}
+
+/** Arena: Fischer from persisted bank + lastMoveTime only (never display seeds). */
+function arenaActiveRemainingMs(player, game, now) {
+  const t = clockNowForGame(game, now);
+  if (player?.time === undefined || game?.lastMoveTime === undefined) {
+    return player?.time ?? 0;
+  }
+  if (!isArenaClientClockLive(game, now)) {
+    return player.time;
+  }
+  return player.time - (t - game.lastMoveTime);
+}
+
 export function tickDisplayRemainingMs(player, game, now = Date.now()) {
+  if (game?.playMode === "arena") {
+    return arenaActiveRemainingMs(player, game, now);
+  }
+  const t = clockNowForGame(game, now);
   if (
     player?.effectiveRemainingMs !== undefined
     && game?.clockDisplayServerTime !== undefined
@@ -11,7 +33,7 @@ export function tickDisplayRemainingMs(player, game, now = Date.now()) {
     if (player.clockPaused) {
       return player.effectiveRemainingMs;
     }
-    const elapsed = Math.max(0, now - game.clockDisplayServerTime);
+    const elapsed = Math.max(0, t - game.clockDisplayServerTime);
     return player.effectiveRemainingMs - elapsed;
   }
   if (player?.time === undefined || game?.lastMoveTime === undefined) {
@@ -20,21 +42,40 @@ export function tickDisplayRemainingMs(player, game, now = Date.now()) {
   return player.time;
 }
 
+/** Fischer clock is running after synchronized arena start countdown. */
+export function isArenaClientClockLive(game, now = Date.now()) {
+  if (game?.playMode !== "arena") {
+    return true;
+  }
+  const startAt = game?.arenaClockStartAt;
+  if (startAt === undefined || startAt === null) {
+    return false;
+  }
+  return clockNowForGame(game, now) >= startAt;
+}
+
 export function tickActivePlayerRemainingMs(player, game, toMove, playerIndex, now = Date.now()) {
   const active = isPlayerIndexOnMove(playerIndex, toMove);
   if (!active) {
     return player?.time ?? 0;
   }
+  if (game?.playMode === "arena") {
+    return arenaActiveRemainingMs(player, game, now);
+  }
+  const t = clockNowForGame(game, now);
   if (
     player?.effectiveRemainingMs !== undefined
     && game?.clockDisplayServerTime !== undefined
   ) {
+    if (player.clockPaused) {
+      return player.effectiveRemainingMs;
+    }
     return tickDisplayRemainingMs(player, game, now);
   }
   if (player?.time === undefined || game?.lastMoveTime === undefined) {
-    return 0;
+    return player?.time ?? 0;
   }
-  return player.time - (now - game.lastMoveTime);
+  return player.time - (t - game.lastMoveTime);
 }
 
 export function isPlayerIndexOnMove(playerIndex, toMove) {
@@ -60,6 +101,54 @@ export function anyOnClockPlayerTimedOut(game, now = Date.now()) {
     return false;
   }
   return game.players.some((p, i) => isPlayerTimedOut(p, game, game.toMove, i, now));
+}
+
+/** Match server arena flag grace before calling timeloss(check). */
+export const ARENA_TIMELOSS_HINT_GRACE_MS = 750;
+
+/**
+ * Hard-clock games: client may call timeloss(check) when display passes this threshold.
+ * Arena: poll from <= 0; backend ARENA_CLOCK_GRACE_MS (see ARENA_TIMELOSS_HINT_GRACE_MS) decides acceptance.
+ * Correspondence: at <= 0.
+ */
+export function anyOnClockPlayerTimedOutForTimelossHint(game, now = Date.now()) {
+  if (!game?.players || game.toMove === "" || game.toMove === undefined) {
+    return false;
+  }
+  const graceMs = 0;
+  return game.players.some((p, i) => {
+    if (!isPlayerIndexOnMove(i, game.toMove)) {
+      return false;
+    }
+    const remaining = tickActivePlayerRemainingMs(
+      p,
+      game,
+      game.toMove,
+      i,
+      now
+    );
+    return remaining <= -graceMs;
+  });
+}
+
+/** True when any on-clock seat's display remaining is <= maxRemainingMs (e.g. -3000 = 3s overtime). */
+export function anyOnClockPlayerRemainingAtMost(game, maxRemainingMs, now = Date.now()) {
+  if (!game?.players || game.toMove === "" || game.toMove === undefined) {
+    return false;
+  }
+  return game.players.some((p, i) => {
+    if (!isPlayerIndexOnMove(i, game.toMove)) {
+      return false;
+    }
+    const remaining = tickActivePlayerRemainingMs(
+      p,
+      game,
+      game.toMove,
+      i,
+      now
+    );
+    return remaining <= maxRemainingMs;
+  });
 }
 
 /**

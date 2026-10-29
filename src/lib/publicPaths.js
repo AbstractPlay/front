@@ -24,5 +24,8 @@ export function isAnonymousFriendlyPath(pathname = window.location.pathname) {
   if (pathname.startsWith("/move/") || pathname.startsWith("/move-beta/")) {
     return true;
   }
+  if (pathname === "/arena" || pathname.startsWith("/arena/")) {
+    return true;
+  }
   return false;
 }

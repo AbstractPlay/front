@@ -16,6 +16,7 @@ import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 import BotAwareName from "../Bots/BotAwareName";
 import { minOpponentOnClockRemainingMs } from "../../lib/gameClockDisplay";
+import { canonicalGamePlayPathForActiveRow } from "../../lib/gamePlayLinks";
 import { GameEventContextCell } from "../shared/GameEventContextCell";
 import { useTranslation } from "react-i18next";
 import {
@@ -73,6 +74,7 @@ function TheirTurnTable(props) {
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
+          playMode: g.playMode,
           gameName: getGameDisplayName(g.metaGame, "Unknown"),
           gameStarted: g.gameStarted || 0,
           lastMove: g.lastMoveTime,
@@ -115,7 +117,7 @@ function TheirTurnTable(props) {
                 }
               >
                 <Link
-                  to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
+                  to={canonicalGamePlayPathForActiveRow(props.row.original)}
                 >
                   {props.getValue()}
                 </Link>

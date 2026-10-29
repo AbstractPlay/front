@@ -13,6 +13,7 @@ function GamePickerTrigger({
   emptyLabel,
   id,
   size = "small",
+  disabled = false,
 }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -29,7 +30,12 @@ function GamePickerTrigger({
         type="button"
         id={id}
         className={`button is-${size} apButtonNeutral`}
-        onClick={() => setOpen(true)}
+        disabled={disabled}
+        onClick={() => {
+          if (!disabled) {
+            setOpen(true);
+          }
+        }}
       >
         {selectedName ?? emptyLabel ?? t("gamePicker.choose")}
       </button>

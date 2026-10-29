@@ -10,6 +10,7 @@ import { useStorageState } from "react-use-storage-state";
 import { useStore } from "../stores";
 import { useAuthSession } from "../hooks/useAuthSession";
 import { REAL_MODE } from "../lib/realMode";
+import { arenaLandingPath } from "../lib/arena/arenaRoutes";
 import {
   DEFAULT_COLOUR_CONTEXT_DARK,
   DEFAULT_COLOUR_CONTEXT_LIGHT,
@@ -160,6 +161,9 @@ function Navbar() {
             </NavbarHoverDropdownLink>
             <NavbarHoverDropdownLink to="/ladders/all">
               {t("Ladder.listTitle")}
+            </NavbarHoverDropdownLink>
+            <NavbarHoverDropdownLink to={arenaLandingPath()}>
+              {t("Arena.navTitle")}
             </NavbarHoverDropdownLink>
             <NavbarHoverDropdownLink to="/events">
               {t("Events.Name")}

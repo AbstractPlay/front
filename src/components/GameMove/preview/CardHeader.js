@@ -4,9 +4,10 @@ import PlayerColourChip from "./PlayerColourChip";
 import QueueNavButtons from "./QueueNavButtons";
 import LastMoveChip from "./LastMoveChip";
 import LayoutPickerTrigger from "../LayoutPickerTrigger";
+import { isArenaGame } from "../../../lib/arena/arenaGame";
 
 function CardHeader({ t, session, layoutContext, highlightNextGame = false }) {
-  const { metaGame, handleNextGame } = session;
+  const { metaGame, handleNextGame, game } = session;
   const {
     gameName,
     parenthetical,
@@ -51,6 +52,7 @@ function CardHeader({ t, session, layoutContext, highlightNextGame = false }) {
             t={t}
             waitingCount={queueCount}
             onNextGame={handleNextGame}
+            arenaBack={isArenaGame(game) && game?.gameOver}
           />
         </div>
       </div>
