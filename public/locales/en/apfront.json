@@ -971,10 +971,15 @@
     "emptySeat": "Open",
     "ready": "Ready",
     "notReady": "Not ready",
-    "joinTable": "Join table",
+    "joinTable": "Take a seat",
     "leaveTable": "Leave",
     "readyUp": "Ready",
     "unready": "Cancel ready",
+    "start": {
+      "waitingOpponent": "Waiting for your opponent's board…",
+      "countdown": "Starting in {{count}}…",
+      "countdownHint": "The clock starts when this reaches zero."
+    },
     "cancelTable": "Cancel table",
     "proposeSwap": "Propose seat swap",
     "offerSwap": "Offer seat swap",

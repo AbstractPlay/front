@@ -254,6 +254,37 @@ export default function MyWebSocket() {
           }
         } else if (msg.verb === "notification") {
           scheduleNotificationsRefresh();
+        } else if (msg.verb === "arena_launch") {
+          const payload = msg.payload;
+          if (payload?.metaGame && payload?.gameId) {
+            window.dispatchEvent(
+              new CustomEvent("arena-launch", {
+                detail: {
+                  metaGame: payload.metaGame,
+                  gameId: payload.gameId,
+                },
+              })
+            );
+          }
+        } else if (msg.verb === "arena_sync") {
+          const payload = msg.payload;
+          if (payload?.metaGame && payload?.gameId) {
+            window.dispatchEvent(
+              new CustomEvent("arena-sync", {
+                detail: {
+                  metaGame: payload.metaGame,
+                  gameId: payload.gameId,
+                  arenaClockStartAt: payload.arenaClockStartAt,
+                  serverTime: payload.serverTime,
+                },
+              })
+            );
+            window.dispatchEvent(
+              new CustomEvent("refresh-data", {
+                detail: { meta: payload.metaGame, id: payload.gameId },
+              })
+            );
+          }
         } else if (msg.verb === "test") {
           toast(`Test message: ${msg.payload}`);
         }

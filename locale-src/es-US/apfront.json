@@ -204,8 +204,8 @@
     "out": "Unirse"
   },
   "Arena.joinTable": {
-    "src": "Join table",
-    "out": "Unirse a la mesa"
+    "src": "Take a seat",
+    "out": "Tomar asiento"
   },
   "Arena.leaveQueue": {
     "src": "Leave queue",
@@ -326,6 +326,18 @@
   "Arena.selectedVariants": {
     "src": "Variants: {{label}}",
     "out": "Variantes: {{label}}"
+  },
+  "Arena.start.countdown": {
+    "src": "Starting in {{count}}…",
+    "out": "Comenzando en {{count}}…"
+  },
+  "Arena.start.countdownHint": {
+    "src": "The clock starts when this reaches zero.",
+    "out": "El reloj comienza cuando esto llegue a cero."
+  },
+  "Arena.start.waitingOpponent": {
+    "src": "Waiting for your opponent's board…",
+    "out": "Esperando el tablero de tu oponente…"
   },
   "Arena.swapPending": {
     "src": "Seat swap proposed — both players must accept and ready again.",

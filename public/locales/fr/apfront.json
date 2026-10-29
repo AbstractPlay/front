@@ -971,10 +971,15 @@
     "emptySeat": "Libre",
     "ready": "Prêt",
     "notReady": "Pas prêt",
-    "joinTable": "Rejoindre la table",
+    "joinTable": "Prendre place",
     "leaveTable": "Quitter",
     "readyUp": "Prêt",
     "unready": "Annuler prêt",
+    "start": {
+      "waitingOpponent": "En attente du plateau de votre adversaire…",
+      "countdown": "Début dans {{count}}…",
+      "countdownHint": "La pendule démarre lorsque ce décompte atteint zéro."
+    },
     "cancelTable": "Annuler la table",
     "proposeSwap": "Proposer d'échanger les places",
     "offerSwap": "Proposer d'échanger les places",

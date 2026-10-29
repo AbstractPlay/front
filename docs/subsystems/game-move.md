@@ -75,6 +75,8 @@ Logged-in users call auth `log_gamemove_layout_event`. Anonymous users call the 
 
 **Arena time loss:** Hard-clock arena games end on the server (EventBridge Scheduler → `arenaFlagWorker` → `timeloss`). The play page does **not** call auth `timeloss` for `playMode: 'arena'`; seated players and spectators rely on the existing `verb: "game"` WebSocket → `refresh-data` → `get_game` after the server archives the game. Correspondence hard-clock games still use client `timeloss` hints where there is no scheduler.
 
+**Arena start:** When both players ready, the server creates the game and pushes **`arena_launch`** (WebSocket) so both clients navigate to play without waiting on lobby poll. Each client calls **`arena_play_ready`** after the board renders; when both have pinged, the server sets **`arenaClockStartAt`** (now + 3s), broadcasts **`arena_sync`**, and Fischer time runs from that instant. A countdown overlay covers the board until then.
+
 Backend semantics: [Games and moves](/backend/subsystems/games-and-moves/), [Realtime Arena](/backend/subsystems/arena/).
 
 ## Move entry

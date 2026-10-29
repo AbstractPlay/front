@@ -112,3 +112,38 @@
 .arena-active-game__text {
   margin: 0;
 }
+
+.arena-start-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--main-bg-color) 55%, transparent);
+  pointer-events: all;
+}
+
+.arena-start-overlay__card {
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 8px 32px var(--dropshadow-target-start);
+  max-width: min(90vw, 22rem);
+}
+
+.arena-start-overlay__title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--main-heading-color);
+}
+
+.arena-start-overlay__sub {
+  margin: 0.75rem 0 0;
+  font-size: 0.95rem;
+  color: var(--secondary-font-color);
+}
