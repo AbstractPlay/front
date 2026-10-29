@@ -10,6 +10,7 @@ import {
   startSoloGameRequest,
 } from "../../lib/soloPlay";
 import { sessionExplorationAllowed } from "../../lib/effectiveGameFlags";
+import { isArenaGame } from "../../lib/arena/arenaGame";
 
 function MiscButtons({
   toMove,
@@ -117,19 +118,24 @@ function MiscButtons({
         <div className="control" style={{ paddingTop: "1em" }}>
           <button className="button apButton is-small" onClick={handleNextGame}>
             <span>
-              {t(
-                myMove.length > 0
-                  ? myMove.filter((g) => g.id !== gameID).length === 0
-                    ? "NextGameLast"
-                    : "NextGame"
-                  : "NextGameNone"
-              )}{" "}
-              {myMove.filter((g) => g.id !== gameID).length > 0
-                ? ` (${myMove.filter((g) => g.id !== gameID).length})`
+              {isArenaGame(game) && game.gameOver
+                ? t("Arena.backToLobby")
+                : t(
+                    myMove.length > 0
+                      ? myMove.filter((g) => g.id !== gameID).length === 0
+                        ? "NextGameLast"
+                        : "NextGame"
+                      : "NextGameNone"
+                  )}{" "}
+              {!isArenaGame(game) || !game.gameOver
+                ? myMove.filter((g) => g.id !== gameID).length > 0
+                  ? ` (${myMove.filter((g) => g.id !== gameID).length})`
+                  : ""
                 : ""}
             </span>
-            {myMove.filter((g) => g.id !== gameID).length === 0 &&
-            myMove.length > 0 ? null : (
+            {isArenaGame(game) && game.gameOver ? null : myMove.filter(
+                (g) => g.id !== gameID
+              ).length === 0 && myMove.length > 0 ? null : (
               <span className="icon">
                 <i className="fa fa-forward"></i>
               </span>

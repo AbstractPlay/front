@@ -11,6 +11,7 @@ import MoveResults from "../MoveResults";
 import PlayerColourChip from "../preview/PlayerColourChip";
 import QueueNavButtons from "../preview/QueueNavButtons";
 import LastMoveChip from "../preview/LastMoveChip";
+import { isArenaGame } from "../../../lib/arena/arenaGame";
 import { useDrawerChatUnread } from "../preview/useDrawerChatUnread";
 import {
   buildBoardProps,
@@ -271,6 +272,7 @@ export function GameMoveContextStrip({ session, layoutContext }) {
             t={t}
             waitingCount={queueCount}
             onNextGame={handleNextGame}
+            arenaBack={isArenaGame(game) && game.gameOver}
           />
         ) : null}
       </div>

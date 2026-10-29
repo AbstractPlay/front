@@ -213,7 +213,6 @@ function Bones(props) {
           <section className="section" id="main">
             <ErrorBoundary inline>
               <Routes>
-                <Route path="*" element={<NotFound />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/explore/:mode?" element={<Explore />} />
                 <Route path="/games/:metaGame" element={<Explore />} />
@@ -305,6 +304,7 @@ function Bones(props) {
                 <Route path="/feedback/history/:tab" element={<FeedbackHistory />} />
                 <Route path="/feedback/new" element={<FeedbackNew />} />
                 <Route path="/feedback/:id" element={<FeedbackDetail />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </ErrorBoundary>
           </section>

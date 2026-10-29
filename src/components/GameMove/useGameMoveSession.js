@@ -19,7 +19,7 @@ import { computeArenaStartOverlay } from "../Arena/ArenaStartOverlay";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
 import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
 import { ladderDetailPathFromGameRef } from "../../lib/ladderRoutes";
-import { arenaTablePath } from "../../lib/arena/arenaRoutes";
+import { arenaLandingPath } from "../../lib/arena/arenaRoutes";
 import { isArenaGame, resolveSubmitMoveQuery } from "../../lib/arena/arenaGame";
 import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import {
@@ -1127,8 +1127,8 @@ export function useGameMoveSession(props) {
       if (isArenaGame(game)) {
         parentheticalSetter((val) => [
           ...val,
-          <Link to={arenaTablePath(game.metaGame, game.id)} key="arena-table">
-            {t("gameMove.arenaTableLink")}
+          <Link to={arenaLandingPath()} key="arena-lobby">
+            {t("gameMove.arenaLobbyLink")}
           </Link>,
         ]);
       }
@@ -3209,6 +3209,11 @@ export function useGameMoveSession(props) {
   };
 
   const handleNextGame = () => {
+    const current = gameRef.current;
+    if (current && isArenaGame(current) && current.gameOver) {
+      navigateToTop(arenaLandingPath());
+      return;
+    }
     // If the current game is in the list, move it to the end.
     const local = [...myMove];
     const idx = local.findIndex((x) => x.id === gameID);

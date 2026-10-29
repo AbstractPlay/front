@@ -5459,9 +5459,9 @@
     "src": "Watching",
     "out": "Observée"
   },
-  "gameMove.arenaTableLink": {
-    "src": "arena table",
-    "out": "table d'arène"
+  "gameMove.arenaLobbyLink": {
+    "src": "Arena",
+    "out": "Arène"
   },
   "gameMove.boardNav.jumpToFirst": {
     "src": "Jump to first frame",

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "../../../stores";
 import { getLivePlayerClockChips } from "./moveEntryUtils";
+import { isArenaGame } from "../../../lib/arena/arenaGame";
 import PlayerColourChip from "./PlayerColourChip";
 import QueueNavButtons from "./QueueNavButtons";
 import LastMoveChip from "./LastMoveChip";
@@ -110,6 +111,7 @@ function StripContextStrip({ session, layoutContext }) {
             t={t}
             waitingCount={queueCount}
             onNextGame={handleNextGame}
+            arenaBack={isArenaGame(game) && game.gameOver}
           />
         ) : null}
         <LayoutPickerTrigger compact={compact} />

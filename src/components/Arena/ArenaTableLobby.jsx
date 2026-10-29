@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, Navigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
 import PageHelmet from "../PageHelmet";
@@ -16,7 +16,7 @@ import {
   arenaTableAction,
   fetchArenaTable,
 } from "../../lib/arena/fetchArena";
-import { arenaLandingPath, arenaPlayPath } from "../../lib/arena/arenaRoutes";
+import { arenaLandingPath, arenaPlayPath, arenaTablePath } from "../../lib/arena/arenaRoutes";
 import ArenaTableLayoutPicker, {
   readArenaTableLayoutChoice,
 } from "./ArenaTableLayoutPicker";
@@ -30,6 +30,8 @@ import "./arena.css";
 export default function ArenaTableLobby() {
   const { t } = useTranslation();
   const { metaGame: metaParam, tableId } = useParams();
+  const [searchParams] = useSearchParams();
+  const tableView = searchParams.get("view") === "table";
   const navigate = useNavigate();
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
@@ -55,13 +57,13 @@ export default function ArenaTableLobby() {
     if (table.metaGame !== metaParam) {
       return;
     }
-    if (table.state === "playing") {
+    if (table.state === "playing" && !tableView) {
       const layout = readArenaTableLayoutChoice();
       navigate(arenaPlayPath(table.metaGame, table.tableId, { layout }), {
         replace: true,
       });
     }
-  }, [table, metaParam, navigate]);
+  }, [table, metaParam, navigate, tableView]);
 
   const comments = table?.comments ?? [];
   const chatPlayers = useMemo(
@@ -179,8 +181,13 @@ export default function ArenaTableLobby() {
     return <PageLoading message={t("Arena.loadingTable")} />;
   }
 
-  if (!table || table.metaGame !== metaParam) {
+  if (!table) {
     return <NotFound />;
+  }
+
+  if (table.metaGame !== metaParam) {
+    const target = arenaTablePath(table.metaGame, table.tableId);
+    return <Navigate to={target} replace />;
   }
 
   const gameName =
@@ -222,6 +229,19 @@ export default function ArenaTableLobby() {
         <p className="has-text-centered">
           <span className="tag">{t(`Arena.lobbyState.${table.state}`, table.state)}</span>
         </p>
+
+        {table.state === "playing" && tableView ? (
+          <p className="has-text-centered">
+            <Link
+              className="apButton"
+              to={arenaPlayPath(table.metaGame, table.tableId, {
+                layout: readArenaTableLayoutChoice(),
+              })}
+            >
+              {t("Arena.returnToGame")}
+            </Link>
+          </p>
+        ) : null}
 
         {actionError ? (
           <p className="help has-text-danger has-text-centered" role="alert">
