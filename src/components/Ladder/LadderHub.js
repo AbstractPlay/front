@@ -7,6 +7,7 @@ import PageLoading from "../shared/PageLoading";
 import NotFound from "../NotFound";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
+import { resolveDisplayName } from "../Bots/botUtils";
 import { formatVariantsJoined } from "../../lib/expandVariants";
 import {
   RECORDS_DOWNLOAD_LINK_REL,
@@ -422,7 +423,9 @@ function LadderHub() {
                   onClick={() => handleChallenge(nearest.userid, true)}
                 >
                   {t("Ladder.challengeNearest", {
-                    name: allUsers?.[nearest.userid]?.name ?? nearest.userid,
+                    name:
+                      resolveDisplayName({ id: nearest.userid }, allUsers) ||
+                      nearest.userid,
                     points: formatLadderPoints(nearest.points ?? 0),
                   })}
                 </button>
@@ -495,7 +498,6 @@ function LadderHub() {
                   <td>
                     <BotAwareName
                       id={row.userid}
-                      name={allUsers?.[row.userid]?.name}
                       users={allUsers}
                       link
                     />

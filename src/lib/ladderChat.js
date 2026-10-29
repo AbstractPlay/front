@@ -13,12 +13,15 @@ export function canCommentLadderChat(me, viewer) {
   return viewer?.membershipStatus === "active";
 }
 
+import { lookupDirectoryName } from "../components/Bots/botUtils";
+
 /** Map ladder board rows to UserChats `players` shape. */
 export function ladderChatPlayers(boardRows, allUsers) {
   return (boardRows ?? [])
     .filter((row) => row.userid)
     .map((row) => {
-      const u = allUsers?.[row.userid];
-      return { id: row.userid, name: u?.name ?? row.userid };
+      const name =
+        lookupDirectoryName(allUsers, row.userid) ?? row.userid;
+      return { id: row.userid, name };
     });
 }
