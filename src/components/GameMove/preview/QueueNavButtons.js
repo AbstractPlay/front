@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { arenaLandingPath } from "../../lib/arena/arenaRoutes";
+import { arenaLandingPath } from "../../../lib/arena/arenaRoutes";
 
 /**
  * Queue navigation for beta layouts: next correspondence game or dashboard.
