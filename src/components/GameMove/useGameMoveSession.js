@@ -20,7 +20,7 @@ import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
 import { ladderDetailPathFromGameRef } from "../../lib/ladderRoutes";
 import { arenaLandingPath } from "../../lib/arena/arenaRoutes";
 import { isArenaGame, resolveSubmitMoveQuery } from "../../lib/arena/arenaGame";
-import { mergeArenaClockSync, resolveArenaClockStartAt } from "../../lib/arena/applyArenaClockSync";
+import { mergeArenaClockSync, resolveArenaClockStartAt, seedArenaServerClockOffset, arenaSyncedNow } from "../../lib/arena/applyArenaClockSync";
 import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import {
   maybeSyncInProgressCommentedFlag,
@@ -286,6 +286,7 @@ export function useGameMoveSession(props) {
   const arenaTimelossBackupAtRef = useRef(0);
   const arenaPlayReadySentRef = useRef(null);
   const arenaClockStartAtRef = useRef(undefined);
+  const arenaServerOffsetRef = useRef(0);
   const [arenaSyncRevision, setArenaSyncRevision] = useState(0);
   // gameID and nodes, an array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
   // for completed games every node might hold a tree of explored moves.
@@ -319,6 +320,9 @@ export function useGameMoveSession(props) {
       return;
     }
     arenaClockStartAtRef.current = arenaClockStartAt;
+    if (serverTime !== undefined && serverTime !== null) {
+      arenaServerOffsetRef.current = serverTime - Date.now();
+    }
     setArenaSyncRevision((v) => v + 1);
     dbgameSetter((prev) => {
       if (!prev || prev.id !== gameID) {
@@ -347,7 +351,8 @@ export function useGameMoveSession(props) {
       return undefined;
     }
     const id = window.setInterval(() => {
-      setLiveClockNow(Date.now());
+      const src = gameRef.current ?? dbgame;
+      setLiveClockNow(arenaSyncedNow(src, Date.now()));
     }, 250);
     return () => window.clearInterval(id);
   }, [arenaLiveClock, dbgame, dbgame?.gameOver, dbgame?.toMove, dbgame?.playMode]);
@@ -405,6 +410,7 @@ export function useGameMoveSession(props) {
       sessionGameIDRef.current = gameID;
       arenaPlayReadySentRef.current = null;
       arenaClockStartAtRef.current = undefined;
+      arenaServerOffsetRef.current = 0;
       setArenaSyncRevision((v) => v + 1);
     }
 
@@ -837,11 +843,15 @@ export function useGameMoveSession(props) {
             data.game.completedGameKey = state.key;
           }
           //   console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
-          dbgameSetter(data.game);
+          dbgameSetter(seedArenaServerClockOffset(data.game));
           if (data.game.arenaClockStartAt !== undefined && data.game.arenaClockStartAt !== null) {
             arenaClockStartAtRef.current = data.game.arenaClockStartAt;
-            setArenaSyncRevision((v) => v + 1);
           }
+          if (data.game.clockDisplayServerTime !== undefined && data.game.clockDisplayServerTime !== null) {
+            arenaServerOffsetRef.current =
+              data.game.clockDisplayServerTime - Date.now();
+          }
+          setArenaSyncRevision((v) => v + 1);
           watchCountSetter(
             typeof data.watchCount === "number" ? data.watchCount : 0
           );
@@ -972,7 +982,10 @@ export function useGameMoveSession(props) {
       }
       arenaPlayReadySentRef.current = gameID;
       if (parsed.data?.arenaClockStartAt !== undefined) {
-        applyArenaClockSync(parsed.data.arenaClockStartAt);
+        applyArenaClockSync(
+          parsed.data.arenaClockStartAt,
+          parsed.data.serverTime
+        );
         setRefresh((val) => val + 1);
       }
     })();
@@ -1033,7 +1046,10 @@ export function useGameMoveSession(props) {
       if (!parsed.ok || parsed.data?.arenaClockStartAt === undefined) {
         return;
       }
-      applyArenaClockSync(parsed.data.arenaClockStartAt);
+      applyArenaClockSync(
+        parsed.data.arenaClockStartAt,
+        parsed.data.serverTime
+      );
       setRefresh((val) => val + 1);
     }, 2500);
     return () => {

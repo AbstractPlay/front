@@ -3,7 +3,14 @@
  * Falls back to legacy bank math when seeds are absent (older API responses).
  */
 
+import { arenaSyncedNow } from "./arena/applyArenaClockSync.js";
+
+function clockNowForGame(game, now) {
+  return game?.playMode === "arena" ? arenaSyncedNow(game, now) : now;
+}
+
 export function tickDisplayRemainingMs(player, game, now = Date.now()) {
+  const t = clockNowForGame(game, now);
   if (
     player?.effectiveRemainingMs !== undefined
     && game?.clockDisplayServerTime !== undefined
@@ -11,7 +18,7 @@ export function tickDisplayRemainingMs(player, game, now = Date.now()) {
     if (player.clockPaused) {
       return player.effectiveRemainingMs;
     }
-    const elapsed = Math.max(0, now - game.clockDisplayServerTime);
+    const elapsed = Math.max(0, t - game.clockDisplayServerTime);
     return player.effectiveRemainingMs - elapsed;
   }
   if (player?.time === undefined || game?.lastMoveTime === undefined) {
@@ -29,10 +36,11 @@ export function isArenaClientClockLive(game, now = Date.now()) {
   if (startAt === undefined || startAt === null) {
     return false;
   }
-  return now >= startAt;
+  return clockNowForGame(game, now) >= startAt;
 }
 
 export function tickActivePlayerRemainingMs(player, game, toMove, playerIndex, now = Date.now()) {
+  const t = clockNowForGame(game, now);
   const active = isPlayerIndexOnMove(playerIndex, toMove);
   if (!active) {
     return player?.time ?? 0;
@@ -52,7 +60,7 @@ export function tickActivePlayerRemainingMs(player, game, toMove, playerIndex, n
     && game?.lastMoveTime !== undefined
     && isArenaClientClockLive(game, now)
   ) {
-    return player.time - (now - game.lastMoveTime);
+    return player.time - (t - game.lastMoveTime);
   }
   if (player?.time === undefined || game?.lastMoveTime === undefined) {
     return player?.time ?? 0;
@@ -60,7 +68,7 @@ export function tickActivePlayerRemainingMs(player, game, toMove, playerIndex, n
   if (game?.playMode === "arena" && !isArenaClientClockLive(game, now)) {
     return player.time;
   }
-  return player.time - (now - game.lastMoveTime);
+  return player.time - (t - game.lastMoveTime);
 }
 
 export function isPlayerIndexOnMove(playerIndex, toMove) {

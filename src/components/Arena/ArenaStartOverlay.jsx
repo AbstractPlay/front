@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { isArenaGame } from "../../lib/arena/arenaGame";
-import { mergeArenaClockSync } from "../../lib/arena/applyArenaClockSync";
+import { computeArenaStartOverlay } from "./ArenaStartOverlay.logic";
 
 /**
  * Full-screen overlay while waiting for the opponent's board or the synchronized start countdown.
@@ -9,37 +8,11 @@ import { mergeArenaClockSync } from "../../lib/arena/applyArenaClockSync";
 export default function ArenaStartOverlay({ session }) {
   const { t } = useTranslation();
   const overlayGame = session?.arenaOverlayGame;
-  const [, overlayTick] = useState(0);
-
-  useEffect(() => {
-    if (!overlayGame || !isArenaGame(overlayGame)) {
-      return undefined;
-    }
-    if (overlayGame.gameOver || overlayGame.toMove === "") {
-      return undefined;
-    }
-    const startAt = overlayGame.arenaClockStartAt;
-    const waiting =
-      startAt === undefined
-      || startAt === null
-      || Date.now() < startAt;
-    if (!waiting) {
-      return undefined;
-    }
-    const id = window.setInterval(() => {
-      overlayTick((n) => n + 1);
-    }, 250);
-    return () => window.clearInterval(id);
-  }, [
-    overlayGame,
-    overlayGame?.arenaClockStartAt,
-    overlayGame?.gameOver,
-    overlayGame?.toMove,
-  ]);
+  const liveClockNow = session?.liveClockNow ?? Date.now();
 
   const overlay = useMemo(
-    () => computeArenaStartOverlay(overlayGame, Date.now()),
-    [overlayGame, overlayTick]
+    () => computeArenaStartOverlay(overlayGame, liveClockNow),
+    [overlayGame, liveClockNow]
   );
 
   const label = useMemo(() => {
@@ -76,17 +49,4 @@ export default function ArenaStartOverlay({ session }) {
   );
 }
 
-export function computeArenaStartOverlay(dbgame, liveClockNow) {
-  if (!dbgame || !isArenaGame(dbgame) || dbgame.gameOver || dbgame.toMove === "") {
-    return null;
-  }
-  const startAt = dbgame.arenaClockStartAt;
-  if (startAt === undefined || startAt === null) {
-    return { visible: true, kind: "waiting" };
-  }
-  if (liveClockNow < startAt) {
-    const seconds = Math.max(1, Math.ceil((startAt - liveClockNow) / 1000));
-    return { visible: true, kind: "countdown", seconds, startAt };
-  }
-  return null;
-}
+export { computeArenaStartOverlay } from "./ArenaStartOverlay.logic";
