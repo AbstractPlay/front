@@ -11,8 +11,13 @@ export default function ArenaStartOverlay({ session }) {
   const liveClockNow = session?.liveClockNow ?? Date.now();
 
   const overlay = useMemo(
-    () => computeArenaStartOverlay(overlayGame, liveClockNow),
-    [overlayGame, liveClockNow]
+    () =>
+      computeArenaStartOverlay(
+        overlayGame,
+        liveClockNow,
+        session?.arenaCountdownComplete
+      ),
+    [overlayGame, liveClockNow, session?.arenaCountdownComplete]
   );
 
   const label = useMemo(() => {

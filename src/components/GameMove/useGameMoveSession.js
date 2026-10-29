@@ -19,7 +19,7 @@ import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
 import { ladderDetailPathFromGameRef } from "../../lib/ladderRoutes";
 import { arenaLandingPath } from "../../lib/arena/arenaRoutes";
 import { isArenaGame, resolveSubmitMoveQuery } from "../../lib/arena/arenaGame";
-import { mergeArenaClockSync, resolveArenaClockStartAt, seedArenaServerClockOffset, arenaSyncedNow } from "../../lib/arena/applyArenaClockSync";
+import { mergeArenaClockSync, resolveArenaClockStartAt, normalizeArenaClientGame, arenaSyncedNow } from "../../lib/arena/applyArenaClockSync";
 import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import {
   maybeSyncInProgressCommentedFlag,
@@ -284,6 +284,7 @@ export function useGameMoveSession(props) {
   const gameRef = useRef(null);
   const arenaPlayReadySentRef = useRef(null);
   const arenaClockStartAtRef = useRef(undefined);
+  const arenaCountdownCompleteRef = useRef(false);
   const arenaServerOffsetRef = useRef(0);
   const [arenaSyncRevision, setArenaSyncRevision] = useState(0);
   // gameID and nodes, an array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
@@ -313,6 +314,28 @@ export function useGameMoveSession(props) {
   const effectiveCustomCss = useGameCustomCss(metaGame, globalMe, customCSS);
   const cbit = parseInt(cbits, 10);
 
+  const mergeIncomingArenaGame = useCallback((game0, prev) => {
+    if (!isArenaGame(game0)) {
+      return game0;
+    }
+    const startAt =
+      game0.arenaClockStartAt ??
+      prev?.arenaClockStartAt ??
+      arenaClockStartAtRef.current;
+    if (startAt !== undefined && startAt !== null) {
+      arenaClockStartAtRef.current = startAt;
+    }
+    return normalizeArenaClientGame(
+      {
+        ...game0,
+        ...(startAt !== undefined && startAt !== null
+          ? { arenaClockStartAt: startAt }
+          : {}),
+      },
+      prev,
+    );
+  }, []);
+
   const applyArenaClockSync = useCallback((arenaClockStartAt, serverTime) => {
     if (arenaClockStartAt === undefined || arenaClockStartAt === null) {
       return;
@@ -326,15 +349,21 @@ export function useGameMoveSession(props) {
       if (!prev || prev.id !== gameID) {
         return prev;
       }
-      return mergeArenaClockSync(prev, { arenaClockStartAt, serverTime });
+      return mergeIncomingArenaGame(
+        mergeArenaClockSync(prev, { arenaClockStartAt, serverTime }),
+        prev,
+      );
     });
     if (gameRef.current?.id === gameID) {
-      gameRef.current = mergeArenaClockSync(gameRef.current, {
-        arenaClockStartAt,
-        serverTime,
-      });
+      gameRef.current = mergeIncomingArenaGame(
+        mergeArenaClockSync(gameRef.current, {
+          arenaClockStartAt,
+          serverTime,
+        }),
+        gameRef.current,
+      );
     }
-  }, [dbgameSetter, gameID]);
+  }, [dbgameSetter, gameID, mergeIncomingArenaGame]);
 
   const resolvedArenaClockStartAt = useMemo(
     () => resolveArenaClockStartAt(dbgame, arenaClockStartAtRef.current),
@@ -349,8 +378,7 @@ export function useGameMoveSession(props) {
       return undefined;
     }
     const id = window.setInterval(() => {
-      const src = gameRef.current ?? dbgame;
-      setLiveClockNow(arenaSyncedNow(src, Date.now()));
+      setLiveClockNow(Date.now());
     }, 250);
     return () => window.clearInterval(id);
   }, [arenaLiveClock, dbgame, dbgame?.gameOver, dbgame?.toMove, dbgame?.playMode]);
@@ -365,7 +393,7 @@ export function useGameMoveSession(props) {
           && (
             !isArenaGame(dbgame)
             || resolvedArenaClockStartAt === undefined
-            || liveClockNow >= resolvedArenaClockStartAt
+            || arenaSyncedNow(dbgame, liveClockNow) >= resolvedArenaClockStartAt
           )
       ),
     [
@@ -408,6 +436,7 @@ export function useGameMoveSession(props) {
       sessionGameIDRef.current = gameID;
       arenaPlayReadySentRef.current = null;
       arenaClockStartAtRef.current = undefined;
+      arenaCountdownCompleteRef.current = false;
       arenaServerOffsetRef.current = 0;
       setArenaSyncRevision((v) => v + 1);
     }
@@ -841,7 +870,7 @@ export function useGameMoveSession(props) {
             data.game.completedGameKey = state.key;
           }
           //   console.log(`Status: ${status}, Data: ${JSON.stringify(data)}`);
-          dbgameSetter(seedArenaServerClockOffset(data.game));
+          dbgameSetter((prev) => mergeIncomingArenaGame(data.game, prev));
           if (data.game.arenaClockStartAt !== undefined && data.game.arenaClockStartAt !== null) {
             arenaClockStartAtRef.current = data.game.arenaClockStartAt;
           }
@@ -1915,6 +1944,7 @@ export function useGameMoveSession(props) {
   }
 
   const applyAuthGamePayload = (game0) => {
+    const nextGame = mergeIncomingArenaGame(game0, gameRef.current);
     const priorNodeCount = explorationRef.current?.nodes?.length ?? 0;
     const priorTip =
       priorNodeCount > 0
@@ -1925,7 +1955,7 @@ export function useGameMoveSession(props) {
         ? game0.players.find((p) => p.id === sessionMe.id)?.settings
         : {};
     setupGame(
-      game0,
+      nextGame,
       gameRef,
       sessionMe,
       explorer,
@@ -1962,7 +1992,7 @@ export function useGameMoveSession(props) {
     if (gameRef.current.customColours) {
       publishGameColors({ state: engineRef.current.state() });
     }
-    dbgameSetter(game0);
+    dbgameSetter(nextGame);
   };
 
   const runTeachingRpc = async (query) => {
@@ -2443,21 +2473,7 @@ export function useGameMoveSession(props) {
 
   const applySubmitMoveResponse = useCallback(
     (game0) => {
-      let nextGame = game0;
-      if (isArenaGame(game0)) {
-        const prev = gameRef.current?.id === game0.id ? gameRef.current : null;
-        nextGame = seedArenaServerClockOffset({
-          ...game0,
-          ...(prev?.arenaServerClockOffsetMs != null
-            ? {
-                arenaServerClockOffsetMs:
-                  game0.arenaServerClockOffsetMs ?? prev.arenaServerClockOffsetMs,
-                clockDisplayServerTime:
-                  game0.clockDisplayServerTime ?? prev.clockDisplayServerTime,
-              }
-            : {}),
-        });
-      }
+      const nextGame = mergeIncomingArenaGame(game0, gameRef.current);
       setMyMove((myMove) => [...myMove.filter((x) => x.id !== gameID)]);
       const priorNodeCount = explorationRef.current?.nodes?.length ?? 0;
       const priorTip =
@@ -2517,6 +2533,7 @@ export function useGameMoveSession(props) {
       sessionDisplayOverride,
       sessionMe,
       setMyMove,
+      mergeIncomingArenaGame,
     ]
   );
 
@@ -3406,18 +3423,38 @@ export function useGameMoveSession(props) {
     if (!dbgame || !isArenaGame(dbgame)) {
       return null;
     }
+    return dbgame;
+  }, [dbgame]);
+
+  const arenaCountdownComplete = useMemo(() => {
+    if (arenaCountdownCompleteRef.current) {
+      return true;
+    }
+    if (!dbgame || !isArenaGame(dbgame)) {
+      return false;
+    }
+    if ((dbgame.numMoves ?? 0) > 0) {
+      return true;
+    }
     const startAt = resolveArenaClockStartAt(dbgame, arenaClockStartAtRef.current);
     if (startAt === undefined) {
-      return dbgame;
+      return false;
     }
-    return mergeArenaClockSync(dbgame, { arenaClockStartAt: startAt });
-  }, [dbgame, arenaSyncRevision]);
+    return arenaSyncedNow(dbgame, liveClockNow) >= startAt;
+  }, [dbgame, liveClockNow, arenaSyncRevision]);
+
+  useEffect(() => {
+    if (arenaCountdownComplete) {
+      arenaCountdownCompleteRef.current = true;
+    }
+  }, [arenaCountdownComplete]);
 
   return {
     moveBasePath,
     liveClockNow,
     liveClockTicking,
     arenaOverlayGame,
+    arenaCountdownComplete,
     error,
     isGameLoading: dbgame === null && !error,
     errorMessageRef,

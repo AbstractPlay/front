@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { mergeArenaClockSync } from "./applyArenaClockSync.js";
 
 describe("mergeArenaClockSync", () => {
-  it("sets lastMoveTime and display seed to match server countdown", () => {
+  it("sets lastMoveTime and server offset to match server countdown", () => {
     const game = {
       id: "g1",
       playMode: "arena",
@@ -20,6 +20,6 @@ describe("mergeArenaClockSync", () => {
     expect(merged.clockDisplayServerTime).toBe(2000);
     expect(merged.arenaServerClockOffsetMs).toBeGreaterThanOrEqual(2000 - after);
     expect(merged.arenaServerClockOffsetMs).toBeLessThanOrEqual(2000 - before);
-    expect(merged.players[0].effectiveRemainingMs).toBe(120_000);
+    expect(merged.players[0].effectiveRemainingMs).toBeUndefined();
   });
 });

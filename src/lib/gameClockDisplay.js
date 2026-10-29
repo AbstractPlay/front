@@ -9,7 +9,22 @@ function clockNowForGame(game, now) {
   return game?.playMode === "arena" ? arenaSyncedNow(game, now) : now;
 }
 
+/** Arena: Fischer from persisted bank + lastMoveTime only (never display seeds). */
+function arenaActiveRemainingMs(player, game, now) {
+  const t = clockNowForGame(game, now);
+  if (player?.time === undefined || game?.lastMoveTime === undefined) {
+    return player?.time ?? 0;
+  }
+  if (!isArenaClientClockLive(game, now)) {
+    return player.time;
+  }
+  return player.time - (t - game.lastMoveTime);
+}
+
 export function tickDisplayRemainingMs(player, game, now = Date.now()) {
+  if (game?.playMode === "arena") {
+    return arenaActiveRemainingMs(player, game, now);
+  }
   const t = clockNowForGame(game, now);
   if (
     player?.effectiveRemainingMs !== undefined
@@ -40,33 +55,25 @@ export function isArenaClientClockLive(game, now = Date.now()) {
 }
 
 export function tickActivePlayerRemainingMs(player, game, toMove, playerIndex, now = Date.now()) {
-  const t = clockNowForGame(game, now);
   const active = isPlayerIndexOnMove(playerIndex, toMove);
   if (!active) {
     return player?.time ?? 0;
   }
+  if (game?.playMode === "arena") {
+    return arenaActiveRemainingMs(player, game, now);
+  }
+  const t = clockNowForGame(game, now);
   if (
     player?.effectiveRemainingMs !== undefined
     && game?.clockDisplayServerTime !== undefined
   ) {
-    if (game?.playMode === "arena" && !isArenaClientClockLive(game, now)) {
+    if (player.clockPaused) {
       return player.effectiveRemainingMs;
     }
     return tickDisplayRemainingMs(player, game, now);
   }
-  if (
-    game?.playMode === "arena"
-    && player?.time !== undefined
-    && game?.lastMoveTime !== undefined
-    && isArenaClientClockLive(game, now)
-  ) {
-    return player.time - (t - game.lastMoveTime);
-  }
   if (player?.time === undefined || game?.lastMoveTime === undefined) {
     return player?.time ?? 0;
-  }
-  if (game?.playMode === "arena" && !isArenaClientClockLive(game, now)) {
-    return player.time;
   }
   return player.time - (t - game.lastMoveTime);
 }

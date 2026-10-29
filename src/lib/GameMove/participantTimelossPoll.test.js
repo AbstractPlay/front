@@ -19,15 +19,16 @@ describe("participantTimelossPoll", () => {
         playMode,
         clockHard: true,
         toMove: "0",
+        numMoves: playMode === "arena" ? 0 : undefined,
         clockDisplayServerTime,
         lastMoveTime: clockDisplayServerTime,
         ...(playMode === "arena"
-          ? { arenaClockStartAt: clockDisplayServerTime }
+          ? { arenaClockStartAt: clockDisplayServerTime - 60_000 }
           : {}),
+        arenaServerClockOffsetMs: playMode === "arena" ? 0 : undefined,
         players: [
           {
             id: onClockPlayerId,
-            effectiveRemainingMs: remainingMs,
             time: remainingMs,
           },
           { id: "opponent", time: 60_000 },

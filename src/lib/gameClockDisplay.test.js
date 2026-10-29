@@ -21,11 +21,25 @@ describe("tickActivePlayerRemainingMs (arena sync)", () => {
       toMove: "0",
       lastMoveTime: 1000,
       arenaClockStartAt: 10_000,
-      clockDisplayServerTime: 1000,
-      players: [{ id: "a", time: 120_000, effectiveRemainingMs: 120_000 }],
+      players: [{ id: "a", time: 120_000 }],
     };
     expect(tickActivePlayerRemainingMs(game.players[0], game, "0", 0, 2000)).toBe(
       120_000
+    );
+  });
+
+  it("ignores effectiveRemainingMs; uses Fischer bank and lastMoveTime", () => {
+    const game = {
+      playMode: "arena",
+      toMove: "0",
+      lastMoveTime: 10_000,
+      arenaClockStartAt: 0,
+      arenaServerClockOffsetMs: 0,
+      clockDisplayServerTime: 10_000,
+      players: [{ id: "a", time: 100_000, effectiveRemainingMs: 50_000 }],
+    };
+    expect(tickActivePlayerRemainingMs(game.players[0], game, "0", 0, 11_000)).toBe(
+      99_000
     );
   });
 });
@@ -35,12 +49,9 @@ describe("anyOnClockPlayerTimedOutForTimelossHint", () => {
     playMode: "arena",
     toMove: "0",
     arenaClockStartAt: 0,
-    clockDisplayServerTime: 1000,
     lastMoveTime: 1000,
-    players: [
-      { id: "a", effectiveRemainingMs: 500, time: 500 },
-      { id: "b", time: 60_000 },
-    ],
+    arenaServerClockOffsetMs: 0,
+    players: [{ id: "a", time: 500 }, { id: "b", time: 60_000 }],
   };
 
   it("hints once display passes zero for arena (server applies grace)", () => {
