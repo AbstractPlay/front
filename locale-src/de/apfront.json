@@ -164,8 +164,8 @@
     "out": "5 — Großartig"
   },
   "Arena.feedback.queueAgain": {
-    "src": "Would you queue again at this game and time control?",
-    "out": "Würdest du dich für dieses Spiel und diese Bedenkzeit erneut einreihen?"
+    "src": "Would you play Arena again at this game and time control?",
+    "out": "Würdest du Arena bei diesem Spiel und dieser Bedenkzeit erneut spielen?"
   },
   "Arena.feedback.queueMaybe": {
     "src": "Maybe",
@@ -220,8 +220,8 @@
     "out": "Live-Partie suchen"
   },
   "Arena.intro": {
-    "src": "Play live two-player games with Fischer clocks—from bullet through live tiers. Use Quick match to pair with someone on the same game and time control, create an open table for anyone to join, or create a closed table that only your invite can seat at (others can still watch and kibitz). All arena games are unrated in this release.\n\nOnly games that support two-player play are listed. Clocks are hard: when your bank reaches zero you lose on time. Correspondence vacation does not pause arena clocks.\n\nBrowse tables below to join a lobby or watch a game in progress. Table chat is available in the lobby; seated players can chat during live play, and anyone may kibitz after the game ends. Arena uses the real-time play board, not the correspondence dashboard, and does not change Glicko ratings while games stay unrated.",
-    "out": "Spiele Live-Partien für zwei Spieler mit Fischer-Uhren – von Bullet bis zu verschiedenen Live-Stufen. Nutze die Schnellsuche, um mit jemandem für dasselbe Spiel und dieselbe Bedenkzeit gepaart zu werden, erstelle einen offenen Tisch, dem jeder beitreten kann, oder erstelle einen geschlossenen Tisch, an dem nur deine eingeladene Person Platz nehmen kann (andere können weiterhin zuschauen und kibitzen). Alle Arena-Partien sind in dieser Version unbewertet.\n\nEs werden nur Spiele aufgeführt, die den Zwei-Spieler-Modus unterstützen. Die Uhren sind strikt: Wenn dein Zeitkonto Null erreicht, verlierst du durch Zeitüberschreitung. Urlaubszeiten für Korrespondenzspiele pausieren die Arena-Uhren nicht.\n\nDurchsuche die folgenden Tische, um einer Lobby beizutreten oder eine laufende Partie zu verfolgen. Der Tisch-Chat steht in der Lobby zur Verfügung; am Tisch sitzende Spieler können während der Live-Partie chatten, und nach Ende der Partie kann jeder kibitzen. Die Arena nutzt das Echtzeit-Spielfeld, nicht das Korrespondenz-Dashboard, und verändert keine Glicko-Wertungen, solange die Partien unbewertet bleiben."
+    "src": "Play live two-player games with Fischer clocks—from bullet through live tiers. Create an open table for anyone to join, or a closed table that only your invite can seat at (others can still watch and kibitz). All arena games are unrated in this release.\n\nOnly games that support two-player play are listed. Clocks are hard: when your bank reaches zero you lose on time. Correspondence vacation does not pause arena clocks.\n\nBrowse tables below to join someone else's lobby or watch a game in progress. Table chat is available in the lobby; seated players can chat during live play, and anyone may kibitz after the game ends. Arena uses the real-time play board, not the correspondence dashboard, and does not change Glicko ratings while games stay unrated.",
+    "out": "Spiele Live-Spiele für zwei Spieler mit Fischer-Uhren – von Bullet bis zu verschiedenen Live-Stufen. Erstelle einen offenen Tisch, dem jeder beitreten kann, oder einen geschlossenen Tisch, an dem nur Eingeladene Platz nehmen können (andere können trotzdem zuschauen und kiebitzen). Alle Arena-Spiele sind in dieser Version ungewertet.\n\nEs werden nur Spiele aufgeführt, die das Spiel zu zweit unterstützen. Die Bedenkzeit ist strikt: Wenn dein Zeitguthaben null erreicht, verlierst du auf Zeit. Der Urlaubsmodus für Korrespondenzspiele pausiert die Arena-Uhren nicht.\n\nDurchsuche unten die Tische, um der Lobby eines anderen Spielers beizutreten oder ein laufendes Spiel anzusehen. Der Tisch-Chat ist in der Lobby verfügbar; Spieler am Tisch können während des Live-Spiels chatten, und nach Spielende kann jeder kiebitzen. Die Arena nutzt das Echtzeit-Spielbrett, nicht das Korrespondenz-Dashboard, und verändert die Glicko-Wertungen nicht, solange die Spiele ungewertet bleiben."
   },
   "Arena.introCollapse": {
     "src": "Show less",
@@ -238,10 +238,6 @@
   "Arena.joinTable": {
     "src": "Take a seat",
     "out": "Platz nehmen"
-  },
-  "Arena.leaveQueue": {
-    "src": "Leave queue",
-    "out": "Warteschlange verlassen"
   },
   "Arena.leaveTable": {
     "src": "Leave",
@@ -322,10 +318,6 @@
   "Arena.proposeSwap": {
     "src": "Propose seat swap",
     "out": "Platztausch vorschlagen"
-  },
-  "Arena.quickMatch": {
-    "src": "Quick match",
-    "out": "Schnellspiel"
   },
   "Arena.ready": {
     "src": "Ready",
