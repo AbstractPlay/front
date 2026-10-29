@@ -5447,10 +5447,6 @@
     "src": "Watching",
     "out": "Observée"
   },
-  "gameMove.arenaLive": {
-    "src": "live arena",
-    "out": "arène en direct"
-  },
   "gameMove.arenaTableLink": {
     "src": "arena table",
     "out": "table d'arène"

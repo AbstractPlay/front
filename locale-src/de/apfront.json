@@ -5447,10 +5447,6 @@
     "src": "Watching",
     "out": "Beobachtet"
   },
-  "gameMove.arenaLive": {
-    "src": "live arena",
-    "out": "Live-Arena"
-  },
   "gameMove.arenaTableLink": {
     "src": "arena table",
     "out": "Arena-Tisch"
