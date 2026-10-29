@@ -21,6 +21,9 @@ describe("participantTimelossPoll", () => {
         toMove: "0",
         clockDisplayServerTime,
         lastMoveTime: clockDisplayServerTime,
+        ...(playMode === "arena"
+          ? { arenaClockStartAt: clockDisplayServerTime }
+          : {}),
         players: [
           {
             id: onClockPlayerId,
