@@ -196,36 +196,6 @@ export default function ArenaLanding() {
   const handleCreateOpenTable = () => handleCreateTable(true);
   const handleCreateClosedTable = () => handleCreateTable(false);
 
-  const handleQuickMatch = () =>
-    runAction(async () => {
-      if (!gameChosen) {
-        throw new Error(t("Arena.chooseGameFirst"));
-      }
-      if (!arenaPlaySupported(metaGame)) {
-        throw new Error(t("Arena.twoPlayerOnly"));
-      }
-      assertVariantsOk();
-      const result = await arenaTableAction("join_arena_queue", arenaMatchPars());
-      if (!result.ok) {
-        throw new Error(result.error ?? t("Arena.actionFailed"));
-      }
-      writeArenaPreferredTcId(arenaTcId);
-      if (result.data?.matched && result.data?.tableId) {
-        navigate(arenaTablePath(metaGame, result.data.tableId));
-      }
-    });
-
-  const handleLeaveQueue = () =>
-    runAction(async () => {
-      if (!gameChosen) {
-        throw new Error(t("Arena.chooseGameFirst"));
-      }
-      const result = await arenaTableAction("leave_arena_queue", arenaMatchPars());
-      if (!result.ok) {
-        throw new Error(result.error ?? t("Arena.actionFailed"));
-      }
-    });
-
   const tableRows = tables ?? [];
 
   const myLiveTable = useMemo(() => {
@@ -352,22 +322,6 @@ export default function ArenaLanding() {
               onClick={handleCreateClosedTable}
             >
               {t("Arena.createClosedTable")}
-            </button>
-            <button
-              type="button"
-              className="button apButton"
-              disabled={busy || !selectedControl || !gameChosen || !variantsValid}
-              onClick={handleQuickMatch}
-            >
-              {t("Arena.quickMatch")}
-            </button>
-            <button
-              type="button"
-              className="button apButtonNeutral"
-              disabled={busy || !selectedControl || !gameChosen}
-              onClick={handleLeaveQueue}
-            >
-              {t("Arena.leaveQueue")}
             </button>
           </div>
         </div>
