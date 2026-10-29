@@ -12,6 +12,8 @@ import {
   participantTimelossPollIntervalMs,
   shouldParticipantCallTimelossCheck,
   shouldParticipantPollTimeloss,
+  shouldArenaTimelossBackupCall,
+  ARENA_TIMELOSS_BACKUP_INTERVAL_MS,
 } from "../../lib/GameMove/participantTimelossPoll";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
 import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
@@ -62,6 +64,7 @@ import {
   syncPlayRenderToFocus,
   populateChecked,
   processNewMove,
+  isFinishedGameSnapshot,
 } from "../../lib/GameMove/gameStuff";
 import { shouldCommitBoardRender } from "../../lib/GameMove/boardRenderCommit";
 import {
@@ -147,13 +150,14 @@ import {
 export const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
 
 /** True when setupGame must rebuild history (new move, state change, etc.). */
-function gamePlayfieldChanged(prev, next) {
+export function gamePlayfieldChanged(prev, next) {
   if (!prev || prev.id !== next.id) return true;
   if (prev.numMoves !== next.numMoves) return true;
   if (prev.toMove !== next.toMove) return true;
   if (prev.state !== next.state) return true;
   if (prev.partialMove !== next.partialMove) return true;
   if (prev.gameOver !== next.gameOver) return true;
+  if (prev.gameEnded !== next.gameEnded) return true;
   if (prev.pieInvoked !== next.pieInvoked) return true;
   return false;
 }
@@ -278,6 +282,7 @@ export function useGameMoveSession(props) {
   const boardImage = useRef();
   const stackImage = useRef();
   const gameRef = useRef(null);
+  const arenaTimelossBackupAtRef = useRef(0);
   // gameID and nodes, an array of GameNodes at each move. For games that are not complete the node at the current move (last entry in the array) holds the tree of explored moves.
   // for completed games every node might hold a tree of explored moves.
   const explorationRef = useRef({ gameID: null, nodes: null });
@@ -841,7 +846,10 @@ export function useGameMoveSession(props) {
     }
 
     // Don't fetch data if user is refreshing a completed game. No point in fetching the game again, the only thing that could have changed is public exploration
-    if (explorationRef.current.gameID === gameID && game && game.gameOver) {
+    if (
+      explorationRef.current.gameID === gameID
+      && gameRef.current?.gameOver
+    ) {
       explorationFetchingRef.current = false;
       explorationFetchedSetter(false);
     } else {
@@ -940,6 +948,33 @@ export function useGameMoveSession(props) {
   ]);
 
   useEffect(() => {
+    if (!liveClockTicking || !isArenaGame(dbgame)) {
+      return undefined;
+    }
+    const game = gameRef.current;
+    if (!game || !shouldArenaTimelossBackupCall(game, liveClockNow)) {
+      return undefined;
+    }
+    const wall = Date.now();
+    if (wall - arenaTimelossBackupAtRef.current < ARENA_TIMELOSS_BACKUP_INTERVAL_MS) {
+      return undefined;
+    }
+    arenaTimelossBackupAtRef.current = wall;
+    checkTime("timeloss");
+    setRefresh((val) => val + 1);
+    return undefined;
+  }, [
+    checkTime,
+    dbgame,
+    dbgame?.gameOver,
+    dbgame?.id,
+    dbgame?.playMode,
+    dbgame?.toMove,
+    liveClockNow,
+    liveClockTicking,
+  ]);
+
+  useEffect(() => {
     if (dbgame === null) return;
 
     const me = sessionMeRef.current;
@@ -1028,7 +1063,6 @@ export function useGameMoveSession(props) {
           <Link to={arenaTablePath(game.metaGame, game.id)} key="arena-table">
             {t("gameMove.arenaTableLink")}
           </Link>,
-          <span key="arena-live">{t("gameMove.arenaLive")}</span>,
         ]);
       }
       if (game.teachingMode === true) {
@@ -1051,8 +1085,12 @@ export function useGameMoveSession(props) {
       }
     };
 
-    // Clock / metadata refresh only — keep exploration tree and move-tree focus.
-    if (!gamePlayfieldChanged(priorGame, game) && priorGame) {
+    // Clock / metadata refresh only — in-progress games; finished snapshots need setupGame.
+    if (
+      !gamePlayfieldChanged(priorGame, game)
+      && priorGame
+      && !isFinishedGameSnapshot(game)
+    ) {
       syncGameSessionFromApi({
         game,
         priorGame,

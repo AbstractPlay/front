@@ -9,7 +9,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
-## [1.0.0-ci] - 2026-10-28
+## [1.0.0-ci] - 2026-10-29
 
 ### Added
 
@@ -18,6 +18,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Changed
 
+- **Arena play:** game title parenthetical links to the arena table only (removed redundant “live arena” label).
 - **Arena landing:** variant picker (`GameVariants`) when creating a table or quick match; variants are sent to `create_arena_table` / `join_arena_queue` and shown in the open-tables list.
 - **Arena table lobby:** choose play-page layout before ready-up (name + short description; separate `gameMoveLayoutLive` storage). Launch navigates to `/arena/play/...?layout=…`.
 - **Play layouts:** fifth **live** layout (clock-first bar, move dock, drawer) for arena and correspondence; arena play/watch default to **live** via `gameMoveLayoutLive`; in-game layout picker links stay on `/arena/play` or `/arena/watch` routes.
@@ -29,6 +30,8 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Arena landing:** seated players in a live game get **Return to game** (play URL) instead of only **Watch**; banner when you have an active table.
 - **Arena play:** moves use `submit_arena_move` when the loaded game is `playMode: arena` (including after opening via `/move/…`); auto-redirect to `/arena/play/…`; layout switcher links use correct arena paths without a stray `cbits` segment.
 - **Arena clocks:** arena end-of-game uses server EventBridge timeloss only (no client `timeloss` polling); play page refreshes on WebSocket `game` updates. **Claim win on time** is hidden. Correspondence hard-clock games still use participant/spectator `timeloss` hints.
+- **Arena clocks:** rare client `timeloss` backup only after ~3s display overtime (every 5s) if the scheduler missed; backend re-arms overdue one-shot schedules in the near future instead of past `at()` times.
+- **Arena play:** completed games refresh on the board after timeloss (WebSocket `game` broadcast from backend; clock-only `get_game` sync no longer keeps `gameOver: false`).
 - **Play (Classic layout):** narrow viewports no longer squeeze the move list and chat into a ~15vw column when orientation or mobile browser chrome leaves a stale wide `innerWidth`; sidebar width is CSS-gated at Bulma’s tablet breakpoint and viewport width tracks `visualViewport`, `orientationchange`, and `matchMedia`.
 
 ## [1.0.0-ci] - 2026-10-25

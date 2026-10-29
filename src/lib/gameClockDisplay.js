@@ -97,6 +97,26 @@ export function anyOnClockPlayerTimedOutForTimelossHint(game, now = Date.now()) 
   });
 }
 
+/** True when any on-clock seat's display remaining is <= maxRemainingMs (e.g. -3000 = 3s overtime). */
+export function anyOnClockPlayerRemainingAtMost(game, maxRemainingMs, now = Date.now()) {
+  if (!game?.players || game.toMove === "" || game.toMove === undefined) {
+    return false;
+  }
+  return game.players.some((p, i) => {
+    if (!isPlayerIndexOnMove(i, game.toMove)) {
+      return false;
+    }
+    const remaining = tickActivePlayerRemainingMs(
+      p,
+      game,
+      game.toMove,
+      i,
+      now
+    );
+    return remaining <= maxRemainingMs;
+  });
+}
+
 /**
  * Minimum ticking clock among opponents still to move (sequential or simultaneous).
  * @param {number} myPlayerIndex seat index of the viewer; excluded from the scan

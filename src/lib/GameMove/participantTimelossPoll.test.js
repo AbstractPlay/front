@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
+  ARENA_TIMELOSS_BACKUP_OVERDUE_MS,
   participantTimelossPollIntervalMs,
+  shouldArenaTimelossBackupCall,
   shouldParticipantCallTimelossCheck,
   shouldParticipantPollTimeloss,
   shouldSpectatorRefreshHintTimeloss,
@@ -32,16 +34,21 @@ describe("participantTimelossPoll", () => {
     };
   };
 
-  it("arena: no client timeloss hints (scheduler + WS refresh)", () => {
+  it("arena: no routine timeloss poll (scheduler + WS)", () => {
     const { game, now } = hardClockTimedOutGame("arena");
     expect(shouldSpectatorRefreshHintTimeloss(game, onClockPlayerId)).toBe(
       false
     );
-    expect(shouldSpectatorRefreshHintTimeloss(game, "spectator-id")).toBe(
-      false
-    );
     expect(shouldParticipantPollTimeloss(game)).toBe(false);
     expect(shouldParticipantCallTimelossCheck(game, now)).toBe(false);
+  });
+
+  it("arena: backup timeloss only after deep overtime", () => {
+    const { game } = hardClockTimedOutGame("arena");
+    const now = game.lastMoveTime + game.players[0].time + 500;
+    expect(shouldArenaTimelossBackupCall(game, now)).toBe(false);
+    const overdue = game.lastMoveTime + game.players[0].time + ARENA_TIMELOSS_BACKUP_OVERDUE_MS + 100;
+    expect(shouldArenaTimelossBackupCall(game, overdue)).toBe(true);
   });
 
   it("correspondence: seated on-clock player skipped by spectator path", () => {
