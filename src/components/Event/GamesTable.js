@@ -11,6 +11,7 @@ import BotAwareName from "../Bots/BotAwareName";
 import { formatPlayerDisplayName } from "../Bots/botUtils";
 import { expandVariants } from "../../lib/expandVariants";
 import { variantSelectionSortingFn } from "../../lib/variantTableSort";
+import { canonicalGamePlayPath } from "../../lib/gamePlayLinks";
 
 function GamesTable({ games, setRefresh, editor, eventid }) {
   const { t, i18n } = useTranslation();
@@ -90,9 +91,13 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
         header: t("tables.game"),
         cell: (props) => (
           <Link
-            to={`/move/${props.row.original.metagame}/${
-              props.row.original.gameover ? 1 : 0
-            }/${props.getValue()}`}
+            to={canonicalGamePlayPath(
+              {
+                metaGame: props.row.original.metagame,
+                id: props.getValue(),
+              },
+              { cbit: props.row.original.gameover ? 1 : 0 },
+            )}
           >
             {props.row.original.gameName}
           </Link>
@@ -246,7 +251,10 @@ function GamesTable({ games, setRefresh, editor, eventid }) {
               components={[
                 <Link
                   key="link"
-                  to={`/move/${arbRec?.metagame}/1/${arbRec?.id}`}
+                  to={canonicalGamePlayPath(
+                    { metaGame: arbRec?.metagame, id: arbRec?.id },
+                    { cbit: 1 },
+                  )}
                 />,
               ]}
             />

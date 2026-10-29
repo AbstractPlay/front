@@ -14,6 +14,18 @@ import {
   formatLadderPoints,
   formatLadderPointsDelta,
 } from "./formatLadderPoints";
+import { canonicalGamePlayPath } from "./gamePlayLinks";
+
+function notificationGameLink(body, cbit) {
+  return canonicalGamePlayPath(
+    {
+      metaGame: body.metaGame,
+      id: body.gameId,
+      playMode: body.playMode,
+    },
+    { cbit },
+  );
+}
 
 function metaGameLabel(metaGame) {
   return getGameDisplayName(metaGame);
@@ -73,7 +85,7 @@ function gameEndScoresSuffix(body) {
 
 function gameEndNotificationMessage(body) {
   const metaGame = metaGameLabel(body.metaGame);
-  const gameLinkTo = `/move/${body.metaGame}/1/${body.gameId}`;
+  const gameLinkTo = notificationGameLink(body, 1);
   const hasOpponent = body.opponentId && body.opponentName;
   const soloEnded =
     !hasOpponent &&
@@ -133,7 +145,7 @@ export function NotificationMessage({ body }) {
             i18nKey="me.notifications.message.gameStart"
             values={{ opponentName: body.opponentName, metaGame }}
             components={{
-              gameLink: <Link to={`/move/${body.metaGame}/0/${body.gameId}`} />,
+              gameLink: <Link to={notificationGameLink(body, 0)} />,
             }}
           />
           {variantsSuffix(body.metaGame, body.variants)}
@@ -271,7 +283,7 @@ export function NotificationMessage({ body }) {
             }
             values={{ commenterName: body.commenterName, metaGame }}
             components={{
-              gameLink: <Link to={`/move/${body.metaGame}/1/${body.gameId}`} />,
+              gameLink: <Link to={notificationGameLink(body, 1)} />,
             }}
           />
           {variantsSuffix(body.metaGame, body.variants)}
@@ -347,7 +359,7 @@ export function NotificationMessage({ body }) {
                   <Link to={ladderDetailPathActive(body.ladderId)} />
                 ),
                 gameLink: (
-                  <Link to={`/move/${body.metaGame}/1/${body.gameId}`} />
+                  <Link to={notificationGameLink(body, 1)} />
                 ),
               }}
             />
@@ -369,7 +381,7 @@ export function NotificationMessage({ body }) {
                 <Link to={ladderDetailPathActive(body.ladderId)} />
               ),
               gameLink: (
-                <Link to={`/move/${body.metaGame}/1/${body.gameId}`} />
+                <Link to={notificationGameLink(body, 1)} />
               ),
             }}
           />
@@ -408,7 +420,7 @@ export function NotificationMessage({ body }) {
               detailSuffix: body.detail ? ` (${body.detail})` : "",
             }}
             components={{
-              gameLink: <Link to={`/move/${body.metaGame}/0/${body.gameId}`} />,
+              gameLink: <Link to={notificationGameLink(body, 0)} />,
             }}
           />
           {variantsSuffix(body.metaGame, body.variants)}
@@ -431,7 +443,7 @@ export function NotificationMessage({ body }) {
           {body.gameId && body.metaGame ? (
             <>
               {" "}
-              <Link to={`/move/${body.metaGame}/0/${body.gameId}`}>
+              <Link to={notificationGameLink(body, 0)}>
                 {i18n.t("me.notifications.viewGame", { defaultValue: "View game" })}
               </Link>
             </>

@@ -18,6 +18,7 @@ import { variantSelectionSortingFn } from "../lib/variantTableSort";
 import DataTable, { LIST_TABLE_PROPS } from "./shared/DataTable";
 import { gameListGlobalFilterFn } from "../lib/tableGlobalFilter";
 import HubListEmptyNotice from "./shared/HubListEmptyNotice";
+import { canonicalGamePlayPath } from "../lib/gamePlayLinks";
 import {
   RECORDS_DOWNLOAD_LINK_REL,
   RECORDS_DOWNLOAD_URLS,
@@ -98,6 +99,7 @@ function ListGamesForMeta({ fixedState, metaGame, gameState }) {
               ? expandVariants(rec.variants)
               : null,
           cbit: fixedState === "completed" || gameState === "completed" ? 1 : 0,
+          playMode: rec.playMode,
         };
       }),
     [games, gameState, fixedState, expandVariants]
@@ -233,7 +235,14 @@ function ListGamesForMeta({ fixedState, metaGame, gameState }) {
         id: "actions",
         cell: (props) => (
           <Link
-            to={`/move/${metaGame}/${props.row.original.cbit}/${props.row.original.id}`}
+            to={canonicalGamePlayPath(
+              {
+                metaGame,
+                id: props.row.original.id,
+                playMode: props.row.original.playMode,
+              },
+              { cbit: props.row.original.cbit },
+            )}
             state={{
               commented: props.row.original.commented,
               key: props.row.original.sk,

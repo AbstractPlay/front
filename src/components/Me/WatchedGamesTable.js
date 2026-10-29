@@ -2,6 +2,7 @@ import { useCallback, useMemo, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { callAuthApi } from "../../lib/api";
 import { unwatchGame } from "../../lib/playerGameMarks";
+import { canonicalGamePlayPathForActiveRow } from "../../lib/gamePlayLinks";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import {
   getCoreRowModel,
@@ -89,8 +90,11 @@ function WatchedGamesTable(props) {
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
+          playMode: g.playMode,
           gameName: getGameDisplayName(g.metaGame, "Unknown"),
           completed,
+          toMove: g.toMove,
+          gameEnded: g.gameEnded,
           opponents: g.players.filter((item) => item.id !== globalMe.id),
           lastActivity: Math.max(
             g.lastChat || 0,
@@ -112,7 +116,6 @@ function WatchedGamesTable(props) {
         header: t("tables.game"),
         sortingFn: stringColumnSortingFn(i18n.language),
         cell: (props) => {
-          const cbit = props.row.original.completed ? 1 : 0;
           if (props.getValue() === "Unknown") {
             return <>Unknown</>;
           }
@@ -125,7 +128,7 @@ function WatchedGamesTable(props) {
               }
             >
               <Link
-                to={`/move/${props.row.original.metaGame}/${cbit}/${props.row.original.id}`}
+                to={canonicalGamePlayPathForActiveRow(props.row.original)}
               >
                 {props.getValue()}
               </Link>

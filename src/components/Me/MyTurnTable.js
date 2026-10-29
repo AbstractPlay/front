@@ -24,6 +24,7 @@ import BotAwareName from "../Bots/BotAwareName";
 import {
   tickActivePlayerRemainingMs,
 } from "../../lib/gameClockDisplay";
+import { canonicalGamePlayPathForActiveRow } from "../../lib/gamePlayLinks";
 import { GameEventContextCell } from "../shared/GameEventContextCell";
 
 const allSize = Number.MAX_SAFE_INTEGER;
@@ -76,6 +77,7 @@ function MyTurnTable({ games, fetching }) {
         const ret = {
           id: g.id,
           metaGame: g.metaGame,
+          playMode: g.playMode,
           clockHard: g.clockHard,
           gameName: getGameDisplayName(g.metaGame, "Unknown"),
           gameStarted: g.gameStarted || 0,
@@ -118,7 +120,7 @@ function MyTurnTable({ games, fetching }) {
                 }
               >
                 <Link
-                  to={`/move/${props.row.original.metaGame}/0/${props.row.original.id}`}
+                  to={canonicalGamePlayPathForActiveRow(props.row.original)}
                 >
                   {props.getValue()}
                 </Link>

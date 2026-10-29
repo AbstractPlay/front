@@ -19,6 +19,7 @@ import DataTable, { LIST_TABLE_PROPS } from "./shared/DataTable";
 import HubListEmptyNotice from "./shared/HubListEmptyNotice";
 import { recentGamesGlobalFilterFn } from "../lib/tableGlobalFilter";
 import { triggerDownload } from "../lib/boardExport/downloadBlob";
+import { canonicalGamePlayPath } from "../lib/gamePlayLinks";
 import {
   RECENT_GAMES_DAY_OPTIONS,
   RECENT_GAMES_DEFAULT_DAYS,
@@ -82,6 +83,7 @@ function RecentCompletedGamesList({ metaGame }) {
               ? new Date(rec.lastMoveTime)
               : null,
         numMoves: rec.numMoves,
+        playMode: rec.playMode,
         commented: rec.commented || 0,
         sk: rec.sk,
         players: rec.players,
@@ -240,7 +242,7 @@ function RecentCompletedGamesList({ metaGame }) {
         id: "actions",
         cell: (props) => (
           <Link
-            to={`/move/${props.row.original.metaGame}/1/${props.row.original.id}`}
+            to={canonicalGamePlayPath(props.row.original, { cbit: 1 })}
             state={{
               commented: props.row.original.commented,
               key: props.row.original.sk,
