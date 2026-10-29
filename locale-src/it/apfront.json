@@ -71,6 +71,34 @@
     "src": "Arena uses hard Fischer clocks from the site catalog. Correspondence vacation does not pause arena clocks.",
     "out": "L'Arena utilizza gli orologi Fischer rigidi del catalogo del sito. Le ferie delle partite per corrispondenza non mettono in pausa gli orologi dell'arena."
   },
+  "Arena.closedTableBadge": {
+    "src": "Invite only",
+    "out": "Solo su invito"
+  },
+  "Arena.closedTableHelp": {
+    "src": "Pick a player, then use Create closed table. Only they can take the empty seat; anyone can open the table page to watch or kibitz in lobby chat.",
+    "out": "Scegli un giocatore, quindi usa Crea tavolo chiuso. Solo quel giocatore potrà occupare il posto vuoto; chiunque può aprire la pagina del tavolo per assistere o commentare nella chat della lobby."
+  },
+  "Arena.closedTableInviteLabel": {
+    "src": "Closed table invite (optional)",
+    "out": "Invito al tavolo chiuso (opzionale)"
+  },
+  "Arena.closedTableLobbyInvite": {
+    "src": "Seat open for {{name}} only. Others can watch and use table chat.",
+    "out": "Posto libero solo per {{name}}. Gli altri possono assistere e usare la chat del tavolo."
+  },
+  "Arena.closedTablePickInvite": {
+    "src": "Choose who may take the seat on a closed table.",
+    "out": "Scegli chi può occupare il posto in un tavolo chiuso."
+  },
+  "Arena.closedTableSelfInvite": {
+    "src": "Closed tables must invite someone other than you.",
+    "out": "I tavoli chiusi devono invitare qualcuno diverso da te."
+  },
+  "Arena.closedTableSpectateOnly": {
+    "src": "You can watch and kibitz here; only the invited player can take a seat.",
+    "out": "Puoi assistere e commentare qui; solo il giocatore invitato può sedersi."
+  },
   "Arena.colGame": {
     "src": "Game",
     "out": "Gioco"
@@ -86,6 +114,10 @@
   "Arena.colTc": {
     "src": "TC",
     "out": "TC"
+  },
+  "Arena.createClosedTable": {
+    "src": "Create closed table",
+    "out": "Crea tavolo chiuso"
   },
   "Arena.createTable": {
     "src": "Create open table",
@@ -188,8 +220,8 @@
     "out": "Trova una partita dal vivo"
   },
   "Arena.intro": {
-    "src": "Play live two-player games with Fischer clocks—from bullet through live tiers. Use Quick match to pair with someone on the same game and time control, or create an open table and ready up when a guest joins. All arena games are unrated in this release.\n\nOnly games that support two-player play are listed. Clocks are hard: when your bank reaches zero you lose on time. Correspondence vacation does not pause arena clocks.\n\nBrowse open tables below to join a lobby or watch a game in progress. Table chat is available in the lobby; seated players can chat during live play, and anyone may kibitz after the game ends. Arena uses the real-time play board, not the correspondence dashboard, and does not change Glicko ratings while games stay unrated.",
-    "out": "Gioca a partite dal vivo a due giocatori con orologi Fischer—dalla modalità bullet ai livelli live. Usa l'Abbinamento rapido per trovare un avversario con lo stesso gioco e controllo del tempo, oppure crea un tavolo aperto e dichiarati pronto quando si unisce un ospite. Tutte le partite dell'arena sono non classificate in questa versione.\n\nSono elencati solo i giochi che supportano la modalità a due giocatori. Gli orologi sono rigidi: quando la tua riserva di tempo raggiunge lo zero, perdi per tempo. La vacanza per la modalità corrispondenza non mette in pausa gli orologi dell'arena.\n\nSfoglia i tavoli aperti qui sotto per unirti a una lobby o guardare una partita in corso. La chat del tavolo è disponibile nella lobby; i giocatori seduti possono chattare durante la partita dal vivo e chiunque può chattare da spettatore al termine della partita. Arena utilizza la tavola di gioco in tempo reale, non la dashboard per corrispondenza, e non modifica i punteggi Glicko finché le partite rimangono non classificate."
+    "src": "Play live two-player games with Fischer clocks—from bullet through live tiers. Use Quick match to pair with someone on the same game and time control, create an open table for anyone to join, or create a closed table that only your invite can seat at (others can still watch and kibitz). All arena games are unrated in this release.\n\nOnly games that support two-player play are listed. Clocks are hard: when your bank reaches zero you lose on time. Correspondence vacation does not pause arena clocks.\n\nBrowse tables below to join a lobby or watch a game in progress. Table chat is available in the lobby; seated players can chat during live play, and anyone may kibitz after the game ends. Arena uses the real-time play board, not the correspondence dashboard, and does not change Glicko ratings while games stay unrated.",
+    "out": "Gioca dal vivo a partite per due giocatori con orologi Fischer—dalle partite bullet ai livelli dal vivo. Usa la Partita rapida per abbinarti a qualcuno per lo stesso gioco e controllo del tempo, crea un tavolo aperto a cui chiunque può unirsi, oppure crea un tavolo chiuso a cui può sedersi solo la persona invitata (gli altri possono comunque assistere e commentare). Tutte le partite dell'arena non sono classificate in questa versione.\n\nSono elencati solo i giochi che supportano la modalità a due giocatori. Gli orologi sono rigidi: quando la tua riserva di tempo raggiunge lo zero, perdi per il tempo. Le ferie per corrispondenza non mettono in pausa gli orologi dell'arena.\n\nSfoglia i tavoli qui sotto per entrare in una lobby o guardare una partita in corso. La chat del tavolo è disponibile nella lobby; i giocatori seduti possono chattare durante la partita dal vivo, e chiunque può commentare al termine della partita. L'Arena utilizza la tavola da gioco in tempo reale, non il pannello per corrispondenza, e non modifica i punteggi Glicko finché le partite rimangono non classificate."
   },
   "Arena.introCollapse": {
     "src": "Show less",
@@ -280,8 +312,8 @@
     "out": "Proponi scambio di posto"
   },
   "Arena.openTables": {
-    "src": "Open tables",
-    "out": "Tavoli aperti"
+    "src": "Live tables",
+    "out": "Tavoli dal vivo"
   },
   "Arena.pageTitle": {
     "src": "Arena",
@@ -406,6 +438,10 @@
   "Arena.unready": {
     "src": "Cancel ready",
     "out": "Annulla stato pronto"
+  },
+  "Arena.viewTable": {
+    "src": "View",
+    "out": "Visualizza"
   },
   "Arena.watch": {
     "src": "Watch",

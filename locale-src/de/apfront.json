@@ -71,6 +71,34 @@
     "src": "Arena uses hard Fischer clocks from the site catalog. Correspondence vacation does not pause arena clocks.",
     "out": "Die Arena verwendet feste Fischer-Uhren aus dem Katalog der Website. Urlaubszeiten für Korrespondenzpartien halten Arena-Uhren nicht an."
   },
+  "Arena.closedTableBadge": {
+    "src": "Invite only",
+    "out": "Nur auf Einladung"
+  },
+  "Arena.closedTableHelp": {
+    "src": "Pick a player, then use Create closed table. Only they can take the empty seat; anyone can open the table page to watch or kibitz in lobby chat.",
+    "out": "Wähle einen Spieler aus und klicke dann auf Geschlossenen Tisch erstellen. Nur diese Person kann auf dem freien Platz Platz nehmen; jeder kann die Tischseite öffnen, um zuzuschauen oder im Lobby-Chat zu kibitzen."
+  },
+  "Arena.closedTableInviteLabel": {
+    "src": "Closed table invite (optional)",
+    "out": "Einladung für geschlossenen Tisch (optional)"
+  },
+  "Arena.closedTableLobbyInvite": {
+    "src": "Seat open for {{name}} only. Others can watch and use table chat.",
+    "out": "Platz nur für {{name}} reserviert. Andere können zuschauen und den Tisch-Chat nutzen."
+  },
+  "Arena.closedTablePickInvite": {
+    "src": "Choose who may take the seat on a closed table.",
+    "out": "Wähle aus, wer auf einem geschlossenen Tisch Platz nehmen darf."
+  },
+  "Arena.closedTableSelfInvite": {
+    "src": "Closed tables must invite someone other than you.",
+    "out": "Für geschlossene Tische muss eine andere Person als du selbst eingeladen werden."
+  },
+  "Arena.closedTableSpectateOnly": {
+    "src": "You can watch and kibitz here; only the invited player can take a seat.",
+    "out": "Du kannst hier zuschauen und kibitzen; nur der eingeladene Spieler kann Platz nehmen."
+  },
   "Arena.colGame": {
     "src": "Game",
     "out": "Spiel"
@@ -86,6 +114,10 @@
   "Arena.colTc": {
     "src": "TC",
     "out": "Bedenkzeit"
+  },
+  "Arena.createClosedTable": {
+    "src": "Create closed table",
+    "out": "Geschlossenen Tisch erstellen"
   },
   "Arena.createTable": {
     "src": "Create open table",
@@ -188,8 +220,8 @@
     "out": "Live-Partie suchen"
   },
   "Arena.intro": {
-    "src": "Play live two-player games with Fischer clocks—from bullet through live tiers. Use Quick match to pair with someone on the same game and time control, or create an open table and ready up when a guest joins. All arena games are unrated in this release.\n\nOnly games that support two-player play are listed. Clocks are hard: when your bank reaches zero you lose on time. Correspondence vacation does not pause arena clocks.\n\nBrowse open tables below to join a lobby or watch a game in progress. Table chat is available in the lobby; seated players can chat during live play, and anyone may kibitz after the game ends. Arena uses the real-time play board, not the correspondence dashboard, and does not change Glicko ratings while games stay unrated.",
-    "out": "Spiele Live-Partien für zwei Spieler mit Fischer-Uhren – von Bullet bis hin zu allen Live-Stufen. Nutze die Schnellsuche, um dich mit jemandem für dasselbe Spiel und dieselbe Zeitkontrolle zu paaren, oder erstelle einen offenen Tisch und mache dich bereit, wenn ein Gast beitritt. Alle Arena-Partien sind in dieser Version ungewertet.\n\nEs werden nur Spiele aufgeführt, die Partien für zwei Spieler unterstützen. Die Uhren sind strikt: Wenn dein Zeitkonto null erreicht, verlierst du auf Zeit. Der Urlaubsmodus für Fernschach pausiert keine Arena-Uhren.\n\nDurchsuche unten die offenen Tische, um einer Lobby beizutreten oder eine laufende Partie zu verfolgen. Der Tisch-Chat ist in der Lobby verfügbar; am Tisch sitzende Spieler können während der Live-Partie chatten, und nach Spielende darf jeder kibitzen. Arena nutzt das Echtzeit-Spielfeld, nicht das Fernschach-Dashboard, und ändert keine Glicko-Wertungen, solange die Partien ungewertet bleiben."
+    "src": "Play live two-player games with Fischer clocks—from bullet through live tiers. Use Quick match to pair with someone on the same game and time control, create an open table for anyone to join, or create a closed table that only your invite can seat at (others can still watch and kibitz). All arena games are unrated in this release.\n\nOnly games that support two-player play are listed. Clocks are hard: when your bank reaches zero you lose on time. Correspondence vacation does not pause arena clocks.\n\nBrowse tables below to join a lobby or watch a game in progress. Table chat is available in the lobby; seated players can chat during live play, and anyone may kibitz after the game ends. Arena uses the real-time play board, not the correspondence dashboard, and does not change Glicko ratings while games stay unrated.",
+    "out": "Spiele Live-Partien für zwei Spieler mit Fischer-Uhren – von Bullet bis zu verschiedenen Live-Stufen. Nutze die Schnellsuche, um mit jemandem für dasselbe Spiel und dieselbe Bedenkzeit gepaart zu werden, erstelle einen offenen Tisch, dem jeder beitreten kann, oder erstelle einen geschlossenen Tisch, an dem nur deine eingeladene Person Platz nehmen kann (andere können weiterhin zuschauen und kibitzen). Alle Arena-Partien sind in dieser Version unbewertet.\n\nEs werden nur Spiele aufgeführt, die den Zwei-Spieler-Modus unterstützen. Die Uhren sind strikt: Wenn dein Zeitkonto Null erreicht, verlierst du durch Zeitüberschreitung. Urlaubszeiten für Korrespondenzspiele pausieren die Arena-Uhren nicht.\n\nDurchsuche die folgenden Tische, um einer Lobby beizutreten oder eine laufende Partie zu verfolgen. Der Tisch-Chat steht in der Lobby zur Verfügung; am Tisch sitzende Spieler können während der Live-Partie chatten, und nach Ende der Partie kann jeder kibitzen. Die Arena nutzt das Echtzeit-Spielfeld, nicht das Korrespondenz-Dashboard, und verändert keine Glicko-Wertungen, solange die Partien unbewertet bleiben."
   },
   "Arena.introCollapse": {
     "src": "Show less",
@@ -280,8 +312,8 @@
     "out": "Platztausch anbieten"
   },
   "Arena.openTables": {
-    "src": "Open tables",
-    "out": "Offene Tische"
+    "src": "Live tables",
+    "out": "Live-Tische"
   },
   "Arena.pageTitle": {
     "src": "Arena",
@@ -406,6 +438,10 @@
   "Arena.unready": {
     "src": "Cancel ready",
     "out": "Bereit aufheben"
+  },
+  "Arena.viewTable": {
+    "src": "View",
+    "out": "Ansehen"
   },
   "Arena.watch": {
     "src": "Watch",
