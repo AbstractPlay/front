@@ -6,10 +6,14 @@ import PageHelmet from "../PageHelmet";
 import PageLoading from "../shared/PageLoading";
 import GamePickerTrigger from "../GamePickerTrigger";
 import GameVariants from "../GameVariants";
+import PlayerPickerTrigger from "../PlayerPickerTrigger";
 import { RulesIntroExpandable } from "../shared/RulesIntroExpandable";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { arenaPlaySupported } from "../../lib/arena/arenaGame";
+import { canTakeSeatOnArenaTableRow } from "../../lib/arena/arenaTableSeating";
 import { useStore } from "../../stores";
+import { useEnsureSummaryTier } from "../../hooks/useEnsureSummaryTier";
+import { buildHighestGlickoMap } from "../../lib/glickoMatchOdds";
 import {
   arenaTableAction,
   fetchArenaTables,
@@ -38,8 +42,14 @@ export default function ArenaLanding() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const globalMe = useStore((state) => state.globalMe);
+  const allUsers = useStore((state) => state.users);
+  const summary = useStore((state) => state.summary);
+  const summaryRatingsLoadState = useStore(
+    (state) => state.summaryRatingsLoadState
+  );
   const [metaGame, metaGameSetter] = useState("");
   const [selectedVariants, setSelectedVariants] = useState([]);
+  const [closedInviteUserId, closedInviteUserIdSetter] = useState("");
   const { variantsValid, onValidityChange, resetVariantValidity } =
     useVariantSelectionValidity();
   const [arenaTcId, arenaTcSetter] = useState(() => readArenaPreferredTcId() || "blitz_5_3");
@@ -94,6 +104,17 @@ export default function ArenaLanding() {
   const gameChosen =
     metaGame !== "" && metaGame != null && arenaPlaySupported(metaGame);
 
+  useEnsureSummaryTier(gameChosen ? "ratings" : null);
+  const ratingsReady = summaryRatingsLoadState === "ready";
+  const highestGlickoMap = useMemo(
+    () => buildHighestGlickoMap(summary?.ratings?.highest),
+    [summary?.ratings?.highest]
+  );
+  const pickerUsers = useMemo(
+    () => (allUsers ?? []).filter((u) => u.id && u.id !== globalMe?.id),
+    [allUsers, globalMe?.id]
+  );
+
   const variantSummary = useMemo(
     () =>
       gameChosen ? formatVariantsJoined(metaGame, selectedVariants) : "",
@@ -142,7 +163,7 @@ export default function ArenaLanding() {
     }
   };
 
-  const handleCreateTable = () =>
+  const handleCreateTable = (open) =>
     runAction(async () => {
       if (!gameChosen) {
         throw new Error(t("Arena.chooseGameFirst"));
@@ -151,9 +172,16 @@ export default function ArenaLanding() {
         throw new Error(t("Arena.twoPlayerOnly"));
       }
       assertVariantsOk();
+      if (!open && !closedInviteUserId) {
+        throw new Error(t("Arena.closedTablePickInvite"));
+      }
+      if (!open && closedInviteUserId === globalMe?.id) {
+        throw new Error(t("Arena.closedTableSelfInvite"));
+      }
       const result = await arenaTableAction("create_arena_table", {
         ...arenaMatchPars(),
-        open: true,
+        open,
+        ...(open ? {} : { inviteUserId: closedInviteUserId }),
       });
       if (!result.ok) {
         throw new Error(result.error ?? t("Arena.actionFailed"));
@@ -164,6 +192,9 @@ export default function ArenaLanding() {
         navigate(arenaTablePath(metaGame, tableId));
       }
     });
+
+  const handleCreateOpenTable = () => handleCreateTable(true);
+  const handleCreateClosedTable = () => handleCreateTable(false);
 
   const handleQuickMatch = () =>
     runAction(async () => {
@@ -276,6 +307,24 @@ export default function ArenaLanding() {
           {selectedControl ? (
             <p className="help">{t("Arena.tcDescription", { label: selectedControl.label })}</p>
           ) : null}
+          <p className="label">{t("Arena.closedTableInviteLabel")}</p>
+          <p className="help">{t("Arena.closedTableHelp")}</p>
+          <PlayerPickerTrigger
+            id="arena-closed-invite"
+            value={closedInviteUserId}
+            users={pickerUsers}
+            allUsers={allUsers}
+            slotIndex={0}
+            selectedOpponentIds={
+              closedInviteUserId ? [{ id: closedInviteUserId }] : []
+            }
+            metaGame={metaGame || undefined}
+            selectedVariants={selectedVariants}
+            playerCount={2}
+            highestMap={highestGlickoMap}
+            ratingsReady={ratingsReady}
+            onChange={({ id }) => closedInviteUserIdSetter(id || "")}
+          />
           {actionError ? (
             <p className="help has-text-danger" role="alert">
               {actionError}
@@ -286,9 +335,23 @@ export default function ArenaLanding() {
               type="button"
               className="button apButton"
               disabled={busy || !selectedControl || !gameChosen || !variantsValid}
-              onClick={handleCreateTable}
+              onClick={handleCreateOpenTable}
             >
               {t("Arena.createTable")}
+            </button>
+            <button
+              type="button"
+              className="button apButtonNeutral"
+              disabled={
+                busy ||
+                !selectedControl ||
+                !gameChosen ||
+                !variantsValid ||
+                !closedInviteUserId
+              }
+              onClick={handleCreateClosedTable}
+            >
+              {t("Arena.createClosedTable")}
             </button>
             <button
               type="button"
@@ -387,6 +450,7 @@ export default function ArenaLanding() {
                       );
                       const seatCount = row.seatUserIds?.length ?? 0;
                       const seatedOnRow = row.seatUserIds?.includes(globalMe?.id);
+                      const closedRow = row.open === false;
                       const href = arenaListTableHref(row, globalMe?.id, {
                         layout: liveLayout,
                       });
@@ -395,12 +459,22 @@ export default function ArenaLanding() {
                         actionLabel = seatedOnRow
                           ? t("Arena.returnToGame")
                           : t("Arena.watch");
+                      } else if (
+                        closedRow &&
+                        !canTakeSeatOnArenaTableRow(row, globalMe?.id)
+                      ) {
+                        actionLabel = t("Arena.viewTable");
                       }
                       return (
                         <tr key={row.tableId} className="arena-table-row">
                           <td>
                             {name}
                             {variants ? ` (${variants})` : ""}
+                            {closedRow ? (
+                              <span className="tag is-light ml-2">
+                                {t("Arena.closedTableBadge")}
+                              </span>
+                            ) : null}
                           </td>
                           <td>{row.arenaTcId}</td>
                           <td>{t(`Arena.tableState.${row.state}`, row.state)}</td>

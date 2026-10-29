@@ -25,6 +25,11 @@ import {
   arenaTableChatPlayers,
   canCommentArenaTableChat,
 } from "../../lib/arena/arenaTableChat";
+import {
+  canTakeSeatOnArenaTable,
+  isClosedArenaTable,
+} from "../../lib/arena/arenaTableSeating";
+import { formatUserDisplayName } from "../Bots/botUtils";
 import "./arena.css";
 
 export default function ArenaTableLobby() {
@@ -204,6 +209,16 @@ export default function ArenaTableLobby() {
     swapOfferedBy && swapOfferedBy !== globalMe?.id;
   const showOfferSwap =
     bothSeated && table.viewer?.seated && !swapOfferedBy;
+  const closedTable = isClosedArenaTable(table);
+  const canJoinSeat = canTakeSeatOnArenaTable(table, globalMe?.id);
+  const inviteDisplayName = table.inviteUserId
+    ? formatUserDisplayName(
+        allUsers?.find((u) => u.id === table.inviteUserId) ?? {
+          id: table.inviteUserId,
+        },
+        allUsers
+      )
+    : "";
 
   const showLayoutPicker =
     table.state === "open" ||
@@ -228,7 +243,20 @@ export default function ArenaTableLobby() {
         </p>
         <p className="has-text-centered">
           <span className="tag">{t(`Arena.lobbyState.${table.state}`, table.state)}</span>
+          {closedTable ? (
+            <span className="tag is-light ml-2">{t("Arena.closedTableBadge")}</span>
+          ) : null}
         </p>
+        {closedTable && inviteDisplayName ? (
+          <p className="has-text-centered help">
+            {t("Arena.closedTableLobbyInvite", { name: inviteDisplayName })}
+          </p>
+        ) : null}
+        {closedTable && !table.viewer?.seated && !canJoinSeat ? (
+          <p className="has-text-centered help">
+            {t("Arena.closedTableSpectateOnly")}
+          </p>
+        ) : null}
 
         {table.state === "playing" && tableView ? (
           <p className="has-text-centered">
@@ -283,7 +311,7 @@ export default function ArenaTableLobby() {
           </div>
 
           <div className="buttons is-centered">
-            {!table.viewer?.seated && table.state === "open" ? (
+            {canJoinSeat ? (
               <button
                 type="button"
                 className="button apButton"
