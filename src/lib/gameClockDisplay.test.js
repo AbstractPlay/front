@@ -1,12 +1,40 @@
 import { describe, expect, it } from "vitest";
 import {
   anyOnClockPlayerTimedOutForTimelossHint,
+  isArenaClientClockLive,
+  tickActivePlayerRemainingMs,
 } from "./gameClockDisplay.js";
+
+describe("isArenaClientClockLive", () => {
+  it("stays frozen until arenaClockStartAt is known and reached", () => {
+    const game = { playMode: "arena", arenaClockStartAt: 5000 };
+    expect(isArenaClientClockLive(game, 4999)).toBe(false);
+    expect(isArenaClientClockLive(game, 5000)).toBe(true);
+    expect(isArenaClientClockLive({ playMode: "arena" }, 9000)).toBe(false);
+  });
+});
+
+describe("tickActivePlayerRemainingMs (arena sync)", () => {
+  it("does not drain before synchronized start", () => {
+    const game = {
+      playMode: "arena",
+      toMove: "0",
+      lastMoveTime: 1000,
+      arenaClockStartAt: 10_000,
+      clockDisplayServerTime: 1000,
+      players: [{ id: "a", time: 120_000, effectiveRemainingMs: 120_000 }],
+    };
+    expect(tickActivePlayerRemainingMs(game.players[0], game, "0", 0, 2000)).toBe(
+      120_000
+    );
+  });
+});
 
 describe("anyOnClockPlayerTimedOutForTimelossHint", () => {
   const baseGame = {
     playMode: "arena",
     toMove: "0",
+    arenaClockStartAt: 0,
     clockDisplayServerTime: 1000,
     lastMoveTime: 1000,
     players: [

@@ -1,13 +1,46 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { isArenaGame } from "../../lib/arena/arenaGame";
+import { mergeArenaClockSync } from "../../lib/arena/applyArenaClockSync";
 
 /**
  * Full-screen overlay while waiting for the opponent's board or the synchronized start countdown.
  */
 export default function ArenaStartOverlay({ session }) {
   const { t } = useTranslation();
-  const overlay = session?.arenaStartOverlay;
+  const overlayGame = session?.arenaOverlayGame;
+  const [, overlayTick] = useState(0);
+
+  useEffect(() => {
+    if (!overlayGame || !isArenaGame(overlayGame)) {
+      return undefined;
+    }
+    if (overlayGame.gameOver || overlayGame.toMove === "") {
+      return undefined;
+    }
+    const startAt = overlayGame.arenaClockStartAt;
+    const waiting =
+      startAt === undefined
+      || startAt === null
+      || Date.now() < startAt;
+    if (!waiting) {
+      return undefined;
+    }
+    const id = window.setInterval(() => {
+      overlayTick((n) => n + 1);
+    }, 250);
+    return () => window.clearInterval(id);
+  }, [
+    overlayGame,
+    overlayGame?.arenaClockStartAt,
+    overlayGame?.gameOver,
+    overlayGame?.toMove,
+  ]);
+
+  const overlay = useMemo(
+    () => computeArenaStartOverlay(overlayGame, Date.now()),
+    [overlayGame, overlayTick]
+  );
 
   const label = useMemo(() => {
     if (!overlay) {
@@ -49,13 +82,6 @@ export function computeArenaStartOverlay(dbgame, liveClockNow) {
   }
   const startAt = dbgame.arenaClockStartAt;
   if (startAt === undefined || startAt === null) {
-    const readyCount = Array.isArray(dbgame.arenaPlayReady)
-      ? dbgame.arenaPlayReady.length
-      : 0;
-    const need = dbgame.numPlayers ?? 2;
-    if (readyCount < need) {
-      return { visible: true, kind: "waiting" };
-    }
     return { visible: true, kind: "waiting" };
   }
   if (liveClockNow < startAt) {

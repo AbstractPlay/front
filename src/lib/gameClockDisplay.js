@@ -26,7 +26,10 @@ export function isArenaClientClockLive(game, now = Date.now()) {
     return true;
   }
   const startAt = game?.arenaClockStartAt;
-  return startAt === undefined || startAt === null || now >= startAt;
+  if (startAt === undefined || startAt === null) {
+    return false;
+  }
+  return now >= startAt;
 }
 
 export function tickActivePlayerRemainingMs(player, game, toMove, playerIndex, now = Date.now()) {
