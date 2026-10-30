@@ -2097,6 +2097,7 @@
       "chatUnread": "Neue Chatnachrichten",
       "queueWaiting": "Noch {{count}} in der Warteschlange",
       "movePly": "Zug {{n}}",
+      "liveClocksAria": "Spieleruhren",
       "youAreColour": "Du spielst {{colour}}",
       "showMoves": "Zugliste anzeigen",
       "hideMoves": "Zugliste ausblenden",

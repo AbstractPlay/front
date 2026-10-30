@@ -2097,6 +2097,7 @@
       "chatUnread": "Nouveaux messages du tchat",
       "queueWaiting": "{{count}} de plus en file d'attente",
       "movePly": "Coup {{n}}",
+      "liveClocksAria": "Horloges des joueurs",
       "youAreColour": "Vous êtes le joueur {{colour}}",
       "showMoves": "Afficher la liste des coups",
       "hideMoves": "Masquer la liste des coups",

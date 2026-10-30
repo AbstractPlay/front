@@ -2097,6 +2097,7 @@
       "chatUnread": "Nuovi messaggi in chat",
       "queueWaiting": "Ancora {{count}} in coda",
       "movePly": "Mossa {{n}}",
+      "liveClocksAria": "Orologi dei giocatori",
       "youAreColour": "Sei il giocatore {{colour}}",
       "showMoves": "Mostra elenco mosse",
       "hideMoves": "Nascondi elenco mosse",
