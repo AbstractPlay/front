@@ -23,6 +23,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Tournaments / ladders:** rules intro on the tournaments list, ladder list, and ladder hub keeps the full description in place with a fade and expand/collapse toggle (same pattern as the player profile about box), instead of swapping short and long copy.
 - **Ladder list:** paginated ladder table with the shared TanStack table nav (search, page controls, page size).
 - **Deploy:** static releases use `scripts/deploy-static.mjs` (no S3 bucket wipe, hashed assets before `index.html`); `error.html` auto-retries during rare error-document responses; post-deploy `prune-stale-static.mjs` drops orphaned `static/` / `flags/` objects (inventory-based, not lifecycle expiry on the live site).
+- **Player search:** opponent picker and player-directory filters match Unicode display names using Latin letters, diacritic-insensitive Latin, and ASCII approximations ([AnyAscii](https://anyascii.com/)); short in-app hint on those search fields.
 
 ### Fixed
 

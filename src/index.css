@@ -4674,3 +4674,24 @@ span.hardTime::after {
   font-weight: 600;
 }
 
+.display-name-search-hint {
+  max-width: 100%;
+  white-space: normal;
+  text-wrap: pretty;
+}
+
+.display-name-search-alias {
+  color: var(--secondary-font-color);
+  font-weight: normal;
+}
+
+.display-name-search-hint__link {
+  color: var(--secondary-color-3-lighter);
+  text-decoration: underline;
+}
+
+.display-name-search-hint__link:hover,
+.display-name-search-hint__link:focus-visible {
+  color: var(--secondary-color-3);
+}
+

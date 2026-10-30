@@ -18,15 +18,27 @@ import Flag from "./Flag";
 import ActivityMarker from "./ActivityMarker";
 import { useStore } from "../stores";
 import { callAuthApi } from "../lib/api";
-import { formatUserDisplayName } from "./Bots/botUtils";
+import {
+  formatUserDisplayName,
+  stripBotEmoji,
+} from "./Bots/botUtils";
 import OnVacationBadge from "./OnVacationBadge";
+import UserDisplayNameWithSearchAlias from "./UserDisplayNameWithSearchAlias";
 import PageLoading from "./shared/PageLoading";
 import { EnlargeableUserAvatar } from "./AvatarLightbox";
-import { trimmedGlobalIncludesStringFilterFn } from "../lib/tableGlobalFilter";
+import { buildDisplayNameSearchHaystack } from "../lib/displayNameSearch";
+import { queryMatchesHaystack } from "../lib/searchQuery";
 import { useSyncTablePageSize } from "../hooks/useTanstackTableEffects";
 import { fetchUserNames } from "../lib/fetchUserNames";
 
 const allSize = Number.MAX_SAFE_INTEGER;
+
+/** @type {import("@tanstack/react-table").FilterFn<any>} */
+function playersDirectoryGlobalFilterFn(row, _columnId, filterValue) {
+  const { name, id } = row.original;
+  const haystack = buildDisplayNameSearchHaystack(stripBotEmoji(name), id);
+  return queryMatchesHaystack(filterValue, haystack);
+}
 
 function blockedPlayerIds(blocked) {
   if (blocked === undefined || blocked === null) {
@@ -247,7 +259,9 @@ function Players() {
         cell: (props) => (
           <>
             <Link to={`/player/${props.row.original.id}`}>
-              {formatUserDisplayName(props.row.original, allUsers)}
+              <UserDisplayNameWithSearchAlias
+                name={formatUserDisplayName(props.row.original, allUsers)}
+              />
             </Link>
             <OnVacationBadge user={props.row.original} />
           </>
@@ -303,7 +317,7 @@ function Players() {
     autoResetPageIndex: false,
     onSortingChange: setSorting,
     onGlobalFilterChange: globalFilterSetter,
-    globalFilterFn: trimmedGlobalIncludesStringFilterFn,
+    globalFilterFn: playersDirectoryGlobalFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
