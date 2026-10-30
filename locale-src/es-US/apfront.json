@@ -6847,6 +6847,10 @@
     "src": "Recent opponents",
     "out": "Oponentes recientes"
   },
+  "playerPicker.searchAliasTitle": {
+    "src": "Search using: {{alias}}",
+    "out": "Buscar usando: {{alias}}"
+  },
   "playerPicker.searchLabel": {
     "src": "Search",
     "out": "Buscar"
@@ -6878,6 +6882,10 @@
   "players.loading": {
     "src": "Loading players…",
     "out": "Cargando jugadores…"
+  },
+  "players.nameSearchHint": {
+    "src": "You can filter with Latin letters for non-Latin display names (for example, <example>Иван / ivan</example>). Accented names also match without accents (José / jose). See <anyAsciiLink>AnyAscii</anyAsciiLink> to preview how a name is approximated.",
+    "out": "Puedes filtrar con letras latinas para los nombres para mostrar que no son latinos (por ejemplo, <example>Иван / ivan</example>). Los nombres con acento también coinciden sin acento (José / jose). Consulta <anyAsciiLink>AnyAscii</anyAsciiLink> para ver una vista previa de cómo se aproxima un nombre."
   },
   "profile.avatar.current": {
     "src": "Current",

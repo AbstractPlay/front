@@ -1461,6 +1461,7 @@
   },
   "players": {
     "loading": "Cargando jugadores…",
+    "nameSearchHint": "Puedes filtrar con letras latinas para los nombres para mostrar que no son latinos (por ejemplo, <example>Иван / ivan</example>). Los nombres con acento también coinciden sin acento (José / jose). Consulta <anyAsciiLink>AnyAscii</anyAsciiLink> para ver una vista previa de cómo se aproxima un nombre.",
     "filters": {
       "hideRed": "Ocultar rojos",
       "hideYellowRed": "Ocultar amarillos y rojos",
@@ -2302,6 +2303,7 @@
     "choose": "Elige un jugador…",
     "searchLabel": "Buscar",
     "searchPlaceholder": "Escribe para filtrar jugadores…",
+    "searchAliasTitle": "Buscar usando: {{alias}}",
     "noResults": "Ningún jugador coincide con tu búsqueda.",
     "noEligible": "Ningún jugador coincide con tus filtros. Intenta ajustar la configuración de actividad o de partida.",
     "loadingQuickPicks": "Cargando tus oponentes…",

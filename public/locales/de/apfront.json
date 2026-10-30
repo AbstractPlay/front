@@ -1461,6 +1461,7 @@
   },
   "players": {
     "loading": "Spieler werden geladen…",
+    "nameSearchHint": "Du kannst mit lateinischen Buchstaben nach nicht-lateinischen Anzeigenamen filtern (zum Beispiel <example>Иван / ivan</example>). Namen mit Akzenten werden auch ohne Akzente gefunden (José / jose). Siehe <anyAsciiLink>AnyAscii</anyAsciiLink> für eine Vorschau, wie ein Name angenähert wird.",
     "filters": {
       "hideRed": "Rot ausblenden",
       "hideYellowRed": "Gelb und Rot ausblenden",
@@ -2302,6 +2303,7 @@
     "choose": "Spieler auswählen…",
     "searchLabel": "Suchen",
     "searchPlaceholder": "Tippen, um Spieler zu filtern…",
+    "searchAliasTitle": "Suche mit: {{alias}}",
     "noResults": "Keine Spieler entsprechen deiner Suche.",
     "noEligible": "Keine Spieler entsprechen deinen Filtern. Versuche, die Aktivitäts- oder Match-Einstellungen zu lockern.",
     "loadingQuickPicks": "Gegner werden geladen…",
