@@ -1461,6 +1461,7 @@
   },
   "players": {
     "loading": "Caricamento giocatori…",
+    "nameSearchHint": "Puoi filtrare con lettere latine i nomi visualizzati non latini (ad esempio, <example>Иван / ivan</example>). I nomi accentati corrispondono anche senza accenti (José / jose). Consulta <anyAsciiLink>AnyAscii</anyAsciiLink> per un'anteprima di come viene approssimato un nome.",
     "filters": {
       "hideRed": "Nascondi rossi",
       "hideYellowRed": "Nascondi gialli e rossi",
@@ -2302,6 +2303,7 @@
     "choose": "Scegli un giocatore…",
     "searchLabel": "Cerca",
     "searchPlaceholder": "Digita per filtrare i giocatori…",
+    "searchAliasTitle": "Cerca usando: {{alias}}",
     "noResults": "Nessun giocatore corrisponde alla tua ricerca.",
     "noEligible": "Nessun giocatore corrisponde ai tuoi filtri. Prova ad allentare le impostazioni di attività o di partita.",
     "loadingQuickPicks": "Caricamento dei tuoi avversari…",
