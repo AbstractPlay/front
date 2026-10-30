@@ -991,6 +991,10 @@
       "countdown": "Début dans {{count}}…",
       "countdownHint": "La pendule démarre lorsque ce décompte atteint zéro."
     },
+    "syncStallNotice": "Votre adversaire ne s'est pas encore connecté au plateau de jeu. Vous pouvez retourner dans le salon de la table et vous indiquer prêt à nouveau lorsque vous serez tous les deux prêts.",
+    "abortLaunchSync": "Retourner au salon",
+    "abortLaunchSyncWorking": "Retour en cours…",
+    "abortLaunchSyncFailed": "Impossible de retourner au salon.",
     "cancelTable": "Annuler la table",
     "proposeSwap": "Proposer d'échanger les places",
     "offerSwap": "Proposer d'échanger les places",
