@@ -5699,6 +5699,10 @@
     "src": "Last move:",
     "out": "Dernier coup :"
   },
+  "gameMove.layout.liveClocksAria": {
+    "src": "Player clocks",
+    "out": "Horloges des joueurs"
+  },
   "gameMove.layout.liveDescription": {
     "src": "Clock-first layout for live and arena games",
     "out": "Disposition axée sur la pendule pour les parties en direct et en arène"

@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import {
   handleMoveTreeKeyDown,
+  MOVE_TREE_KEYBOARD_SKIP_ATTR,
   shouldSkipMoveTreeKeyboard,
 } from "./moveTreeKeyboard";
 
@@ -31,6 +32,23 @@ describe("moveTreeKeyboard", () => {
 
     it("does not skip when focus is elsewhere", () => {
       expect(shouldSkipMoveTreeKeyboard({ id: "theBoardSVG" }, [])).to.be.false;
+    });
+
+    it("skips when focus is inside a marked challenge modal container", () => {
+      const root = document.createElement("div");
+      root.setAttribute(MOVE_TREE_KEYBOARD_SKIP_ATTR, "");
+      const textarea = document.createElement("textarea");
+      textarea.id = "comment";
+      root.appendChild(textarea);
+      document.body.appendChild(root);
+      textarea.focus();
+      try {
+        expect(
+          shouldSkipMoveTreeKeyboard(document.activeElement, [{ move: "e4" }])
+        ).to.be.true;
+      } finally {
+        root.remove();
+      }
     });
   });
 

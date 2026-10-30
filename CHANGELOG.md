@@ -9,7 +9,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
-## [1.0.0-ci] - 2026-10-29
+## [1.0.0-ci] - 2026-10-30
 
 ### Added
 
@@ -28,6 +28,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 - **Play (Classic layout):** narrow viewports no longer squeeze the move list and chat into a ~15vw column when orientation or mobile browser chrome leaves a stale wide `innerWidth`; sidebar width is CSS-gated at Bulma’s tablet breakpoint and viewport width tracks `visualViewport`, `orientationchange`, and `matchMedia`.
 - **Arena / WebSocket:** parse text frames when Firefox delivers `Blob`/`ArrayBuffer` payloads; arena table launch ignores stale `gameMoveLayoutLive` strip (etc.) unless the player explicitly chose a layout in the lobby or picker; **`watchGames` always merges the current play/watch URL at send time** so move pushes work after deploy without a hard refresh (avoids strict WS filtering when an old tab never registered `/arena/play` in the hook).
+- **Challenge modal (Lab / teach from position):** move-tree keyboard shortcuts no longer intercept typing in the new-challenge form (notes, game/opponent pickers, clock fields).
 
 ## [1.0.0-ci] - 2026-10-25
 

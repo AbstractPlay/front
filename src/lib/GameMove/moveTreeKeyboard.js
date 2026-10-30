@@ -1,3 +1,6 @@
+/** Markup on a container whose inputs must not trigger move-tree shortcuts (e.g. New Challenge modal). */
+export const MOVE_TREE_KEYBOARD_SKIP_ATTR = "data-move-tree-keyboard-skip";
+
 /** Element ids where move-tree keyboard shortcuts must not fire. */
 export const MOVE_TREE_KEYBOARD_INPUT_IDS = new Set([
   "enterAMove",
@@ -10,8 +13,18 @@ export const MOVE_TREE_KEYBOARD_INPUT_IDS = new Set([
   "labSaveNameUpdate",
 ]);
 
+export function isInsideMoveTreeKeyboardSkipRoot(activeElement) {
+  if (!activeElement || typeof activeElement.closest !== "function") {
+    return false;
+  }
+  return activeElement.closest(`[${MOVE_TREE_KEYBOARD_SKIP_ATTR}]`) !== null;
+}
+
 export function shouldSkipMoveTreeKeyboard(activeElement, exploration) {
   if (exploration === null) {
+    return true;
+  }
+  if (isInsideMoveTreeKeyboardSkipRoot(activeElement)) {
     return true;
   }
   if (activeElement && MOVE_TREE_KEYBOARD_INPUT_IDS.has(activeElement.id)) {

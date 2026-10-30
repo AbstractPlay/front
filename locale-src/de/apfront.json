@@ -5699,6 +5699,10 @@
     "src": "Last move:",
     "out": "Letzter Zug:"
   },
+  "gameMove.layout.liveClocksAria": {
+    "src": "Player clocks",
+    "out": "Spieleruhren"
+  },
   "gameMove.layout.liveDescription": {
     "src": "Clock-first layout for live and arena games",
     "out": "Uhr-fokussiertes Layout für Live- und Arena-Spiele"
