@@ -999,6 +999,12 @@
     "swapWaitingOpponent": "Se ofreció el cambio de asiento — esperando a que tu oponente acepte o rechace.",
     "swapRespond": "Tu oponente ofreció cambiar de asiento. Acepta o rechaza, y luego vuelve a confirmar que estás listo.",
     "swapPending": "Se propuso un intercambio de asientos; ambos jugadores deben aceptar y confirmarse como listos de nuevo.",
+    "tableActivityToast": {
+      "joined": "{{name}} se unió a tu mesa de arena.",
+      "left": "{{name}} salió de tu mesa de arena.",
+      "ready": "{{name}} está listo.",
+      "clickHint": "Haz clic para abrir tu mesa."
+    },
     "tableChat": "Chat de la mesa",
     "lobbyLayout": {
       "title": "Diseño de la página de juego",

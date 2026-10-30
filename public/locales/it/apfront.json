@@ -999,6 +999,12 @@
     "swapWaitingOpponent": "Scambio di posto proposto — in attesa che l'avversario accetti o rifiuti.",
     "swapRespond": "Il tuo avversario ha proposto di scambiare i posti. Accetta o rifiuta, poi conferma nuovamente di essere pronto.",
     "swapPending": "Scambio posto proposto — entrambi i giocatori devono accettare e confermare di essere pronti.",
+    "tableActivityToast": {
+      "joined": "{{name}} si è unito al tuo tavolo dell'arena.",
+      "left": "{{name}} ha lasciato il tuo tavolo dell'arena.",
+      "ready": "{{name}} è pronto.",
+      "clickHint": "Clicca per aprire il tuo tavolo."
+    },
     "tableChat": "Chat del tavolo",
     "lobbyLayout": {
       "title": "Layout pagina di gioco",

@@ -999,6 +999,12 @@
     "swapWaitingOpponent": "Échange de places proposé — en attente de l'acceptation ou du refus de votre adversaire.",
     "swapRespond": "Votre adversaire a proposé d'échanger les places. Acceptez ou refusez, puis indiquez à nouveau que vous êtes prêt.",
     "swapPending": "Échange de places proposé — les deux joueurs doivent accepter et se déclarer à nouveau prêts.",
+    "tableActivityToast": {
+      "joined": "{{name}} a rejoint votre table d'arène.",
+      "left": "{{name}} a quitté votre table d'arène.",
+      "ready": "{{name}} est prêt.",
+      "clickHint": "Cliquez pour ouvrir votre table."
+    },
     "tableChat": "Discussion de table",
     "lobbyLayout": {
       "title": "Disposition de la page de jeu",
