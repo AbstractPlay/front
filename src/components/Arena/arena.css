@@ -180,3 +180,32 @@
   font-size: 0.95rem;
   color: var(--secondary-font-color);
 }
+
+.arena-launch-sync-abort {
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+.arena-launch-sync-abort__notice {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  color: var(--secondary-font-color);
+}
+
+.arena-launch-sync-abort__btn {
+  margin: 0 auto;
+}
+
+.arena-launch-sync-abort__btn:hover,
+.arena-launch-sync-abort__btn:focus-visible {
+  background: var(--tag-background-color);
+  color: var(--main-font-color);
+}
+
+.arena-table-sync-abort {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid var(--tag-background-color);
+  border-radius: 6px;
+  background: var(--secondary-color-3-bg);
+}

@@ -991,6 +991,10 @@
       "countdown": "Starting in {{count}}…",
       "countdownHint": "The clock starts when this reaches zero."
     },
+    "syncStallNotice": "Your opponent has not connected to the game board yet. You can return to the table lobby and ready again when you are both set.",
+    "abortLaunchSync": "Return to lobby",
+    "abortLaunchSyncWorking": "Returning…",
+    "abortLaunchSyncFailed": "Could not return to the lobby.",
     "cancelTable": "Cancel table",
     "proposeSwap": "Propose seat swap",
     "offerSwap": "Offer seat swap",

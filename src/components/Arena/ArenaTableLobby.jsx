@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams, Navigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { gameinfo } from "@abstractplay/gameslib";
@@ -7,7 +7,7 @@ import PageLoading from "../shared/PageLoading";
 import UserChats from "../GameMove/UserChats";
 import BotAwareName from "../Bots/BotAwareName";
 import { useStore } from "../../stores";
-import { callAuthApi } from "../../lib/api";
+import { callAuthApi, postAuthQueryKeepalive } from "../../lib/api";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
 import { getGameDisplayName } from "../../lib/gameOptions";
 import { formatVariantsJoined } from "../../lib/expandVariants";
@@ -30,6 +30,10 @@ import {
   isClosedArenaTable,
 } from "../../lib/arena/arenaTableSeating";
 import { formatUserDisplayName } from "../Bots/botUtils";
+import {
+  canAbortArenaLaunchSync,
+} from "../../lib/arena/arenaLaunchSync";
+import ArenaLaunchSyncAbort from "./ArenaLaunchSyncAbort";
 import "./arena.css";
 
 export default function ArenaTableLobby() {
@@ -42,6 +46,9 @@ export default function ArenaTableLobby() {
   const allUsers = useStore((state) => state.users);
   const [busy, busySetter] = useState(false);
   const [actionError, actionErrorSetter] = useState("");
+  const [syncGame, syncGameSetter] = useState(null);
+  const tableRef = useRef(null);
+  const launchingToPlayRef = useRef(false);
 
   const loadTable = useCallback(async () => {
     if (!tableId) {
@@ -55,6 +62,8 @@ export default function ArenaTableLobby() {
     idleMs: 15000,
   });
 
+  tableRef.current = table;
+
   useEffect(() => {
     const onRefresh = (event) => {
       if (event.detail?.tableId === tableId) {
@@ -64,6 +73,79 @@ export default function ArenaTableLobby() {
     window.addEventListener("refresh-arena-table", onRefresh);
     return () => window.removeEventListener("refresh-arena-table", onRefresh);
   }, [reload, tableId]);
+
+  useEffect(() => {
+    if (
+      !table
+      || !table.viewer?.seated
+      || table.state !== "playing"
+      || !tableView
+      || !tableId
+    ) {
+      syncGameSetter(null);
+      return undefined;
+    }
+    let cancelled = false;
+    (async () => {
+      const res = await callAuthApi("get_game", {
+        id: tableId,
+        metaGame: table.metaGame,
+        cbit: 0,
+      });
+      const parsed = await parseAuthResponse(res);
+      if (!cancelled && parsed.ok && parsed.data?.game) {
+        syncGameSetter(parsed.data.game);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [table, tableId, tableView]);
+
+  const showSyncAbort = useMemo(() => {
+    if (!syncGame || !globalMe?.id) {
+      return false;
+    }
+    return canAbortArenaLaunchSync(syncGame, globalMe.id);
+  }, [syncGame, globalMe?.id]);
+
+  useEffect(() => {
+    const fireLobbyUnready = () => {
+      const current = tableRef.current;
+      if (!current || !globalMe?.id || !tableId) {
+        return;
+      }
+      if (launchingToPlayRef.current) {
+        return;
+      }
+      if (current.state !== "open" && current.state !== "seated") {
+        return;
+      }
+      if (!current.viewer?.seated) {
+        return;
+      }
+      const seat = current.seats?.find((s) => s.userId === globalMe.id);
+      if (!seat?.ready) {
+        return;
+      }
+      const token = useStore.getState().authSession?.token;
+      if (!token) {
+        return;
+      }
+      postAuthQueryKeepalive(
+        "set_arena_ready",
+        { tableId, ready: false },
+        token
+      );
+    };
+
+    const onPageHide = () => fireLobbyUnready();
+    window.addEventListener("pagehide", onPageHide);
+    return () => {
+      window.removeEventListener("pagehide", onPageHide);
+      fireLobbyUnready();
+    };
+  }, [globalMe?.id, tableId]);
 
   const loadMyArenaTable = useCallback(async () => {
     if (!globalMe?.id) {
@@ -152,6 +234,7 @@ export default function ArenaTableLobby() {
         throw new Error(result.error ?? t("Arena.actionFailed"));
       }
       if (result.data?.launched) {
+        launchingToPlayRef.current = true;
         const layout = readArenaTableLayoutChoice();
         navigate(arenaPlayPath(metaParam, tableId, { layout }));
       }
@@ -303,16 +386,25 @@ export default function ArenaTableLobby() {
         ) : null}
 
         {table.state === "playing" && tableView ? (
-          <p className="has-text-centered">
-            <Link
-              className="apButton"
-              to={arenaPlayPath(table.metaGame, table.tableId, {
-                layout: readArenaTableLayoutChoice(),
-              })}
-            >
-              {t("Arena.returnToGame")}
-            </Link>
-          </p>
+          <>
+            {showSyncAbort ? (
+              <ArenaLaunchSyncAbort
+                className="arena-table-sync-abort"
+                metaGame={table.metaGame}
+                tableId={table.tableId}
+              />
+            ) : null}
+            <p className="has-text-centered">
+              <Link
+                className="apButton"
+                to={arenaPlayPath(table.metaGame, table.tableId, {
+                  layout: readArenaTableLayoutChoice(),
+                })}
+              >
+                {t("Arena.returnToGame")}
+              </Link>
+            </p>
+          </>
         ) : null}
 
         {actionError ? (
