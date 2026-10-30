@@ -28,7 +28,7 @@ Preferences are **localStorage only** (per browser/device). Correspondence and l
 | `strip` | [`GameMoveStripLayout.js`](../src/components/GameMove/layouts/GameMoveStripLayout.js) | Board hero, sticky dock, tabbed drawer (default on `/move`) |
 | `card` | [`GameMoveCardLayout.js`](../src/components/GameMove/layouts/GameMoveCardLayout.js) | Queue card for playing through your inbox |
 | `narrative` | [`GameMoveNarrativeLayout.js`](../src/components/GameMove/layouts/GameMoveNarrativeLayout.js) | Story column beside the board |
-| `live` | [`GameMoveLiveLayout.js`](../src/components/GameMove/layouts/GameMoveLiveLayout.js) | Clock-first bar, move dock, drawer (default on arena) |
+| `live` | [`GameMoveLiveLayout.js`](../src/components/GameMove/layouts/GameMoveLiveLayout.js) | Context strip, clocks in the sidebar column on wide viewports, full move dock, drawer (default on arena) |
 
 All five layouts are available to anonymous and logged-in users on both correspondence and arena routes (each context remembers its own choice).
 

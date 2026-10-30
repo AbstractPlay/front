@@ -4,8 +4,11 @@ import GameMoveHelmetTour from "./GameMoveHelmetTour";
 import GameMoveLayoutError from "./GameMoveLayoutError";
 import GameMoveLayoutModals from "./GameMoveLayoutModals";
 import { GameMoveBoardSection, GameMoveDrawer } from "./GameMoveSections";
-import LiveContextBar from "../preview/LiveContextBar";
+import LiveContextBar, {
+  LIVE_SIDEBAR_BREAKPOINT,
+} from "../preview/LiveContextBar";
 import LiveActionDock from "../preview/LiveActionDock";
+import LiveClockPanel from "../preview/LiveClockPanel";
 
 export default function GameMoveLiveLayout({ session }) {
   const users = useStore((state) => state.users);
@@ -16,16 +19,23 @@ export default function GameMoveLiveLayout({ session }) {
   }
 
   const layoutContext = getLayoutContext(session, users, myMove, session.t);
+  const clocksInSidebar =
+    (session.screenWidth ?? LIVE_SIDEBAR_BREAKPOINT) > LIVE_SIDEBAR_BREAKPOINT;
 
   return (
     <>
       <GameMoveHelmetTour session={session} />
       <article className="game-move-layout game-move-layout--live">
-        <LiveContextBar session={session} layoutContext={layoutContext} />
+        <LiveContextBar
+          session={session}
+          layoutContext={layoutContext}
+          showClocks={!clocksInSidebar}
+        />
         <div className="game-move-layout--live__main">
           <GameMoveBoardSection session={session} hideTitle />
         </div>
         <div className="game-move-layout--live__sidebar">
+          {clocksInSidebar ? <LiveClockPanel session={session} /> : null}
           <LiveActionDock session={session} />
           <GameMoveDrawer
             key={session.game?.id ?? session.gameID}

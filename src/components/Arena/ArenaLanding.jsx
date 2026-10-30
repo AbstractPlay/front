@@ -19,8 +19,8 @@ import {
   fetchArenaTables,
   fetchArenaTimeControls,
   fetchMyArenaTable,
-  readArenaPreferredTcId,
-  writeArenaPreferredTcId,
+  readArenaLastCreate,
+  writeArenaLastCreate,
 } from "../../lib/arena/fetchArena";
 import {
   arenaListTableHref,
@@ -35,6 +35,26 @@ import "./arena.css";
 
 const TIERS = ["bullet", "blitz", "rapid", "live"];
 
+function initialArenaCreatePrefs() {
+  const last = readArenaLastCreate();
+  const metaGame =
+    last.metaGame && arenaPlaySupported(last.metaGame) ? last.metaGame : "";
+  let variants = last.variants ?? [];
+  if (metaGame && variants.length > 0) {
+    const check = validateChallengeVariantSelection(metaGame, variants);
+    if (!check.ok) {
+      variants = [];
+    }
+  } else if (!metaGame) {
+    variants = [];
+  }
+  return {
+    metaGame,
+    arenaTcId: last.arenaTcId || "blitz_5_3",
+    variants,
+  };
+}
+
 function tierLabel(t, tier) {
   return t(`Arena.tier.${tier}`, tier);
 }
@@ -48,12 +68,15 @@ export default function ArenaLanding() {
   const summaryRatingsLoadState = useStore(
     (state) => state.summaryRatingsLoadState
   );
-  const [metaGame, metaGameSetter] = useState("");
-  const [selectedVariants, setSelectedVariants] = useState([]);
+  const [initialCreatePrefs] = useState(initialArenaCreatePrefs);
+  const [metaGame, metaGameSetter] = useState(initialCreatePrefs.metaGame);
+  const [selectedVariants, setSelectedVariants] = useState(
+    initialCreatePrefs.variants
+  );
   const [closedInviteUserId, closedInviteUserIdSetter] = useState("");
   const { variantsValid, onValidityChange, resetVariantValidity } =
     useVariantSelectionValidity();
-  const [arenaTcId, arenaTcSetter] = useState(() => readArenaPreferredTcId() || "blitz_5_3");
+  const [arenaTcId, arenaTcSetter] = useState(initialCreatePrefs.arenaTcId);
   const [controls, controlsSetter] = useState(null);
   const [filterMeta, filterMetaSetter] = useState("");
   const [busy, busySetter] = useState(false);
@@ -203,7 +226,7 @@ export default function ArenaLanding() {
       if (!result.ok) {
         throw new Error(result.error ?? t("Arena.actionFailed"));
       }
-      writeArenaPreferredTcId(arenaTcId);
+      writeArenaLastCreate({ metaGame, arenaTcId, variants: selectedVariants });
       const tableId = result.data?.tableId;
       if (tableId) {
         navigate(arenaTablePath(metaGame, tableId));
@@ -287,6 +310,7 @@ export default function ArenaLanding() {
             <GameVariants
               metaGame={metaGame}
               variantsSetter={setSelectedVariants}
+              initialVariantUids={initialCreatePrefs.variants}
               onValidityChange={handleVariantValidityChange}
               disableFields={tableCreateLocked}
             />

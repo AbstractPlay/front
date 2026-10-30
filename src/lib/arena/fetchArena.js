@@ -77,6 +77,7 @@ export async function arenaTableAction(query, pars) {
 }
 
 export const STORAGE_ARENA_PREFERRED_TC = "arenaPreferredTcId";
+export const STORAGE_ARENA_LAST_CREATE = "arenaLastCreate";
 
 export function readArenaPreferredTcId() {
   try {
@@ -90,6 +91,56 @@ export function writeArenaPreferredTcId(tcId) {
   try {
     if (tcId) {
       localStorage.setItem(STORAGE_ARENA_PREFERRED_TC, tcId);
+    }
+  } catch {
+    // ignore
+  }
+}
+
+/** Last game, Fischer TC, and variants used when the player successfully created an arena table. */
+export function readArenaLastCreate() {
+  try {
+    const raw = localStorage.getItem(STORAGE_ARENA_LAST_CREATE);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === "object") {
+        const variants = Array.isArray(parsed.variants)
+          ? parsed.variants.filter(
+              (v) => typeof v === "string" && v.length > 0,
+            )
+          : [];
+        return {
+          metaGame:
+            typeof parsed.metaGame === "string" ? parsed.metaGame : "",
+          arenaTcId:
+            typeof parsed.arenaTcId === "string" ? parsed.arenaTcId : "",
+          variants,
+        };
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return {
+    metaGame: "",
+    arenaTcId: readArenaPreferredTcId(),
+    variants: [],
+  };
+}
+
+export function writeArenaLastCreate({ metaGame, arenaTcId, variants }) {
+  try {
+    const variantList = Array.isArray(variants)
+      ? variants.filter((v) => typeof v === "string" && v.length > 0)
+      : [];
+    const payload = {
+      metaGame: metaGame || "",
+      arenaTcId: arenaTcId || "",
+      variants: variantList,
+    };
+    localStorage.setItem(STORAGE_ARENA_LAST_CREATE, JSON.stringify(payload));
+    if (arenaTcId) {
+      writeArenaPreferredTcId(arenaTcId);
     }
   } catch {
     // ignore

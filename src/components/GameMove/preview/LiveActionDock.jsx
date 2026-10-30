@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useStore } from "../../../stores";
 import {
   buildMoveEntryProps,
@@ -8,7 +7,7 @@ import { sessionExplorationAllowed } from "../../../lib/effectiveGameFlags";
 import DockMoveEntry from "./DockMoveEntry";
 import DockMiscButtons from "./DockMiscButtons";
 
-function liveMorePanelHasContent(miscProps, globalMe, game) {
+function liveMiscHasContent(miscProps, globalMe, game) {
   if (!game) {
     return false;
   }
@@ -24,48 +23,22 @@ function liveMorePanelHasContent(miscProps, globalMe, game) {
 }
 
 function LiveActionDock({ session }) {
-  const { t } = session;
   const globalMe = useStore((state) => state.globalMe);
-  const [moreOpen, moreOpenSetter] = useState(false);
 
   const moveEntryProps = buildMoveEntryProps(session, { forceUndoRight: true });
   const miscProps = buildMiscButtonsProps(session);
   const game = moveEntryProps.game;
-  const showMisc = liveMorePanelHasContent(miscProps, globalMe, game);
+  const showMisc = liveMiscHasContent(miscProps, globalMe, game);
 
   return (
     <div className="game-move-live-dock">
       <DockMoveEntry
         {...moveEntryProps}
-        expanded={false}
-        primaryOnly
+        expanded
         pinExplorationToolbar={false}
         layoutVariant="live"
       />
-      <div className="game-move-live-dock__more">
-        <button
-          type="button"
-          className="button is-small apButtonNeutral game-move-live-dock__more-toggle"
-          aria-expanded={moreOpen}
-          onClick={() => moreOpenSetter((v) => !v)}
-        >
-          {t("gameMove.layout.moreActions")}
-          <span className="icon is-small" aria-hidden="true">
-            <i className={`fa fa-chevron-${moreOpen ? "up" : "down"}`} />
-          </span>
-        </button>
-        {moreOpen ? (
-          <div className="game-move-live-dock__more-panel">
-            <DockMoveEntry
-              {...moveEntryProps}
-              extrasOnly
-              pinExplorationToolbar={false}
-              layoutVariant="live"
-            />
-            {showMisc ? <DockMiscButtons {...miscProps} /> : null}
-          </div>
-        ) : null}
-      </div>
+      {showMisc ? <DockMiscButtons {...miscProps} /> : null}
     </div>
   );
 }

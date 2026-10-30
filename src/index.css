@@ -3887,11 +3887,33 @@ span.hardTime::after {
   color: var(--secondary-color-3);
 }
 
+.game-move-live-clocks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.game-move-live-clocks--sidebar {
+  padding: 0.65rem 0.75rem;
+  background: var(--secondary-color-3-bg);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+  border-radius: 0.5rem;
+}
+
+.game-move-live-clocks--inline {
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
 .game-move-layout--live__main {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 12rem;
   margin-bottom: 0.25rem;
   overflow: auto;
@@ -3977,10 +3999,14 @@ span.hardTime::after {
     box-shadow: 0 4px 16px var(--dropshadow-target-start);
     border: 1px solid var(--tag-background-color);
     border-radius: 0.5rem;
-    overflow: visible;
-  }
+  overflow: visible;
+}
 
-  .game-move-layout--live__sidebar .game-move-drawer {
+.game-move-layout--live__sidebar .game-move-live-clocks {
+  margin-bottom: 0.25rem;
+}
+
+.game-move-layout--live__sidebar .game-move-drawer {
     display: flex;
     flex: 0 0 auto;
     flex-direction: column;
