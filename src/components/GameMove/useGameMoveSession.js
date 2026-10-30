@@ -6,7 +6,7 @@ import { render } from "@abstractplay/renderer";
 import { cloneDeep, debounce } from "lodash";
 import { API_ENDPOINT_OPEN } from "../../config";
 import { apPerfRun } from "../../lib/apPerf.js";
-import { callAuthApi } from "../../lib/api";
+import { callAuthApi, postAuthQueryKeepalive } from "../../lib/api";
 import { anyOnClockPlayerTimedOut } from "../../lib/gameClockDisplay";
 import {
   participantTimelossPollIntervalMs,
@@ -19,6 +19,7 @@ import { tournamentDetailPathFromGameRef } from "../../lib/tournamentRoutes";
 import { ladderDetailPathFromGameRef } from "../../lib/ladderRoutes";
 import { arenaLandingPath } from "../../lib/arena/arenaRoutes";
 import { isArenaGame, resolveSubmitMoveQuery } from "../../lib/arena/arenaGame";
+import { isArenaLaunchSyncWindow } from "../../lib/arena/arenaLaunchSync";
 import { mergeArenaClockSync, resolveArenaClockStartAt, normalizeArenaClientGame, arenaSyncedNow } from "../../lib/arena/applyArenaClockSync";
 import { submitNewChallenge } from "../../lib/submitNewChallenge";
 import {
@@ -1093,6 +1094,38 @@ export function useGameMoveSession(props) {
     gameID,
     resolvedArenaClockStartAt,
   ]);
+
+  useEffect(() => {
+    if (!metaGame || !gameID || !isArenaGame(gameRef.current)) {
+      return undefined;
+    }
+
+    const fireStandDown = () => {
+      const game = gameRef.current;
+      if (!game || !isArenaLaunchSyncWindow(game)) {
+        return;
+      }
+      const token = useStore.getState().authSession?.token;
+      if (!token) {
+        return;
+      }
+      postAuthQueryKeepalive(
+        "arena_play_stand_down",
+        { metaGame, id: gameID },
+        token
+      );
+      if (arenaPlayReadySentRef.current === gameID) {
+        arenaPlayReadySentRef.current = null;
+      }
+    };
+
+    const onPageHide = () => fireStandDown();
+    window.addEventListener("pagehide", onPageHide);
+    return () => {
+      window.removeEventListener("pagehide", onPageHide);
+      fireStandDown();
+    };
+  }, [gameID, metaGame]);
 
   const checkTime = useCallback(async (query) => {
     try {

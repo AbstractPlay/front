@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { computeArenaStartOverlay } from "./ArenaStartOverlay.logic";
+import { canAbortArenaLaunchSyncAsPlayer } from "../../lib/arena/arenaLaunchSync";
+import ArenaLaunchSyncAbort from "./ArenaLaunchSyncAbort";
 
 /**
  * Full-screen overlay while waiting for the opponent's board or the synchronized start countdown.
@@ -33,6 +35,16 @@ export default function ArenaStartOverlay({ session }) {
     return "";
   }, [overlay, t]);
 
+  const showAbort = useMemo(() => {
+    if (!overlay?.visible || !session?.game) {
+      return false;
+    }
+    return canAbortArenaLaunchSyncAsPlayer(
+      session.arenaOverlayGame ?? session.game,
+      session.liveClockNow
+    );
+  }, [overlay?.visible, session?.arenaOverlayGame, session?.game, session?.liveClockNow]);
+
   if (!overlay?.visible || !label) {
     return null;
   }
@@ -48,6 +60,13 @@ export default function ArenaStartOverlay({ session }) {
         <p className="arena-start-overlay__title">{label}</p>
         {overlay.kind === "countdown" ? (
           <p className="arena-start-overlay__sub">{t("Arena.start.countdownHint")}</p>
+        ) : null}
+        {showAbort ? (
+          <ArenaLaunchSyncAbort
+            className="arena-start-overlay__abort"
+            metaGame={session.game?.metaGame}
+            tableId={session.game?.id}
+          />
         ) : null}
       </div>
     </div>

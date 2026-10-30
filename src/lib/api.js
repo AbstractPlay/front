@@ -24,6 +24,14 @@ async function postAuthQuery(query, pars, token) {
   });
 }
 
+/** Best-effort auth POST during tab close (no redirect on 401). */
+export function postAuthQueryKeepalive(query, pars, token) {
+  if (!token) {
+    return;
+  }
+  void postAuthQuery(query, pars, token).catch(() => {});
+}
+
 // Set requireAuth to false to you are calling this from a flow that is supported for non-logged in users
 export const callAuthApi = async (query, pars, requireAuth = true) => {
   const replayResponse = maybeReplayAuthResponse(query, pars);
