@@ -640,7 +640,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
         { label: t("Close"), action: handleNewChallengeClose },
       ]}
     >
-      <div className="container">
+      <div className="container" data-move-tree-keyboard-skip>
         {fixedMetaGame ? (
           <p>
             <strong>{t("ChooseGame")}</strong>:{" "}
