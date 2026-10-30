@@ -999,6 +999,12 @@
     "swapWaitingOpponent": "Platztausch angeboten — warte darauf, dass dein Gegner annimmt oder ablehnt.",
     "swapRespond": "Dein Gegner hat einen Platztausch angeboten. Nimm an oder lehne ab und mache dich dann wieder bereit.",
     "swapPending": "Platztausch vorgeschlagen — beide Spieler müssen zustimmen und sich erneut bereit machen.",
+    "tableActivityToast": {
+      "joined": "{{name}} ist deinem Arena-Tisch beigetreten.",
+      "left": "{{name}} hat deinen Arena-Tisch verlassen.",
+      "ready": "{{name}} ist bereit.",
+      "clickHint": "Klicke, um deinen Tisch zu öffnen."
+    },
     "tableChat": "Tisch-Chat",
     "lobbyLayout": {
       "title": "Layout der Spielseite",

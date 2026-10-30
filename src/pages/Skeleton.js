@@ -47,6 +47,7 @@ import { loadAnnouncementsBellBootstrap } from "../lib/announcements/loadNews";
 import ThemeApplicator from "../components/ThemeApplicator";
 import MyWebSocket from "../components/MyWebSocket";
 import ArenaLaunchListener from "../components/Arena/ArenaLaunchListener";
+import ArenaTableActivityListener from "../components/Arena/ArenaTableActivityListener";
 import GameWatch from "../components/GameWatch";
 import ProfileBootstrap from "../components/ProfileBootstrap";
 import { resolveAuthSession } from "../lib/authSession";
@@ -207,6 +208,7 @@ function Bones(props) {
           <ThemeApplicator />
           <MyWebSocket />
           <ArenaLaunchListener />
+          <ArenaTableActivityListener />
           <GameWatch />
           <ProfileBootstrap />
           <Navbar />

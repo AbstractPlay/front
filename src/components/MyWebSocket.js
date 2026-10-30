@@ -308,6 +308,18 @@ export default function MyWebSocket() {
               })
             );
           }
+        } else if (msg.verb === "arena_table") {
+          const payload = msg.payload;
+          if (
+            payload?.tableId &&
+            payload?.event &&
+            payload?.actorUserId &&
+            payload?.userId
+          ) {
+            window.dispatchEvent(
+              new CustomEvent("arena-table-activity", { detail: payload }),
+            );
+          }
         } else if (msg.verb === "test") {
           toast(`Test message: ${msg.payload}`);
         }

@@ -391,6 +391,22 @@
     "src": "Seat swap offered — waiting for your opponent to accept or decline.",
     "out": "Échange de places proposé — en attente de l'acceptation ou du refus de votre adversaire."
   },
+  "Arena.tableActivityToast.clickHint": {
+    "src": "Click to open your table.",
+    "out": "Cliquez pour ouvrir votre table."
+  },
+  "Arena.tableActivityToast.joined": {
+    "src": "{{name}} joined your arena table.",
+    "out": "{{name}} a rejoint votre table d'arène."
+  },
+  "Arena.tableActivityToast.left": {
+    "src": "{{name}} left your arena table.",
+    "out": "{{name}} a quitté votre table d'arène."
+  },
+  "Arena.tableActivityToast.ready": {
+    "src": "{{name}} is ready.",
+    "out": "{{name}} est prêt."
+  },
   "Arena.tableChat": {
     "src": "Table chat",
     "out": "Discussion de table"
