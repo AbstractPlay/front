@@ -999,6 +999,12 @@
     "swapWaitingOpponent": "Seat swap offered — waiting for your opponent to accept or decline.",
     "swapRespond": "Your opponent offered to swap seats. Accept or decline, then ready again.",
     "swapPending": "Seat swap proposed — both players must accept and ready again.",
+    "tableActivityToast": {
+      "joined": "{{name}} joined your arena table.",
+      "left": "{{name}} left your arena table.",
+      "ready": "{{name}} is ready.",
+      "clickHint": "Click to open your table."
+    },
     "tableChat": "Table chat",
     "lobbyLayout": {
       "title": "Play page layout",

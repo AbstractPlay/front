@@ -55,6 +55,16 @@ export default function ArenaTableLobby() {
     idleMs: 15000,
   });
 
+  useEffect(() => {
+    const onRefresh = (event) => {
+      if (event.detail?.tableId === tableId) {
+        void reload();
+      }
+    };
+    window.addEventListener("refresh-arena-table", onRefresh);
+    return () => window.removeEventListener("refresh-arena-table", onRefresh);
+  }, [reload, tableId]);
+
   const loadMyArenaTable = useCallback(async () => {
     if (!globalMe?.id) {
       return null;
