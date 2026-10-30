@@ -226,7 +226,7 @@ const NewChallengeModal = React.memo(function NewChallengeModal(props) {
     clockIncSetter(24);
     clockMaxSetter(96);
     clockHardSetter(false);
-    setOnlySee("all");
+    setOnlySee("month");
     ratedSetter(true);
     noExploreSetter(false);
     teachingModeSetter(false);

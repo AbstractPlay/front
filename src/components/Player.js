@@ -86,6 +86,7 @@ function Player() {
   const navigate = useNavigate();
   const globalMe = useStore((state) => state.globalMe);
   const allUsers = useStore((state) => state.users);
+  const usersLoaded = useStore((state) => state.usersLoaded);
   const summary = useStore((state) => state.summary);
   const [user, userSetter] = useState(null);
   const [allRecs, allRecsSetter] = useState([]);
@@ -264,6 +265,16 @@ function Player() {
   useEffect(() => {
     fetchUserNames();
   }, [userid]);
+
+  useEffect(() => {
+    if (!userid || !usersLoaded) {
+      return;
+    }
+    const rec = allUsers?.find((u) => u.id === userid);
+    if (rec === undefined && (allUsers?.length ?? 0) > 0) {
+      fetchUserNames({ all: true, force: true });
+    }
+  }, [userid, allUsers, usersLoaded]);
 
   useEffect(() => {
     if (allUsers !== null) {
