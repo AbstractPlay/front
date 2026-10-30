@@ -24,6 +24,7 @@ import PageLoading from "./shared/PageLoading";
 import { EnlargeableUserAvatar } from "./AvatarLightbox";
 import { trimmedGlobalIncludesStringFilterFn } from "../lib/tableGlobalFilter";
 import { useSyncTablePageSize } from "../hooks/useTanstackTableEffects";
+import { fetchUserNames } from "../lib/fetchUserNames";
 
 const allSize = Number.MAX_SAFE_INTEGER;
 
@@ -66,7 +67,7 @@ function Players() {
   const [globalFilter, globalFilterSetter] = useState(null);
   const [hideFilter, hideFilterSetter] = useStorageState(
     "players-hide",
-    "none"
+    "red"
   );
   const [blockedFilter, blockedFilterSetter] = useStorageState(
     "players-blocked",
@@ -435,7 +436,10 @@ function Players() {
                 type="radio"
                 name="answer"
                 defaultChecked={hideFilter === "none"}
-                onClick={() => hideFilterSetter("none")}
+                onClick={() => {
+                  hideFilterSetter("none");
+                  fetchUserNames({ all: true, force: true });
+                }}
               />
               {t("ShowAll")}
             </label>

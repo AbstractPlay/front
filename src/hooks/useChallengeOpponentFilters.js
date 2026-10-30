@@ -5,7 +5,7 @@ import { minSeenFromOnlySee } from "../lib/challengeOpponentOptions";
 export function useChallengeOpponentFilters() {
   const [onlySee, setOnlySee] = useStorageState(
     "challenges-filter-opponent-activity",
-    "all"
+    "month"
   );
   const [matchFilter, setMatchFilter] = useStorageState(
     "challenges-filter-match",

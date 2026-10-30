@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { getGameDisplayName, isSummaryStatsVisible } from "../lib/gameOptions";
@@ -23,6 +23,7 @@ import { matchesSummaryGameKey, parseSummaryGameKey } from "../lib/summaryGameKe
 import { compareVariantSelections } from "../lib/variantTableSort";
 import PageLoading from "./shared/PageLoading";
 import { SUMMARY_URLS, RECORDS_DOWNLOAD_LINK_REL } from "../lib/summaryFetch";
+import { fetchUserNames } from "../lib/fetchUserNames";
 import GlickoHint from "./shared/GlickoHint";
 import GlickoDisplayNote from "./shared/GlickoDisplayNote";
 import DataTable, { LIST_TABLE_PROPS } from "./shared/DataTable";
@@ -275,6 +276,10 @@ function RatingsForMeta({ metaGame }) {
   const allUsers = useStore((state) => state.users);
   const summary = useStore((state) => state.summary);
   const ratingsLoadState = useStore((state) => state.summaryRatingsLoadState);
+
+  useEffect(() => {
+    fetchUserNames({ all: true });
+  }, []);
 
   useEnsureSummaryTier("ratings");
 

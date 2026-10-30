@@ -1,10 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { API_ENDPOINT_OPEN } from "../config";
 import { callAuthApi } from "../lib/api";
 import { fetchProfile } from "../lib/globalMeBootstrap";
 import Modal from "./Modal";
 import { validateDisplayName } from "./Bots/botUtils";
+import { fetchUserNames } from "../lib/fetchUserNames";
 
 function NewProfile(props) {
   const [name, nameSetter] = useState("");
@@ -24,11 +24,7 @@ function NewProfile(props) {
   useEffect(() => {
     async function fetchData() {
       try {
-        var url = new URL(API_ENDPOINT_OPEN);
-        url.searchParams.append("query", "user_names");
-        const res = await fetch(url);
-        const result = await res.json();
-        console.log("users from user_names request:", result);
+        const result = await fetchUserNames({ all: true, force: true });
         usersSetter(result.map((u) => u.name));
       } catch (error) {
         errorSetter(error);

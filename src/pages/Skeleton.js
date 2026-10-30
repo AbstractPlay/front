@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { fetchUserNames } from "../lib/fetchUserNames";
+import { fetchUserNames, userDirectoryIncludesAll } from "../lib/fetchUserNames";
 import { REAL_MODE } from "../lib/realMode";
 import { redirectToSignIn } from "../lib/amplifyAuth";
 import Spinner from "../components/Spinner";
@@ -169,7 +169,7 @@ function Bones(props) {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
-        fetchUserNames();
+        fetchUserNames({ all: userDirectoryIncludesAll() });
       }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
