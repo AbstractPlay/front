@@ -2097,6 +2097,7 @@
       "chatUnread": "New chat messages",
       "queueWaiting": "{{count}} more in queue",
       "movePly": "Move {{n}}",
+      "liveClocksAria": "Player clocks",
       "youAreColour": "You are player {{colour}}",
       "showMoves": "Show move list",
       "hideMoves": "Hide move list",
