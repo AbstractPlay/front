@@ -98,4 +98,11 @@ describe("filterOpponentOptionsByQuery", () => {
     ]);
     expect(filterOpponentOptionsByQuery(list, "zara beta")).toHaveLength(0);
   });
+
+  it("matches Latin query against Cyrillic display name", () => {
+    const list = [{ id: "ru1", name: "Иван" }];
+    expect(filterOpponentOptionsByQuery(list, "ivan").map((u) => u.id)).toEqual([
+      "ru1",
+    ]);
+  });
 });

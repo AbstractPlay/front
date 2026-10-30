@@ -3,6 +3,7 @@ import {
   matchWinRateForChallenge,
   passesMatchCompetitivenessFilter,
 } from "./glickoMatchOdds";
+import { buildPlayerSearchHaystack } from "./displayNameSearch";
 import { queryMatchesHaystack, searchTokens } from "./searchQuery";
 
 /** @typedef {"all" | "week" | "month"} OpponentActivityFilter */
@@ -182,13 +183,11 @@ export function filterOpponentOptionsByQuery(opponents, query) {
     return opponents;
   }
   return opponents.filter((user) => {
-    const haystack = [
-      user.name ?? "",
-      user.searchLabel ?? user.name ?? "",
-      user.id,
-    ]
-      .join(" ")
-      .toLowerCase();
+    const haystack = buildPlayerSearchHaystack({
+      name: user.name ?? "",
+      searchLabel: user.searchLabel,
+      id: user.id,
+    });
     return queryMatchesHaystack(query, haystack);
   });
 }

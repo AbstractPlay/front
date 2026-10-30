@@ -1461,6 +1461,7 @@
   },
   "players": {
     "loading": "Loading players…",
+    "nameSearchHint": "You can filter with Latin letters for non-Latin display names (for example, <example>Иван / ivan</example>). Accented names also match without accents (José / jose). See <anyAsciiLink>AnyAscii</anyAsciiLink> to preview how a name is approximated.",
     "filters": {
       "hideRed": "Hide red",
       "hideYellowRed": "Hide yellow and red",
@@ -2302,6 +2303,7 @@
     "choose": "Choose a player…",
     "searchLabel": "Search",
     "searchPlaceholder": "Type to filter players…",
+    "searchAliasTitle": "Search using: {{alias}}",
     "noResults": "No players match your search.",
     "noEligible": "No players match your filters. Try relaxing activity or match settings.",
     "loadingQuickPicks": "Loading your opponents…",

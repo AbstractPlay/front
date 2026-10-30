@@ -23,6 +23,7 @@ import {
   firstNamedListSortingFn,
 } from "../../lib/compareStrings";
 import { isHighlighted, toggleHighlight } from "../../lib/playerGameMarks";
+import { buildPlayerSearchHaystack } from "../../lib/displayNameSearch";
 import { queryMatchesHaystack } from "../../lib/searchQuery";
 import { canonicalGamePlayPathFromRecordSite } from "../../lib/gamePlayLinks";
 import { toast } from "react-toastify";
@@ -378,26 +379,24 @@ function History({ handleChallenge }) {
   );
 
   const globalFilterFn = (row, colId, val) => {
-    let winner = row.original.winner;
-    if (winner === undefined) {
-      winner = "draw";
-    } else if (
-      globalMe === null ||
-      globalMe === undefined ||
-      winner.id !== globalMe.id
-    ) {
-      winner = winner.name;
-    } else {
-      winner = `${winner.name},you`;
+    const origWinner = row.original.winner;
+    let winnerHaystack = "draw";
+    if (origWinner !== undefined) {
+      winnerHaystack = buildPlayerSearchHaystack(origWinner);
+      if (globalMe?.id && origWinner.id === globalMe.id) {
+        winnerHaystack = `${winnerHaystack} you`;
+      }
     }
-    const haystack = [
-      row.original.gameName,
-      row.original.variants,
-      row.original.opponents.map((u) => u.name).join(","),
-      typeof winner === "string" ? winner : winner.name,
-    ]
-      .join(" ")
-      .toLowerCase();
+    const opponentHaystacks = row.original.opponents.map((u) =>
+      buildPlayerSearchHaystack(u)
+    );
+    const plainParts = [row.original.gameName, row.original.variants]
+      .filter(Boolean)
+      .map((part) => String(part).toLowerCase())
+      .join(" ");
+    const haystack = [plainParts, ...opponentHaystacks, winnerHaystack]
+      .filter(Boolean)
+      .join(" ");
     return queryMatchesHaystack(val, haystack);
   };
 

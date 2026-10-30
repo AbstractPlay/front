@@ -991,6 +991,10 @@
       "countdown": "Comenzando en {{count}}…",
       "countdownHint": "El reloj comienza cuando esto llegue a cero."
     },
+    "syncStallNotice": "Tu oponente aún no se ha conectado al tablero de juego. Puedes volver al lobby de la mesa y confirmar que estás listo de nuevo cuando ambos lo estén.",
+    "abortLaunchSync": "Volver al lobby",
+    "abortLaunchSyncWorking": "Volviendo…",
+    "abortLaunchSyncFailed": "No se pudo volver al lobby.",
     "cancelTable": "Cancelar mesa",
     "proposeSwap": "Proponer intercambio de asientos",
     "offerSwap": "Ofrecer cambio de asiento",

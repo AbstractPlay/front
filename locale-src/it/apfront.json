@@ -43,6 +43,18 @@
     "src": "Where would you like this choice applied?",
     "out": "Dove vorresti applicare questa scelta?"
   },
+  "Arena.abortLaunchSync": {
+    "src": "Return to lobby",
+    "out": "Torna alla lobby"
+  },
+  "Arena.abortLaunchSyncFailed": {
+    "src": "Could not return to the lobby.",
+    "out": "Impossibile tornare alla lobby."
+  },
+  "Arena.abortLaunchSyncWorking": {
+    "src": "Returning…",
+    "out": "Tornando…"
+  },
   "Arena.acceptSwap": {
     "src": "Accept swap",
     "out": "Accetta scambio"
@@ -390,6 +402,10 @@
   "Arena.swapWaitingOpponent": {
     "src": "Seat swap offered — waiting for your opponent to accept or decline.",
     "out": "Scambio di posto proposto — in attesa che l'avversario accetti o rifiuti."
+  },
+  "Arena.syncStallNotice": {
+    "src": "Your opponent has not connected to the game board yet. You can return to the table lobby and ready again when you are both set.",
+    "out": "Il tuo avversario non si è ancora connesso alla plancia di gioco. Puoi tornare alla lobby del tavolo e dare di nuovo il pronto quando sarete entrambi pronti."
   },
   "Arena.tableActivityToast.clickHint": {
     "src": "Click to open your table.",

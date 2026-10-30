@@ -991,6 +991,10 @@
       "countdown": "Startet in {{count}}…",
       "countdownHint": "Die Uhr startet, sobald dieser Wert Null erreicht."
     },
+    "syncStallNotice": "Dein Gegner hat sich noch nicht mit dem Spielbrett verbunden. Du kannst zur Tisch-Lobby zurückkehren und dich erneut bereitmelden, wenn ihr beide soweit seid.",
+    "abortLaunchSync": "Zurück zur Lobby",
+    "abortLaunchSyncWorking": "Kehre zur Lobby zurück…",
+    "abortLaunchSyncFailed": "Konnte nicht zur Lobby zurückkehren.",
     "cancelTable": "Tisch abbrechen",
     "proposeSwap": "Platztausch vorschlagen",
     "offerSwap": "Platztausch anbieten",

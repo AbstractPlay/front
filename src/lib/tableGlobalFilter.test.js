@@ -107,6 +107,22 @@ describe("gameListGlobalFilterFn", () => {
       )
     ).toBe(true);
   });
+
+  it("finds rows by Latin query against Cyrillic player name", () => {
+    expect(
+      gameListGlobalFilterFn(
+        row({
+          id: "g1",
+          players: [{ id: "u1", name: "Иван" }],
+          variants: [],
+          winners: null,
+          numMoves: 1,
+        }),
+        "global",
+        "ivan"
+      )
+    ).toBe(true);
+  });
 });
 
 describe("recentGamesGlobalFilterFn", () => {

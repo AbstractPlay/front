@@ -1,4 +1,8 @@
 import {
+  buildPlayerSearchHaystack,
+  isPlayerShapedSearchValue,
+} from "./displayNameSearch";
+import {
   haystackMatchesAllTokens,
   normalizeSearchQuery,
   searchTokens,
@@ -13,6 +17,26 @@ export function normalizeFilterQuery(val) {
 }
 
 /**
+ * @param {unknown} item
+ * @returns {string}
+ */
+function arrayItemToSearchText(item) {
+  if (item != null && typeof item === "object") {
+    if (isPlayerShapedSearchValue(item)) {
+      return buildPlayerSearchHaystack(item);
+    }
+    if ("name" in item && item.name != null) {
+      return String(item.name).toLowerCase();
+    }
+    if ("id" in item && item.id != null) {
+      return String(item.id).toLowerCase();
+    }
+    return String(item).toLowerCase();
+  }
+  return String(item).toLowerCase();
+}
+
+/**
  * @param {unknown} v
  * @returns {string}
  */
@@ -21,27 +45,20 @@ function fieldValueToSearchText(v) {
     return "";
   }
   if (Array.isArray(v)) {
-    return v
-      .map((item) =>
-        item != null && typeof item === "object"
-          ? "name" in item && item.name != null
-            ? String(item.name)
-            : "id" in item && item.id != null
-              ? String(item.id)
-              : String(item)
-          : String(item)
-      )
-      .join(" ");
+    return v.map((item) => arrayItemToSearchText(item)).join(" ");
   }
   if (typeof v === "object") {
+    if (isPlayerShapedSearchValue(v)) {
+      return buildPlayerSearchHaystack(v);
+    }
     return [
-      "name" in v && v.name != null ? String(v.name) : "",
-      "id" in v && v.id != null ? String(v.id) : "",
+      "name" in v && v.name != null ? String(v.name).toLowerCase() : "",
+      "id" in v && v.id != null ? String(v.id).toLowerCase() : "",
     ]
       .filter(Boolean)
       .join(" ");
   }
-  return String(v);
+  return String(v).toLowerCase();
 }
 
 /**
@@ -57,8 +74,7 @@ export function includesStringOnFields(original, fieldGetters, query) {
   const haystack = fieldGetters
     .map((get) => fieldValueToSearchText(get(original)))
     .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
+    .join(" ");
   return haystackMatchesAllTokens(haystack, tokens);
 }
 
