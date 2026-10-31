@@ -18,4 +18,27 @@ describe("GameEventContextCell", () => {
     const link = screen.getByRole("link");
     assert.equal(link.getAttribute("href"), "/ladder/l1");
   });
+
+  it("links tournament when no ladder", () => {
+    render(
+      <MemoryRouter>
+        <GameEventContextCell
+          tournament="go#tid-1"
+          metaGame="go"
+        />
+      </MemoryRouter>
+    );
+    const link = screen.getByRole("link");
+    assert.equal(link.getAttribute("href"), "/tournament/go/tid-1");
+  });
+
+  it("links organized event when no ladder or tournament", () => {
+    render(
+      <MemoryRouter>
+        <GameEventContextCell event="evt-99" metaGame="go" />
+      </MemoryRouter>
+    );
+    const link = screen.getByRole("link");
+    assert.equal(link.getAttribute("href"), "/event/evt-99");
+  });
 });

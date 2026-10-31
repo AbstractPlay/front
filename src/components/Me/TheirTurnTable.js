@@ -92,6 +92,7 @@ function TheirTurnTable(props) {
           lastChat: g.lastChat || 0,
           tournament: g.tournament,
           ladderId: g.ladderId,
+          event: g.event,
         };
         return ret;
       }),
@@ -196,6 +197,7 @@ function TheirTurnTable(props) {
           <GameEventContextCell
             tournament={props.row.original.tournament}
             ladderId={props.row.original.ladderId}
+            event={props.row.original.event}
             metaGame={props.row.original.metaGame}
           />
         ),
