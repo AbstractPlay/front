@@ -1313,6 +1313,7 @@
     "intro": "This page lets you explore different ways of sorting the list of games. Select your desired view below. Clicking on a game's name will take you to that game's landing page with additional information.",
     "loadingCounts": "Loading game counts…",
     "filterRecommended": "Recommended games only",
+    "expandAllDescriptions": "Expand all descriptions",
     "views": {
       "all": {
         "title": "All games"
