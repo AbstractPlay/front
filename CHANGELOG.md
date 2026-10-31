@@ -17,6 +17,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Continuous Delta Ladder:** Ladder list and hub UI (`/ladders`, `/ladder/:id`), dashboard Ladders tab (join match pool per ladder when eligible), game-list Event column, profile ladder module, `watchLadders` WebSocket refresh, in-app notification copy/prefs (`ladderChat`, `ladderDecay`, `ladderPointsGain` / `ladderPointsLoss`, `ladderJoin`, `ladderLeave`); ladder surfaces visible in prod (kill-switch removed).
 - **Feedback tags:** hover tooltips on topic badges, board filter chips, and tag pickers describe what each tag covers (English `feedback.tagDesc.*`; Weblate for other locales).
 - **Game over status:** finished-game move header uses `formatEogSummary` from gameslib (via `formatGameOverStatus`) to append localized EOG `reason` copy (`GameIsOver*_reason` apfront keys); requires a gameslib build that exports `formatEogSummary`.
+- **Completed game lists:** per-game and site recent completed tables show a **How ended** column (timeout, resignation, abandonment, draw, or localized EOG reason from apresults when the API provides `gameEndKind` / `eogReason`).
 
 ### Changed
 

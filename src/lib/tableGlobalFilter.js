@@ -119,6 +119,7 @@ export function gameListGlobalFilterFn(row, _columnId, filterValue) {
       () => o.variants,
       () => o.winners,
       () => o.numMoves,
+      () => o.howEnded,
     ],
     filterValue
   );
@@ -137,6 +138,7 @@ export function recentGamesGlobalFilterFn(row, _columnId, filterValue) {
       () => o.variants,
       () => o.winners,
       () => o.numMoves,
+      () => o.howEnded,
     ],
     filterValue
   );

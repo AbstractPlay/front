@@ -417,7 +417,15 @@
   "LevelMetaGame": "For all {{game}} games",
   "ListOf": "List of",
   "listGames": {
-    "loading": "Loading games…"
+    "loading": "Loading games…",
+    "end": {
+      "abandoned": "Abandoned",
+      "draw": "Draw agreed",
+      "resign": "Resignation",
+      "resignBy": "Resignation ({{player}})",
+      "timeout": "Timeout",
+      "timeoutBy": "Timeout ({{player}})"
+    }
   },
   "LogIn": "Log In",
   "LogOut": "Log Out",
@@ -752,6 +760,7 @@
     "goal": "Goal",
     "hard": "Hard?",
     "hardClock": "Hard clock?",
+    "howEnded": "How ended",
     "matchPercent": "Match %",
     "histogram": "Histogram",
     "hIndex": "h-index",

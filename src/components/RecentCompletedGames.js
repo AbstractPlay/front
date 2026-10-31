@@ -25,6 +25,7 @@ import {
   RECENT_GAMES_DEFAULT_DAYS,
   normalizeRecentGamesDays,
 } from "../lib/recentGamesSections";
+import { formatCompletedGameEnd } from "../lib/formatCompletedGameEnd";
 
 function RecentCompletedGamesList({ metaGame }) {
   const { t, i18n } = useTranslation();
@@ -97,8 +98,19 @@ function RecentCompletedGamesList({ metaGame }) {
           "variants" in rec && rec.variants !== null
             ? expandVariantsForGame(rec.metaGame, rec.variants)
             : null,
+        howEnded: formatCompletedGameEnd({
+          metaGame: rec.metaGame,
+          gameEndKind: rec.gameEndKind,
+          gameEndPlayer: rec.gameEndPlayer,
+          eogReason: rec.eogReason,
+          players: rec.players,
+          allUsers,
+          t,
+          tApresults: (key, params) =>
+            i18n.t(key, { ...params, ns: "apresults" }),
+        }),
       })),
-    [rawGames]
+    [rawGames, allUsers, t, i18n]
   );
 
   const columnHelper = createColumnHelper();
@@ -226,6 +238,21 @@ function RecentCompletedGamesList({ metaGame }) {
                 .getValue()
                 .map((p) => formatPlayerDisplayName(p, allUsers))
                 .join(", "),
+      }),
+      columnHelper.accessor("howEnded", {
+        header: t("tables.howEnded"),
+        cell: (props) => {
+          const text = props.getValue();
+          if (!text) {
+            return "";
+          }
+          return (
+            <span className="completed-game-end-label" title={text}>
+              {text}
+            </span>
+          );
+        },
+        enableSorting: false,
       }),
       columnHelper.accessor("variants", {
         header: t("tables.variants"),
