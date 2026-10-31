@@ -5463,10 +5463,6 @@
     "src": "This game is commercially available. Abstract Play cannot implement it without permission from the rights holder. You may still vote to show interest.",
     "out": "Questo gioco è disponibile in commercio. Abstract Play non può implementarlo senza il consenso del titolare dei diritti. Puoi comunque votare per mostrare il tuo interesse."
   },
-  "feedback.wishlist.discuss": {
-    "src": "Discuss",
-    "out": "Discussione"
-  },
   "feedback.wishlist.downloadCurrentView": {
     "src": "Download current view",
     "out": "Scarica la vista corrente"
@@ -5486,6 +5482,10 @@
   "feedback.wishlist.filterLabel": {
     "src": "Filter wishlist",
     "out": "Filtra lista desideri"
+  },
+  "feedback.wishlist.gameLink": {
+    "src": "Game link",
+    "out": "Link del gioco"
   },
   "feedback.wishlist.intro": {
     "src": "Vote for games you would like to see on Abstract Play. Suggest a game with a link to its rules or BoardGameGeek page.",

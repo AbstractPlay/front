@@ -1679,7 +1679,7 @@
       "sortRecent": "Fecha en que se agregó (más recientes primero)",
       "sortName": "Nombre (A–Z)",
       "filterAll": "Todos ({{count}})",
-      "discuss": "Discutir",
+      "gameLink": "Enlace del juego",
       "legacyVotesNote": "incluye votos anteriores de la lista de BGG",
       "viewExisting": "Ver entrada existente de la lista de deseos",
       "downloadCurrentView": "Descargar vista actual",
