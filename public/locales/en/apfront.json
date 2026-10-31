@@ -225,6 +225,7 @@
     "loading": "Loading events…",
     "Description": "Organized events are managed by individuals. The system allows organizers to create events, for players to register, and then for organizers to launch games between registered players. Tracking results, enforcing detailed time restrictions, and announcing winners is up to the organizer.",
     "Name": "Organized Events",
+    "badge": "Event",
     "newEvent": "New event",
     "draftEvents": "Draft events",
     "openForRegistration": "Open for registration",
