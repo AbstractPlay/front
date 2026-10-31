@@ -1855,6 +1855,10 @@
     "src": "Active games",
     "out": "Parties actives"
   },
+  "Ladder.activeOnly": {
+    "src": "Active ladders only",
+    "out": "Échelles actives uniquement"
+  },
   "Ladder.badge": {
     "src": "Ladder",
     "out": "Échelle"
@@ -6315,6 +6319,30 @@
     "src": "Update \"{{name}}\"",
     "out": "Mettre à jour \"{{name}}\""
   },
+  "listGames.end.abandoned": {
+    "src": "Abandoned",
+    "out": "Abandonnée"
+  },
+  "listGames.end.draw": {
+    "src": "Draw agreed",
+    "out": "Nulle d'un commun accord"
+  },
+  "listGames.end.resign": {
+    "src": "Resignation",
+    "out": "Abandon"
+  },
+  "listGames.end.resignBy": {
+    "src": "Resignation ({{player}})",
+    "out": "Abandon ({{player}})"
+  },
+  "listGames.end.timeout": {
+    "src": "Timeout",
+    "out": "Temps écoulé"
+  },
+  "listGames.end.timeoutBy": {
+    "src": "Timeout ({{player}})",
+    "out": "Temps écoulé ({{player}})"
+  },
   "listGames.loading": {
     "src": "Loading games…",
     "out": "Chargement des parties…"
@@ -7942,6 +7970,10 @@
   "tables.histogram": {
     "src": "Histogram",
     "out": "Histogramme"
+  },
+  "tables.howEnded": {
+    "src": "How ended",
+    "out": "Fin de partie"
   },
   "tables.image": {
     "src": "Image",

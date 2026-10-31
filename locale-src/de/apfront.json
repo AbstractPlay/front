@@ -1855,6 +1855,10 @@
     "src": "Active games",
     "out": "Aktive Spiele"
   },
+  "Ladder.activeOnly": {
+    "src": "Active ladders only",
+    "out": "Nur aktive Ranglisten"
+  },
   "Ladder.badge": {
     "src": "Ladder",
     "out": "Rangliste"
@@ -6315,6 +6319,30 @@
     "src": "Update \"{{name}}\"",
     "out": "\"{{name}}\" aktualisieren"
   },
+  "listGames.end.abandoned": {
+    "src": "Abandoned",
+    "out": "Abgebrochen"
+  },
+  "listGames.end.draw": {
+    "src": "Draw agreed",
+    "out": "Remis vereinbart"
+  },
+  "listGames.end.resign": {
+    "src": "Resignation",
+    "out": "Aufgabe"
+  },
+  "listGames.end.resignBy": {
+    "src": "Resignation ({{player}})",
+    "out": "Aufgabe ({{player}})"
+  },
+  "listGames.end.timeout": {
+    "src": "Timeout",
+    "out": "Zeitüberschreitung"
+  },
+  "listGames.end.timeoutBy": {
+    "src": "Timeout ({{player}})",
+    "out": "Zeitüberschreitung ({{player}})"
+  },
   "listGames.loading": {
     "src": "Loading games…",
     "out": "Spiele werden geladen…"
@@ -7942,6 +7970,10 @@
   "tables.histogram": {
     "src": "Histogram",
     "out": "Histogramm"
+  },
+  "tables.howEnded": {
+    "src": "How ended",
+    "out": "Beendet durch"
   },
   "tables.image": {
     "src": "Image",

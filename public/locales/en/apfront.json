@@ -1087,6 +1087,7 @@
     "memberCountForming_other": "{{count}} members ({{min}} to activate)",
     "activeGames": "Active games",
     "participatingOnly": "Only ladders I'm in",
+    "activeOnly": "Active ladders only",
     "noneListed": "No ladders match your filters.",
     "noneOnDashboard": "You are not in any ladders.",
     "createTitle": "Create a ladder",

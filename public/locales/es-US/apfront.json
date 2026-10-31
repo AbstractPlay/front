@@ -417,7 +417,15 @@
   "LevelMetaGame": "Para todos los juegos de {{game}}",
   "ListOf": "Lista de",
   "listGames": {
-    "loading": "Cargando partidas…"
+    "loading": "Cargando partidas…",
+    "end": {
+      "abandoned": "Abandonado",
+      "draw": "Empate acordado",
+      "resign": "Rendición",
+      "resignBy": "Rendición ({{player}})",
+      "timeout": "Tiempo agotado",
+      "timeoutBy": "Tiempo agotado ({{player}})"
+    }
   },
   "LogIn": "Iniciar sesión",
   "LogOut": "Cerrar sesión",
@@ -752,6 +760,7 @@
     "goal": "Objetivo",
     "hard": "¿Estricto?",
     "hardClock": "¿Reloj estricto?",
+    "howEnded": "Cómo terminó",
     "matchPercent": "% de emparejamiento",
     "histogram": "Histograma",
     "hIndex": "Índice h",
@@ -1078,6 +1087,7 @@
     "memberCountForming_other": "{{count}} miembros ({{min}} para activar)",
     "activeGames": "Partidas activas",
     "participatingOnly": "Solo escaleras en las que participo",
+    "activeOnly": "Solo clasificaciones activas",
     "noneListed": "Ninguna escalera coincide con tus filtros.",
     "noneOnDashboard": "No estás en ninguna escalera.",
     "createTitle": "Crear una escalera",
