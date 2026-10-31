@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { GameFactory } from "@abstractplay/gameslib";
 import { useStore } from "../../../stores";
 import { callAuthApi } from "../../../lib/api";
 import { getPendingSubmitMove } from "../../../lib/GameMove/submitMove";
 import { formatPlayerDisplayName, isClientBotTurn } from "../../Bots/botUtils";
 import { getFocusNode } from "./moveEntryUtils";
-import { formatSoloOutcome, isSoloGame } from "../../../lib/soloPlay";
+import { formatGameOverStatus } from "../../../lib/formatGameOverStatus";
+import i18n from "../../../i18n";
 import { isPlayerTimedOut } from "../../../lib/gameClockDisplay";
 import { isTeachingUndoReviewAtCurrentTip } from "../../../lib/teachingModeChallenge";
 import { isArenaGame } from "../../../lib/arena/arenaGame";
@@ -158,36 +158,16 @@ export function useDockMoveEntry(props) {
   } else {
     const node = getFocusNode(exploration, game, focus);
     if (!node) return { ready: false };
-    if (isSoloGame(game)) {
-      mover = formatSoloOutcome({
-        gameRec,
-        engine,
-        metaGame: game.metaGame,
-        t,
-      });
-    } else {
-      const state = GameFactory(engine.metaGame, node.state);
-      if (state.winner?.length > 0) {
-        if (state.winner.length === 1) {
-          const winner = formatPlayerDisplayName(
-            game.players[state.winner[0] - 1],
-            allUsers
-          );
-          mover = t("GameIsOver1", { winner });
-        } else {
-          const winners = state.winner.map((w) =>
-            formatPlayerDisplayName(game.players[w - 1], allUsers)
-          );
-          const lastWinner = winners.pop();
-          mover = t("GameIsOver2", {
-            winners: winners.join(", "),
-            lastWinner,
-          });
-        }
-      } else {
-        mover = t("GameIsOver");
-      }
-    }
+    const status = formatGameOverStatus({
+      game,
+      gameRec,
+      metaGame: engine.metaGame,
+      nodeState: node.state,
+      allUsers,
+      t,
+      tApresults: (key, params) => i18n.t(key, params),
+    });
+    mover = status.primary;
   }
 
   let canClaimTimeout = false;

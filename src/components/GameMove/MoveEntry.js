@@ -7,7 +7,8 @@ import { useStore } from "../../stores";
 import { formatPlayerDisplayName, isClientBotTurn } from "../Bots/botUtils";
 import { getPendingSubmitMove } from "../../lib/GameMove/submitMove";
 import Modal from "../Modal";
-import { formatSoloOutcome, isSoloGame } from "../../lib/soloPlay";
+import i18n from "../../i18n";
+import { formatGameOverStatus } from "../../lib/formatGameOverStatus";
 import PlayerOnlineIcon from "./preview/PlayerOnlineIcon";
 import PlayerVacationPauseIcon from "./preview/PlayerVacationPauseIcon";
 import { isPlayerIndexOnMove } from "./preview/moveEntryUtils";
@@ -266,35 +267,19 @@ function MoveEntry(props) {
       // game over
       const node = getFocusNode(exploration, game, focus);
       if (!node) return null;
-      if (isSoloGame(game)) {
-        mover = formatSoloOutcome({
-          gameRec,
-          engine,
-          metaGame: game.metaGame,
-          t,
-        });
-      } else {
-        const state = GameFactory(engine.metaGame, node.state);
-        if (state.winner && state.winner.length > 0) {
-          if (state.winner.length === 1) {
-            const winner = formatPlayerDisplayName(
-              game.players[state.winner[0] - 1],
-              allUsers
-            );
-            mover = t("GameIsOver1", { winner });
-          } else {
-            const winners = state.winner.map((w) =>
-              formatPlayerDisplayName(game.players[w - 1], allUsers)
-            );
-            const lastWinner = winners.pop();
-            const winnersStr = winners.join(", ");
-            mover = t("GameIsOver2", { winners: winnersStr, lastWinner });
-          }
-        } else {
-          console.log(state);
-          mover = t("GameIsOver");
-        }
-      }
+      const status = formatGameOverStatus({
+        game,
+        gameRec,
+        metaGame: engine.metaGame,
+        nodeState: node.state,
+        allUsers,
+        t,
+        tApresults: (key, params) => i18n.t(key, params),
+      });
+      mover = status.primary;
+      gameOverNonLeafNode =
+        game.gameOver &&
+        getFocusNode(exploration, game, focus)?.children?.length > 0;
     }
     let canClaimTimeout = false;
     if (uiState === 0 && !submitting) {

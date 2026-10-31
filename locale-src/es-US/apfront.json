@@ -1575,9 +1575,21 @@
     "src": "The game has ended. {{winner}} won.",
     "out": "El juego ha terminado. {{winner}} ganó."
   },
+  "GameIsOver1_reason": {
+    "src": "The game has ended. {{winner}} won. {{reason}}",
+    "out": "La partida ha terminado. {{winner}} ganó. {{reason}}"
+  },
   "GameIsOver2": {
     "src": "The game has ended. The following players won: {{winners}} and {{lastWinner}}.",
     "out": "El juego ha terminado. Los siguientes jugadores ganaron: {{winners}} y {{lastWinner}}."
+  },
+  "GameIsOver2_reason": {
+    "src": "The game has ended. The following players won: {{winners}} and {{lastWinner}}. {{reason}}",
+    "out": "La partida ha terminado. Los siguientes jugadores ganaron: {{winners}} y {{lastWinner}}. {{reason}}"
+  },
+  "GameIsOver_reason": {
+    "src": "The game has ended. {{reason}}",
+    "out": "La partida ha terminado. {{reason}}"
   },
   "GameNoteModal": {
     "src": "Game note",
@@ -5463,10 +5475,6 @@
     "src": "This game is commercially available. Abstract Play cannot implement it without permission from the rights holder. You may still vote to show interest.",
     "out": "Este juego está disponible comercialmente. Abstract Play no puede implementarlo sin el permiso del titular de los derechos. Aún puedes votar para mostrar interés."
   },
-  "feedback.wishlist.discuss": {
-    "src": "Discuss",
-    "out": "Discutir"
-  },
   "feedback.wishlist.downloadCurrentView": {
     "src": "Download current view",
     "out": "Descargar vista actual"
@@ -5486,6 +5494,10 @@
   "feedback.wishlist.filterLabel": {
     "src": "Filter wishlist",
     "out": "Filtrar lista de deseos"
+  },
+  "feedback.wishlist.gameLink": {
+    "src": "Game link",
+    "out": "Enlace del juego"
   },
   "feedback.wishlist.intro": {
     "src": "Vote for games you would like to see on Abstract Play. Suggest a game with a link to its rules or BoardGameGeek page.",
