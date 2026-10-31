@@ -19,6 +19,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Changed
 
+- **Game wishlist:** list entry titles link to the discussion thread; external rules/BGG URL is a separate “Game link”.
 - **Play layouts:** fifth **live** layout (context strip, sidebar clocks on wide viewports, full move dock, drawer) for arena and correspondence; arena play/watch default to **live** via `gameMoveLayoutLive`; in-game layout picker links stay on `/arena/play` or `/arena/watch` routes.
 - **Game links:** profile history, highlights, hub game lists, recent completed, dashboard tables, notifications, and meta recommended games link to **`/arena/play/...`** when the row or record has `playMode: arena` (via `canonicalGamePlayPath`); correspondence and legacy URLs still use `/move/...` (arena bookmarks redirect once).
 - **Tournaments / ladders:** rules intro on the tournaments list, ladder list, and ladder hub keeps the full description in place with a fade and expand/collapse toggle (same pattern as the player profile about box), instead of swapping short and long copy.
