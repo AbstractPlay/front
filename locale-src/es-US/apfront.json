@@ -1575,9 +1575,21 @@
     "src": "The game has ended. {{winner}} won.",
     "out": "El juego ha terminado. {{winner}} ganó."
   },
+  "GameIsOver1_reason": {
+    "src": "The game has ended. {{winner}} won. {{reason}}",
+    "out": "La partida ha terminado. {{winner}} ganó. {{reason}}"
+  },
   "GameIsOver2": {
     "src": "The game has ended. The following players won: {{winners}} and {{lastWinner}}.",
     "out": "El juego ha terminado. Los siguientes jugadores ganaron: {{winners}} y {{lastWinner}}."
+  },
+  "GameIsOver2_reason": {
+    "src": "The game has ended. The following players won: {{winners}} and {{lastWinner}}. {{reason}}",
+    "out": "La partida ha terminado. Los siguientes jugadores ganaron: {{winners}} y {{lastWinner}}. {{reason}}"
+  },
+  "GameIsOver_reason": {
+    "src": "The game has ended. {{reason}}",
+    "out": "La partida ha terminado. {{reason}}"
   },
   "GameNoteModal": {
     "src": "Game note",
