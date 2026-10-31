@@ -24,6 +24,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Ladder list:** paginated ladder table with the shared TanStack table nav (search, page controls, page size).
 - **Deploy:** static releases use `scripts/deploy-static.mjs` (no S3 bucket wipe, hashed assets before `index.html`); `error.html` auto-retries during rare error-document responses; post-deploy `prune-stale-static.mjs` drops orphaned `static/` / `flags/` objects (inventory-based, not lifecycle expiry on the live site).
 - **Player search:** opponent picker and player-directory filters match Unicode display names using Latin letters, diacritic-insensitive Latin, and ASCII approximations ([AnyAscii](https://anyascii.com/)); short in-app hint on those search fields.
+- **Chat composer:** Ctrl+Enter (Cmd+Enter on macOS) posts the comment from play, arena, ladder, and tournament chat boxes.
 
 ### Fixed
 

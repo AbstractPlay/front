@@ -55,4 +55,24 @@ describe("GameCommentShort", () => {
     expect(handleSubmit).toHaveBeenCalledWith("posted");
     expect(screen.getByPlaceholderText("Comment")).toHaveValue("");
   });
+
+  it("submits on Ctrl+Enter", () => {
+    const handleSubmit = vi.fn();
+
+    render(
+      <GameCommentShort
+        gameid="game-1"
+        handleSubmit={handleSubmit}
+        tooMuch={false}
+        commentingCompletedGame={false}
+      />
+    );
+
+    const field = screen.getByPlaceholderText("Comment");
+    fireEvent.change(field, { target: { value: "quick post" } });
+    fireEvent.keyDown(field, { key: "Enter", ctrlKey: true });
+
+    expect(handleSubmit).toHaveBeenCalledWith("quick post");
+    expect(screen.getByPlaceholderText("Comment")).toHaveValue("");
+  });
 });
