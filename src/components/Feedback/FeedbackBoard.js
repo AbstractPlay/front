@@ -409,17 +409,14 @@ function FeedbackBoard({ kind = "bug" }) {
               ) : null}
               {kind === "wishlist" && item.gameUrl ? (
                 <>
-                  <a
-                    href={item.gameUrl}
-                    className="has-text-weight-semibold"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <Link to={feedbackDetailPath(item.id)} className="has-text-weight-semibold">
                     {item.title}
-                  </a>
+                  </Link>
                   <span className="feedback-muted">
                     {" · "}
-                    <Link to={feedbackDetailPath(item.id)}>{t("feedback.wishlist.discuss")}</Link>
+                    <a href={item.gameUrl} target="_blank" rel="noopener noreferrer">
+                      {t("feedback.wishlist.gameLink")}
+                    </a>
                   </span>
                 </>
               ) : (
