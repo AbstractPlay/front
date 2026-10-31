@@ -419,7 +419,7 @@
   "listGames": {
     "loading": "Chargement des parties…",
     "end": {
-      "abandoned": "Abandonnée",
+      "abandoned": "Partie abandonnée",
       "draw": "Nulle d'un commun accord",
       "resign": "Abandon",
       "resignBy": "Abandon ({{player}})",

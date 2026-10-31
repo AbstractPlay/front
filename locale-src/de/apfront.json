@@ -7973,7 +7973,7 @@
   },
   "tables.howEnded": {
     "src": "How ended",
-    "out": "Beendet durch"
+    "out": "Art des Spielendes"
   },
   "tables.image": {
     "src": "Image",

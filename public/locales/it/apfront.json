@@ -419,7 +419,7 @@
   "listGames": {
     "loading": "Caricamento partite…",
     "end": {
-      "abandoned": "Abbandono",
+      "abandoned": "Abbandonata",
       "draw": "Patta concordata",
       "resign": "Resa",
       "resignBy": "Resa ({{player}})",

@@ -6321,7 +6321,7 @@
   },
   "listGames.end.abandoned": {
     "src": "Abandoned",
-    "out": "Abandonnée"
+    "out": "Partie abandonnée"
   },
   "listGames.end.draw": {
     "src": "Draw agreed",

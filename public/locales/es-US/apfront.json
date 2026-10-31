@@ -419,7 +419,7 @@
   "listGames": {
     "loading": "Cargando partidas…",
     "end": {
-      "abandoned": "Abandonado",
+      "abandoned": "Abandono",
       "draw": "Empate acordado",
       "resign": "Rendición",
       "resignBy": "Rendición ({{player}})",
