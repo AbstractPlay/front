@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { Fragment, useState, useEffect, useMemo, useCallback } from "react";
 import { Link, useParams, useNavigate, Navigate, useLocation } from "react-router-dom";
 import {
   getCoreRowModel,
@@ -52,6 +52,10 @@ function Ladders() {
     "ladders-registered-only",
     false
   );
+  const [activeOnly, activeOnlySetter] = useStorageState(
+    "ladders-active-only",
+    false
+  );
   const [starredOnly, starredOnlySetter] = useStorageState(
     "ladders-starred-only",
     false
@@ -102,6 +106,9 @@ function Ladders() {
     const myId = globalMe?.id;
     return ladders
       .filter((l) => {
+        if (activeOnly && l.status !== "active") {
+          return false;
+        }
         if (starredOnly && !stars.includes(l.metaGame)) {
           return false;
         }
@@ -122,7 +129,14 @@ function Ladders() {
         activeMemberCount: l.activeMemberCount ?? 0,
         minActiveMembers: l.minActiveMembers ?? 4,
       }));
-  }, [ladders, starredOnly, registeredOnly, globalMe?.stars, globalMe?.id]);
+  }, [
+    ladders,
+    activeOnly,
+    starredOnly,
+    registeredOnly,
+    globalMe?.stars,
+    globalMe?.id,
+  ]);
 
   const variantSortingFn = useMemo(
     () =>
@@ -149,9 +163,11 @@ function Ladders() {
       columnHelper.accessor("variants", {
         header: t("tables.variants"),
         sortingFn: variantSortingFn,
+        enableSorting: false,
       }),
       columnHelper.accessor("displayName", {
         header: t("Ladder.name"),
+        enableSorting: false,
         cell: (props) => (
           <Link to={ladderDetailPathActive(props.row.original.ladderId)}>
             {props.getValue()}
@@ -160,6 +176,7 @@ function Ladders() {
       }),
       columnHelper.accessor("status", {
         header: t("tables.status"),
+        enableSorting: false,
         cell: (props) => t(`Ladder.status.${props.getValue()}`, props.getValue()),
       }),
       columnHelper.accessor("activeMemberCount", {
@@ -191,7 +208,13 @@ function Ladders() {
     onGlobalFilterChange: setGlobalFilter,
   });
 
-  useResetTablePageIndex(table, globalFilter);
+  useResetTablePageIndex(
+    table,
+    globalFilter,
+    activeOnly,
+    starredOnly,
+    registeredOnly
+  );
   useSyncTablePageSize(table, showState);
 
   const handleNewLadder = useCallback(
@@ -252,6 +275,16 @@ function Ladders() {
                 />
               </div>
             ) : null}
+            <div className="control">
+              <label className="checkbox ladders-page-filter-checkbox">
+                <input
+                  type="checkbox"
+                  checked={activeOnly}
+                  onChange={(e) => activeOnlySetter(e.target.checked)}
+                />
+                {t("Ladder.activeOnly")}
+              </label>
+            </div>
             {globalMe?.id ? (
               <>
                 <div className="control">
@@ -301,7 +334,31 @@ function Ladders() {
               <tr key={hg.id}>
                 {hg.headers.map((header) => (
                   <th key={header.id}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
+                    {header.isPlaceholder ? null : (
+                      <div
+                        className={header.column.getCanSort() ? "sortable" : ""}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {{
+                          asc: (
+                            <Fragment>
+                              &nbsp;
+                              <i className="fa fa-angle-up" aria-hidden="true" />
+                            </Fragment>
+                          ),
+                          desc: (
+                            <Fragment>
+                              &nbsp;
+                              <i className="fa fa-angle-down" aria-hidden="true" />
+                            </Fragment>
+                          ),
+                        }[header.column.getIsSorted()] ?? null}
+                      </div>
+                    )}
                   </th>
                 ))}
               </tr>

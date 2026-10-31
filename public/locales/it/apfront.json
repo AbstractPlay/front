@@ -417,7 +417,15 @@
   "LevelMetaGame": "Per tutte le partite a {{game}}",
   "ListOf": "Elenco di",
   "listGames": {
-    "loading": "Caricamento partite…"
+    "loading": "Caricamento partite…",
+    "end": {
+      "abandoned": "Abbandonata",
+      "draw": "Patta concordata",
+      "resign": "Resa",
+      "resignBy": "Resa ({{player}})",
+      "timeout": "Tempo scaduto",
+      "timeoutBy": "Tempo scaduto ({{player}})"
+    }
   },
   "LogIn": "Accedi",
   "LogOut": "Disconnettiti",
@@ -752,6 +760,7 @@
     "goal": "Obiettivo",
     "hard": "Difficile?",
     "hardClock": "Tempo rigido?",
+    "howEnded": "Modalità di fine",
     "matchPercent": "% Partita",
     "histogram": "Istogramma",
     "hIndex": "Indice h",
@@ -1078,6 +1087,7 @@
     "memberCountForming_other": "{{count}} membri ({{min}} per attivare)",
     "activeGames": "Partite attive",
     "participatingOnly": "Solo le mie scale",
+    "activeOnly": "Solo ladder attive",
     "noneListed": "Nessuna scala corrisponde ai filtri.",
     "noneOnDashboard": "Non partecipi a nessuna scala.",
     "createTitle": "Crea una scala",

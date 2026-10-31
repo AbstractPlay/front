@@ -17,10 +17,6 @@ function countLinkCell(toBuilder, loadingLabel) {
   };
 }
 
-function siteWideHeaderLink(to, label) {
-  return () => <Link to={to}>{label}</Link>;
-}
-
 function shuffle(array) {
   const arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
@@ -95,14 +91,14 @@ export const viewConfigs = {
         ),
       }),
       columnHelper.accessor("completed", {
-        header: siteWideHeaderLink("/recent-games", t("tables.completed")),
+        header: t("tables.completed"),
         cell: countLinkCell(
           (id) => `/listgames/completed/${id}`,
           loadingLabel
         ),
       }),
       columnHelper.accessor("challenges", {
-        header: siteWideHeaderLink("/challenges", t("tables.challenges")),
+        header: t("tables.challenges"),
         cell: countLinkCell((id) => `/challenges/${id}`, loadingLabel),
       }),
       columnHelper.accessor("ratings", {
@@ -340,14 +336,14 @@ export const viewConfigs = {
         ),
       }),
       columnHelper.accessor("completed", {
-        header: siteWideHeaderLink("/recent-games", t("tables.completed")),
+        header: t("tables.completed"),
         cell: countLinkCell(
           (id) => `/listgames/completed/${id}`,
           loadingLabel
         ),
       }),
       columnHelper.accessor("challenges", {
-        header: siteWideHeaderLink("/challenges", t("tables.challenges")),
+        header: t("tables.challenges"),
         cell: countLinkCell((id) => `/challenges/${id}`, loadingLabel),
       }),
       columnHelper.accessor("ratings", {

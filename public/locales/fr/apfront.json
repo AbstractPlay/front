@@ -417,7 +417,15 @@
   "LevelMetaGame": "Pour toutes les parties de {{game}}",
   "ListOf": "Liste de",
   "listGames": {
-    "loading": "Chargement des parties…"
+    "loading": "Chargement des parties…",
+    "end": {
+      "abandoned": "Partie abandonnée",
+      "draw": "Nulle d'un commun accord",
+      "resign": "Abandon",
+      "resignBy": "Abandon ({{player}})",
+      "timeout": "Temps écoulé",
+      "timeoutBy": "Temps écoulé ({{player}})"
+    }
   },
   "LogIn": "Connexion",
   "LogOut": "Déconnexion",
@@ -752,6 +760,7 @@
     "goal": "Objectif",
     "hard": "Difficile ?",
     "hardClock": "Horloge stricte ?",
+    "howEnded": "Fin de partie",
     "matchPercent": "% du match",
     "histogram": "Histogramme",
     "hIndex": "Indice h",
@@ -1078,6 +1087,7 @@
     "memberCountForming_other": "{{count}} membres ({{min}} pour activer)",
     "activeGames": "Parties actives",
     "participatingOnly": "Uniquement mes échelles",
+    "activeOnly": "Échelles actives uniquement",
     "noneListed": "Aucune échelle ne correspond à vos filtres.",
     "noneOnDashboard": "Vous n'êtes dans aucune échelle.",
     "createTitle": "Créer une échelle",

@@ -25,7 +25,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Play layouts:** fifth **live** layout (context strip, sidebar clocks on wide viewports, full move dock, drawer) for arena and correspondence; arena play/watch default to **live** via `gameMoveLayoutLive`; in-game layout picker links stay on `/arena/play` or `/arena/watch` routes.
 - **Game links:** profile history, highlights, hub game lists, recent completed, dashboard tables, notifications, and meta recommended games link to **`/arena/play/...`** when the row or record has `playMode: arena` (via `canonicalGamePlayPath`); correspondence and legacy URLs still use `/move/...` (arena bookmarks redirect once).
 - **Tournaments / ladders:** rules intro on the tournaments list, ladder list, and ladder hub keeps the full description in place with a fade and expand/collapse toggle (same pattern as the player profile about box), instead of swapping short and long copy.
-- **Ladder list:** paginated ladder table with the shared TanStack table nav (search, page controls, page size).
+- **Ladder list:** paginated ladder table with the shared TanStack table nav (search, page controls, page size); **Active ladders only** filter; sort by game or member count.
 - **Deploy:** static releases use `scripts/deploy-static.mjs` (no S3 bucket wipe, hashed assets before `index.html`); `error.html` auto-retries during rare error-document responses; post-deploy `prune-stale-static.mjs` drops orphaned `static/` / `flags/` objects (inventory-based, not lifecycle expiry on the live site).
 - **Player search:** opponent picker and player-directory filters match Unicode display names using Latin letters, diacritic-insensitive Latin, and ASCII approximations ([AnyAscii](https://anyascii.com/)); short in-app hint on those search fields.
 - **Chat composer:** Ctrl+Enter (Cmd+Enter on macOS) posts the comment from play, arena, ladder, and tournament chat boxes.
@@ -37,6 +37,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Arena / WebSocket:** parse text frames when Firefox delivers `Blob`/`ArrayBuffer` payloads; arena table launch ignores stale `gameMoveLayoutLive` strip (etc.) unless the player explicitly chose a layout in the lobby or picker; **`watchGames` always merges the current play/watch URL at send time** so move pushes work after deploy without a hard refresh (avoids strict WS filtering when an old tab never registered `/arena/play` in the hook).
 - **Challenge modal (Lab / teach from position):** move-tree keyboard shortcuts no longer intercept typing in the new-challenge form (notes, game/opponent pickers, clock fields).
 - **Dashboard Games tab:** Event column shows tournament and organized-event links (not only ladder games); requires backend `CURRENTGAMES#` projection of `tournament` and `event` (existing rows refresh on the next game update).
+- **Explore (all / random):** Completed and Challenges column headers are plain labels again so sorting works; per-game count cells still link to completed lists and standing challenges.
 
 ## [1.0.0-ci] - 2026-10-25
 
