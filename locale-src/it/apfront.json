@@ -5219,6 +5219,70 @@
     "src": "Tournaments",
     "out": "Tornei"
   },
+  "feedback.tagDesc.accessibility": {
+    "src": "Focus, motor, and visibility quality-of-life improvements",
+    "out": "Miglioramenti per focus, abilità motorie e visibilità"
+  },
+  "feedback.tagDesc.account": {
+    "src": "Account settings, vacations, and notification preferences",
+    "out": "Impostazioni account, modalità vacanza e preferenze di notifica"
+  },
+  "feedback.tagDesc.challenges": {
+    "src": "Open challenges, issuing, and resuming challenge games",
+    "out": "Sfide aperte, invio e ripresa delle partite di sfida"
+  },
+  "feedback.tagDesc.chat": {
+    "src": "Game chat, tournament chat, and log links",
+    "out": "Chat di gioco, chat del torneo e link ai log"
+  },
+  "feedback.tagDesc.dashboard": {
+    "src": "Home dashboard, events, and site navigation",
+    "out": "Dashboard principale, eventi e navigazione del sito"
+  },
+  "feedback.tagDesc.designer": {
+    "src": "Designer, playground, and explore nodes",
+    "out": "Designer, playground e nodi di esplorazione"
+  },
+  "feedback.tagDesc.feedback": {
+    "src": "Bug reports, feature ideas, wishlist, and related notifications",
+    "out": "Segnalazioni di bug, idee per funzionalità, lista dei desideri e relative notifiche"
+  },
+  "feedback.tagDesc.game_client": {
+    "src": "In-game client: renderer, variants, scores, rotation, and play UI",
+    "out": "Client di gioco: rendering, varianti, punteggi, rotazione e UI di gioco"
+  },
+  "feedback.tagDesc.games": {
+    "src": "Game catalog (/games), search, and game page chrome",
+    "out": "Catalogo giochi (/games), ricerca e interfaccia della pagina di gioco"
+  },
+  "feedback.tagDesc.i18n": {
+    "src": "Translations, locales, and language-specific content",
+    "out": "Traduzioni, localizzazioni e contenuti specifici della lingua"
+  },
+  "feedback.tagDesc.players": {
+    "src": "Player profiles, the /players directory, and profile stats",
+    "out": "Profili giocatore, la directory /players e statistiche del profilo"
+  },
+  "feedback.tagDesc.rules_engine": {
+    "src": "Move legality, end-of-game detection, and engine logging",
+    "out": "Validità delle mosse, rilevamento di fine partita e log del motore"
+  },
+  "feedback.tagDesc.stats": {
+    "src": "Game statistics filters, averages, and history views",
+    "out": "Filtri delle statistiche di gioco, medie e viste della cronologia"
+  },
+  "feedback.tagDesc.tables": {
+    "src": "HTML table layout on play and stats pages",
+    "out": "Layout delle tabelle HTML nelle pagine di gioco e delle statistiche"
+  },
+  "feedback.tagDesc.themes": {
+    "src": "Site theme and color customization",
+    "out": "Tema del sito e personalizzazione dei colori"
+  },
+  "feedback.tagDesc.tournaments": {
+    "src": "Tournament schedules, grids, history, and tournament chat",
+    "out": "Programmi dei tornei, tabelloni, cronologia e chat dei tornei"
+  },
   "feedback.tags.adminSection": {
     "src": "Tags",
     "out": "Tag"

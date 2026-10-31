@@ -1927,6 +1927,24 @@
       "tables": "Tische & Layout",
       "feedback": "Feedbacksystem"
     },
+    "tagDesc": {
+      "dashboard": "Haupt-Dashboard, Events und Seitennavigation",
+      "games": "Spielekatalog (/games), Suche und Spielseiten-Chrome",
+      "game_client": "In-Game-Client: Renderer, Varianten, Punktestände, Rotation und Spiel-UI",
+      "tournaments": "Turnierpläne, Raster, Verlauf und Turnier-Chat",
+      "players": "Spielerprofile, das Verzeichnis /players und Profilstatistiken",
+      "stats": "Spielstatistik-Filter, Durchschnitte und Verlaufsansichten",
+      "challenges": "Offene Herausforderungen, Erstellung und Wiederaufnahme von Herausforderungsspielen",
+      "chat": "Spiel-Chat, Turnier-Chat und Protokoll-Links",
+      "designer": "Designer, Spielwiese und Erkundungsknoten",
+      "themes": "Website-Theme und Farbanpassungen",
+      "account": "Kontoeinstellungen, Urlaubsmodus und Benachrichtigungseinstellungen",
+      "i18n": "Übersetzungen, Lokalisierungen und sprachspezifische Inhalte",
+      "accessibility": "Verbesserungen der Barrierefreiheit für Fokus, Motorik und Sichtbarkeit",
+      "rules_engine": "Zuggültigkeit, Spielende-Erkennung und Engine-Protokollierung",
+      "tables": "HTML-Tabellenlayout auf Spiel- und Statistikseiten",
+      "feedback": "Fehlerberichte, Funktionsideen, Wunschliste und zugehörige Benachrichtigungen"
+    },
     "reviewers": {
       "badge": "Reviewer: {{names}}",
       "badgePrefix": "Rezensenten:",

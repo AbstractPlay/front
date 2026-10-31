@@ -1927,6 +1927,24 @@
       "tables": "Tables & layout",
       "feedback": "Feedback system"
     },
+    "tagDesc": {
+      "dashboard": "Home dashboard, events, and site navigation",
+      "games": "Game catalog (/games), search, and game page chrome",
+      "game_client": "In-game client: renderer, variants, scores, rotation, and play UI",
+      "tournaments": "Tournament schedules, grids, history, and tournament chat",
+      "players": "Player profiles, the /players directory, and profile stats",
+      "stats": "Game statistics filters, averages, and history views",
+      "challenges": "Open challenges, issuing, and resuming challenge games",
+      "chat": "Game chat, tournament chat, and log links",
+      "designer": "Designer, playground, and explore nodes",
+      "themes": "Site theme and color customization",
+      "account": "Account settings, vacations, and notification preferences",
+      "i18n": "Translations, locales, and language-specific content",
+      "accessibility": "Focus, motor, and visibility quality-of-life improvements",
+      "rules_engine": "Move legality, end-of-game detection, and engine logging",
+      "tables": "HTML table layout on play and stats pages",
+      "feedback": "Bug reports, feature ideas, wishlist, and related notifications"
+    },
     "reviewers": {
       "badge": "Reviewers: {{names}}",
       "badgePrefix": "Reviewers:",

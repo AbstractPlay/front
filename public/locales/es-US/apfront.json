@@ -1927,6 +1927,24 @@
       "tables": "Mesas y diseño",
       "feedback": "Sistema de comentarios"
     },
+    "tagDesc": {
+      "dashboard": "Panel principal, eventos y navegación del sitio",
+      "games": "Catálogo de juegos (/games), búsqueda e interfaz de la página del juego",
+      "game_client": "Cliente del juego: renderizador, variantes, puntuaciones, rotación e interfaz de juego",
+      "tournaments": "Calendarios de torneos, cuadros, historial y chat de torneos",
+      "players": "Perfiles de jugadores, el directorio /players y estadísticas del perfil",
+      "stats": "Filtros de estadísticas de juegos, promedios y vistas del historial",
+      "challenges": "Desafíos abiertos, emisión y reanudación de partidas de desafío",
+      "chat": "Chat del juego, chat del torneo y enlaces de registros",
+      "designer": "Diseñador, zona de pruebas y nodos de exploración",
+      "themes": "Tema del sitio y personalización de colores",
+      "account": "Configuración de la cuenta, vacaciones y preferencias de notificación",
+      "i18n": "Traducciones, configuraciones regionales y contenido específico del idioma",
+      "accessibility": "Mejoras de calidad de vida para enfoque, motricidad y visibilidad",
+      "rules_engine": "Legalidad de movimientos, detección de fin de partida y registros del motor",
+      "tables": "Diseño de tablas HTML en las páginas de juego y estadísticas",
+      "feedback": "Reportes de errores, ideas de funciones, lista de deseos y notificaciones relacionadas"
+    },
     "reviewers": {
       "badge": "Revisores: {{names}}",
       "badgePrefix": "Revisores:",

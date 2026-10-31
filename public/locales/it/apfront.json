@@ -1927,6 +1927,24 @@
       "tables": "Tavoli e layout",
       "feedback": "Sistema di feedback"
     },
+    "tagDesc": {
+      "dashboard": "Dashboard principale, eventi e navigazione del sito",
+      "games": "Catalogo giochi (/games), ricerca e interfaccia della pagina di gioco",
+      "game_client": "Client di gioco: rendering, varianti, punteggi, rotazione e UI di gioco",
+      "tournaments": "Programmi dei tornei, tabelloni, cronologia e chat dei tornei",
+      "players": "Profili giocatore, la directory /players e statistiche del profilo",
+      "stats": "Filtri delle statistiche di gioco, medie e viste della cronologia",
+      "challenges": "Sfide aperte, invio e ripresa delle partite di sfida",
+      "chat": "Chat di gioco, chat del torneo e link ai log",
+      "designer": "Designer, playground e nodi di esplorazione",
+      "themes": "Tema del sito e personalizzazione dei colori",
+      "account": "Impostazioni account, modalità vacanza e preferenze di notifica",
+      "i18n": "Traduzioni, localizzazioni e contenuti specifici della lingua",
+      "accessibility": "Miglioramenti per focus, abilità motorie e visibilità",
+      "rules_engine": "Validità delle mosse, rilevamento di fine partita e log del motore",
+      "tables": "Layout delle tabelle HTML nelle pagine di gioco e delle statistiche",
+      "feedback": "Segnalazioni di bug, idee per funzionalità, lista dei desideri e relative notifiche"
+    },
     "reviewers": {
       "badge": "Revisori: {{names}}",
       "badgePrefix": "Revisori:",

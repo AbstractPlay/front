@@ -1927,6 +1927,24 @@
       "tables": "Tables et disposition",
       "feedback": "Système de retours"
     },
+    "tagDesc": {
+      "dashboard": "Tableau de bord d'accueil, événements et navigation du site",
+      "games": "Catalogue de jeux (/games), recherche et interface de la page de jeu",
+      "game_client": "Client en jeu : moteur de rendu, variantes, scores, rotation et interface de jeu",
+      "tournaments": "Calendriers des tournois, tableaux, historique et tchat de tournoi",
+      "players": "Profils de joueurs, annuaire /players et statistiques de profil",
+      "stats": "Filtres des statistiques de jeu, moyennes et vues de l'historique",
+      "challenges": "Défis ouverts, création et reprise de parties de défi",
+      "chat": "Tchat de partie, tchat de tournoi et liens du journal",
+      "designer": "Concepteur, espace d'expérimentation et exploration de nœuds",
+      "themes": "Thème du site et personnalisation des couleurs",
+      "account": "Paramètres du compte, vacances et préférences de notification",
+      "i18n": "Traductions, paramètres régionaux et contenu spécifique à la langue",
+      "accessibility": "Améliorations du confort d'utilisation : focus, motricité et visibilité",
+      "rules_engine": "Légalité des coups, détection de fin de partie et journaux du moteur",
+      "tables": "Mise en page des tableaux HTML sur les pages de jeu et de statistiques",
+      "feedback": "Rapports de bugs, idées de fonctionnalités, liste de souhaits et notifications associées"
+    },
     "reviewers": {
       "badge": "Réviseurs : {{names}}",
       "badgePrefix": "Relecteurs :",
