@@ -1287,6 +1287,10 @@
     "src": "Withdraw",
     "out": "Zurückziehen"
   },
+  "Events.badge": {
+    "src": "Event",
+    "out": "Event"
+  },
   "Events.completedEvents": {
     "src": "Completed events",
     "out": "Abgeschlossene Events"

@@ -1287,6 +1287,10 @@
     "src": "Withdraw",
     "out": "Ritirati"
   },
+  "Events.badge": {
+    "src": "Event",
+    "out": "Evento"
+  },
   "Events.completedEvents": {
     "src": "Completed events",
     "out": "Eventi completati"

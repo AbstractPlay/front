@@ -225,6 +225,7 @@
     "loading": "Cargando eventos…",
     "Description": "Los eventos organizados son gestionados por individuos. El sistema permite a los organizadores crear eventos, a los jugadores registrarse y luego a los organizadores lanzar juegos entre los jugadores registrados. El seguimiento de resultados, la aplicación de restricciones de tiempo detalladas y el anuncio de ganadores dependen del organizador.",
     "Name": "Eventos organizados",
+    "badge": "Evento",
     "newEvent": "Nuevo evento",
     "draftEvents": "Eventos en borrador",
     "openForRegistration": "Abiertos para registro",
