@@ -154,6 +154,10 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     }
   });
   const [expandedPara, expandedParaSetter] = useState([]);
+  const [expandAllDescriptions, expandAllDescriptionsSetter] = useStorageState(
+    "explore-expand-all-descriptions",
+    false
+  );
   const [sorting, setSorting] = useState(config.defaultSort);
   const [columnFilters, setColumnFilters] = useState(() => {
     const filters = [];
@@ -530,7 +534,10 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
         header: t("tables.description"),
         cell: (props) => (
           <ExpandableDiv
-            expanded={expandedPara.includes(props.row.original.id)}
+            expanded={
+              expandAllDescriptions ||
+              expandedPara.includes(props.row.original.id)
+            }
             handleClick={() => togglePara(props.row.original.id)}
           >
             <ReactMarkdown rehypePlugins={[rehypeRaw]} className="content">
@@ -578,6 +585,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     [
       columnHelper,
       expandedPara,
+      expandAllDescriptions,
       togglePara,
       toggleStar,
       openImgModal,
@@ -801,18 +809,33 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
                             ),
                           }[header.column.getIsSorted()] ?? null}
                           {header.id !== "description" ? null : (
-                            <>
-                              {" "}
-                              <span
-                                style={{
-                                  fontSize: "smaller",
-                                  fontWeight: "normal",
-                                  paddingTop: 0,
-                                }}
-                              >
-                                ({t("ClickExpand")})
-                              </span>
-                            </>
+                            <div
+                              style={{
+                                fontSize: "smaller",
+                                fontWeight: "normal",
+                                paddingTop: "0.25em",
+                              }}
+                              onClick={(e) => e.stopPropagation()}
+                              onKeyDown={(e) => e.stopPropagation()}
+                            >
+                              <label className="checkbox">
+                                <input
+                                  type="checkbox"
+                                  checked={Boolean(expandAllDescriptions)}
+                                  onChange={() =>
+                                    expandAllDescriptionsSetter(
+                                      !expandAllDescriptions
+                                    )
+                                  }
+                                />{" "}
+                                {t("explore.expandAllDescriptions")}
+                              </label>
+                              {!expandAllDescriptions ? (
+                                <span className="is-block help">
+                                  ({t("ClickExpand")})
+                                </span>
+                              ) : null}
+                            </div>
                           )}
                         </div>
                         {config.enableNameSearch && header.id === "gameName" ? (
