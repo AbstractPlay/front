@@ -41,6 +41,7 @@ import {
 } from "../../lib/feedback/wishlistExport";
 import { triggerDownload } from "../../lib/boardExport/downloadBlob";
 import { loadFeedbackTagVocab, tagOptionsForKind } from "../../lib/feedback/feedbackTagVocab";
+import { feedbackTagDescription, feedbackTagLabel } from "../../lib/feedback/feedbackTagI18n";
 import "./feedback.css";
 
 function FeedbackBoard({ kind = "bug" }) {
@@ -339,13 +340,14 @@ function FeedbackBoard({ kind = "bug" }) {
                 className={`button is-small apButtonNeutral feedback-tag-filter-chip${tagFilter === entry.id ? " feedback-tag-filter-chip--selected" : ""}`}
                 disabled={showClosedOnly || tagCounts[entry.id] === 0}
                 aria-pressed={tagFilter === entry.id}
+                title={feedbackTagDescription(t, entry.id)}
                 onClick={() => {
                   setStatusFilter("");
                   setCategoryFilter("");
                   setTagFilter((prev) => (prev === entry.id ? "" : entry.id));
                 }}
               >
-                {t(`feedback.tag.${entry.id}`, { defaultValue: entry.id })}
+                {feedbackTagLabel(t, entry.id)}
                 {tagCounts[entry.id] > 0 ? ` (${tagCounts[entry.id]})` : ""}
               </button>
             ))}

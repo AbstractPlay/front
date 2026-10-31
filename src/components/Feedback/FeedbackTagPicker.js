@@ -6,6 +6,7 @@ import {
   loadFeedbackTagVocab,
   tagOptionsForKind,
 } from "../../lib/feedback/feedbackTagVocab";
+import { feedbackTagDescription, feedbackTagLabel } from "../../lib/feedback/feedbackTagI18n";
 
 function FeedbackTagPicker({
   kind,
@@ -98,6 +99,7 @@ function FeedbackTagPicker({
       <div className="feedback-tag-picker-options" role="group" aria-label={t("feedback.tags.pickerLabel")}>
         {options.map((entry) => {
           const selected = selectedTags.includes(entry.id);
+          const description = feedbackTagDescription(t, entry.id);
           return (
             <button
               key={entry.id}
@@ -105,9 +107,10 @@ function FeedbackTagPicker({
               className={`button is-small apButtonNeutral feedback-tag-picker-option${selected ? " feedback-tag-picker-option--selected" : ""}`}
               disabled={disabled || (!selected && selectedTags.length >= FEEDBACK_TAG_MAX_COUNT)}
               aria-pressed={selected}
+              title={description}
               onClick={() => toggleTag(entry.id)}
             >
-              {t(`feedback.tag.${entry.id}`, { defaultValue: entry.id })}
+              {feedbackTagLabel(t, entry.id)}
             </button>
           );
         })}

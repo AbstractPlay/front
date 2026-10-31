@@ -5219,6 +5219,70 @@
     "src": "Tournaments",
     "out": "Tournois"
   },
+  "feedback.tagDesc.accessibility": {
+    "src": "Focus, motor, and visibility quality-of-life improvements",
+    "out": "Améliorations du confort d'utilisation : focus, motricité et visibilité"
+  },
+  "feedback.tagDesc.account": {
+    "src": "Account settings, vacations, and notification preferences",
+    "out": "Paramètres du compte, vacances et préférences de notification"
+  },
+  "feedback.tagDesc.challenges": {
+    "src": "Open challenges, issuing, and resuming challenge games",
+    "out": "Défis ouverts, création et reprise de parties de défi"
+  },
+  "feedback.tagDesc.chat": {
+    "src": "Game chat, tournament chat, and log links",
+    "out": "Tchat de partie, tchat de tournoi et liens du journal"
+  },
+  "feedback.tagDesc.dashboard": {
+    "src": "Home dashboard, events, and site navigation",
+    "out": "Tableau de bord d'accueil, événements et navigation du site"
+  },
+  "feedback.tagDesc.designer": {
+    "src": "Designer, playground, and explore nodes",
+    "out": "Concepteur, espace d'expérimentation et exploration de nœuds"
+  },
+  "feedback.tagDesc.feedback": {
+    "src": "Bug reports, feature ideas, wishlist, and related notifications",
+    "out": "Rapports de bugs, idées de fonctionnalités, liste de souhaits et notifications associées"
+  },
+  "feedback.tagDesc.game_client": {
+    "src": "In-game client: renderer, variants, scores, rotation, and play UI",
+    "out": "Client en jeu : moteur de rendu, variantes, scores, rotation et interface de jeu"
+  },
+  "feedback.tagDesc.games": {
+    "src": "Game catalog (/games), search, and game page chrome",
+    "out": "Catalogue de jeux (/games), recherche et interface de la page de jeu"
+  },
+  "feedback.tagDesc.i18n": {
+    "src": "Translations, locales, and language-specific content",
+    "out": "Traductions, paramètres régionaux et contenu spécifique à la langue"
+  },
+  "feedback.tagDesc.players": {
+    "src": "Player profiles, the /players directory, and profile stats",
+    "out": "Profils de joueurs, annuaire /players et statistiques de profil"
+  },
+  "feedback.tagDesc.rules_engine": {
+    "src": "Move legality, end-of-game detection, and engine logging",
+    "out": "Légalité des coups, détection de fin de partie et journaux du moteur"
+  },
+  "feedback.tagDesc.stats": {
+    "src": "Game statistics filters, averages, and history views",
+    "out": "Filtres des statistiques de jeu, moyennes et vues de l'historique"
+  },
+  "feedback.tagDesc.tables": {
+    "src": "HTML table layout on play and stats pages",
+    "out": "Mise en page des tableaux HTML sur les pages de jeu et de statistiques"
+  },
+  "feedback.tagDesc.themes": {
+    "src": "Site theme and color customization",
+    "out": "Thème du site et personnalisation des couleurs"
+  },
+  "feedback.tagDesc.tournaments": {
+    "src": "Tournament schedules, grids, history, and tournament chat",
+    "out": "Calendriers des tournois, tableaux, historique et tchat de tournoi"
+  },
   "feedback.tags.adminSection": {
     "src": "Tags",
     "out": "Tags"

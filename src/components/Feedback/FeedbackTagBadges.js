@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
+import { feedbackTagDescription, feedbackTagLabel } from "../../lib/feedback/feedbackTagI18n";
 
 function FeedbackTagBadges({ tags = [], compact = false }) {
   const { t } = useTranslation();
@@ -8,11 +9,18 @@ function FeedbackTagBadges({ tags = [], compact = false }) {
   }
   return (
     <span className={`feedback-tag-badges${compact ? " feedback-tag-badges-compact" : ""}`}>
-      {tags.map((tagId) => (
-        <span key={tagId} className="feedback-tag-badge">
-          {t(`feedback.tag.${tagId}`, { defaultValue: tagId })}
-        </span>
-      ))}
+      {tags.map((tagId) => {
+        const description = feedbackTagDescription(t, tagId);
+        return (
+          <span
+            key={tagId}
+            className="feedback-tag-badge"
+            title={description}
+          >
+            {feedbackTagLabel(t, tagId)}
+          </span>
+        );
+      })}
     </span>
   );
 }
