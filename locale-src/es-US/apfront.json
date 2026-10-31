@@ -6315,6 +6315,30 @@
     "src": "Update \"{{name}}\"",
     "out": "Actualizar \"{{name}}\""
   },
+  "listGames.end.abandoned": {
+    "src": "Abandoned",
+    "out": "Abandono"
+  },
+  "listGames.end.draw": {
+    "src": "Draw agreed",
+    "out": "Empate acordado"
+  },
+  "listGames.end.resign": {
+    "src": "Resignation",
+    "out": "Rendición"
+  },
+  "listGames.end.resignBy": {
+    "src": "Resignation ({{player}})",
+    "out": "Rendición ({{player}})"
+  },
+  "listGames.end.timeout": {
+    "src": "Timeout",
+    "out": "Tiempo agotado"
+  },
+  "listGames.end.timeoutBy": {
+    "src": "Timeout ({{player}})",
+    "out": "Tiempo agotado ({{player}})"
+  },
   "listGames.loading": {
     "src": "Loading games…",
     "out": "Cargando partidas…"
@@ -7942,6 +7966,10 @@
   "tables.histogram": {
     "src": "Histogram",
     "out": "Histograma"
+  },
+  "tables.howEnded": {
+    "src": "How ended",
+    "out": "Cómo terminó"
   },
   "tables.image": {
     "src": "Image",

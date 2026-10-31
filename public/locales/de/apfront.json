@@ -417,7 +417,15 @@
   "LevelMetaGame": "Für alle {{game}}-Spiele",
   "ListOf": "Liste von",
   "listGames": {
-    "loading": "Spiele werden geladen…"
+    "loading": "Spiele werden geladen…",
+    "end": {
+      "abandoned": "Abgebrochen",
+      "draw": "Remis vereinbart",
+      "resign": "Aufgabe",
+      "resignBy": "Aufgabe ({{player}})",
+      "timeout": "Zeitüberschreitung",
+      "timeoutBy": "Zeitüberschreitung ({{player}})"
+    }
   },
   "LogIn": "Anmelden",
   "LogOut": "Abmelden",
@@ -752,6 +760,7 @@
     "goal": "Ziel",
     "hard": "Schwer?",
     "hardClock": "Harte Bedenkzeit?",
+    "howEnded": "Art des Spielendes",
     "matchPercent": "Match %",
     "histogram": "Histogramm",
     "hIndex": "h-Index",
