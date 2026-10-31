@@ -225,6 +225,7 @@
     "loading": "Chargement des événements…",
     "Description": "Les événements organisés sont gérés par des particuliers. Le système permet aux organisateurs de créer des événements, aux joueurs de s'inscrire, puis aux organisateurs de lancer des parties entre les joueurs inscrits. Le suivi des résultats, l'application des limites de temps détaillées et l'annonce des gagnants incombent à l'organisateur.",
     "Name": "Événements organisés",
+    "badge": "Événement",
     "newEvent": "Nouvel événement",
     "draftEvents": "Brouillons d'événements",
     "openForRegistration": "Inscriptions ouvertes",

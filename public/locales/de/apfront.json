@@ -225,6 +225,7 @@
     "loading": "Events werden geladen…",
     "Description": "Organisierte Events werden von Einzelpersonen verwaltet. Das System ermöglicht es Organisatoren, Events zu erstellen, Spielern, sich zu registrieren, und Organisatoren anschließend, Spiele zwischen registrierten Spielern zu starten. Die Verfolgung von Ergebnissen, die Durchsetzung detaillierter Zeitbeschränkungen und die Ankündigung von Gewinnern obliegt dem Organisator.",
     "Name": "Organisierte Events",
+    "badge": "Event",
     "newEvent": "Neues Event",
     "draftEvents": "Event-Entwürfe",
     "openForRegistration": "Offen für Registrierung",

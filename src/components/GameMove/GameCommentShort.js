@@ -57,11 +57,23 @@ function GameCommentShort(props) {
     chatDraftByGameId.set(gameKey, next);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const postComment = () => {
     props.handleSubmit(comment.substring(0, 4000));
     chatDraftByGameId.delete(gameKey);
     commentSetter("");
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    postComment();
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key !== "Enter" || (!e.ctrlKey && !e.metaKey)) {
+      return;
+    }
+    e.preventDefault();
+    postComment();
   };
 
   React.useLayoutEffect(() => {
@@ -104,6 +116,7 @@ function GameCommentShort(props) {
                 value={comment}
                 placeholder={t("Comment")}
                 onChange={(e) => handleChange(e.target.value)}
+                onKeyDown={handleKeyDown}
               ></textarea>
             </div>
             <div className="control">
