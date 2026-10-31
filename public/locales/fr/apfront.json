@@ -1313,6 +1313,7 @@
     "intro": "Cette page vous permet d'explorer différentes manières de trier la liste des jeux. Sélectionnez la vue souhaitée ci-dessous. En cliquant sur le nom d'un jeu, vous accéderez à sa page de présentation contenant des informations supplémentaires.",
     "loadingCounts": "Chargement du nombre de parties…",
     "filterRecommended": "Jeux recommandés uniquement",
+    "expandAllDescriptions": "Développer toutes les descriptions",
     "views": {
       "all": {
         "title": "Tous les jeux"

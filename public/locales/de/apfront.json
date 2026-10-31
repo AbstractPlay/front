@@ -1313,6 +1313,7 @@
     "intro": "Auf dieser Seite kannst du verschiedene Möglichkeiten erkunden, die Liste der Spiele zu sortieren. Wähle unten deine gewünschte Ansicht aus. Ein Klick auf den Namen eines Spiels führt dich zur Übersichtsseite dieses Spiels mit weiteren Informationen.",
     "loadingCounts": "Anzahl der Spiele wird geladen…",
     "filterRecommended": "Nur empfohlene Spiele",
+    "expandAllDescriptions": "Alle Beschreibungen ausklappen",
     "views": {
       "all": {
         "title": "Alle Spiele"
