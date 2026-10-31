@@ -4695,3 +4695,13 @@ span.hardTime::after {
   color: var(--secondary-color-3);
 }
 
+.completed-game-end-label {
+  color: var(--main-font-color);
+  display: inline-block;
+  max-width: 14rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+

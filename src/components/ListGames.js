@@ -19,6 +19,7 @@ import DataTable, { LIST_TABLE_PROPS } from "./shared/DataTable";
 import { gameListGlobalFilterFn } from "../lib/tableGlobalFilter";
 import HubListEmptyNotice from "./shared/HubListEmptyNotice";
 import { canonicalGamePlayPath } from "../lib/gamePlayLinks";
+import { formatCompletedGameEnd } from "../lib/formatCompletedGameEnd";
 import {
   RECORDS_DOWNLOAD_LINK_REL,
   RECORDS_DOWNLOAD_URLS,
@@ -74,6 +75,21 @@ function ListGamesForMeta({ fixedState, metaGame, gameState }) {
         console.log(
           `Processing game record: ${rec.id} with commented = ${rec.commented}, sk = ${rec.sk}`
         );
+        const rowPlayers = rec.players;
+        const howEnded =
+          fixedState === "completed" || gameState === "completed"
+            ? formatCompletedGameEnd({
+                metaGame,
+                gameEndKind: rec.gameEndKind,
+                gameEndPlayer: rec.gameEndPlayer,
+                eogReason: rec.eogReason,
+                players: rowPlayers,
+                allUsers,
+                t,
+                tApresults: (key, params) =>
+                  i18n.t(key, { ...params, ns: "apresults" }),
+              })
+            : "";
         return {
           id: rec.id,
           started:
@@ -87,7 +103,7 @@ function ListGamesForMeta({ fixedState, metaGame, gameState }) {
           numMoves: rec.numMoves,
           commented: rec.commented || 0,
           sk: rec.sk, // Include sk for the state
-          players: rec.players,
+          players: rowPlayers,
           winners:
             "winner" in rec && rec.winner !== null
               ? rec.winner.map((w) => rec.players[w - 1])
@@ -100,9 +116,10 @@ function ListGamesForMeta({ fixedState, metaGame, gameState }) {
               : null,
           cbit: fixedState === "completed" || gameState === "completed" ? 1 : 0,
           playMode: rec.playMode,
+          howEnded,
         };
       }),
-    [games, gameState, fixedState, expandVariants]
+    [games, gameState, fixedState, expandVariants, metaGame, allUsers, t, i18n]
   );
 
   const columnHelper = createColumnHelper();
@@ -221,6 +238,21 @@ function ListGamesForMeta({ fixedState, metaGame, gameState }) {
                 .map((p) => formatPlayerDisplayName(p, allUsers))
                 .join(", "),
       }),
+      columnHelper.accessor("howEnded", {
+        header: t("tables.howEnded"),
+        cell: (props) => {
+          const text = props.getValue();
+          if (!text) {
+            return "";
+          }
+          return (
+            <span className="completed-game-end-label" title={text}>
+              {text}
+            </span>
+          );
+        },
+        enableSorting: false,
+      }),
       columnHelper.accessor("variants", {
         header: t("tables.variants"),
         cell: (props) =>
@@ -260,6 +292,7 @@ function ListGamesForMeta({ fixedState, metaGame, gameState }) {
     () => ({
       ended: isCompleted,
       winners: isCompleted,
+      howEnded: isCompleted,
     }),
     [isCompleted]
   );
