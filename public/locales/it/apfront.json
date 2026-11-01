@@ -1313,6 +1313,7 @@
     "intro": "Questa pagina ti permette di esplorare diversi modi per ordinare l'elenco dei giochi. Seleziona la vista desiderata qui sotto. Cliccando sul nome di un gioco verrai indirizzato alla sua pagina principale con ulteriori informazioni.",
     "loadingCounts": "Caricamento conteggio partite…",
     "filterRecommended": "Solo giochi consigliati",
+    "expandAllDescriptions": "Espandi tutte le descrizioni",
     "views": {
       "all": {
         "title": "Tutti i giochi"

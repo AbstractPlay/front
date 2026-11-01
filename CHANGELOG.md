@@ -39,6 +39,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Challenge modal (Lab / teach from position):** move-tree keyboard shortcuts no longer intercept typing in the new-challenge form (notes, game/opponent pickers, clock fields).
 - **Dashboard Games tab:** Event column shows tournament and organized-event links (not only ladder games); requires backend `CURRENTGAMES#` projection of `tournament` and `event` (existing rows refresh on the next game update).
 - **Explore (all / random):** Completed and Challenges column headers are plain labels again so sorting works; per-game count cells still link to completed lists and standing challenges.
+- **Player profile (Records):** history tab no longer crashes when a finished game’s winner is missing from the loaded user list (`lastSeen` lookup).
 
 ## [1.0.0-ci] - 2026-10-25
 

@@ -4267,6 +4267,10 @@
     "src": "with",
     "out": "durch"
   },
+  "explore.expandAllDescriptions": {
+    "src": "Expand all descriptions",
+    "out": "Alle Beschreibungen ausklappen"
+  },
   "explore.filterRecommended": {
     "src": "Recommended games only",
     "out": "Nur empfohlene Spiele"
