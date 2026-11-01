@@ -3,6 +3,7 @@ import { GameNode } from "../../components/GameMove/GameTree";
 import { callAuthApi } from "../api";
 import {
   mergeExploration,
+  mergeExistingExploration,
   parseSaveExplorationConflictPayload,
   saveExploration,
 } from "./exploration";
@@ -162,5 +163,24 @@ describe("mergeExploration", () => {
     );
     expect(exploration[1].children).toHaveLength(1);
     expect(exploration[1].children[0].move).toBe(">e,12-d1");
+  });
+});
+
+describe("mergeExistingExploration", () => {
+  it("stops at mainline nodes without a move (match reset checkpoints)", () => {
+    const priorTip = new GameNode(null, "f4-e5", null, 1);
+    priorTip.children = [
+      new GameNode(null, "d8|e7,e8|f7", null, 0),
+    ];
+    const exploration = [
+      new GameNode(null, "", null, 0),
+      new GameNode(null, "f4-e5", null, 1),
+      new GameNode(null, "d8|e7,e8|f7", null, 0),
+      new GameNode(null, undefined, null, 1),
+    ];
+    expect(() =>
+      mergeExistingExploration(2, priorTip, exploration)
+    ).not.toThrow();
+    expect(exploration[3].children).toEqual([]);
   });
 });
