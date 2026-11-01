@@ -1,5 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+import {
+  applyVisualViewportFixedBottom,
+  readStepperBottomOffsetPx,
+} from "../../lib/visualViewportFixedChrome";
 
 const BODY_ACTIVE_CLASS = "move-tree-mobile-stepper-active";
 
@@ -12,6 +16,7 @@ function MoveTreeMobileStepper({
   onPrev,
   onNext,
 }) {
+  const barRef = useRef(null);
   const positionLabel =
     positionTotal > 0 ? `${positionIndex} / ${positionTotal}` : "—";
 
@@ -22,8 +27,36 @@ function MoveTreeMobileStepper({
     };
   }, []);
 
+  useEffect(() => {
+    const el = barRef.current;
+    if (!el) {
+      return undefined;
+    }
+    const sync = () => {
+      const extra = readStepperBottomOffsetPx(el);
+      applyVisualViewportFixedBottom(el, extra);
+    };
+    sync();
+    window.addEventListener("resize", sync);
+    window.addEventListener("orientationchange", sync);
+    const vv = window.visualViewport;
+    vv?.addEventListener("resize", sync);
+    vv?.addEventListener("scroll", sync);
+    return () => {
+      window.removeEventListener("resize", sync);
+      window.removeEventListener("orientationchange", sync);
+      vv?.removeEventListener("resize", sync);
+      vv?.removeEventListener("scroll", sync);
+      el.style.removeProperty("left");
+      el.style.removeProperty("width");
+      el.style.removeProperty("right");
+      el.style.removeProperty("bottom");
+    };
+  }, []);
+
   const bar = (
     <div
+      ref={barRef}
       className="move-tree-mobile-stepper"
       role="toolbar"
       aria-label={t("Moves")}

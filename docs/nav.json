@@ -26,5 +26,6 @@
   { "slug": "guides/routing", "title": "Routing" },
   { "slug": "guides/styling", "title": "Styling" },
   { "slug": "guides/testing", "title": "Testing" },
-  { "slug": "guides/gamemove-replay", "title": "Game Move replay (local)" }
+  { "slug": "guides/gamemove-replay", "title": "Game Move replay (local)" },
+  { "slug": "guides/play-page-browser-zoom", "title": "Play page browser zoom" }
 ]
