@@ -30,6 +30,7 @@ import ReplayModeBanner from "./GameMove/ReplayModeBanner";
 import ArenaFeedbackModal from "./Arena/ArenaFeedbackModal";
 import ArenaStartOverlay from "./Arena/ArenaStartOverlay";
 import MoveTreeMobileChrome from "./GameMove/MoveTreeMobileChrome";
+import PageZoomBoardHint from "./GameMove/PageZoomBoardHint";
 import { isGameMoveReplayEnabled } from "../lib/GameMove/replay/replayEnabled";
 import { activateReplayFromSearchParams } from "../lib/GameMove/replay/shimEntry.js";
 
@@ -220,6 +221,7 @@ function GameMoveShell({
     <LayoutPickerProvider value={pickerValue}>
       <div className="game-move-shell">
         <ReplayModeBanner />
+        <PageZoomBoardHint session={session} />
         <ArenaStartOverlay session={session} />
         <MoveTreeMobileChrome session={session} />
         <GameMoveLayout

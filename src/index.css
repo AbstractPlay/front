@@ -3037,6 +3037,10 @@ span.hardTime::after {
   color: var(--main-font-color);
 }
 
+.game-move-page-zoom-hint {
+  margin-top: 0.5rem;
+}
+
 .game-move-layout-hint__body {
   margin: 0;
   display: flex;

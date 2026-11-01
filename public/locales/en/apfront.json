@@ -2111,6 +2111,10 @@
       "hintBody": "You're using Strip and dock.",
       "hintChange": "Change layout",
       "hintDismiss": "Dismiss",
+      "pageZoomHint": {
+        "body": "Browser zoom reflows the page and may shrink the board. Use the magnifier under the board to zoom the position.",
+        "dismissAria": "Dismiss browser zoom hint"
+      },
       "classicName": "Classic",
       "classicDescription": "The original three-column layout",
       "stripName": "Strip and dock",

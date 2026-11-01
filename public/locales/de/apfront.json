@@ -2111,6 +2111,10 @@
       "hintBody": "Du nutzt Strip und Dock.",
       "hintChange": "Layout ändern",
       "hintDismiss": "Ausblenden",
+      "pageZoomHint": {
+        "body": "Der Browser-Zoom ordnet die Seite neu an und kann das Spielbrett verkleinern. Nutze die Lupe unter dem Spielbrett, um die Stellung zu vergrößern.",
+        "dismissAria": "Hinweis zum Browser-Zoom ausblenden"
+      },
       "classicName": "Klassisch",
       "classicDescription": "Das ursprüngliche dreispaltige Layout",
       "stripName": "Leiste und Dock",

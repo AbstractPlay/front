@@ -2111,6 +2111,10 @@
       "hintBody": "Vous utilisez Strip et dock.",
       "hintChange": "Changer la disposition",
       "hintDismiss": "Ignorer",
+      "pageZoomHint": {
+        "body": "Le zoom du navigateur modifie la mise en page et peut réduire le plateau. Utilisez la loupe sous le plateau pour zoomer sur la position.",
+        "dismissAria": "Ignorer le conseil sur le zoom du navigateur"
+      },
       "classicName": "Classique",
       "classicDescription": "La disposition originale en trois colonnes",
       "stripName": "Bandeau et ancrage",
