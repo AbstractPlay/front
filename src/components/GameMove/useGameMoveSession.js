@@ -274,6 +274,7 @@ export function useGameMoveSession(props) {
   const handleGameMoveClickRef = useRef();
   const initialMoveFromUrlAppliedRef = useRef(false);
   const boardRenderGenerationRef = useRef(0);
+  const clickBoardContextRef = useRef(undefined);
   const renderrepRef = useRef(renderrep);
   renderrepRef.current = renderrep;
   // Revisit this moveRef variable. It works, but is it really needed? It was changed to deal with missing dependency warnings on the useEffect that updates the svg board. Is that really needed?
@@ -543,7 +544,7 @@ export function useGameMoveSession(props) {
   tRef.current = t;
   publishGameColorsRef.current = publishGameColors;
 
-  boardClickHandlerRef.current = (row, col, piece, panelId) => {
+  boardClickHandlerRef.current = (row, col, piece, ui) => {
     let gameEngineTmp = createEngineAtFocus(
       gameRef.current,
       explorationRef.current.nodes,
@@ -562,7 +563,7 @@ export function useGameMoveSession(props) {
           row,
           col,
           piece,
-          panelId
+          ui
         );
     result.rendered = moveRef.current.rendered;
     processNewMove(
@@ -2253,8 +2254,9 @@ export function useGameMoveSession(props) {
           });
         },
         canBoardClick: !!canExplore,
-        onBoardClick: (row, col, piece, panelId) => {
-          boardClickHandlerRef.current(row, col, piece, panelId);
+        clickBoardContextRef,
+        onBoardClick: (row, col, piece, ui) => {
+          boardClickHandlerRef.current(row, col, piece, ui);
         },
         stackExpanding: !!currentGame?.stackExpanding,
         onStackColumnHover: currentGame?.stackExpanding
