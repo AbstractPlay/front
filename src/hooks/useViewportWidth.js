@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
-import { NARROW_VIEWPORT_MEDIA, readViewportWidth } from "../lib/viewport";
+import {
+  NARROW_VIEWPORT_MEDIA,
+  readLayoutViewportWidth,
+} from "../lib/viewport";
 
 /**
  * Subscribes to viewport width changes (resize, orientation, visual viewport, matchMedia).
  */
 export function useViewportWidth() {
-  const [width, setWidth] = useState(() => readViewportWidth());
+  const [width, setWidth] = useState(() => readLayoutViewportWidth());
 
   useEffect(() => {
-    const update = () => setWidth(readViewportWidth());
+    const update = () => setWidth(readLayoutViewportWidth());
     update();
 
     window.addEventListener("resize", update);

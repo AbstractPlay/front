@@ -21,6 +21,7 @@ import LayoutPickerTrigger from "./LayoutPickerTrigger";
 import MetaGameLinks from "../shared/MetaGameLinks";
 import { buildMoveEntryProps } from "../../lib/GameMove/gameMoveLayoutHelpers";
 import { isNarrowViewport } from "../../lib/viewport";
+import { normalizePlayMobileOrder } from "../../lib/GameMove/playMobileOrder";
 
 export default function GameMoveClassicLayout({ session }) {
   const {
@@ -246,7 +247,8 @@ export default function GameMoveClassicLayout({ session }) {
         )}
         {isNarrowViewport(screenWidth) || verticalLayout ? (
           /* Mobile, stacked layout */
-          mobileOrder.map((key) => {
+          <div className="game-move-classic-mobile">
+          {normalizePlayMobileOrder(mobileOrder).map((key) => {
             let title;
             let tourClass;
             switch (key) {
@@ -449,12 +451,13 @@ export default function GameMoveClassicLayout({ session }) {
                 </div>
               </div>
             );
-          })
+          })}
+          </div>
         ) : (
           /* Normal, full-width layout */
-          <div className="columns">
+          <div className="columns game-move-classic-columns">
             {/***************** MoveEntry *****************/}
-            <div className={`column is-one-fifth`}>
+            <div className="column is-one-fifth game-move-classic-side-column">
               <div style={{ marginBottom: "2rem" }} className="tourStatus">
                 <h1 className="subtitle lined">
                   <span>{t("Status")}</span>
@@ -494,7 +497,7 @@ export default function GameMoveClassicLayout({ session }) {
             </div>{" "}
             {/* column */}
             {/***************** Board *****************/}
-            <div className="column">
+            <div className="column game-move-classic-board-column">
               <div className="game-move-classic-header__title-row">
                 <h1 className="subtitle lined tourWelcome">
                   <span>

@@ -148,7 +148,9 @@ import {
   shouldIgnoreGameRefreshForReplay,
 } from "../../lib/GameMove/replay/shimEntry.js";
 
-export const defaultChunkOrder = ["status", "move", "board", "moves", "chat"];
+import { PLAY_MOBILE_CHUNK_ORDER_DEFAULT } from "../../lib/GameMove/playMobileOrder";
+
+export const defaultChunkOrder = PLAY_MOBILE_CHUNK_ORDER_DEFAULT;
 
 /** True when setupGame must rebuild history (new move, state change, etc.). */
 export function gamePlayfieldChanged(prev, next) {

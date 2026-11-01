@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { buildMoveTreeMobileStepperProps } from "../../lib/GameMove/buildMoveTreeMobileStepperProps";
+import { isNarrowViewport } from "../../lib/viewport";
 import MoveTreeMobileStepper from "./MoveTreeMobileStepper";
 
 /**
@@ -15,9 +16,13 @@ function MoveTreeMobileChrome({ session }) {
     handleGameMoveClick,
     explorationRef,
     explorationVersion,
+    screenWidth,
   } = session;
 
   const stepperProps = useMemo(() => {
+    if (!isNarrowViewport(screenWidth)) {
+      return null;
+    }
     void explorationVersion;
     if (isGameLoading || error || !focus || !game) {
       return null;
@@ -33,6 +38,7 @@ function MoveTreeMobileChrome({ session }) {
       handleGameMoveClick,
     });
   }, [
+    screenWidth,
     isGameLoading,
     error,
     focus,

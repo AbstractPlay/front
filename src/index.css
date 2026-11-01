@@ -1052,6 +1052,16 @@ button.faded {
   max-height: 75vh;
 }
 
+.game-move-shell .board,
+.game-move-layout .board {
+  min-height: 10rem;
+  max-height: min(75vh, calc(100dvh - 12rem));
+}
+
+.game-move-layout .game-move-section--board {
+  min-width: 0;
+}
+
 .board > svg {
     width: 100%;
     height: 100%;
@@ -1573,63 +1583,69 @@ abbr.glicko-hint {
   opacity: 0.5;
 }
 
-/* Fixed prev/next stepper when the move list is on screen (narrow viewports). */
+/* Fixed prev/next stepper when play layout is narrow (MoveTreeMobileChrome + body class). */
 .move-tree-mobile-stepper {
   display: none;
 }
 
-@media screen and (max-width: 768px) {
-  .move-tree-mobile-stepper {
-    display: flex;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: calc(
-      var(--game-move-stepper-bottom, 0px) + env(safe-area-inset-bottom, 0px)
-    );
-    z-index: 30;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    padding: 0.5rem 1rem;
-    background: var(--main-bg-color);
-    color: var(--main-font-color);
-    border-top: 1px solid var(--tag-background-color);
-    box-shadow: 0 -4px 12px var(--dropshadow-target-start);
-  }
+body.move-tree-mobile-stepper-active {
+  --game-move-stepper-reserve: 3.75rem;
+}
 
-  .move-tree-mobile-stepper__btn {
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-  }
+body.move-tree-mobile-stepper-active .game-move-shell {
+  padding-bottom: calc(
+    var(--game-move-stepper-reserve) + env(safe-area-inset-bottom, 0px)
+  );
+}
 
-  .move-tree-mobile-stepper__btn:hover,
-  .move-tree-mobile-stepper__btn:focus-visible {
-    background: var(--tag-background-color);
-    color: var(--main-font-color);
-  }
+body.move-tree-mobile-stepper-active .move-tree-mobile-stepper {
+  display: flex;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(
+    var(--game-move-stepper-bottom, 0px) + env(safe-area-inset-bottom, 0px)
+  );
+  z-index: 30;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  border-top: 1px solid var(--tag-background-color);
+  box-shadow: 0 -4px 12px var(--dropshadow-target-start);
+}
 
-  .move-tree-mobile-stepper__position {
-    font-size: 0.9rem;
-    font-variant-numeric: tabular-nums;
-    color: var(--main-font-color);
-    min-width: 4.5rem;
-    text-align: center;
-  }
+body.move-tree-mobile-stepper-active .move-tree-mobile-stepper__btn {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
 
-  body.move-tree-mobile-stepper-active .movesTable {
-    margin-bottom: 3.75rem;
-  }
+body.move-tree-mobile-stepper-active .move-tree-mobile-stepper__btn:hover,
+body.move-tree-mobile-stepper-active .move-tree-mobile-stepper__btn:focus-visible {
+  background: var(--tag-background-color);
+  color: var(--main-font-color);
+}
 
-  .game-move-layout--strip {
-    --game-move-stepper-bottom: 4.25rem;
-  }
+body.move-tree-mobile-stepper-active .move-tree-mobile-stepper__position {
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--main-font-color);
+  min-width: 4.5rem;
+  text-align: center;
+}
 
-  .game-move-layout--strip .game-move-strip-dock:not(.is-expanded) {
-    --game-move-stepper-bottom: 5.5rem;
-  }
+body.move-tree-mobile-stepper-active .game-move-layout--strip {
+  --game-move-stepper-bottom: 4.25rem;
+}
+
+body.move-tree-mobile-stepper-active
+  .game-move-layout--strip
+  .game-move-strip-dock:not(.is-expanded) {
+  --game-move-stepper-bottom: 5.5rem;
 }
 
 /* Can be nested to create ever-more indented containers.
@@ -3083,8 +3099,31 @@ span.hardTime::after {
 /* Classic / Lab move list + chat: cap width only when Bulma columns are horizontal */
 @media screen and (min-width: 769px) {
   .game-move-classic-sidebar.column.is-narrow {
-    max-width: 15vw;
+    flex: 0 1 min(16rem, 22vw);
+    max-width: min(16rem, 22vw);
   }
+}
+
+.game-move-classic-columns {
+  flex-wrap: wrap;
+}
+
+.game-move-classic-columns > .column {
+  min-width: 0;
+}
+
+.game-move-classic-columns > .game-move-classic-side-column {
+  flex: 1 1 14rem;
+  max-width: 100%;
+}
+
+.game-move-classic-columns > .game-move-classic-board-column {
+  flex: 2 1 16rem;
+  min-width: min(100%, 16rem);
+}
+
+.game-move-classic-mobile .card-content .board {
+  min-height: 10rem;
 }
 
 .game-move-classic-header__title-row,
@@ -3376,6 +3415,7 @@ span.hardTime::after {
   min-height: 12rem;
   margin-bottom: 0.25rem;
   overflow: auto;
+  min-width: 0;
 }
 
 .game-move-layout--strip__main .game-move-section--board {
@@ -3917,6 +3957,7 @@ span.hardTime::after {
   min-height: 12rem;
   margin-bottom: 0.25rem;
   overflow: auto;
+  min-width: 0;
 }
 
 .game-move-layout--live__main .game-move-section--board {

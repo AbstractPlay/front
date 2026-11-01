@@ -13,6 +13,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Play page (browser zoom):** multi-column play layouts (Classic, Strip, Live, and related surfaces) reflow and stay usable under pinch/Ctrl+ zoom and narrow effective viewports—layout width semantics, fixed chrome spacing, and column CSS—so core actions (status, move entry, board, line navigation) are not lost when the page is magnified (accessibility reflow).
 - **Guerrilla Checkers (match):** submitting the game-1 winning move no longer shows a client error when exploration is enabled; `mergeExistingExploration` stops at G2 reset checkpoints that have no `lastmove` (move was already saved server-side).
 
 ## [1.0.0-ci] - 2026-10-31
