@@ -4267,6 +4267,10 @@
     "src": "with",
     "out": "con"
   },
+  "explore.expandAllDescriptions": {
+    "src": "Expand all descriptions",
+    "out": "Expandir todas las descripciones"
+  },
   "explore.filterRecommended": {
     "src": "Recommended games only",
     "out": "Solo juegos recomendados"
