@@ -246,14 +246,24 @@ export function mergeExistingExploration(
   moveNum++;
   let subtree = cur_exploration;
   while (true) {
-    let move = exploration[moveNum].move.toLowerCase().replace(/\s+/g, "");
+    const mainlineMove = exploration[moveNum]?.move;
+    // Match-transition checkpoints (e.g. Guerrilla G2 reset) have no lastmove.
+    if (mainlineMove === undefined || mainlineMove === null) {
+      break;
+    }
+    let move = mainlineMove.toLowerCase().replace(/\s+/g, "");
     if (useSameMove) {
       let node = getExplorationNode(exploration, game, moveNum);
       let gameEngine = GameFactory(game.metaGame, node.state);
-      subtree = subtree.children.find((e) => gameEngine.sameMove(move, e.move));
+      subtree = subtree.children.find((e) =>
+        e.move != null && e.move !== "" ? gameEngine.sameMove(move, e.move) : false
+      );
     } else {
       subtree = subtree.children.find(
-        (e) => e.move.toLowerCase().replace(/\s+/g, "") === move
+        (e) =>
+          e.move != null &&
+          e.move !== "" &&
+          e.move.toLowerCase().replace(/\s+/g, "") === move
       );
     }
     if (subtree !== undefined) {
