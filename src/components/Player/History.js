@@ -107,7 +107,7 @@ function History({ handleChallenge }) {
               winner = {
                 id: sortedResults[0].userid,
                 name,
-                lastSeen: found.lastSeen || 0,
+                lastSeen: found?.lastSeen ?? 0,
               };
             }
           }
