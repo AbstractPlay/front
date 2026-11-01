@@ -5839,6 +5839,14 @@
     "src": "Narrative",
     "out": "Narrativo"
   },
+  "gameMove.layout.pageZoomHint.body": {
+    "src": "Browser zoom reflows the page and may shrink the board. Use the magnifier under the board to zoom the position.",
+    "out": "Lo zoom del browser riadatta la pagina e potrebbe rimpicciolire la scacchiera. Usa la lente d'ingrandimento sotto la scacchiera per ingrandire la posizione."
+  },
+  "gameMove.layout.pageZoomHint.dismissAria": {
+    "src": "Dismiss browser zoom hint",
+    "out": "Chiudi il suggerimento sullo zoom del browser"
+  },
   "gameMove.layout.pickerIntro": {
     "src": "Pick how the game page is arranged on this device. Correspondence and live arena each remember their own choice in this browser.",
     "out": "Scegli la disposizione della pagina di gioco su questo dispositivo. Le partite per corrispondenza e l'arena dal vivo ricordano ciascuna la propria preferenza in questo browser."

@@ -2111,6 +2111,10 @@
       "hintBody": "Stai usando Strip e dock.",
       "hintChange": "Cambia layout",
       "hintDismiss": "Ignora",
+      "pageZoomHint": {
+        "body": "Lo zoom del browser riadatta la pagina e potrebbe rimpicciolire la scacchiera. Usa la lente d'ingrandimento sotto la scacchiera per ingrandire la posizione.",
+        "dismissAria": "Chiudi il suggerimento sullo zoom del browser"
+      },
       "classicName": "Classico",
       "classicDescription": "Il layout originale a tre colonne",
       "stripName": "Striscia e dock",

@@ -5839,6 +5839,14 @@
     "src": "Narrative",
     "out": "Narrative"
   },
+  "gameMove.layout.pageZoomHint.body": {
+    "src": "Browser zoom reflows the page and may shrink the board. Use the magnifier under the board to zoom the position.",
+    "out": "Le zoom du navigateur modifie la mise en page et peut réduire le plateau. Utilisez la loupe sous le plateau pour zoomer sur la position."
+  },
+  "gameMove.layout.pageZoomHint.dismissAria": {
+    "src": "Dismiss browser zoom hint",
+    "out": "Ignorer le conseil sur le zoom du navigateur"
+  },
   "gameMove.layout.pickerIntro": {
     "src": "Pick how the game page is arranged on this device. Correspondence and live arena each remember their own choice in this browser.",
     "out": "Choisissez la disposition de la page de jeu sur cet appareil. Le mode par correspondance et l'arène en direct conservent chacun leur propre choix dans ce navigateur."

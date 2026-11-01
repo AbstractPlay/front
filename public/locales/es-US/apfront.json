@@ -2111,6 +2111,10 @@
       "hintBody": "Estás usando Strip y dock.",
       "hintChange": "Cambiar diseño",
       "hintDismiss": "Descartar",
+      "pageZoomHint": {
+        "body": "El zoom del navegador reajusta la página y puede achicar el tablero. Usa la lupa debajo del tablero para ampliar la posición.",
+        "dismissAria": "Descartar aviso de zoom del navegador"
+      },
       "classicName": "Clásico",
       "classicDescription": "El diseño original de tres columnas",
       "stripName": "Barra y panel acoplado",

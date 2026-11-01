@@ -20,7 +20,7 @@ Exercise each URL query: `?layout=classic`, `strip`, `live`, `card`, `narrative`
    - Board is visible (vertical scroll OK).
    - Line navigation works (move list or mobile stepper when narrow layout width).
 
-**Desktop pinch on a wide window:** Classic should stay on **three-column** layout (not card mode); fixed bottom stepper should **not** appear.
+**Desktop pinch on a wide window:** Classic should stay on **three-column** layout (not card mode); fixed bottom stepper should **not** appear. A dismissible info banner may point users to **board zoom** (magnifier under the board) when browser page zoom is active.
 
 ## 1.4.10 — reflow (~320px width)
 
@@ -47,5 +47,6 @@ In the console on the play page:
 | Layout width / page zoom | `src/lib/viewport.js` |
 | Mobile stepper gate | `src/components/GameMove/MoveTreeMobileChrome.js` |
 | Stepper visual-viewport pin | `src/lib/visualViewportFixedChrome.js` |
+| Page zoom → board zoom hint | `src/components/GameMove/PageZoomBoardHint.js` |
 | Classic column reflow | `src/index.css` (`.game-move-classic-columns`) |
 | Classic card section order | `src/lib/GameMove/playMobileOrder.js` |
