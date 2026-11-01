@@ -234,6 +234,7 @@ function LabSession({
   const tRef = useRef();
   const publishGameColorsRef = useRef();
   const boardClickHandlerRef = useRef();
+  const clickBoardContextRef = useRef(undefined);
   const moveEntryHandlersRef = useRef({});
   const moveRef = useRef();
   moveRef.current = move;
@@ -513,7 +514,7 @@ function LabSession({
   tRef.current = t;
   publishGameColorsRef.current = publishGameColors;
 
-  boardClickHandlerRef.current = (row, col, piece, panelId) => {
+  boardClickHandlerRef.current = (row, col, piece, ui) => {
     const node = getFocusNode(
       explorationRef.current.nodes,
       gameRef.current,
@@ -543,7 +544,7 @@ function LabSession({
         row,
         col,
         piece,
-        panelId
+        ui
       );
     }
     result.rendered = moveRef.current.rendered;
@@ -1078,8 +1079,9 @@ function LabSession({
           });
         },
         canBoardClick: canClick,
-        onBoardClick: (row, col, piece, panelId) => {
-          boardClickHandlerRef.current(row, col, piece, panelId);
+        clickBoardContextRef,
+        onBoardClick: (row, col, piece, ui) => {
+          boardClickHandlerRef.current(row, col, piece, ui);
         },
         stackExpanding: !!gameRef.current?.stackExpanding,
         onStackColumnHover: gameRef.current?.stackExpanding
