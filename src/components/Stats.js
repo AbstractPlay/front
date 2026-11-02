@@ -26,6 +26,7 @@ import {
   sortStatsModules,
 } from "../lib/statsSections";
 import { formatSummaryCount } from "../lib/summaryDisplay";
+import { fetchUserNames } from "../lib/fetchUserNames";
 
 const daysBetween = (startDate, endDate) => {
   const oneDay = 1000 * 60 * 60 * 24;
@@ -66,6 +67,10 @@ function Stats() {
   const [pinnedModule, pinnedModuleSetter] = useStorageState("stats-pin", null);
   const [recDays, recDaysSetter] = useState(0);
   const [recYears, recYearsSetter] = useState(0);
+
+  useEffect(() => {
+    fetchUserNames({ all: true });
+  }, []);
 
   useEffect(() => {
     if (summary?.oldestRec != null && summary?.newestRec != null) {

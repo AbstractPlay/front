@@ -17,6 +17,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Site statistics:** opening Statistics loads the full player directory (not only recently active users) so rating and player tables show correct names instead of **UNKNOWN** for inactive accounts.
 - **Play page (browser zoom):** multi-column play layouts (Classic, Strip, Live, and related surfaces) reflow and stay usable under pinch/Ctrl+ zoom and narrow effective viewports—layout width semantics, fixed chrome spacing, column CSS, and a dismissible hint to use board zoom when page zoom is active—so core actions (status, move entry, board, line navigation) are not lost when the page is magnified (accessibility reflow).
 - **Guerrilla Checkers (match):** submitting the game-1 winning move no longer shows a client error when exploration is enabled; `mergeExistingExploration` stops at G2 reset checkpoints that have no `lastmove` (move was already saved server-side).
 
