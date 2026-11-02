@@ -198,6 +198,7 @@ function DataTable({
   tableClassName = "table apTable",
   tableStyle = undefined,
   navEnd = undefined,
+  resetPageIndexDeps = [],
 }) {
   const [sorting, setSorting] = useState(sort);
   const [globalFilter, globalFilterSetter] = useState("");
@@ -223,7 +224,7 @@ function DataTable({
   });
 
   useSyncTablePageSize(table, showState);
-  useResetTablePageIndex(table, globalFilter);
+  useResetTablePageIndex(table, globalFilter, ...resetPageIndexDeps);
 
   const pageIndex = table.getState().pagination.pageIndex + 1;
   const pageCount = table.getPageCount();

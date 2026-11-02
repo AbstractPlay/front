@@ -1,4 +1,9 @@
 import React, { useMemo } from "react";
+import {
+  rowMeetsMinNumRecords,
+  useMinNumRecordsFilter,
+  useMinNumRecordsNavEnd,
+} from "./shared/minNumRecordsFilter";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable, { STATS_TABLE_PROPS } from "../shared/DataTable";
 import { useStore } from "../../stores";
@@ -15,6 +20,12 @@ import { summaryGameKeySortingFn } from "../../lib/variantTableSort";
 function GameStats({ metaFilter, nav }) {
   const summary = useStore((state) => state.summary);
   const { t, i18n } = useTranslation();
+  const { minNumRecords, setMinNumRecords } = useMinNumRecordsFilter();
+  const navEnd = useMinNumRecordsNavEnd(
+    minNumRecords,
+    setMinNumRecords,
+    "stats-min-num-records-gameStats"
+  );
 
   const data = useMemo(
     () =>
@@ -38,8 +49,9 @@ function GameStats({ metaFilter, nav }) {
             metaFilter === undefined ||
             matchesSummaryGameKey(rec.id, metaFilter)
         )
+        .filter((rec) => rowMeetsMinNumRecords(rec, minNumRecords))
         .sort((a, b) => compareStrings(a.game, b.game, i18n.language)),
-    [summary, metaFilter, t, i18n.language]
+    [summary, metaFilter, minNumRecords, t, i18n.language]
   );
 
   const columnHelper = createColumnHelper();
@@ -77,6 +89,8 @@ function GameStats({ metaFilter, nav }) {
       data={data}
       columns={columns}
       sort={[{ id: "game", desc: false }]}
+      navEnd={navEnd}
+      resetPageIndexDeps={[minNumRecords]}
     />
   );
 }

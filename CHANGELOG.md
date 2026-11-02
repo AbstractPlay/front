@@ -9,10 +9,15 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
-## [1.0.0-ci] - 2026-11-01
+## [1.0.0-ci] - 2026-11-02
+
+### Added
+
+- **Site statistics (games tab):** game statistics and pie rule tables include a **Min. records** control to hide rows below a chosen record count (remembered per browser).
 
 ### Fixed
 
+- **Site statistics:** opening Statistics loads the full player directory (not only recently active users) so rating and player tables show correct names instead of **UNKNOWN** for inactive accounts.
 - **Play page (browser zoom):** multi-column play layouts (Classic, Strip, Live, and related surfaces) reflow and stay usable under pinch/Ctrl+ zoom and narrow effective viewports—layout width semantics, fixed chrome spacing, column CSS, and a dismissible hint to use board zoom when page zoom is active—so core actions (status, move entry, board, line navigation) are not lost when the page is magnified (accessibility reflow).
 - **Guerrilla Checkers (match):** submitting the game-1 winning move no longer shows a client error when exploration is enabled; `mergeExistingExploration` stops at G2 reset checkpoints that have no `lastmove` (move was already saved server-side).
 

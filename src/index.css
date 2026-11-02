@@ -2974,6 +2974,14 @@ span.hardTime::after {
     gap: 0.5rem;
   }
 
+  #leaderboard .data-table-nav-min-records .label {
+    margin-bottom: 0.25rem;
+  }
+
+  #leaderboard .stats-min-num-records-input {
+    width: 5.5rem;
+  }
+
   @media screen and (max-width: 768px) {
     #leaderboard .data-table-nav .level-left,
     #leaderboard .stats-table-nav .level-left {

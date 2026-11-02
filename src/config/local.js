@@ -2,7 +2,7 @@ import dev from "./dev";
 import prod from "./prod";
 
 /** Flip to "prod" to hit production API/WS/Cognito from localhost. */
-const LOCAL_BACKEND = "prod";
+const LOCAL_BACKEND = "dev";
 
 const backend = LOCAL_BACKEND === "prod" ? prod : dev;
 
