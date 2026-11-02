@@ -1356,6 +1356,37 @@
         "title": "Orden aleatorio",
         "description": "Juegos en orden aleatorio. Haz clic en el botón para rebarajar."
       }
+    },
+    "tagFilter": {
+      "quickLabel": "Filtrar por etiqueta",
+      "advancedButton": "Filtros avanzados…",
+      "advancedActive_one": "{{count}} regla avanzada",
+      "advancedActive_other": "{{count}} reglas avanzadas",
+      "modalTitle": "Filtros de etiquetas avanzados",
+      "modalIntro": "Combina etiquetas de categoría con cualquiera/todas/ninguna por grupo, grupos O opcionales y exclusiones globales. El filtro rápido de etiquetas en el encabezado de la tabla se sigue aplicando además de esto.",
+      "apply": "Aplicar",
+      "clearAdvanced": "Limpiar avanzados",
+      "copyLink": "Copiar enlace",
+      "copyLinkPrompt": "Copia este enlace para compartir estos filtros de etiquetas:",
+      "addTag": "Agregar etiqueta…",
+      "modeLabel": "Modo de coincidencia para {{dimension}}",
+      "modeAny": "Cualquiera de",
+      "modeAll": "Todas de",
+      "modeNone": "Ninguna de",
+      "dimensionGoal": "Objetivos",
+      "dimensionMech": "Mecánicas",
+      "dimensionBoard": "Tablero",
+      "dimensionOther": "Otras etiquetas",
+      "dimensionsDisabled": "Los filtros de dimensión se ignoran mientras los grupos O estén activos.",
+      "globalExclude": "Excluir juegos con cualquiera de",
+      "showGroups": "Mostrar grupos O",
+      "hideGroups": "Ocultar grupos O",
+      "groupsHelp": "Un juego coincide si cumple con cualquier grupo. Las exclusiones globales aún se aplican.",
+      "addGroup": "Agregar grupo",
+      "removeGroup": "Eliminar grupo",
+      "groupModeAll": "Todas las etiquetas del grupo",
+      "groupModeAny": "Cualquier etiqueta del grupo",
+      "emptyGroup": "Agrega al menos una etiqueta a este grupo."
     }
   },
   "stats": {

@@ -19,7 +19,7 @@ import {
 import { gameDescription } from "../../lib/gameDescription";
 import { useTranslation } from "react-i18next";
 import { getUiLocaleBundleKey } from "../../i18n";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useStorageState } from "react-use-storage-state";
 import {
   getCoreRowModel,
@@ -44,6 +44,18 @@ import {
 } from "../../hooks/useGameRecommendations";
 import { useStore } from "../../stores";
 import { useEnsureSummaryTier } from "../../hooks/useEnsureSummaryTier";
+import ExploreTagFilterModal from "./ExploreTagFilterModal";
+import {
+  countAdvancedFilterRules,
+  EMPTY_TAG_FILTER_SPEC,
+  exploreTagFiltersActive,
+  gameMatchesExploreTagFilters,
+  mergeExploreTagFiltersIntoSearch,
+  normalizeTagFilterSpec,
+  parseExploreTagFiltersFromSearch,
+  parseStoredExploreTagFilters,
+  tagFilterSpecIsActive,
+} from "../../lib/categoryTagFilter";
 
 function readStoredValue(key) {
   try {
@@ -87,7 +99,37 @@ function initialGridView(viewKey) {
 
 const COUNT_VIEWS = new Set(["all", "stars", "completed", "random"]);
 
+function readExploreFilterStorage(viewKey) {
+  try {
+    const stored = sessionStorage.getItem(`explore-filters-${viewKey}`);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
+
+function getInitialExploreTagFilters(viewKey, enableTagFilter) {
+  if (!enableTagFilter) {
+    return {
+      quickTag: "",
+      tagFilterSpec: normalizeTagFilterSpec(EMPTY_TAG_FILTER_SPEC),
+    };
+  }
+  if (viewKey === "all" && typeof window !== "undefined") {
+    const search = window.location.search;
+    if (search.includes("t=") || search.includes("tf=2")) {
+      return parseExploreTagFiltersFromSearch(search);
+    }
+  }
+  return parseStoredExploreTagFilters(readExploreFilterStorage(viewKey));
+}
+
 function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
+  const location = useLocation();
+  const navigate = useNavigate();
   const allSize = Number.MAX_SAFE_INTEGER;
   const globalMe = useStore((state) => state.globalMe);
   const summarySite = useStore((state) => state.summary);
@@ -159,15 +201,16 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     false
   );
   const [sorting, setSorting] = useState(config.defaultSort);
+  const initialTagFilters = getInitialExploreTagFilters(
+    viewKey,
+    config.enableTagFilter
+  );
   const [columnFilters, setColumnFilters] = useState(() => {
     const filters = [];
     try {
       const stored = sessionStorage.getItem(`explore-filters-${viewKey}`);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (parsed.tagFilter?.length > 0) {
-          filters.push({ id: "tags", value: parsed.tagFilter });
-        }
         if (parsed.nameSearch) {
           filters.push({ id: "gameName", value: parsed.nameSearch });
         }
@@ -177,6 +220,21 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
       }
     } catch {
       /* ignore */
+    }
+    if (
+      config.enableTagFilter &&
+      exploreTagFiltersActive({
+        quickTag: initialTagFilters.quickTag,
+        tagFilterSpec: initialTagFilters.tagFilterSpec,
+      })
+    ) {
+      filters.push({
+        id: "tags",
+        value: {
+          quickTag: initialTagFilters.quickTag,
+          spec: initialTagFilters.tagFilterSpec,
+        },
+      });
     }
     return filters;
   });
@@ -203,16 +261,11 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     () => new Set(recommendations.map((game) => game.id)),
     [recommendations]
   );
-  const [tagFilter, tagFilterSetter] = useState(() => {
-    try {
-      const stored = sessionStorage.getItem(`explore-filters-${viewKey}`);
-      if (stored) return JSON.parse(stored).tagFilter || [];
-    } catch {
-      /* ignore */
-    }
-    return [];
-  });
-  const [ddSelected, ddSelectedSetter] = useState("");
+  const [quickTag, setQuickTag] = useState(initialTagFilters.quickTag);
+  const [tagFilterSpec, setTagFilterSpec] = useState(
+    initialTagFilters.tagFilterSpec
+  );
+  const [showAdvancedTagModal, setShowAdvancedTagModal] = useState(false);
   const [nameSearch, nameSearchSetter] = useState(() => {
     try {
       const stored = sessionStorage.getItem(`explore-filters-${viewKey}`);
@@ -240,12 +293,45 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
   }, [pageIndex, viewKey]);
 
   useEffect(() => {
-    const filterState = { tagFilter, nameSearch, designerSearch };
+    const filterState = {
+      quickTag,
+      tagFilterSpec,
+      nameSearch,
+      designerSearch,
+    };
     sessionStorage.setItem(
       `explore-filters-${viewKey}`,
       JSON.stringify(filterState)
     );
-  }, [tagFilter, nameSearch, designerSearch, viewKey]);
+  }, [quickTag, tagFilterSpec, nameSearch, designerSearch, viewKey]);
+
+  useEffect(() => {
+    if (viewKey !== "all" || !config.enableTagFilter) {
+      return undefined;
+    }
+    const timer = setTimeout(() => {
+      const nextSearch = mergeExploreTagFiltersIntoSearch(location.search, {
+        quickTag,
+        tagFilterSpec,
+      });
+      const current = location.search || "";
+      if (nextSearch !== current) {
+        navigate(
+          { pathname: location.pathname, search: nextSearch },
+          { replace: true }
+        );
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [
+    quickTag,
+    tagFilterSpec,
+    viewKey,
+    config.enableTagFilter,
+    location.pathname,
+    location.search,
+    navigate,
+  ]);
 
   const openImgModal = useCallback((name) => {
     activeImgModalSetter(name);
@@ -272,37 +358,65 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
     [expandedPara, expandedParaSetter]
   );
 
-  const multiTagSelect = useCallback((row, id, filterVals) => {
-    if (filterVals.length === 0) return true;
-    const val = row.getValue(id);
-    return filterVals.reduce(
-      (prev, curr) => prev && val.find((o) => o.raw === curr) !== undefined,
-      true
-    );
+  const syncTagsColumnFilter = useCallback((q, spec) => {
+    setColumnFilters((prev) => {
+      const rest = prev.filter((cf) => cf.id !== "tags");
+      if (exploreTagFiltersActive({ quickTag: q, tagFilterSpec: spec })) {
+        rest.push({ id: "tags", value: { quickTag: q, spec } });
+      }
+      return rest;
+    });
   }, []);
 
-  const addTag = useCallback(
+  const exploreTagColumnFilter = useCallback((row, id, filterVal) => {
+    if (!filterVal) {
+      return true;
+    }
+    const val = row.getValue(id);
+    const categories = val.map((entry) => entry.raw);
+    return gameMatchesExploreTagFilters(categories, {
+      quickTag: filterVal.quickTag,
+      spec: filterVal.spec,
+    });
+  }, []);
+
+  const setQuickTagValue = useCallback(
     (tag) => {
-      if (tag !== "" && !tagFilter.includes(tag)) {
-        const tags = [...tagFilter, tag];
-        tagFilterSetter([...tags]);
-        const lst = [...columnFilters].filter((cf) => cf.id !== "tags");
-        setColumnFilters([...lst, { id: "tags", value: tags }]);
-      }
+      const q = tag == null ? "" : String(tag).trim();
+      setQuickTag(q);
+      syncTagsColumnFilter(q, tagFilterSpec);
+      pageIndexSetter(0);
     },
-    [tagFilter, columnFilters]
+    [tagFilterSpec, syncTagsColumnFilter]
   );
 
-  const delTag = useCallback(
-    (tag) => {
-      if (tagFilter.includes(tag)) {
-        const tags = [...tagFilter.filter((t) => t !== tag)];
-        tagFilterSetter([...tags]);
-        const lst = [...columnFilters].filter((cf) => cf.id !== "tags");
-        setColumnFilters([...lst, { id: "tags", value: tags }]);
-      }
+  const applyAdvancedTagSpec = useCallback(
+    (spec) => {
+      const normalized = normalizeTagFilterSpec(spec);
+      setTagFilterSpec(normalized);
+      syncTagsColumnFilter(quickTag, normalized);
+      setShowAdvancedTagModal(false);
+      pageIndexSetter(0);
     },
-    [tagFilter, columnFilters]
+    [quickTag, syncTagsColumnFilter]
+  );
+
+  const buildTagFilterShareUrl = useCallback(
+    (advancedSpec) => {
+      const origin =
+        typeof window !== "undefined" ? window.location.origin : "";
+      const search = mergeExploreTagFiltersIntoSearch(location.search, {
+        quickTag,
+        tagFilterSpec: advancedSpec,
+      });
+      return `${origin}${location.pathname}${search}`;
+    },
+    [location.pathname, location.search, quickTag]
+  );
+
+  const advancedRuleCount = useMemo(
+    () => countAdvancedFilterRules(tagFilterSpec),
+    [tagFilterSpec]
   );
 
   const updateNameFilter = useCallback(
@@ -559,7 +673,9 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
                   className="tag"
                   title={tag.desc}
                   onClick={
-                    config.enableTagFilter ? () => addTag(tag.raw) : undefined
+                    config.enableTagFilter
+                      ? () => setQuickTagValue(tag.raw)
+                      : undefined
                   }
                 >
                   {tag.tag}
@@ -578,7 +694,7 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
               null
             ),
         enableSorting: false,
-        ...(config.enableTagFilter ? { filterFn: multiTagSelect } : {}),
+        ...(config.enableTagFilter ? { filterFn: exploreTagColumnFilter } : {}),
       }),
       ...config.extraColumns(columnHelper, { openChallengeModal }, t),
     ],
@@ -593,8 +709,8 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
       config,
       filterStars,
       filterStarsSetter,
-      addTag,
-      multiTagSelect,
+      setQuickTagValue,
+      exploreTagColumnFilter,
       t,
       i18n.language,
     ]
@@ -862,50 +978,50 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
                           </div>
                         ) : null}
                         {config.enableTagFilter && header.id === "tags" ? (
-                          <>
-                            <div className="control">
-                              <div className="select is-small">
-                                <select
-                                  value={ddSelected}
-                                  onChange={(e) => {
-                                    addTag(e.target.value);
-                                    ddSelectedSetter("");
-                                  }}
-                                >
-                                  <option value="" key="tagdd_blank"></option>
-                                  {allTags.map((tg, i) => (
-                                    <option value={tg.raw} key={`tagdd_${i}`}>
-                                      {tg.full}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                            </div>
-                            {tagFilter
-                              .map((tag, ind) =>
-                                tag === "" ? null : (
-                                  <span
-                                    key={`tag_${ind}`}
-                                    className="tag"
-                                    title={tCat(`categories.${tag}.description`)}
-                                    onClick={() => delTag(tag)}
+                          <div className="explore-tag-filter-header">
+                            <div className="explore-tag-filter-header__row">
+                              <div className="control">
+                                <div className="select is-small">
+                                  <select
+                                    value={quickTag}
+                                    aria-label={t("explore.tagFilter.quickLabel")}
+                                    onChange={(e) =>
+                                      setQuickTagValue(e.target.value)
+                                    }
                                   >
-                                    {tCat(`categories.${tag}.tag`)}
-                                  </span>
-                                )
-                              )
-                              .reduce(
-                                (acc, x) =>
-                                  acc === null ? (
-                                    x
-                                  ) : (
-                                    <>
-                                      {acc} {x}
-                                    </>
-                                  ),
-                                null
-                              )}
-                          </>
+                                    <option value="">
+                                      {t("gamePicker.filterAny")}
+                                    </option>
+                                    {allTags.map((tg, i) => (
+                                      <option
+                                        value={tg.raw}
+                                        key={`tagdd_${i}`}
+                                      >
+                                        {tg.full}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+                              <button
+                                type="button"
+                                className="button is-small apButtonNeutral"
+                                onClick={() => setShowAdvancedTagModal(true)}
+                              >
+                                {t("explore.tagFilter.advancedButton")}
+                                {advancedRuleCount > 0
+                                  ? ` (${advancedRuleCount})`
+                                  : ""}
+                              </button>
+                            </div>
+                            {tagFilterSpecIsActive(tagFilterSpec) ? (
+                              <span className="explore-tag-filter-header__summary">
+                                {t("explore.tagFilter.advancedActive", {
+                                  count: advancedRuleCount,
+                                })}
+                              </span>
+                            ) : null}
+                          </div>
                         ) : null}
                       </>
                     )}
@@ -952,6 +1068,16 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
           )}
         </div>
       </Modal>
+      {config.enableTagFilter ? (
+        <ExploreTagFilterModal
+          show={showAdvancedTagModal}
+          initialSpec={tagFilterSpec}
+          allTags={allTags}
+          onApply={applyAdvancedTagSpec}
+          onClose={() => setShowAdvancedTagModal(false)}
+          buildShareUrl={buildTagFilterShareUrl}
+        />
+      ) : null}
       {handleChallenge && (
         <ChallengeEntryModals
           show={activeChallengeModal !== ""}

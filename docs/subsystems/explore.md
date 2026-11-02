@@ -20,6 +20,7 @@ Legacy bookmarks to `/games/:mode` where `:mode` is a catalog view slug redirect
 | [`Explore.js`](../src/components/Explore.js) | Routing, view selection, game detail wrapper |
 | [`exploreSections.js`](../src/lib/exploreSections.js) | View ids, validation, display order |
 | [`Explore/ExploreView.js`](../src/components/Explore/ExploreView.js) | Game grid / list rendering, tag filters, recommended-only filter |
+| [`Explore/ExploreTagFilterModal.js`](../src/components/Explore/ExploreTagFilterModal.js) | Advanced tag filter modal (All games) |
 | [`exploreViewConfigs.js`](../src/components/Explore/exploreViewConfigs.js) | Per-view options (e.g. `enableRecommendedFilter` on All Games) |
 | [`MetaContainer.js`](../src/components/MetaContainer.js) | Meta-game detail wrapper and tabs |
 
@@ -33,6 +34,32 @@ Open queries:
 Optional `token` prop enables authenticated-only actions (e.g. starting a game while logged in).
 
 Tag ids on each game (`gameinfo.categories`) drive filters in the UI. Semantics and **generated lists of games per tag** are documented in [Categories & tags](/gameslib/categories/) on gameslib.
+
+## Tag filters (All games view)
+
+On **All games** (`/explore/all`), the Tags column provides:
+
+| Control | Behavior |
+|---------|----------|
+| Tag dropdown | Quick filter: show games that have the selected category tag (combined with advanced rules using AND). |
+| **Advanced filters…** | Modal for richer logic: per-dimension **Any of** / **All of** / **None of** (goals, mechanics, board, other); optional **OR groups**; **global exclude** list. |
+| Row tag click | Sets the quick dropdown to that tag. |
+
+Advanced rules and the quick tag can both apply: a game must satisfy the quick tag (if set) and the advanced spec (if any).
+
+**Bookmarkable URLs** (tag state only — not name/designer search):
+
+| Param | Meaning |
+|-------|---------|
+| `t` | Quick single tag id |
+| `tf=2` | Advanced filter schema version |
+| `g`, `m`, `b`, `o` | Dimension tag lists (optional `;a` all, `;n` none) |
+| `x` | Global exclude tags |
+| `grp` | URL-encoded JSON OR groups |
+
+Example: `/explore/all?t=goal.territory&tf=2&m=mechanic>capture,mechanic>move`
+
+Implementation: [`categoryTagFilter.js`](../src/lib/categoryTagFilter.js), [`ExploreTagFilterModal.js`](../src/components/Explore/ExploreTagFilterModal.js), [`ExploreView.js`](../src/components/Explore/ExploreView.js).
 
 ## Per-view preferences
 

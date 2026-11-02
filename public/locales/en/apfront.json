@@ -1356,6 +1356,37 @@
         "title": "Random Order",
         "description": "Games in random order. Click the button to reshuffle."
       }
+    },
+    "tagFilter": {
+      "quickLabel": "Filter by tag",
+      "advancedButton": "Advanced filters…",
+      "advancedActive_one": "{{count}} advanced rule",
+      "advancedActive_other": "{{count}} advanced rules",
+      "modalTitle": "Advanced tag filters",
+      "modalIntro": "Combine category tags with any/all/none per group, optional OR groups, and global exclusions. Quick tag filter in the table header still applies in addition.",
+      "apply": "Apply",
+      "clearAdvanced": "Clear advanced",
+      "copyLink": "Copy link",
+      "copyLinkPrompt": "Copy this link to share these tag filters:",
+      "addTag": "Add tag…",
+      "modeLabel": "Match mode for {{dimension}}",
+      "modeAny": "Any of",
+      "modeAll": "All of",
+      "modeNone": "None of",
+      "dimensionGoal": "Goals",
+      "dimensionMech": "Mechanics",
+      "dimensionBoard": "Board",
+      "dimensionOther": "Other tags",
+      "dimensionsDisabled": "Dimension filters are ignored while OR groups are active.",
+      "globalExclude": "Exclude games with any of",
+      "showGroups": "Show OR groups",
+      "hideGroups": "Hide OR groups",
+      "groupsHelp": "A game matches if it satisfies any one group. Global exclusions still apply.",
+      "addGroup": "Add group",
+      "removeGroup": "Remove group",
+      "groupModeAll": "All tags in group",
+      "groupModeAny": "Any tag in group",
+      "emptyGroup": "Add at least one tag to this group."
     }
   },
   "stats": {

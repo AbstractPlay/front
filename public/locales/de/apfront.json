@@ -1356,6 +1356,37 @@
         "title": "Zufällige Reihenfolge",
         "description": "Spiele in zufälliger Reihenfolge. Klicke auf die Schaltfläche, um neu zu mischen."
       }
+    },
+    "tagFilter": {
+      "quickLabel": "Nach Tag filtern",
+      "advancedButton": "Erweiterte Filter…",
+      "advancedActive_one": "{{count}} erweiterte Regel",
+      "advancedActive_other": "{{count}} erweiterte Regeln",
+      "modalTitle": "Erweiterte Tag-Filter",
+      "modalIntro": "Kombiniere Kategorie-Tags mit Mindestens ein/Alle/Keine pro Gruppe, optionalen ODER-Gruppen und globalen Ausschlüssen. Der Tag-Schnellfilter im Tabellenkopf gilt weiterhin zusätzlich.",
+      "apply": "Anwenden",
+      "clearAdvanced": "Erweiterte zurücksetzen",
+      "copyLink": "Link kopieren",
+      "copyLinkPrompt": "Kopiere diesen Link, um diese Tag-Filter zu teilen:",
+      "addTag": "Tag hinzufügen…",
+      "modeLabel": "Übereinstimmungsmodus für {{dimension}}",
+      "modeAny": "Mindestens eines von",
+      "modeAll": "Alle von",
+      "modeNone": "Keines von",
+      "dimensionGoal": "Ziele",
+      "dimensionMech": "Mechaniken",
+      "dimensionBoard": "Spielbrett",
+      "dimensionOther": "Weitere Tags",
+      "dimensionsDisabled": "Dimensionsfilter werden ignoriert, solange ODER-Gruppen aktiv sind.",
+      "globalExclude": "Spiele ausschließen mit mindestens einem von",
+      "showGroups": "ODER-Gruppen anzeigen",
+      "hideGroups": "ODER-Gruppen ausblenden",
+      "groupsHelp": "Ein Spiel entspricht den Kriterien, wenn es mindestens eine Gruppe erfüllt. Globale Ausschlüsse gelten weiterhin.",
+      "addGroup": "Gruppe hinzufügen",
+      "removeGroup": "Gruppe entfernen",
+      "groupModeAll": "Alle Tags in der Gruppe",
+      "groupModeAny": "Mindestens ein Tag in der Gruppe",
+      "emptyGroup": "Füge dieser Gruppe mindestens einen Tag hinzu."
     }
   },
   "stats": {
