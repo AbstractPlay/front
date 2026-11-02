@@ -227,6 +227,29 @@ export function NotificationMessage({ body }) {
           }}
         />
       );
+    case "eventEnd": {
+      const winnerNames = body.winnerNames ?? [];
+      const winnerList = winnerNames.join(", ");
+      let i18nKey = "me.notifications.message.eventEnd";
+      if (winnerNames.length === 1) {
+        i18nKey = "me.notifications.message.eventEnd_withWinner";
+      } else if (winnerNames.length > 1) {
+        i18nKey = "me.notifications.message.eventEnd_withWinners";
+      }
+      return (
+        <Trans
+          i18nKey={i18nKey}
+          values={{
+            eventName: body.eventName,
+            winnerName: winnerNames[0],
+            winnerNames: winnerList,
+          }}
+          components={{
+            eventLink: <Link to={`/event/${body.eventId}`} />,
+          }}
+        />
+      );
+    }
     case "tournamentStart":
       return (
         <>
