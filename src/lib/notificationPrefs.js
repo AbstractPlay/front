@@ -5,6 +5,7 @@ export const EMAIL_NOTIFICATION_KEYS = [
   "yourturn",
   "tournamentStart",
   "tournamentEnd",
+  "eventEnd",
   "announcements",
 ];
 
@@ -14,6 +15,7 @@ export const IN_APP_NOTIFICATION_KEYS = [
   "gameEnd",
   "ratingChange",
   "eventInvitation",
+  "eventEnd",
   "completedGameChat",
   "tournamentChat",
   "tournamentStart",

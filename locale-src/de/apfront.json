@@ -1735,6 +1735,10 @@
     "src": "Completed game chat",
     "out": "Chat beendeter Spiele"
   },
+  "InAppNotifyLabel-eventEnd": {
+    "src": "Organized event ended",
+    "out": "Organisiertes Event beendet"
+  },
   "InAppNotifyLabel-eventInvitation": {
     "src": "Event invitations",
     "out": "Event-Einladungen"
@@ -2286,6 +2290,10 @@
   "NotifyLabel-challenges": {
     "src": "Challenges (every instance)",
     "out": "Herausforderungen (jedes Vorkommen)"
+  },
+  "NotifyLabel-eventEnd": {
+    "src": "Organized event ended (every instance)",
+    "out": "Organisiertes Event beendet (jede Instanz)"
   },
   "NotifyLabel-gameEnd": {
     "src": "Game ended (every instance)",
@@ -6418,6 +6426,18 @@
   "me.notifications.message.completedGameChat_backfill": {
     "src": "You have unread chat in your completed <gameLink>{{metaGame}}</gameLink> game",
     "out": "Du hast ungelesene Chatnachrichten in deiner beendeten <gameLink>{{metaGame}}</gameLink>-Partie"
+  },
+  "me.notifications.message.eventEnd": {
+    "src": "The event <eventLink>{{eventName}}</eventLink> has ended.",
+    "out": "Das Event <eventLink>{{eventName}}</eventLink> ist beendet."
+  },
+  "me.notifications.message.eventEnd_withWinner": {
+    "src": "The event <eventLink>{{eventName}}</eventLink> has ended. {{winnerName}} won.",
+    "out": "Das Event <eventLink>{{eventName}}</eventLink> ist beendet. {{winnerName}} hat gewonnen."
+  },
+  "me.notifications.message.eventEnd_withWinners": {
+    "src": "The event <eventLink>{{eventName}}</eventLink> has ended. Winners: {{winnerNames}}.",
+    "out": "Das Event <eventLink>{{eventName}}</eventLink> ist beendet. Gewinner: {{winnerNames}}."
   },
   "me.notifications.message.eventInvitation": {
     "src": "{{organizerName}} has invited you to the event <eventLink>{{eventName}}</eventLink>.",
