@@ -4758,3 +4758,44 @@ span.hardTime::after {
   white-space: nowrap;
 }
 
+.explore-tag-filter-modal__intro {
+  margin-bottom: 1rem;
+}
+
+.explore-tag-filter-dimension__controls {
+  margin-bottom: 0.35rem;
+}
+
+.explore-tag-filter-dimension__chips {
+  margin-bottom: 0.75rem;
+}
+
+.explore-tag-filter-group.box {
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  border: 1px solid var(--tag-background-color);
+  margin-bottom: 0.75rem;
+}
+
+.explore-tag-filter-modal__groups-toggle {
+  margin-bottom: 0.5rem;
+}
+
+.explore-tag-filter-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 12rem;
+}
+
+.explore-tag-filter-header__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.explore-tag-filter-header__summary {
+  color: var(--secondary-font-color);
+  font-size: 0.85rem;
+}

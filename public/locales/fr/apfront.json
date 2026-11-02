@@ -1356,6 +1356,37 @@
         "title": "Ordre aléatoire",
         "description": "Jeux dans un ordre aléatoire. Cliquez sur le bouton pour mélanger à nouveau."
       }
+    },
+    "tagFilter": {
+      "quickLabel": "Filtrer par tag",
+      "advancedButton": "Filtres avancés…",
+      "advancedActive_one": "{{count}} règle avancée",
+      "advancedActive_other": "{{count}} règles avancées",
+      "modalTitle": "Filtres de tags avancés",
+      "modalIntro": "Combinez des tags de catégorie avec au moins un/tous/aucun par groupe, des groupes OU optionnels et des exclusions globales. Le filtre rapide de tags dans l'en-tête du tableau s'applique toujours en complément.",
+      "apply": "Appliquer",
+      "clearAdvanced": "Effacer les filtres avancés",
+      "copyLink": "Copier le lien",
+      "copyLinkPrompt": "Copiez ce lien pour partager ces filtres de tags :",
+      "addTag": "Ajouter un tag…",
+      "modeLabel": "Mode de correspondance pour {{dimension}}",
+      "modeAny": "Au moins un de",
+      "modeAll": "Tous les",
+      "modeNone": "Aucun de",
+      "dimensionGoal": "Objectifs",
+      "dimensionMech": "Mécaniques",
+      "dimensionBoard": "Plateau",
+      "dimensionOther": "Autres tags",
+      "dimensionsDisabled": "Les filtres par dimension sont ignorés lorsque les groupes OU sont actifs.",
+      "globalExclude": "Exclure les jeux contenant l'un des",
+      "showGroups": "Afficher les groupes OU",
+      "hideGroups": "Masquer les groupes OU",
+      "groupsHelp": "Un jeu correspond s'il satisfait à au moins un groupe. Les exclusions globales s'appliquent toujours.",
+      "addGroup": "Ajouter un groupe",
+      "removeGroup": "Supprimer le groupe",
+      "groupModeAll": "Tous les tags du groupe",
+      "groupModeAny": "Au moins un tag du groupe",
+      "emptyGroup": "Ajoutez au moins un tag à ce groupe."
     }
   },
   "stats": {

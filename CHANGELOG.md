@@ -13,6 +13,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Added
 
+- **Explore (all games):** quick **filter by tag** dropdown plus **Advanced filters** modal (combine goals, mechanics, board, and other tags with any/all/none; optional OR groups; global exclusions). Tag filters can be bookmarked via URL query parameters (`t`, `tf`, and related keys). Name, designer, star, and recommended filters are unchanged.
 - **Site statistics (games tab):** game statistics and pie rule tables include a **Min. records** control to hide rows below a chosen record count (remembered per browser).
 
 ### Fixed

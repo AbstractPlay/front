@@ -26,7 +26,6 @@ const Modal = ({
   }
   const closeModal = buttons[buttons.length - 1].action;
   const handleBackdropClose = disableBackdropClose ? undefined : closeModal;
-  const handleHeaderClose = disableBackdropClose ? undefined : closeModal;
 
   return (
     <div className="modal is-active">
@@ -34,7 +33,7 @@ const Modal = ({
       <div className="modal-card">
         <header className="modal-card-head">
           <p className="modal-card-title">{title}</p>
-          <button className="delete" onClick={handleHeaderClose} />
+          <button className="delete" onClick={closeModal} />
         </header>
         <section className="modal-card-body">{children}</section>
         <footer className="modal-card-foot">

@@ -4291,6 +4291,122 @@
     "src": "Loading game counts…",
     "out": "Cargando conteo de partidas…"
   },
+  "explore.tagFilter.addGroup": {
+    "src": "Add group",
+    "out": "Agregar grupo"
+  },
+  "explore.tagFilter.addTag": {
+    "src": "Add tag…",
+    "out": "Agregar etiqueta…"
+  },
+  "explore.tagFilter.advancedActive_one": {
+    "src": "{{count}} advanced rule",
+    "out": "{{count}} regla avanzada"
+  },
+  "explore.tagFilter.advancedActive_other": {
+    "src": "{{count}} advanced rules",
+    "out": "{{count}} reglas avanzadas"
+  },
+  "explore.tagFilter.advancedButton": {
+    "src": "Advanced filters…",
+    "out": "Filtros avanzados…"
+  },
+  "explore.tagFilter.apply": {
+    "src": "Apply",
+    "out": "Aplicar"
+  },
+  "explore.tagFilter.clearAdvanced": {
+    "src": "Clear advanced",
+    "out": "Limpiar avanzados"
+  },
+  "explore.tagFilter.copyLink": {
+    "src": "Copy link",
+    "out": "Copiar enlace"
+  },
+  "explore.tagFilter.copyLinkPrompt": {
+    "src": "Copy this link to share these tag filters:",
+    "out": "Copia este enlace para compartir estos filtros de etiquetas:"
+  },
+  "explore.tagFilter.dimensionBoard": {
+    "src": "Board",
+    "out": "Tablero"
+  },
+  "explore.tagFilter.dimensionGoal": {
+    "src": "Goals",
+    "out": "Objetivos"
+  },
+  "explore.tagFilter.dimensionMech": {
+    "src": "Mechanics",
+    "out": "Mecánicas"
+  },
+  "explore.tagFilter.dimensionOther": {
+    "src": "Other tags",
+    "out": "Otras etiquetas"
+  },
+  "explore.tagFilter.dimensionsDisabled": {
+    "src": "Dimension filters are ignored while OR groups are active.",
+    "out": "Los filtros de dimensión se ignoran mientras los grupos O estén activos."
+  },
+  "explore.tagFilter.emptyGroup": {
+    "src": "Add at least one tag to this group.",
+    "out": "Agrega al menos una etiqueta a este grupo."
+  },
+  "explore.tagFilter.globalExclude": {
+    "src": "Exclude games with any of",
+    "out": "Excluir juegos con cualquiera de"
+  },
+  "explore.tagFilter.groupModeAll": {
+    "src": "All tags in group",
+    "out": "Todas las etiquetas del grupo"
+  },
+  "explore.tagFilter.groupModeAny": {
+    "src": "Any tag in group",
+    "out": "Cualquier etiqueta del grupo"
+  },
+  "explore.tagFilter.groupsHelp": {
+    "src": "A game matches if it satisfies any one group. Global exclusions still apply.",
+    "out": "Un juego coincide si cumple con cualquier grupo. Las exclusiones globales aún se aplican."
+  },
+  "explore.tagFilter.hideGroups": {
+    "src": "Hide OR groups",
+    "out": "Ocultar grupos O"
+  },
+  "explore.tagFilter.modalIntro": {
+    "src": "Combine category tags with any/all/none per group, optional OR groups, and global exclusions. Quick tag filter in the table header still applies in addition.",
+    "out": "Combina etiquetas de categoría con cualquiera/todas/ninguna por grupo, grupos O opcionales y exclusiones globales. El filtro rápido de etiquetas en el encabezado de la tabla se sigue aplicando además de esto."
+  },
+  "explore.tagFilter.modalTitle": {
+    "src": "Advanced tag filters",
+    "out": "Filtros de etiquetas avanzados"
+  },
+  "explore.tagFilter.modeAll": {
+    "src": "All of",
+    "out": "Todas de"
+  },
+  "explore.tagFilter.modeAny": {
+    "src": "Any of",
+    "out": "Cualquiera de"
+  },
+  "explore.tagFilter.modeLabel": {
+    "src": "Match mode for {{dimension}}",
+    "out": "Modo de coincidencia para {{dimension}}"
+  },
+  "explore.tagFilter.modeNone": {
+    "src": "None of",
+    "out": "Ninguna de"
+  },
+  "explore.tagFilter.quickLabel": {
+    "src": "Filter by tag",
+    "out": "Filtrar por etiqueta"
+  },
+  "explore.tagFilter.removeGroup": {
+    "src": "Remove group",
+    "out": "Eliminar grupo"
+  },
+  "explore.tagFilter.showGroups": {
+    "src": "Show OR groups",
+    "out": "Mostrar grupos O"
+  },
   "explore.views.all.title": {
     "src": "All games",
     "out": "Todos los juegos"
