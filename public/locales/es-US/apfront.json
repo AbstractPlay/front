@@ -1388,7 +1388,8 @@
       "showAll": "Mostrar todo",
       "showCount": "Mostrar {{count}}",
       "filter": "Filtrar",
-      "filterPlaceholder": "Filtrar..."
+      "filterPlaceholder": "Filtrar...",
+      "minNumRecordsLabel": "Mín. de registros"
     },
     "site": {
       "subnavLabel": "Secciones de estadísticas del sitio",

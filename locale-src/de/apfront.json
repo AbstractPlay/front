@@ -7687,6 +7687,10 @@
     "src": "Filter...",
     "out": "Filtern..."
   },
+  "stats.table.minNumRecordsLabel": {
+    "src": "Min. records",
+    "out": "Min. Datensätze"
+  },
   "stats.table.of": {
     "src": "of",
     "out": "von"
