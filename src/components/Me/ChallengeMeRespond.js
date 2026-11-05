@@ -250,11 +250,9 @@ function ChallengeMeRespond({ fetching, handleChallengeResponse }) {
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className={`${
-                  row.original.tournament !== undefined ? "tourneyGame" : ""
-                } ${
+                className={
                   row.original.lastChat > row.original.lastSeen ? "newChat" : ""
-                }`}
+                }
               >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id}>

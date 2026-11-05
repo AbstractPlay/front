@@ -269,13 +269,14 @@ function MyTurnTable({ games, fetching }) {
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className={`${
-                  row.original.tournament !== undefined ? "tourneyGame" : ""
-                } ${
-                  row.original.ladderId ? "ladderGame" : ""
-                } ${
-                  row.original.lastChat > row.original.lastSeen ? "newChat" : ""
-                }`}
+                className={
+                  [
+                    row.original.ladderId && "ladderGame",
+                    row.original.lastChat > row.original.lastSeen && "newChat",
+                  ]
+                    .filter(Boolean)
+                    .join(" ") || undefined
+                }
               >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id}>

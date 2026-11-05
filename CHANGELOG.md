@@ -16,6 +16,10 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 - **Explore (all games):** quick **filter by tag** dropdown plus **Advanced filters** modal (combine goals, mechanics, board, and other tags with any/all/none; optional OR groups; global exclusions). Tag filters can be bookmarked via URL query parameters (`t`, `tf`, and related keys). Name, designer, star, and recommended filters are unchanged.
 - **Site statistics (games tab):** game statistics and pie rule tables include a **Min. records** control to hide rows below a chosen record count (remembered per browser).
 
+### Changed
+
+- **Dashboard tables:** tournament game rows no longer use bold text; the Event column badge identifies ladder, tournament, and organized-event games.
+
 ### Fixed
 
 - **Play page (move dock):** finished-game turn chips no longer repeat “The game has ended” when gameslib reports the generic EOG default (e.g. Alien City) alongside the winner line; long game-over and turn labels wrap inside dock/context chips instead of clipping in narrow sidebars.
