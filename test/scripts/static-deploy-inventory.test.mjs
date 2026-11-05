@@ -8,7 +8,13 @@ import {
   collectBuildAssetKeys,
   shouldPruneStaticObject,
 } from "../../scripts/staticDeployInventory.mjs";
-import { planPruneActions } from "../../scripts/prune-stale-static.mjs";
+import {
+  LIST_OBJECTS_MAX_KEYS,
+  LIST_OBJECTS_QUERY,
+  buildListObjectsV2Args,
+  objectsFromListPage,
+  planPruneActions,
+} from "../../scripts/prune-stale-static.mjs";
 
 describe("collectBuildAssetKeys", () => {
   it("lists static and flags keys with posix prefixes", () => {
@@ -76,6 +82,30 @@ describe("shouldPruneStaticObject", () => {
       }),
       true,
     );
+  });
+});
+
+describe("buildListObjectsV2Args", () => {
+  it("requests slim paginated listings", () => {
+    const config = { bucket: "abstract-play-dev", profile: "AbstractPlayDev" };
+    const args = buildListObjectsV2Args(config, "static/", "token-abc");
+    assert.ok(args.includes("--query"));
+    assert.ok(args.includes(LIST_OBJECTS_QUERY));
+    assert.ok(args.includes("--max-keys"));
+    assert.ok(args.includes(String(LIST_OBJECTS_MAX_KEYS)));
+    assert.ok(args.includes("--continuation-token"));
+    assert.ok(args.includes("token-abc"));
+  });
+});
+
+describe("objectsFromListPage", () => {
+  it("maps Key and LastModified from a list page", () => {
+    const objects = objectsFromListPage({
+      Contents: [{ Key: "static/js/a.js", LastModified: "2026-06-01T00:00:00.000Z" }],
+    });
+    assert.equal(objects.length, 1);
+    assert.equal(objects[0].key, "static/js/a.js");
+    assert.equal(objects[0].lastModifiedMs, Date.parse("2026-06-01T00:00:00.000Z"));
   });
 });
 

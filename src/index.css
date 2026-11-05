@@ -3308,6 +3308,9 @@ span.hardTime::after {
   background: var(--main-bg-color);
   color: var(--main-font-color);
   border: 1px solid var(--tag-background-color);
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
 }
 
 .game-move-player-online {
@@ -3470,6 +3473,8 @@ span.hardTime::after {
   flex-direction: column;
   flex-shrink: 0;
   gap: 0.5rem;
+  min-width: 0;
+  width: 100%;
 }
 
 .game-move-strip-dock__toggle {
@@ -3492,6 +3497,9 @@ span.hardTime::after {
 
 .game-move-dock-entry {
   flex-shrink: 0;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .game-move-dock-entry__primary {
@@ -3500,6 +3508,8 @@ span.hardTime::after {
   flex-shrink: 0;
   gap: 0.5rem;
   align-items: center;
+  min-width: 0;
+  width: 100%;
 }
 
 .game-move-dock-entry .historyState,
@@ -3511,13 +3521,25 @@ span.hardTime::after {
 }
 
 .game-move-dock-entry__turn--inline {
-  flex: 0 0 auto;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
   margin: 0;
   padding: 0.15rem 0.5rem;
   border-radius: 999px;
   border: 1px solid var(--tag-background-color);
   background: var(--main-bg-color);
   font-size: 0.85rem;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.game-move-dock-entry__turn--inline:has(.toMoveImage) {
+  align-items: center;
+}
+
+.game-move-dock-entry__turn--inline:not(:has(.toMoveImage)) .playerName {
+  margin-left: 0;
 }
 
 .game-move-dock-entry__turn--inline.game-move-dock-entry__turn--active {
@@ -3608,6 +3630,14 @@ span.hardTime::after {
   margin: 0 0 0.5rem;
   padding: 0.25rem 0.5rem;
   font-size: 0.9rem;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.game-move-dock-entry__turn .playerName {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .game-move-dock-entry__turn--active {
@@ -3998,6 +4028,8 @@ span.hardTime::after {
   flex: 0 0 auto;
   max-height: min(46vh, 22rem);
   overflow: auto;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .game-move-live-dock__more-toggle {

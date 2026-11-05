@@ -18,6 +18,16 @@ import {
 
 const AWS_REGION = "us-east-1";
 
+/** Default spawn buffer (1 MiB) is too small for full S3 list-objects JSON on busy dev buckets. */
+const AWS_EXEC_MAX_BUFFER = 64 * 1024 * 1024;
+
+/** Paginate listings; slim --query keeps each page well under maxBuffer. */
+export const LIST_OBJECTS_MAX_KEYS = 500;
+
+/** Only fields prune logic needs; preserves pagination metadata. */
+export const LIST_OBJECTS_QUERY =
+  "{Contents: Contents[].{Key: Key, LastModified: LastModified}, IsTruncated: IsTruncated, NextContinuationToken: NextContinuationToken}";
+
 const STAGE_CONFIG = {
   dev: {
     bucket: "abstract-play-dev",
@@ -48,9 +58,40 @@ function awsJson(args, config) {
   const output = execFileSync(
     "aws",
     [...args, ...awsProfileArgs(config)],
-    { encoding: "utf8" },
+    { encoding: "utf8", maxBuffer: AWS_EXEC_MAX_BUFFER },
   );
   return JSON.parse(output);
+}
+
+export function buildListObjectsV2Args(config, prefix, continuationToken) {
+  const args = [
+    "s3api",
+    "list-objects-v2",
+    "--bucket",
+    config.bucket,
+    "--prefix",
+    prefix,
+    "--max-keys",
+    String(LIST_OBJECTS_MAX_KEYS),
+    "--output",
+    "json",
+    "--query",
+    LIST_OBJECTS_QUERY,
+  ];
+  if (continuationToken) {
+    args.push("--continuation-token", continuationToken);
+  }
+  return args;
+}
+
+export function objectsFromListPage(page) {
+  const out = [];
+  for (const item of page.Contents ?? []) {
+    if (item.Key) {
+      out.push({ key: item.Key, lastModifiedMs: new Date(item.LastModified).getTime() });
+    }
+  }
+  return out;
 }
 
 function loadInventory(config) {
@@ -65,7 +106,7 @@ function loadInventory(config) {
         tmp,
         ...awsProfileArgs(config),
       ],
-      { stdio: "pipe" },
+      { stdio: "pipe", maxBuffer: AWS_EXEC_MAX_BUFFER },
     );
     const doc = JSON.parse(fs.readFileSync(tmp, "utf8"));
     if (!Array.isArray(doc.keys)) {
@@ -85,25 +126,8 @@ function listPrefix(config, prefix) {
   const keys = [];
   let token;
   do {
-    const args = [
-      "s3api",
-      "list-objects-v2",
-      "--bucket",
-      config.bucket,
-      "--prefix",
-      prefix,
-      "--output",
-      "json",
-    ];
-    if (token) {
-      args.push("--continuation-token", token);
-    }
-    const page = awsJson(args, config);
-    for (const item of page.Contents ?? []) {
-      if (item.Key) {
-        keys.push({ key: item.Key, lastModifiedMs: new Date(item.LastModified).getTime() });
-      }
-    }
+    const page = awsJson(buildListObjectsV2Args(config, prefix, token), config);
+    keys.push(...objectsFromListPage(page));
     token = page.IsTruncated ? page.NextContinuationToken : undefined;
   } while (token);
   return keys;
@@ -166,7 +190,7 @@ function main() {
           key,
           ...awsProfileArgs(config),
         ],
-        { stdio: "pipe" },
+        { stdio: "pipe", maxBuffer: AWS_EXEC_MAX_BUFFER },
       );
     }
   }

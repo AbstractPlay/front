@@ -9,7 +9,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
-## [1.0.0-ci] - 2026-11-02
+## [1.0.0-ci] - 2026-11-05
 
 ### Added
 
@@ -18,9 +18,11 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Play page (move dock):** finished-game turn chips no longer repeat “The game has ended” when gameslib reports the generic EOG default (e.g. Alien City) alongside the winner line; long game-over and turn labels wrap inside dock/context chips instead of clipping in narrow sidebars.
 - **Site statistics:** opening Statistics loads the full player directory (not only recently active users) so rating and player tables show correct names instead of **UNKNOWN** for inactive accounts.
 - **Play page (browser zoom):** multi-column play layouts (Classic, Strip, Live, and related surfaces) reflow and stay usable under pinch/Ctrl+ zoom and narrow effective viewports—layout width semantics, fixed chrome spacing, column CSS, and a dismissible hint to use board zoom when page zoom is active—so core actions (status, move entry, board, line navigation) are not lost when the page is magnified (accessibility reflow).
 - **Guerrilla Checkers (match):** submitting the game-1 winning move no longer shows a client error when exploration is enabled; `mergeExistingExploration` stops at G2 reset checkpoints that have no `lastmove` (move was already saved server-side).
+- **Deploy (dev):** `prune-stale-static.mjs` no longer fails with `spawnSync aws ENOBUFS` when the dev bucket’s `static/` inventory JSON exceeds Node’s default 1 MiB spawn buffer (slim S3 list query, smaller pages, raised maxBuffer).
 
 ## [1.0.0-ci] - 2026-10-31
 

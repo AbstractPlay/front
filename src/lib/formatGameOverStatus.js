@@ -2,6 +2,25 @@ import { GameFactory } from "@abstractplay/gameslib";
 import { formatPlayerDisplayName } from "../components/Bots/botUtils";
 import { formatSoloOutcome, isSoloGame } from "./soloPlay";
 
+/** Drop gameslib generic EOG fallback when apfront already prefixes "The game has ended". */
+function eogDetailForGameOverStatus(detail, t, tApresults) {
+  if (!detail) {
+    return undefined;
+  }
+  const trimmed = detail.trim();
+  const gameIsOver = t("GameIsOver").trim();
+  if (trimmed === gameIsOver || trimmed === `${gameIsOver}.`) {
+    return undefined;
+  }
+  for (const key of ["apresults:_general.EOG.default", "_general.EOG.default"]) {
+    const defaultLine = tApresults(key);
+    if (defaultLine && defaultLine !== key && trimmed === defaultLine.trim()) {
+      return undefined;
+    }
+  }
+  return detail;
+}
+
 /**
  * @param {object} opts
  * @param {object} opts.game
@@ -37,10 +56,11 @@ export function formatGameOverStatus({
   const playerNames = game.players.map((p) =>
     formatPlayerDisplayName(p, allUsers)
   );
-  const detail =
+  const rawDetail =
     typeof state.formatEogSummary === "function"
       ? state.formatEogSummary(playerNames, tApresults)
       : undefined;
+  const detail = eogDetailForGameOverStatus(rawDetail, t, tApresults);
 
   if (!state.winner || state.winner.length === 0) {
     if (detail) {
