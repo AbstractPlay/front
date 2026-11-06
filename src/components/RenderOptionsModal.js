@@ -5,7 +5,10 @@ import { cloneDeep } from "lodash";
 import Modal from "./Modal";
 import { useStore } from "../stores";
 import DisplayOptionsPicker from "./DisplayOptionsPicker.js";
+import InputModeOptionsPicker from "./InputModeOptionsPicker.js";
+import { gameinfo } from "@abstractplay/gameslib";
 import { normalizeDisplaySetting } from "../lib/displaySettings.js";
+import { resolveInputMode } from "../lib/inputModeSettings.js";
 
 function getSettingAndLevel(
   setting,
@@ -85,8 +88,12 @@ function RenderOptionsModal(props) {
   const [displayPickerKey, displayPickerKeySetter] = useState(0);
   const [annotate, annotateSetter] = useState(true);
   const [annotateLevel, annotateLevelSetter] = useState("game");
+  const [inputModeUid, inputModeUidSetter] = useState(undefined);
+  const [inputPickerKey, inputPickerKeySetter] = useState(0);
   const { t } = useTranslation();
   const globalMe = useStore((state) => state.globalMe);
+  const hasInputModes =
+    gameinfo.get(metaGame)?.inputModes?.length > 0;
 
   useEffect(() => {
     if (!show) {
@@ -110,6 +117,10 @@ function RenderOptionsModal(props) {
     );
     annotateSetter(annotateSetting[0] === true);
     annotateLevelSetter(annotateSetting[1] ?? "game");
+    inputModeUidSetter(
+      resolveInputMode(gameSettings, settings, metaGame)
+    );
+    inputPickerKeySetter((key) => key + 1);
   }, [show, gameSettings, metaGame, settings]);
 
   const handleAnnotationChange = (checked) => {
@@ -144,6 +155,16 @@ function RenderOptionsModal(props) {
       newUserSettings,
       metaGame
     );
+    if (hasInputModes && inputModeUid !== undefined) {
+      [newUserSettings, newGameSettings] = updateSettings(
+        "inputMode",
+        "meta",
+        inputModeUid,
+        newGameSettings,
+        newUserSettings,
+        metaGame
+      );
+    }
     props.processNewSettings(newGameSettings, newUserSettings);
     if (newGameSettings !== undefined && game.me > -1) {
       try {
@@ -194,6 +215,14 @@ function RenderOptionsModal(props) {
         ) : (
           ""
         )}
+        {hasInputModes && show ? (
+          <InputModeOptionsPicker
+            key={inputPickerKey}
+            metaGame={metaGame}
+            initialUid={inputModeUid}
+            onChange={inputModeUidSetter}
+          />
+        ) : null}
         <div className="field">
           <div className="control">
             <label className="checkbox">

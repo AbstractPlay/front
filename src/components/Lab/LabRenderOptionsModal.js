@@ -4,7 +4,10 @@ import { cloneDeep } from "lodash";
 import Modal from "../Modal";
 import { getLabSetting } from "../../lib/Lab/settings";
 import DisplayOptionsPicker from "../DisplayOptionsPicker.js";
+import InputModeOptionsPicker from "../InputModeOptionsPicker.js";
 import { normalizeDisplaySetting } from "../../lib/displaySettings.js";
+import { gameinfo } from "@abstractplay/gameslib";
+import { resolveInputMode } from "../../lib/inputModeSettings.js";
 
 function LabRenderOptionsModal({
   show,
@@ -21,6 +24,9 @@ function LabRenderOptionsModal({
   const [displayUids, displayUidsSetter] = useState([]);
   const [displayPickerKey, displayPickerKeySetter] = useState(0);
   const [annotate, annotateSetter] = useState(true);
+  const [inputModeUid, inputModeUidSetter] = useState(undefined);
+  const [inputPickerKey, inputPickerKeySetter] = useState(0);
+  const hasInputModes = gameinfo.get(metaGame)?.inputModes?.length > 0;
 
   useEffect(() => {
     if (!show) {
@@ -41,6 +47,10 @@ function LabRenderOptionsModal({
     annotateSetter(
       getLabSetting("annotate", true, gameSettings, labBoardSettings, metaGame)
     );
+    inputModeUidSetter(
+      resolveInputMode(gameSettings, labBoardSettings, metaGame),
+    );
+    inputPickerKeySetter((key) => key + 1);
   }, [show, gameSettings, labBoardSettings, metaGame]);
 
   const handleSave = () => {
@@ -51,6 +61,9 @@ function LabRenderOptionsModal({
     }
     newLabBoardSettings[metaGame].display = displayUids;
     newLabBoardSettings[metaGame].annotate = annotate;
+    if (hasInputModes && inputModeUid !== undefined) {
+      newLabBoardSettings[metaGame].inputMode = inputModeUid;
+    }
     processNewSettings(gameSettings, newLabBoardSettings);
   };
 
@@ -73,6 +86,14 @@ function LabRenderOptionsModal({
           metaGame={metaGame}
           initialUids={displayUids}
           onChange={displayUidsSetter}
+        />
+      ) : null}
+      {hasInputModes && show ? (
+        <InputModeOptionsPicker
+          key={inputPickerKey}
+          metaGame={metaGame}
+          initialUid={inputModeUid}
+          onChange={inputModeUidSetter}
         />
       ) : null}
       <div className="field">

@@ -62,6 +62,8 @@ import {
   setupColors,
   nextDisplayOption,
 } from "../../lib/Lab/settings";
+import { resolveInputMode } from "../../lib/inputModeSettings.js";
+import { setStatus } from "../../lib/Lab/misc";
 import { setRendererColourOpts } from "../../lib/setRendererColourOpts";
 import { setGlyphMapOpt } from "../../lib/setGlyphMapOpt";
 import { renderLiveBoardLayers } from "../../lib/renderLiveBoardLayers";
@@ -812,6 +814,11 @@ function LabSession({
   };
 
   const processUpdatedLabSettings = (newGameSettings, newLabBoardSettings) => {
+    const prevInputMode = resolveInputMode(
+      gameSettings,
+      labBoardSettings,
+      metaGame,
+    );
     const newSettings = processNewSettings(
       newGameSettings,
       newLabBoardSettings,
@@ -823,6 +830,43 @@ function LabSession({
       effectiveColourContext
     );
     saveLabBoardSettings(newLabBoardSettings);
+    const defs = gameinfo.get(metaGame)?.inputModes;
+    if (
+      newSettings &&
+      defs?.length &&
+      prevInputMode !== newSettings.inputMode &&
+      gameRef.current &&
+      focus
+    ) {
+      partialMoveRenderRef.current = false;
+      setMoveDraft("");
+      const node = getFocusNode(
+        explorationRef.current.nodes,
+        gameRef.current,
+        focus,
+      );
+      const engine = GameFactory(gameRef.current.metaGame, node.state);
+      setStatus(engine, gameRef.current, false, "", statusRef.current);
+      engineRef.current = engine;
+      if (!gameRef.current.noMoves && focus.canExplore) {
+        movesRef.current = gameRef.current.simultaneous
+          ? engine.moves(gameRef.current.me + 1)
+          : engine.moves();
+      }
+      if (gameRef.current.simultaneous) {
+        moveSetter({
+          ...engine.validateMove("", gameRef.current.me + 1),
+          rendered: "",
+          move: "",
+        });
+      } else {
+        moveSetter({
+          ...engine.validateMove(""),
+          rendered: "",
+          move: "",
+        });
+      }
+    }
     if (engineRef.current && newSettings && focus) {
       const node = getFocusNode(
         explorationRef.current.nodes,
@@ -1053,6 +1097,7 @@ function LabSession({
         metaGame,
         globalMe: globalMeRef.current,
         seatRotate: settings.rotate,
+        inputMode: settings.inputMode,
         baseOptions: {
           divid: "svg",
           svgid: "theBoardSVG",
@@ -1093,6 +1138,7 @@ function LabSession({
   }, [
     renderrep,
     settings,
+    settings?.inputMode,
     effectiveColourContext,
     metaGame,
     focusCanExplore,
