@@ -79,6 +79,8 @@ function FeedbackDetail() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showReclassifyModal, setShowReclassifyModal] = useState(false);
   const [deleteReason, setDeleteReason] = useState("");
+  const [wishlistCoverOnlyKeys, setWishlistCoverOnlyKeys] = useState([]);
+  const [wishlistCoverOnlySubmitting, setWishlistCoverOnlySubmitting] = useState(false);
   const commentTextareaRef = useRef(null);
 
   const beginReplyTo = useCallback(({ authorName, body }) => {
@@ -315,6 +317,29 @@ function FeedbackDetail() {
     await load();
   }
 
+  async function handleSaveWishlistCoverOnly(e) {
+    e.preventDefault();
+    const currentPost = data?.post;
+    if (!currentPost || currentPost.kind !== "wishlist" || wishlistCoverOnlyKeys.length === 0) {
+      return;
+    }
+    setWishlistCoverOnlySubmitting(true);
+    setError("");
+    const result = await updateFeedback({
+      id,
+      title: currentPost.title,
+      body: currentPost.body ?? "",
+      attachmentKeys: wishlistCoverOnlyKeys,
+    });
+    setWishlistCoverOnlySubmitting(false);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setWishlistCoverOnlyKeys([]);
+    await load();
+  }
+
   if (loading) {
     return <Spinner />;
   }
@@ -382,6 +407,12 @@ function FeedbackDetail() {
   const boardPath = boardPathForKind(post.kind);
   const boardKey = boardKeyForKind(post.kind);
   const canEdit = globalMe?.id && (globalMe.admin || globalMe.id === post.authorId);
+  const hasWishlistCover = Boolean(attachmentUrls?.length > 0);
+  const showWishlistCoverUpload = post.kind === "wishlist"
+    && !editing
+    && loggedIn
+    && !readOnly
+    && (!hasWishlistCover || Boolean(globalMe?.admin));
   const statusOptions = statusesForKind(post.kind);
   const canReclassify = globalMe?.admin
     && post.kind === "bug"
@@ -420,6 +451,59 @@ function FeedbackDetail() {
             />
           </a>
         </div>
+      ) : null}
+      {showWishlistCoverUpload ? (
+        <form
+          className="feedback-wishlist-cover-upload"
+          onSubmit={handleSaveWishlistCoverOnly}
+        >
+          <fieldset disabled={wishlistCoverOnlySubmitting}>
+            <div className="field">
+              <label className="label" id="feedback-wishlist-cover-upload-label">
+                {t("feedback.new.coverImage")}
+              </label>
+              {hasWishlistCover && globalMe?.admin ? (
+                <>
+                  <p className="feedback-muted feedback-field-hint">
+                    {t("feedback.detail.wishlistCoverAdminReplaceHint")}
+                  </p>
+                  <div className="feedback-wishlist-cover-edit-preview">
+                    <img
+                      src={attachmentUrls[0].url}
+                      alt=""
+                      className="feedback-wishlist-cover-image"
+                    />
+                  </div>
+                </>
+              ) : (
+                <p className="feedback-muted feedback-field-hint">
+                  {t("feedback.detail.wishlistCoverAddHint")}
+                </p>
+              )}
+              <ScreenshotUpload
+                attachmentKeys={wishlistCoverOnlyKeys}
+                onChange={setWishlistCoverOnlyKeys}
+                maxFiles={1}
+                replaceOnUpload
+                addLabel={t("feedback.upload.addCover")}
+                pasteLabel={t("feedback.upload.pasteCover")}
+                pasteHint={t("feedback.upload.pasteCoverHint")}
+                countLabelKey="feedback.upload.coverCount"
+              />
+            </div>
+            <div className="feedback-comment-actions">
+              <button
+                type="submit"
+                className="button apButton"
+                disabled={wishlistCoverOnlyKeys.length === 0}
+              >
+                {wishlistCoverOnlySubmitting
+                  ? t("feedback.detail.savingWishlistCover")
+                  : t("feedback.detail.saveWishlistCover")}
+              </button>
+            </div>
+          </fieldset>
+        </form>
       ) : null}
       <h1 className="title lined">
         <span>
@@ -482,6 +566,7 @@ function FeedbackDetail() {
             className="button apButtonNeutral is-small"
             onClick={() => {
               setEditAttachmentKeys([]);
+              setWishlistCoverOnlyKeys([]);
               setEditTags(Array.isArray(post.tags) ? post.tags : []);
               setEditSuggestedTags(Array.isArray(data.suggestedTags) ? data.suggestedTags : []);
               setEditing(true);
@@ -539,32 +624,6 @@ function FeedbackDetail() {
               onSuggestedChange={setEditSuggestedTags}
               disabled={submitting}
             />
-          ) : null}
-          {post.kind === "wishlist" ? (
-            <div className="field">
-              <label className="label">{t("feedback.new.coverImage")}</label>
-              <p className="feedback-muted feedback-field-hint">{t("feedback.new.coverImageHint")}</p>
-              {attachmentUrls?.[0] && editAttachmentKeys.length === 0 ? (
-                <div className="feedback-wishlist-cover-edit-preview">
-                  <img
-                    src={attachmentUrls[0].url}
-                    alt=""
-                    className="feedback-wishlist-cover-image"
-                  />
-                  <p className="feedback-muted">{t("feedback.detail.coverReplaceHint")}</p>
-                </div>
-              ) : null}
-              <ScreenshotUpload
-                attachmentKeys={editAttachmentKeys}
-                onChange={setEditAttachmentKeys}
-                maxFiles={1}
-                replaceOnUpload
-                addLabel={t("feedback.upload.addCover")}
-                pasteLabel={t("feedback.upload.pasteCover")}
-                pasteHint={t("feedback.upload.pasteCoverHint")}
-                countLabelKey="feedback.upload.coverCount"
-              />
-            </div>
           ) : null}
           <div className="feedback-comment-actions">
             <button type="submit" className="button apButton" disabled={submitting}>

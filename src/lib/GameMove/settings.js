@@ -2,6 +2,7 @@ import { GameFactory } from "@abstractplay/gameslib";
 import { renderSheetGlyph } from "@abstractplay/renderer";
 import { setRendererColourOpts } from "../setRendererColourOpts";
 import { normalizeDisplaySetting } from "../displaySettings.js";
+import { resolveInputMode } from "../inputModeSettings.js";
 
 function getSetting(setting, deflt, gameSettings, userSettings, metaGame) {
   if (gameSettings !== undefined && gameSettings[setting] !== undefined) {
@@ -74,6 +75,11 @@ export function processNewSettings(
       newGameSettings === undefined || newGameSettings.rotate === undefined
         ? 0
         : newGameSettings.rotate;
+    newSettings.inputMode = resolveInputMode(
+      newGameSettings,
+      newUserSettings,
+      game.metaGame,
+    );
     setupColors(newSettings, game, globalMe, colourContext);
     settingsSetter(newSettings);
     return newSettings;

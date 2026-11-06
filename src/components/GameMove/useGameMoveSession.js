@@ -57,6 +57,7 @@ import { appendMovePartToDraft } from "../../lib/GameMove/moveEntryDraft";
 import {
   isInterestingComment,
   resolveRenderLabels,
+  setStatus,
 } from "../../lib/GameMove/misc";
 import {
   applyPlayerSessionFields,
@@ -116,6 +117,7 @@ import {
   normalizeDisplaySetting,
 } from "../../lib/displaySettings.js";
 import { buildGameMoveRenderExtras } from "../../lib/GameMove/renderExtras.js";
+import { resolveInputMode } from "../../lib/inputModeSettings.js";
 import { isLabSupportedGame } from "../../lib/Lab/buildGame";
 import { launchLabFromExport } from "../../lib/Lab/storage";
 import { serializeSessionExploration } from "../../lib/Lab/exploration";
@@ -2234,6 +2236,7 @@ export function useGameMoveSession(props) {
         metaGame,
         globalMe: globalMeRef.current,
         seatRotate: displaySettings.rotate,
+        inputMode: displaySettings.inputMode,
         baseOptions,
         applyColourOpts: (options) => {
           setRendererColourOpts({
@@ -2282,6 +2285,7 @@ export function useGameMoveSession(props) {
   }, [
     renderrep,
     displaySettings,
+    displaySettings?.inputMode,
     effectiveColourContext,
     boardKey,
     metaGame,
@@ -2440,6 +2444,11 @@ export function useGameMoveSession(props) {
         player.settings = cloneDeep(newGameSettings);
       }
     }
+    const prevInputMode = resolveInputMode(
+      gameSettings,
+      userSettings,
+      metaGame
+    );
     const newSettings = processNewSettings(
       newGameSettings,
       newUserSettings,
@@ -2451,6 +2460,43 @@ export function useGameMoveSession(props) {
       effectiveColourContext
     );
     if (newSettings) {
+      const defs = gameinfo.get(metaGame)?.inputModes;
+      const nextInputMode = newSettings.inputMode;
+      if (
+        defs?.length &&
+        prevInputMode !== nextInputMode &&
+        gameRef.current
+      ) {
+        partialMoveRenderRef.current = false;
+        setMoveDraft("");
+        const g = gameRef.current;
+        const engine = createEngineAtFocus(
+          g,
+          explorationRef.current.nodes,
+          focusRef.current
+        );
+        setStatus(engine, g, false, "", statusRef.current);
+        engineRef.current = engine;
+        if (!g.noMoves && focusRef.current?.canExplore) {
+          movesRef.current = g.simultaneous
+            ? engine.moves(g.me + 1)
+            : engine.moves();
+        }
+        if (g.simultaneous) {
+          moveSetter({
+            ...engine.validateMove("", g.me + 1),
+            rendered: "",
+            move: "",
+          });
+        } else {
+          moveSetter({
+            ...engine.validateMove(""),
+            rendered: "",
+            move: "",
+          });
+        }
+        boardKeySetter(nanoid());
+      }
       const newRenderRep = resolveRenderLabels(
         engineRef.current.render(
           buildRenderDisplayOpts(

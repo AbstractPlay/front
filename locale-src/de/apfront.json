@@ -4823,9 +4823,17 @@
     "src": "Save changes",
     "out": "Änderungen speichern"
   },
+  "feedback.detail.saveWishlistCover": {
+    "src": "Save cover image",
+    "out": "Cover-Bild speichern"
+  },
   "feedback.detail.savingEdit": {
     "src": "Saving…",
     "out": "Speichern…"
+  },
+  "feedback.detail.savingWishlistCover": {
+    "src": "Saving cover…",
+    "out": "Cover wird gespeichert…"
   },
   "feedback.detail.staff": {
     "src": "Staff",
@@ -4846,6 +4854,14 @@
   "feedback.detail.watch": {
     "src": "Watch",
     "out": "Beobachten"
+  },
+  "feedback.detail.wishlistCoverAddHint": {
+    "src": "No cover image yet. Paste or upload one box-art image (one image per entry).",
+    "out": "Noch kein Cover-Bild vorhanden. Füge ein Cover-Bild ein oder lade eines hoch (ein Bild pro Eintrag)."
+  },
+  "feedback.detail.wishlistCoverAdminReplaceHint": {
+    "src": "Admins can replace the cover image. Upload or paste a new image; the previous image is discarded.",
+    "out": "Admins können das Cover-Bild ersetzen. Lade ein neues Bild hoch oder füge eines ein; das vorherige Bild wird verworfen."
   },
   "feedback.effort.high": {
     "src": "High effort",

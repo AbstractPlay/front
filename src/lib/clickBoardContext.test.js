@@ -44,4 +44,10 @@ describe("buildHandleClickUi", () => {
   it("returns undefined when both args are empty", () => {
     expect(buildHandleClickUi(undefined, undefined)).to.be.undefined;
   });
+
+  it("returns inputMode-only ui when panel and board are absent", () => {
+    expect(buildHandleClickUi(undefined, undefined, "tap")).to.deep.equal({
+      inputMode: "tap",
+    });
+  });
 });

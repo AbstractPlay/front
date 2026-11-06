@@ -38,6 +38,7 @@ export function renderLiveBoardLayers({
   stackExpanding,
   onStackColumnHover,
   clickBoardContextRef,
+  inputMode,
 }) {
   return apPerfRun("explore.boardSvgLayers", () => {
   const layers = [];
@@ -73,7 +74,12 @@ export function renderLiveBoardLayers({
     if (canBoardClick) {
       layerOptions.boardClick = (panelId, row, col, piece) => {
         const board = panelContextById.get(String(panelId));
-        onBoardClick(row, col, piece, buildHandleClickUi(panelId, board));
+        onBoardClick(
+          row,
+          col,
+          piece,
+          buildHandleClickUi(panelId, board, inputMode),
+        );
       };
     }
     if (stackExpanding && onStackColumnHover) {
@@ -107,7 +113,7 @@ export function renderLiveBoardLayers({
     }
     if (canBoardClick && isTopFrame) {
       const board = clickBoardContextFromDisplayRep(displayRep);
-      const ui = buildHandleClickUi(undefined, board);
+      const ui = buildHandleClickUi(undefined, board, inputMode);
       if (clickBoardContextRef) {
         clickBoardContextRef.current = ui;
       }

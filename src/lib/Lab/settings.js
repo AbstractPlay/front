@@ -5,6 +5,7 @@ import {
   nextBoardDisplayCycle,
   normalizeDisplaySetting,
 } from "../displaySettings.js";
+import { resolveInputMode } from "../inputModeSettings.js";
 
 export function getLabSetting(
   setting,
@@ -69,6 +70,11 @@ export function processNewSettings(
       newGameSettings === undefined || newGameSettings.rotate === undefined
         ? 0
         : newGameSettings.rotate;
+    newSettings.inputMode = resolveInputMode(
+      newGameSettings,
+      newUserSettings,
+      game.metaGame,
+    );
     setupColors(newSettings, game, globalMe, colourContext);
     settingsSetter(newSettings);
     return newSettings;
