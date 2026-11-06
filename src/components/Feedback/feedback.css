@@ -148,6 +148,28 @@
   margin: 0 0 1rem;
 }
 
+.feedback-wishlist-cover-upload {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--tag-background-color);
+  border-radius: 6px;
+  background: var(--secondary-color-3-bg);
+}
+
+.feedback-wishlist-cover-upload fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.feedback-wishlist-cover-upload .field {
+  margin-bottom: 0.75rem;
+}
+
+.feedback-wishlist-cover-upload .field:last-child {
+  margin-bottom: 0;
+}
+
 .feedback-edit-form {
   margin: 0 0 1.5rem;
 }
