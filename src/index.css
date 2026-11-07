@@ -233,6 +233,13 @@ a.navbar-item,
   width: auto;
 }
 
+/* Fits the logged-in icons beside the logo on the narrowest phones. */
+@media screen and (max-width: 369px) {
+  .navbar-brand .navbar-item img {
+    height: 2rem;
+  }
+}
+
 @media screen and (max-width: 1219px) {
   .navbar-brand {
     max-width: 100%;
@@ -255,7 +262,8 @@ a.navbar-item,
 
   .navbar-icon-cluster-desktop,
   .navbar-dark-mode-desktop,
-  .navbar-login-desktop {
+  .navbar-login-desktop,
+  .navbar-search-desktop {
     display: none !important;
   }
 
@@ -275,6 +283,10 @@ a.navbar-item,
     display: flex;
     gap: 0.25rem;
   }
+}
+
+.navbar-search-desktop {
+  padding: 0;
 }
 
 .nav-dropdown-root {
@@ -619,14 +631,16 @@ a.navbar-item,
   transform: translate(25%, -25%);
 }
 
-.notification-panel {
+.notification-panel,
+.game-search-panel {
   max-width: min(100vw - 2rem, 22rem);
   padding: 0;
   width: 22rem;
 }
 
 @media screen and (max-width: 1219px) {
-  .notification-panel.nav-dropdown-panel {
+  .notification-panel.nav-dropdown-panel,
+  .game-search-panel.nav-dropdown-panel {
     left: 1rem;
     margin-top: 0;
     max-width: none;
@@ -635,6 +649,51 @@ a.navbar-item,
     top: calc(var(--ap-navbar-bar-height) + 0.25rem);
     width: auto;
   }
+}
+
+.game-search-panel .input {
+  border-radius: 4px 4px 0 0;
+  border-width: 0 0 1px;
+  box-shadow: none;
+}
+
+.game-search-results {
+  list-style: none;
+  margin: 0;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.game-search-result {
+  color: var(--main-font-color);
+  display: block;
+  padding: 0.5rem 0.75rem;
+  text-decoration: none;
+}
+
+.game-search-result:hover,
+.game-search-result:focus-visible,
+.game-search-result.is-active {
+  background: var(--tag-background-color);
+  color: var(--main-font-color);
+}
+
+.game-search-result-name {
+  display: block;
+  font-weight: 600;
+}
+
+.game-search-result-designers {
+  color: var(--secondary-font-color);
+  display: block;
+  font-size: 0.75rem;
+}
+
+.game-search-empty {
+  color: var(--secondary-font-color);
+  margin: 0;
+  padding: 0.75rem;
 }
 
 .notification-panel-news-callout {

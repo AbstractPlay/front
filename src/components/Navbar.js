@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
+import GameSearch from "./GameSearch";
 import ProfileMenu from "./ProfileMenu";
 import NotificationBell from "./NotificationBell";
 import { useStorageState } from "react-use-storage-state";
@@ -82,6 +83,7 @@ function Navbar() {
           </Link>
         </div>
         <div className="navbar-brand-actions navbar-icon-cluster-mobile">
+          <GameSearch closeBurger={closeBurger} />
           {loggedin && globalMe !== null ? (
             <NotificationBell closeBurger={closeBurger} />
           ) : null}
@@ -246,6 +248,9 @@ function Navbar() {
           </NavbarHoverDropdown>
         </div>
         <div className="navbar-end">
+          <div className="navbar-item navbar-search-desktop">
+            <GameSearch closeBurger={closeBurger} />
+          </div>
           {loggedin ? (
             <>
               <div className="navbar-item navbar-dark-mode-desktop">
