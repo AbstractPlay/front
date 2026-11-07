@@ -10,7 +10,7 @@ All routes are defined in [`src/pages/Skeleton.js`](../src/pages/Skeleton.js) in
 | `/move/:metaGame/:cbits/:gameID` | `GameMoveWrapper` | Live game |
 | `/games/:metaGame?` | `Explore` | Lazy-loaded |
 | `/player/:userid` | `Player` | Lazy-loaded |
-| `/challenges/:metaGame` | `StandingChallenges` | |
+| `/challenges/:metaGame?` | `StandingChallenges` | Site-wide list when `:metaGame` is omitted |
 | `/listgames/:gameState/:metaGame` | `ListGames` | |
 | `/ratings/:metaGame` | `Ratings` | |
 | `/tournaments/:tab?/:metaGame?` | `Tournaments` | Tabbed list (`open`, `current`, `completed`); optional game filter |

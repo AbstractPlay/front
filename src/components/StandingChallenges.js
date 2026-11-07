@@ -565,7 +565,7 @@ function StandingChallenges(props) {
           header: t("tables.game"),
           sortingFn: stringColumnSortingFn(i18n.language),
           cell: (props) => (
-            <Link to={`/challenges/${props.row.original.metaGame}`}>
+            <Link to={`/games/${props.row.original.metaGame}`}>
               {props.getValue()}
             </Link>
           ),

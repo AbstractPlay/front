@@ -1,6 +1,8 @@
 # Challenges
 
-Standing challenges let players post open invitations for a specific meta-game. Route: `/challenges/:metaGame`.
+Standing challenges let players post open invitations for a specific meta-game. Routes: `/challenges` (site-wide) and `/challenges/:metaGame` (single game).
+
+In the site-wide list, the game name links to the game page (`/games/:metaGame`) so players browsing challenges can read about a game. That page's **Challenges** tab lists the same per-game challenges.
 
 ## Key files
 
