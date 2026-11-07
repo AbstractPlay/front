@@ -327,8 +327,6 @@ function FeedbackDetail() {
     setError("");
     const result = await updateFeedback({
       id,
-      title: currentPost.title,
-      body: currentPost.body ?? "",
       attachmentKeys: wishlistCoverOnlyKeys,
     });
     setWishlistCoverOnlySubmitting(false);
