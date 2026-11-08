@@ -248,43 +248,36 @@ function Navbar() {
           </NavbarHoverDropdown>
         </div>
         <div className="navbar-end">
-          <div className="navbar-item navbar-search-desktop">
-            <GameSearch closeBurger={closeBurger} />
-          </div>
           {loggedin ? (
-            <>
-              <div className="navbar-item navbar-dark-mode-desktop">
-                <button
-                  type="button"
-                  aria-label={
-                    colorMode === "light"
-                      ? t("a11y.toggleDarkMode")
-                      : t("a11y.toggleLightMode")
-                  }
-                  onClick={toggleColorMode}
-                  title={
-                    colorMode === "light"
-                      ? t("a11y.toggleDarkMode")
-                      : t("a11y.toggleLightMode")
-                  }
-                >
-                  <span
-                    className="icon"
-                    style={{ fontSize: "1.4rem", fontWeight: "bold" }}
-                  >
-                    {colorMode === "light" ? "\u263E" : "\u263C"}
-                  </span>
-                </button>
-              </div>
-              <div className="navbar-item navbar-icon-cluster-desktop">
-                {globalMe !== null ? (
-                  <NotificationBell closeBurger={closeBurger} />
-                ) : null}
-                <ProfileMenu {...profileMenuProps} showColorModeInMenu={false} />
-              </div>
-            </>
+            <div className="navbar-item navbar-icon-cluster-desktop">
+              <GameSearch closeBurger={closeBurger} />
+              <button
+                type="button"
+                className="nav-icon-btn navbar-color-mode-desktop"
+                aria-label={
+                  colorMode === "light"
+                    ? t("a11y.toggleDarkMode")
+                    : t("a11y.toggleLightMode")
+                }
+                onClick={toggleColorMode}
+                title={
+                  colorMode === "light"
+                    ? t("a11y.toggleDarkMode")
+                    : t("a11y.toggleLightMode")
+                }
+              >
+                <span className="icon navbar-color-mode-icon">
+                  {colorMode === "light" ? "\u263E" : "\u263C"}
+                </span>
+              </button>
+              {globalMe !== null ? (
+                <NotificationBell closeBurger={closeBurger} />
+              ) : null}
+              <ProfileMenu {...profileMenuProps} showColorModeInMenu={false} />
+            </div>
           ) : (
-            <div className="navbar-item navbar-login-desktop">
+            <div className="navbar-item navbar-icon-cluster-desktop navbar-login-desktop">
+              <GameSearch closeBurger={closeBurger} />
               <ProfileMenu {...profileMenuProps} showColorModeInMenu={false} />
             </div>
           )}

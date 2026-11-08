@@ -49,6 +49,11 @@ function GameSearch({ closeBurger }) {
     setActiveIndex(0);
   }, []);
 
+  const handleEscape = useCallback(() => {
+    close();
+    triggerRef.current?.focus();
+  }, [close]);
+
   const toggle = () => {
     if (open) {
       close();
@@ -71,20 +76,18 @@ function GameSearch({ closeBurger }) {
       event.preventDefault();
       navigate(`/games/${results[activeIndex].id}`);
       close();
-    } else if (event.key === "Escape") {
-      close();
-      triggerRef.current?.focus();
     }
   };
 
   return (
-    <NavDropdownPanel open={open} onClose={close}>
+    <NavDropdownPanel open={open} onClose={close} onEscape={handleEscape}>
       <button
         ref={triggerRef}
         type="button"
         className="nav-icon-btn"
         aria-label={t("a11y.searchGames")}
         aria-expanded={open}
+        aria-haspopup="listbox"
         title={t("a11y.searchGames")}
         onClick={toggle}
       >
@@ -100,7 +103,7 @@ function GameSearch({ closeBurger }) {
             role="combobox"
             aria-label={t("a11y.searchGames")}
             aria-autocomplete="list"
-            aria-expanded={hasQuery && results.length > 0}
+            aria-expanded={hasQuery}
             aria-controls={listId}
             aria-activedescendant={
               results[activeIndex] ? `${listId}-${activeIndex}` : undefined

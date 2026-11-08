@@ -261,9 +261,7 @@ a.navbar-item,
   }
 
   .navbar-icon-cluster-desktop,
-  .navbar-dark-mode-desktop,
-  .navbar-login-desktop,
-  .navbar-search-desktop {
+  .navbar-login-desktop {
     display: none !important;
   }
 
@@ -283,10 +281,15 @@ a.navbar-item,
     display: flex;
     gap: 0.25rem;
   }
+
+  .navbar-icon-cluster-desktop.navbar-item {
+    padding-block: 0;
+  }
 }
 
-.navbar-search-desktop {
-  padding: 0;
+.navbar-color-mode-icon {
+  font-size: 1.25rem;
+  font-weight: bold;
 }
 
 .nav-dropdown-root {
