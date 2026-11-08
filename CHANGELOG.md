@@ -13,6 +13,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Added
 
+- **Navbar game search:** a magnifying glass in the navbar finds games by title (or designer) from any page and opens the game page, with keyboard navigation.
 - **Game wishlist:** anyone signed in can **add a missing cover image** on a wishlist entry’s detail page; **admins** can **replace** the single cover image. (Requires matching `feedback_update` rules on the API.)
 - **Explore (all games):** quick **filter by tag** dropdown plus **Advanced filters** modal (combine goals, mechanics, board, and other tags with any/all/none; optional OR groups; global exclusions). Tag filters can be bookmarked via URL query parameters (`t`, `tf`, and related keys). Name, designer, star, and recommended filters are unchanged.
 - **Site statistics (games tab):** game statistics and pie rule tables include a **Min. records** control to hide rows below a chosen record count (remembered per browser).

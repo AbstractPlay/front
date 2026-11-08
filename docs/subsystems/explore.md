@@ -13,6 +13,10 @@ The explore page lists available games and meta-games.
 
 Legacy bookmarks to `/games/:mode` where `:mode` is a catalog view slug redirect to `/explore/:mode`.
 
+## Navbar game search
+
+The magnifying glass in the navbar ([`GameSearch.js`](../src/components/GameSearch.js)) is the quick route to a game page. It filters the public catalog with `filterGameOptions` (the matching used by the game picker) and orders results with `rankGameSearchResults`, so title matches come first. Selecting a result navigates to `/games/:metaGame`.
+
 ## Key files
 
 | File | Role |

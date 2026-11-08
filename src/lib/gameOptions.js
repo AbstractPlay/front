@@ -9,7 +9,7 @@ import { compareStrings } from "./compareStrings";
 import { isLabSupportedGame } from "./Lab/buildGame";
 import { isProductionMode } from "./realMode";
 import { tournamentPlaySupported } from "./tournamentGame";
-import { queryMatchesHaystack } from "./searchQuery";
+import { normalizeSearchQuery, queryMatchesHaystack } from "./searchQuery";
 
 /**
  * @param {{ flags?: string[] } | null | undefined} info
@@ -297,4 +297,35 @@ export function filterGameOptions(
     }
     return true;
   });
+}
+
+function titleMatchRank(name, normalizedQuery) {
+  const lower = name.toLowerCase();
+  if (lower === normalizedQuery) return 0;
+  if (lower.startsWith(normalizedQuery)) return 1;
+  if (lower.split(/[\s\p{P}]+/u).some((word) => word.startsWith(normalizedQuery))) {
+    return 2;
+  }
+  return lower.includes(normalizedQuery) ? 3 : 4;
+}
+
+/**
+ * Order search matches so title hits come first: exact, then prefix, then word
+ * prefix, then substring, then anything else (e.g. designer-only matches).
+ * The sort is stable, so ties keep the incoming order. An empty query has no
+ * results.
+ * @template {{ name: string }} T
+ * @param {T[]} games
+ * @param {string} query
+ * @returns {T[]}
+ */
+export function rankGameSearchResults(games, query) {
+  const normalizedQuery = normalizeSearchQuery(query);
+  if (!normalizedQuery) {
+    return [];
+  }
+  return games
+    .map((game) => ({ game, rank: titleMatchRank(game.name, normalizedQuery) }))
+    .sort((a, b) => a.rank - b.rank)
+    .map(({ game }) => game);
 }
