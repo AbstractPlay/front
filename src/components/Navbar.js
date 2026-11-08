@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import logoLight from "../assets/AbstractPlayLogo-light.svg";
 import logoDark from "../assets/AbstractPlayLogo-dark.svg";
+import GameSearch from "./GameSearch";
 import ProfileMenu from "./ProfileMenu";
 import NotificationBell from "./NotificationBell";
 import { useStorageState } from "react-use-storage-state";
@@ -82,6 +83,7 @@ function Navbar() {
           </Link>
         </div>
         <div className="navbar-brand-actions navbar-icon-cluster-mobile">
+          <GameSearch closeBurger={closeBurger} />
           {loggedin && globalMe !== null ? (
             <NotificationBell closeBurger={closeBurger} />
           ) : null}
@@ -247,39 +249,35 @@ function Navbar() {
         </div>
         <div className="navbar-end">
           {loggedin ? (
-            <>
-              <div className="navbar-item navbar-dark-mode-desktop">
-                <button
-                  type="button"
-                  aria-label={
-                    colorMode === "light"
-                      ? t("a11y.toggleDarkMode")
-                      : t("a11y.toggleLightMode")
-                  }
-                  onClick={toggleColorMode}
-                  title={
-                    colorMode === "light"
-                      ? t("a11y.toggleDarkMode")
-                      : t("a11y.toggleLightMode")
-                  }
-                >
-                  <span
-                    className="icon"
-                    style={{ fontSize: "1.4rem", fontWeight: "bold" }}
-                  >
-                    {colorMode === "light" ? "\u263E" : "\u263C"}
-                  </span>
-                </button>
-              </div>
-              <div className="navbar-item navbar-icon-cluster-desktop">
-                {globalMe !== null ? (
-                  <NotificationBell closeBurger={closeBurger} />
-                ) : null}
-                <ProfileMenu {...profileMenuProps} showColorModeInMenu={false} />
-              </div>
-            </>
+            <div className="navbar-item navbar-icon-cluster-desktop">
+              <GameSearch closeBurger={closeBurger} />
+              <button
+                type="button"
+                className="nav-icon-btn navbar-color-mode-desktop"
+                aria-label={
+                  colorMode === "light"
+                    ? t("a11y.toggleDarkMode")
+                    : t("a11y.toggleLightMode")
+                }
+                onClick={toggleColorMode}
+                title={
+                  colorMode === "light"
+                    ? t("a11y.toggleDarkMode")
+                    : t("a11y.toggleLightMode")
+                }
+              >
+                <span className="icon navbar-color-mode-icon">
+                  {colorMode === "light" ? "\u263E" : "\u263C"}
+                </span>
+              </button>
+              {globalMe !== null ? (
+                <NotificationBell closeBurger={closeBurger} />
+              ) : null}
+              <ProfileMenu {...profileMenuProps} showColorModeInMenu={false} />
+            </div>
           ) : (
-            <div className="navbar-item navbar-login-desktop">
+            <div className="navbar-item navbar-icon-cluster-desktop navbar-login-desktop">
+              <GameSearch closeBurger={closeBurger} />
               <ProfileMenu {...profileMenuProps} showColorModeInMenu={false} />
             </div>
           )}

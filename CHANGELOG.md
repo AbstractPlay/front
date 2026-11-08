@@ -9,10 +9,11 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
-## [1.0.0-ci] - 2026-11-06
+## [1.0.0-ci] - 2026-11-08
 
 ### Added
 
+- **Navbar game search:** a magnifying glass in the navbar finds games by title (or designer) from any page and opens the game page, with keyboard navigation.
 - **Game wishlist:** anyone signed in can **add a missing cover image** on a wishlist entry’s detail page; **admins** can **replace** the single cover image. (Requires matching `feedback_update` rules on the API.)
 - **Explore (all games):** quick **filter by tag** dropdown plus **Advanced filters** modal (combine goals, mechanics, board, and other tags with any/all/none; optional OR groups; global exclusions). Tag filters can be bookmarked via URL query parameters (`t`, `tf`, and related keys). Name, designer, star, and recommended filters are unchanged.
 - **Site statistics (games tab):** game statistics and pie rule tables include a **Min. records** control to hide rows below a chosen record count (remembered per browser).
@@ -20,6 +21,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 ### Changed
 
 - **Dashboard tables:** tournament game rows no longer use bold text; the Event column badge identifies ladder, tournament, and organized-event games.
+- **Open challenges:** clicking a game name in the site-wide list now opens the game page instead of a list of that game's challenges, which remain available on the game page's **Challenges** tab.
 
 ### Fixed
 

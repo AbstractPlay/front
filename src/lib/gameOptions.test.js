@@ -12,6 +12,7 @@ import {
   isPublicCatalogGame,
   isBoardRootCategory,
   pickRandomGameOption,
+  rankGameSearchResults,
   resolveMetaGameUid,
   sortCategoryKeys,
 } from "./gameOptions";
@@ -281,5 +282,37 @@ describe("filterGameOptions", () => {
     expect(filterGameOptions(tagged, { boardTag: "board>none" })).toEqual([
       tagged[1],
     ]);
+  });
+});
+
+describe("rankGameSearchResults", () => {
+  const games = [
+    { name: "Cargo" },
+    { name: "Designed by Go fan" },
+    { name: "Go" },
+    { name: "Gorgon" },
+    { name: "Mad-Go" },
+    { name: "Zebra", designers: "Hugo" },
+  ];
+
+  it("orders exact, prefix, word prefix, substring, then other matches", () => {
+    expect(rankGameSearchResults(games, "  GO ").map((g) => g.name)).toEqual([
+      "Go",
+      "Gorgon",
+      "Designed by Go fan",
+      "Mad-Go",
+      "Cargo",
+      "Zebra",
+    ]);
+  });
+
+  it("returns nothing for a blank query", () => {
+    expect(rankGameSearchResults(games, "   ")).toEqual([]);
+  });
+
+  it("does not mutate the input", () => {
+    const input = [...games];
+    rankGameSearchResults(input, "go");
+    expect(input).toEqual(games);
   });
 });

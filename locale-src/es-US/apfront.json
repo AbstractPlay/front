@@ -3231,6 +3231,10 @@
     "src": "Notifications",
     "out": "Notificaciones"
   },
+  "a11y.searchGames": {
+    "src": "Search games",
+    "out": "Buscar juegos"
+  },
   "a11y.toggleDarkMode": {
     "src": "Toggle dark mode",
     "out": "Alternar modo oscuro"
@@ -6166,6 +6170,10 @@
   "gamePicker.starredOnly": {
     "src": "Starred games only",
     "out": "Solo juegos favoritos"
+  },
+  "gameSearch.placeholder": {
+    "src": "Search games…",
+    "out": "Buscar juegos…"
   },
   "gameVariants.communityBadge": {
     "src": "Community",

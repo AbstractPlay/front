@@ -3,8 +3,10 @@ import { useEffect, useRef } from "react";
 /**
  * Wraps a dropdown trigger and panel. Closes on outside click or Escape.
  * Parent renders trigger + conditional panel as children.
+ * @param {((event: KeyboardEvent) => void) | undefined} onEscape
+ *   Optional Escape handler; when set, replaces the default `onClose()` on Escape.
  */
-function NavDropdownPanel({ open, onClose, className = "", children }) {
+function NavDropdownPanel({ open, onClose, onEscape, className = "", children }) {
   const rootRef = useRef(null);
 
   useEffect(() => {
@@ -18,7 +20,11 @@ function NavDropdownPanel({ open, onClose, className = "", children }) {
     };
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
-        onClose();
+        if (onEscape) {
+          onEscape(event);
+        } else {
+          onClose();
+        }
       }
     };
     document.addEventListener("mousedown", handlePointerDown);
@@ -27,7 +33,7 @@ function NavDropdownPanel({ open, onClose, className = "", children }) {
       document.removeEventListener("mousedown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [open, onClose]);
+  }, [open, onClose, onEscape]);
 
   return (
     <div
