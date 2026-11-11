@@ -1,4 +1,5 @@
 import { GameFactory, gameinfo } from "@abstractplay/gameslib";
+import { effectiveFlags, flagSetIncludes } from "../effectiveGameFlags.js";
 import { nanoid } from "nanoid";
 import {
   applySimultaneousGameFields,
@@ -90,8 +91,10 @@ export function buildLabGame(metaGame, state, options = {}) {
   const engine = createEngine(metaGame, { variants, state, numPlayers });
   const serialized = engine.serialize();
   const playerCount = engine.numplayers;
-  const info = gameinfo.get(metaGame);
-  const simultaneous = info?.flags?.includes("simultaneous") ?? false;
+  const simultaneous = flagSetIncludes(
+    effectiveFlags(engine, metaGame),
+    "simultaneous"
+  );
 
   const players = Array.from({ length: playerCount }, (_, i) => ({
     id: `lab-p${i}`,

@@ -1,4 +1,4 @@
-import { gameinfo, GameFactory } from "@abstractplay/gameslib";
+import { gameinfo, GameFactory, sessionIsSimultaneous } from "@abstractplay/gameslib";
 
 const ALLOWED_TURN_MODELS = new Set(["sequential", "sequenced", "skip-turn"]);
 
@@ -16,7 +16,12 @@ export function isTeachingChallengeEligible(
   if (!info) {
     return false;
   }
-  if (info.flags.includes("simultaneous")) {
+  if (
+    sessionIsSimultaneous(undefined, metaGame, {
+      variants,
+      numplayers: count,
+    })
+  ) {
     return false;
   }
   try {
@@ -27,11 +32,16 @@ export function isTeachingChallengeEligible(
     if (!engine) {
       return false;
     }
-    const turnModel =
-      typeof engine.turnModel === "function" ? engine.turnModel() : "sequential";
-    if (turnModel === "simultaneous") {
+    if (
+      sessionIsSimultaneous(engine, metaGame, {
+        variants,
+        numplayers: count,
+      })
+    ) {
       return false;
     }
+    const turnModel =
+      typeof engine.turnModel === "function" ? engine.turnModel() : "sequential";
     return ALLOWED_TURN_MODELS.has(turnModel);
   } catch {
     return false;

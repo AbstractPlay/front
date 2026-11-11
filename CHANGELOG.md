@@ -9,7 +9,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
-## [1.0.0-ci] - 2026-11-08
+## [1.0.0-ci] - 2026-11-11
 
 ### Added
 
@@ -20,6 +20,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Changed
 
+- **Simultaneous play:** `game.simultaneous`, teaching-mode challenge eligibility, Playground lab sessions, and move-table exploration game lists use gameslib **`getFlags()` / `resolveGameFlags`** (`sessionIsSimultaneous`) instead of static catalog `gameinfo.flags`.
 - **Dashboard tables:** tournament game rows no longer use bold text; the Event column badge identifies ladder, tournament, and organized-event games.
 - **Open challenges:** clicking a game name in the site-wide list now opens the game page instead of a list of that game's challenges, which remain available on the game page's **Challenges** tab.
 

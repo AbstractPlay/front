@@ -8,6 +8,11 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { gameinfo, GameFactory } from "@abstractplay/gameslib";
 import { isPublicCatalogGame, getGameDisplayName } from "../../lib/gameOptions";
+import {
+  effectiveFlagsForChallenge,
+  flagSetIncludes,
+  sessionExplorationAllowed,
+} from "../../lib/effectiveGameFlags";
 import { compareStrings } from "../../lib/compareStrings";
 import { useStore } from "../../stores";
 import BotAwareName from "../Bots/BotAwareName";
@@ -45,7 +50,6 @@ import {
   livePartialMoveWireForTable,
   shouldApplyLivePartialPreview,
 } from "../../lib/GameMove/livePartialMove";
-import { sessionExplorationAllowed } from "../../lib/effectiveGameFlags";
 import {
   filterPathCellsForSeat,
   resolveMoveTablePlayerSeats,
@@ -148,7 +152,13 @@ function GameMoves(props) {
       if (
         isPublicCatalogGame(info) &&
         info.playercounts.includes(2) &&
-        !info.flags.includes("simultaneous")
+        !flagSetIncludes(
+          effectiveFlagsForChallenge(info.uid, {
+            variants: [],
+            numplayers: 2,
+          }),
+          "simultaneous"
+        )
       ) {
         lst.push([info.uid, getGameDisplayName(info.uid)]);
       }
