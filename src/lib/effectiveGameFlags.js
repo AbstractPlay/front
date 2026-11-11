@@ -1,5 +1,11 @@
 import { gameinfo, resolveGameFlags } from "@abstractplay/gameslib";
 
+/**
+ * Session flags for live UI and API parity with gameslib.
+ * Simultaneous submit/partial-move routing uses the effective `simultaneous`
+ * flag (`getFlags()` / `resolveGameFlags`), not `turnModel()` or static catalog flags.
+ */
+
 /** Effective flags for an active engine instance (preferred). */
 export function effectiveFlags(engine, metaGame) {
   if (engine != null && typeof engine.getFlags === "function") {
@@ -44,10 +50,10 @@ export function sessionExplorationAllowed(game) {
 
 /** Copy session flags from the engine onto the front game record. */
 export function applyEffectiveFlags(game0, engine, metaGame) {
-  const info = gameinfo.get(metaGame);
   const flags = effectiveFlags(engine, metaGame);
 
-  game0.simultaneous = flagSetIncludes(info?.flags, "simultaneous");
+  // Submit/partial-move UX uses the effective simultaneous flag (not turnModel).
+  game0.simultaneous = flagSetIncludes(flags, "simultaneous");
   game0.pie =
     flagSetIncludes(flags, "pie") || flagSetIncludes(flags, "pie-even");
   game0.pieEven = flagSetIncludes(flags, "pie-even");

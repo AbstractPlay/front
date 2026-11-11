@@ -88,10 +88,13 @@ describe("effectiveGameFlags", () => {
     expect(game0.simultaneous).toBe(false);
   });
 
-  it("applyEffectiveFlags keeps simultaneous from static gameinfo", () => {
+  it("applyEffectiveFlags sets simultaneous from getFlags only", () => {
     const game0 = {};
-    applyEffectiveFlags(game0, { getFlags: () => [] }, "entropy");
+    applyEffectiveFlags(game0, { getFlags: () => ["simultaneous"] }, "entropy");
     expect(game0.simultaneous).toBe(true);
+    const game1 = {};
+    applyEffectiveFlags(game1, { getFlags: () => [] }, "entropy");
+    expect(game1.simultaneous).toBe(false);
   });
 
   it("challengeNoExploreActive is in-game only", () => {
