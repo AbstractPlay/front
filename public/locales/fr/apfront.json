@@ -166,6 +166,8 @@
   "ConfirmMove": "Confirmer l'envoi du coup",
   "ConfirmMoveDesc": "Êtes-vous sûr de vouloir envoyer ce coup ?",
   "ConfirmMoveHelp": "Si vous préférez ne pas avoir de demande de confirmation, vous pouvez la désactiver dans vos paramètres d'utilisateur.",
+  "ConfirmPie": "Échanger les couleurs",
+  "ConfirmPieDesc": "Les couleurs des joueurs seront échangées immédiatement. Cette action est irréversible.",
   "ConfirmResign": "Confirmer l'abandon",
   "ConfirmResignDesc": "Êtes-vous sûr de vouloir abandonner ?",
   "ConfirmDrawOffer": "Proposer la nulle",
