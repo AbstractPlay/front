@@ -112,6 +112,9 @@ export default function GameMoveClassicLayout({ session }) {
     showResignConfirm,
     handleResignConfirmed,
     handleCloseResignConfirm,
+    showPieConfirm,
+    handlePieConfirmed,
+    handleClosePieConfirm,
     showDeleteSubtreeConfirm,
     handleDeleteSubtreeConfirmed,
     handleCloseDeleteSubtreeConfirm,
@@ -656,6 +659,21 @@ export default function GameMoveClassicLayout({ session }) {
         >
           <div className="content">
             <p>{t("ConfirmResignDesc")}</p>
+          </div>
+        </Modal>
+        <Modal
+          show={showPieConfirm}
+          title={t("ConfirmPie")}
+          buttons={[
+            { label: t("InvokePie"), action: handlePieConfirmed },
+            {
+              label: t("Cancel"),
+              action: handleClosePieConfirm,
+            },
+          ]}
+        >
+          <div className="content">
+            <p>{t("ConfirmPieDesc")}</p>
           </div>
         </Modal>
         <Modal

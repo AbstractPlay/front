@@ -205,6 +205,7 @@ export function useGameMoveSession(props) {
   const [showSettings, showSettingsSetter] = useState(false);
   const [showMoveConfirm, showMoveConfirmSetter] = useState(false);
   const [showResignConfirm, showResignConfirmSetter] = useState(false);
+  const [showPieConfirm, showPieConfirmSetter] = useState(false);
   const [showDeleteSubtreeConfirm, showDeleteSubtreeConfirmSetter] =
     useState(false);
   const [showPremoveConfirm, showPremoveConfirmSetter] = useState(false);
@@ -2058,8 +2059,8 @@ export function useGameMoveSession(props) {
   const handleTeachingKeep = () => runTeachingRpc("teaching_keep_move");
   const handleTeachingUndo = () => runTeachingRpc("teaching_undo_move");
 
-  // The user has clicked the "Invoke pie rule" button
-  const handlePie = async () => {
+  const handlePieConfirmed = async () => {
+    showPieConfirmSetter(false);
     if (
       gameRef.current?.teachingUndo ||
       gameRef.current?.teachingMode === true
@@ -2083,6 +2084,20 @@ export function useGameMoveSession(props) {
     } catch (err) {
       setError(`invoke_pie failed with ${err.message}`);
     }
+  };
+
+  const handlePie = () => {
+    if (
+      gameRef.current?.teachingUndo ||
+      gameRef.current?.teachingMode === true
+    ) {
+      return;
+    }
+    showPieConfirmSetter(true);
+  };
+
+  const handleClosePieConfirm = () => {
+    showPieConfirmSetter(false);
   };
 
   // handler when user types a move, selects a move (from list of available moves) or clicks on his stash.
@@ -3643,6 +3658,9 @@ export function useGameMoveSession(props) {
     showResignConfirm,
     handleResignConfirmed,
     handleCloseResignConfirm,
+    showPieConfirm,
+    handlePieConfirmed,
+    handleClosePieConfirm,
     showDeleteSubtreeConfirm,
     handleDeleteSubtreeConfirmed,
     handleCloseDeleteSubtreeConfirm,

@@ -166,6 +166,8 @@
   "ConfirmMove": "Confirm move submission",
   "ConfirmMoveDesc": "Are you sure you want to submit this move?",
   "ConfirmMoveHelp": "If you prefer not to get asked for confirmation, you can disable this in your user settings.",
+  "ConfirmPie": "Swap player colours",
+  "ConfirmPieDesc": "Player colours will be swapped immediately. This cannot be undone.",
   "ConfirmResign": "Confirm resignation",
   "ConfirmResignDesc": "Are you sure you want to resign?",
   "ConfirmDrawOffer": "Offer draw",
