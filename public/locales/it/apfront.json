@@ -166,6 +166,8 @@
   "ConfirmMove": "Conferma invio mossa",
   "ConfirmMoveDesc": "Sei sicuro di voler inviare questa mossa?",
   "ConfirmMoveHelp": "Se preferisci non ricevere la richiesta di conferma, puoi disabilitare questa opzione nelle impostazioni utente.",
+  "ConfirmPie": "Scambia i colori dei giocatori",
+  "ConfirmPieDesc": "I colori dei giocatori verranno scambiati immediatamente. Questa azione non può essere annullata.",
   "ConfirmResign": "Conferma abbandono",
   "ConfirmResignDesc": "Sei sicuro di volerti arrendere?",
   "ConfirmDrawOffer": "Proponi patta",

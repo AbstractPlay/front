@@ -166,6 +166,8 @@
   "ConfirmMove": "Confirmar envío de movimiento",
   "ConfirmMoveDesc": "¿Estás seguro de que deseas enviar este movimiento?",
   "ConfirmMoveHelp": "Si prefieres que no se te pida confirmación, puedes deshabilitarlo en tu configuración de usuario.",
+  "ConfirmPie": "Intercambiar los colores de los jugadores",
+  "ConfirmPieDesc": "Los colores de los jugadores se intercambiarán de inmediato. Esto no se puede deshacer.",
   "ConfirmResign": "Confirmar rendición",
   "ConfirmResignDesc": "¿Estás seguro de que deseas rendirte?",
   "ConfirmDrawOffer": "Ofrecer empate",

@@ -787,6 +787,14 @@
     "src": "If you prefer not to get asked for confirmation, you can disable this in your user settings.",
     "out": "Wenn du nicht um Bestätigung gebeten werden möchtest, kannst du dies in deinen Benutzereinstellungen deaktivieren."
   },
+  "ConfirmPie": {
+    "src": "Swap player colours",
+    "out": "Spielerfarben tauschen"
+  },
+  "ConfirmPieDesc": {
+    "src": "Player colours will be swapped immediately. This cannot be undone.",
+    "out": "Die Spielerfarben werden sofort getauscht. Dies kann nicht rückgängig gemacht werden."
+  },
   "ConfirmPremove": {
     "src": "Set premove",
     "out": "Zugvorauswahl festlegen"
