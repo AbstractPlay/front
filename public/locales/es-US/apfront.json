@@ -430,6 +430,7 @@
     }
   },
   "LogIn": "Iniciar sesión",
+  "LogInAliasHint": "En la página de inicio de sesión, usa el nombre de usuario de Abstract Play que elegiste al registrarte.",
   "LogOut": "Cerrar sesión",
   "MakeMove": "Hacer un movimiento",
   "MarkPremove": "Marcar como premovimiento",

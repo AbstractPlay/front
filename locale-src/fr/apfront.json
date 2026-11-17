@@ -2135,6 +2135,10 @@
     "src": "Log In",
     "out": "Connexion"
   },
+  "LogInAliasHint": {
+    "src": "On the sign-in page, use the Abstract Play username you chose when you registered.",
+    "out": "Sur la page de connexion, utilisez le nom d'utilisateur Abstract Play que vous avez choisi lors de votre inscription."
+  },
   "LogOut": {
     "src": "Log Out",
     "out": "Déconnexion"
