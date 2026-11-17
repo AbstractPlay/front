@@ -430,6 +430,7 @@
     }
   },
   "LogIn": "Log In",
+  "LogInAliasHint": "On the sign-in page, use the Abstract Play username you chose when you registered.",
   "LogOut": "Log Out",
   "MakeMove": "Make a move",
   "MarkPremove": "Mark as pre-move",

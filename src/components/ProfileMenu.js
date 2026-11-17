@@ -97,6 +97,7 @@ function ProfileMenu({
           className="button is-small apButton"
           onClick={() => redirectToSignIn()}
           id={loginButtonId}
+          title={t("LogInAliasHint")}
         >
           {t("LogIn")}
         </button>

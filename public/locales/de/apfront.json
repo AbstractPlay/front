@@ -430,6 +430,7 @@
     }
   },
   "LogIn": "Anmelden",
+  "LogInAliasHint": "Verwende auf der Anmeldeseite den Abstract Play-Benutzernamen, den du bei der Registrierung gewählt hast.",
   "LogOut": "Abmelden",
   "MakeMove": "Einen Zug machen",
   "MarkPremove": "Als Zugvorauswahl markieren",
