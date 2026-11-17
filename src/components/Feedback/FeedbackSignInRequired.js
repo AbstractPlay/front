@@ -8,6 +8,7 @@ function FeedbackSignInRequired({ messageKey = "feedback.auth.signInRequired", c
   return (
     <div className={compact ? "feedback-sign-in-required feedback-sign-in-required--compact" : "feedback-sign-in-required"}>
       <p className={compact ? "feedback-muted" : undefined}>{t(messageKey)}</p>
+      <p className={compact ? "feedback-muted" : undefined}>{t("LogInAliasHint")}</p>
       <button type="button" className={`button ${compact ? "is-small apButton" : "apButton"}`} onClick={() => redirectToSignIn()}>
         {t("LogIn")}
       </button>
