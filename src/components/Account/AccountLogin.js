@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useMemo, useState } from "react";
 import { useAuthSession } from "../../hooks/useAuthSession";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { signIn, signInWithRedirect } from "aws-amplify/auth";
+import { signIn } from "aws-amplify/auth";
 import { mapCognitoAuthError } from "../../lib/mapCognitoAuthError";
 import { refreshAuthSession } from "../../lib/authSession";
 import { fetchProfile } from "../../lib/globalMeBootstrap";
@@ -139,16 +139,6 @@ export default function AccountLogin() {
           <Link to="/account/forgot-password">{t("AccountPageForgotPassword")}</Link>
           {" · "}
           <Link to="/account/forgot-username">{t("AccountPageForgotUsername")}</Link>
-        </p>
-        <p className="help account-login-hosted-fallback">
-          {t("AccountLoginHostedUiFallback")}{" "}
-          <button
-            type="button"
-            className="button is-small is-link is-light"
-            onClick={() => signInWithRedirect()}
-          >
-            {t("AccountLoginHostedUiLink")}
-          </button>
         </p>
         <p>
           <Link to="/">{t("AccountBackHome")}</Link>

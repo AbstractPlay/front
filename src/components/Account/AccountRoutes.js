@@ -6,7 +6,7 @@ import AccountLogin from "./AccountLogin";
 import AccountRegister from "./AccountRegister";
 import AccountResetPassword from "./AccountResetPassword";
 import AccountVerify from "./AccountVerify";
-import AccountStub from "./AccountStub";
+import AccountConfirmEmail from "./AccountConfirmEmail";
 
 export default function AccountRoutes() {
   return (
@@ -18,10 +18,7 @@ export default function AccountRoutes() {
       <Route path="forgot-password" element={<AccountForgotPassword />} />
       <Route path="reset-password" element={<AccountResetPassword />} />
       <Route path="forgot-username" element={<AccountForgotUsername />} />
-      <Route
-        path="confirm-email"
-        element={<AccountStub pageId="confirm-email" />}
-      />
+      <Route path="confirm-email" element={<AccountConfirmEmail />} />
       <Route path="*" element={<Navigate to="login" replace />} />
     </Routes>
   );

@@ -10,13 +10,10 @@ import { useTranslation } from "react-i18next";
 import { compareStrings } from "../lib/compareStrings";
 import Spinner from "./Spinner";
 import { cloneDeep, debounce } from "lodash";
-import {
-  confirmUserAttribute,
-  signOut,
-  updateUserAttribute,
-} from "aws-amplify/auth";
+import { signOut, updateUserAttribute } from "aws-amplify/auth";
 import { callAuthApi } from "../lib/api";
 import { fetchProfile } from "../lib/globalMeBootstrap";
+import { confirmEmailAttributeCode } from "../lib/accountConfirmEmailAttribute";
 import { useAuthSession } from "../hooks/useAuthSession";
 import ProfileAbout from "./ProfileAbout";
 import {
@@ -120,6 +117,7 @@ function UserSettingsModal(props) {
   const [nameError, nameErrorSetter] = useState("");
   const [email, emailSetter] = useState("");
   const [emailCode, emailCodeSetter] = useState("");
+  const [emailManualCodeOpen, emailManualCodeOpenSetter] = useState(false);
   const [emailError, emailErrorSetter] = useState("");
   const [country, countrySetter] = useState("");
   const [communicationLanguage, communicationLanguageSetter] = useState("en");
@@ -127,7 +125,7 @@ function UserSettingsModal(props) {
   const [aboutMe, aboutMeSetter] = useState("");
   const [aboutError, aboutErrorSetter] = useState("");
   const users = useStore((state) => state.users);
-  const { email: sessionEmail } = useAuthSession();
+  const { email: sessionEmail, username: loginName } = useAuthSession();
   const [updated, updatedSetter] = useState(0);
   const [notifications, notificationsSetter] = useState(null);
   const [inAppNotifications, inAppNotificationsSetter] = useState(null);
@@ -158,6 +156,7 @@ function UserSettingsModal(props) {
     emailSetter("");
     emailCodeSetter("");
     emailErrorSetter("");
+    emailManualCodeOpenSetter(false);
   }, [show]);
 
   useEffect(() => {
@@ -342,6 +341,7 @@ function UserSettingsModal(props) {
         },
       });
       changingCodeSentSetter(true);
+      emailManualCodeOpenSetter(false);
     } catch (error) {
       const errorCode = error?.name ?? error?.code;
       if (errorCode === "AliasExistsException") {
@@ -358,18 +358,17 @@ function UserSettingsModal(props) {
     emailErrorSetter("");
     changingCodeSentSetter(false);
     changingEMailSetter(false);
+    emailManualCodeOpenSetter(false);
   };
 
   const handleEMailChangeCodeSubmitClick = async () => {
     emailErrorSetter("");
     try {
-      await confirmUserAttribute({
-        userAttributeKey: "email",
-        confirmationCode: emailCode,
-      });
+      await confirmEmailAttributeCode(emailCode);
       changingEMailSetter(false);
       changingCodeSentSetter(false);
       emailCodeSetter("");
+      emailManualCodeOpenSetter(false);
       updatedSetter((updated) => updated + 1);
     } catch (error) {
       const errorCode = error?.name ?? error?.code;
@@ -590,6 +589,14 @@ function UserSettingsModal(props) {
               id="user-settings-profile"
               role="tabpanel"
             >
+          {/********************* login name *********************/}
+          <div className="field" key="loginName">
+            <label className="label">{t("LoginNameLabel")}</label>
+            <div className="control">
+              {loginName ?? "—"}
+            </div>
+            <p className="help">{t("LoginNameSettingsHelp")}</p>
+          </div>
           {/********************* Display Name *********************/}
           <div className="field" key="DisplayName">
             <label className="label" htmlFor="user_settings_name">
@@ -724,52 +731,56 @@ function UserSettingsModal(props) {
                 </button>
               )}
             </div>
-            {/********************* e-mail confirmation code *********************/}
+            {/********************* e-mail verification *********************/}
             {changingCodeSent ? (
               <div className="field">
-                <label className="label" htmlFor="user_settings_email_code">
-                  {t("EMailCode")}:
-                </label>
-                <div className="control">
-                  {globalMe === null ? (
-                    <Spinner />
-                  ) : (
-                    <input
-                      className="input is-small"
-                      name="email"
-                      id="user_settings_email_code"
-                      type="text"
-                      value={emailCode}
-                      onChange={(e) => {
-                        emailErrorSetter("");
-                        emailCodeSetter(e.target.value);
-                      }}
-                    />
-                  )}
-                </div>
-                <div className="control">
-                  {globalMe === null ? (
-                    ""
-                  ) : changingEMail ? (
-                    <button
-                      className="button is-small apButton"
-                      onClick={handleEMailChangeCodeSubmitClick}
-                    >
-                      {t("Submit")}
-                    </button>
-                  ) : (
-                    <button
-                      className="button is-small apButton"
-                      onClick={handleEMailChangeClick}
-                    >
-                      {t("Change")}
-                    </button>
-                  )}
-                </div>
+                <p className="notification is-info is-light">
+                  {t("AccountEmailChangeCheckInbox")}
+                </p>
                 {emailError !== "" ? (
                   <p className="help is-danger">{emailError}</p>
+                ) : null}
+                {emailManualCodeOpen ? (
+                  <Fragment>
+                    <label className="label" htmlFor="user_settings_email_code">
+                      {t("EMailCode")}
+                    </label>
+                    <div className="control">
+                      {globalMe === null ? (
+                        <Spinner />
+                      ) : (
+                        <input
+                          className="input is-small"
+                          name="email"
+                          id="user_settings_email_code"
+                          type="text"
+                          value={emailCode}
+                          onChange={(e) => {
+                            emailErrorSetter("");
+                            emailCodeSetter(e.target.value);
+                          }}
+                        />
+                      )}
+                    </div>
+                    <div className="control">
+                      <button
+                        type="button"
+                        className="button is-small apButton"
+                        onClick={handleEMailChangeCodeSubmitClick}
+                      >
+                        {t("Submit")}
+                      </button>
+                    </div>
+                    <p className="help">{t("EMailCodeHelp")}</p>
+                  </Fragment>
                 ) : (
-                  <p className="help is-primary">{t("EMailCodeHelp")}</p>
+                  <button
+                    type="button"
+                    className="button is-small"
+                    onClick={() => emailManualCodeOpenSetter(true)}
+                  >
+                    {t("AccountConfirmEnterCodeInstead")}
+                  </button>
                 )}
               </div>
             ) : (

@@ -1,14 +1,10 @@
 import { Amplify } from "aws-amplify";
-import { signInWithRedirect as amplifySignInWithRedirect } from "aws-amplify/auth";
 import { redirectToSignIn as goToAccountLogin } from "./accountLoginNavigation";
 import { cognitoUserPoolsTokenProvider } from "aws-amplify/auth/cognito";
 import { CookieStorage } from "aws-amplify/utils";
 import {
   COGNITO_APPID,
   COGNITO_COOKIE_DOMAIN,
-  COGNITO_DOMAIN,
-  COGNITO_REDIRECT_LOGIN,
-  COGNITO_REDIRECT_LOGOUT,
   COGNITO_USER_POOL_ID,
 } from "../config";
 
@@ -29,13 +25,6 @@ export function configureAmplifyAuth() {
           username: true,
           email: false,
           phone: false,
-          oauth: {
-            domain: COGNITO_DOMAIN,
-            scopes: ["openid", "email", "aws.cognito.signin.user.admin"],
-            redirectSignIn: [COGNITO_REDIRECT_LOGIN],
-            redirectSignOut: [COGNITO_REDIRECT_LOGOUT],
-            responseType: "code",
-          },
         },
       },
     },
@@ -53,8 +42,4 @@ export function configureAmplifyAuth() {
 
 export function redirectToSignIn(returnUrl) {
   goToAccountLogin(returnUrl);
-}
-
-export function signInWithHostedUi() {
-  return amplifySignInWithRedirect();
 }

@@ -31,6 +31,14 @@
     "src": "Enter the code from your email.",
     "out": "Inserisci il codice ricevuto via email."
   },
+  "AccountConfirmEmailIntro": {
+    "src": "We are confirming the email address you set in User Settings.",
+    "out": "Stiamo confermando l'indirizzo email che hai impostato nelle Impostazioni utente."
+  },
+  "AccountConfirmEmailSignInRequired": {
+    "src": "Sign in with your login name and password to finish verifying your new email address.",
+    "out": "Accedi con il tuo nome utente e la tua password per completare la verifica del nuovo indirizzo email."
+  },
   "AccountConfirmEnterCodeInstead": {
     "src": "Enter code instead",
     "out": "Inserisci il codice invece"
@@ -50,6 +58,10 @@
   "AccountConfirmWorking": {
     "src": "Confirming…",
     "out": "Conferma in corso…"
+  },
+  "AccountEmailChangeCheckInbox": {
+    "src": "We sent a verification email. Open the message and click the verify link to finish updating your email.",
+    "out": "Abbiamo inviato un'email di verifica. Apri il messaggio e fai clic sul link di verifica per completare l'aggiornamento dell'email."
   },
   "AccountForgotPasswordIntro": {
     "src": "Enter your login name and we will email a reset link with a code.",
@@ -1236,8 +1248,8 @@
     "out": "Codice inviato via e-mail"
   },
   "EMailCodeHelp": {
-    "src": "The login system just sent a code to the email address you provided. Please enter it here.",
-    "out": "Il sistema di accesso ha appena inviato un codice all'indirizzo e-mail fornito. Inseriscilo qui."
+    "src": "Enter the code from the email if the link does not work.",
+    "out": "Inserisci il codice inviato via email se il link non funziona."
   },
   "EMailCodeInvalid": {
     "src": "That code is invalid or has expired. Please try again.",
@@ -2374,6 +2386,10 @@
   "LoginNameNavHint": {
     "src": "Sign in with your Abstract Play login name",
     "out": "Accedi con il tuo nome utente di Abstract Play"
+  },
+  "LoginNameSettingsHelp": {
+    "src": "Your login name cannot be changed. If you forget it while signed out, use Forgot login name on the sign-in page.",
+    "out": "Il tuo nome utente non può essere modificato. Se lo dimentichi quando sei disconnesso, usa \"Nome utente dimenticato\" nella pagina di accesso."
   },
   "MakeMove": {
     "src": "Make a move",
