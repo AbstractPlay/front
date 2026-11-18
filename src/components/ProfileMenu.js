@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { signOut } from "aws-amplify/auth";
-import { redirectToSignIn } from "../lib/amplifyAuth";
+import { buildAccountLoginPath } from "../lib/accountLoginNavigation";
 import UserSettingsModal from "./UserSettingsModal";
 import NewProfile from "./NewProfile";
 import NavDropdownPanel from "./NavDropdownPanel";
@@ -10,6 +10,7 @@ import UserAvatar from "./UserAvatar";
 import { useStore } from "../stores";
 import { useAuthSession } from "../hooks/useAuthSession";
 import { fetchProfile } from "../lib/globalMeBootstrap";
+import { shouldOpenUserSettingsProfile } from "../lib/userSettingsDeepLink";
 
 function ProfileMenu({
   closeBurger,
@@ -21,7 +22,12 @@ function ProfileMenu({
   onVisibilityChange,
 }) {
   const { t } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { status, userId, username } = useAuthSession();
+  const loginPath = buildAccountLoginPath(
+    `${location.pathname}${location.search}${location.hash}`,
+  );
   const globalMe = useStore((state) => state.globalMe);
   const connections = useStore((state) => state.connections);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -38,6 +44,39 @@ function ProfileMenu({
       closeBurger();
     }
   };
+
+  useEffect(() => {
+    if (status !== "ready" || !userId) {
+      return;
+    }
+    if (!shouldOpenUserSettingsProfile(location.search)) {
+      return;
+    }
+    if (!globalMe || globalMe.id === undefined) {
+      setShowNewProfileModal(true);
+    } else {
+      setShowUserSettingsModal(true);
+    }
+    const params = new URLSearchParams(location.search);
+    params.delete("userSettings");
+    const nextSearch = params.toString();
+    navigate(
+      {
+        pathname: location.pathname,
+        hash: location.hash,
+        search: nextSearch ? `?${nextSearch}` : "",
+      },
+      { replace: true },
+    );
+  }, [
+    status,
+    userId,
+    location.pathname,
+    location.search,
+    location.hash,
+    navigate,
+    globalMe,
+  ]);
 
   const handleSettingsClick = () => {
     closeMenu();
@@ -92,15 +131,14 @@ function ProfileMenu({
   if (status !== "ready" || !userId) {
     return (
       <>
-        <button
-          type="button"
+        <Link
+          to={loginPath}
           className="button is-small apButton"
-          onClick={() => redirectToSignIn()}
           id={loginButtonId}
-          title={t("LogInAliasHint")}
+          title={t("LoginNameNavHint")}
         >
           {t("LogIn")}
-        </button>
+        </Link>
         {settingsModals}
       </>
     );
@@ -130,6 +168,9 @@ function ProfileMenu({
           <div className="nav-dropdown-panel nav-profile-menu" role="menu">
             {username ? (
               <p className="nav-profile-menu-header" role="presentation">
+                <span className="has-text-grey is-size-7">
+                  {t("LoginNameLabel")}:{" "}
+                </span>
                 {username}
               </p>
             ) : null}

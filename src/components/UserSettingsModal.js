@@ -6,18 +6,21 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { compareStrings } from "../lib/compareStrings";
 import Spinner from "./Spinner";
 import { cloneDeep, debounce } from "lodash";
-import {
-  confirmUserAttribute,
-  signOut,
-  updateUserAttribute,
-} from "aws-amplify/auth";
+import { signOut, updateUserAttribute } from "aws-amplify/auth";
 import { callAuthApi } from "../lib/api";
 import { fetchProfile } from "../lib/globalMeBootstrap";
+import { confirmEmailAttributeCode } from "../lib/accountConfirmEmailAttribute";
 import { useAuthSession } from "../hooks/useAuthSession";
+import { mapCognitoAuthError } from "../lib/mapCognitoAuthError";
+import {
+  buildAccountResetPasswordPath,
+  requestAccountPasswordReset,
+} from "../lib/accountPasswordReset";
 import ProfileAbout from "./ProfileAbout";
 import {
   ABOUT_MAX_BYTES,
@@ -112,6 +115,8 @@ async function parseNewSettingResponse(res) {
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
   const show = props.show;
+  const navigate = useNavigate();
+  const location = useLocation();
   const { t, i18n } = useTranslation();
   const [changingName, changingNameSetter] = useState(false);
   const [changingEMail, changingEMailSetter] = useState(false);
@@ -120,14 +125,17 @@ function UserSettingsModal(props) {
   const [nameError, nameErrorSetter] = useState("");
   const [email, emailSetter] = useState("");
   const [emailCode, emailCodeSetter] = useState("");
+  const [emailManualCodeOpen, emailManualCodeOpenSetter] = useState(false);
   const [emailError, emailErrorSetter] = useState("");
   const [country, countrySetter] = useState("");
   const [communicationLanguage, communicationLanguageSetter] = useState("en");
   const [bggid, bggidSetter] = useState("");
   const [aboutMe, aboutMeSetter] = useState("");
   const [aboutError, aboutErrorSetter] = useState("");
+  const [passwordResetBusy, passwordResetBusySetter] = useState(false);
+  const [passwordResetErrorKey, passwordResetErrorKeySetter] = useState("");
   const users = useStore((state) => state.users);
-  const { email: sessionEmail } = useAuthSession();
+  const { email: sessionEmail, username: loginName } = useAuthSession();
   const [updated, updatedSetter] = useState(0);
   const [notifications, notificationsSetter] = useState(null);
   const [inAppNotifications, inAppNotificationsSetter] = useState(null);
@@ -158,6 +166,9 @@ function UserSettingsModal(props) {
     emailSetter("");
     emailCodeSetter("");
     emailErrorSetter("");
+    emailManualCodeOpenSetter(false);
+    passwordResetBusySetter(false);
+    passwordResetErrorKeySetter("");
   }, [show]);
 
   useEffect(() => {
@@ -326,6 +337,26 @@ function UserSettingsModal(props) {
   const aboutCanSave =
     globalMe != null && globalMe.about !== aboutMe && aboutValidation.ok;
 
+  const handlePasswordResetClick = async () => {
+    const name = loginName?.trim();
+    if (!name) {
+      passwordResetErrorKeySetter("AccountForgotPasswordUsernameRequired");
+      return;
+    }
+    passwordResetBusySetter(true);
+    passwordResetErrorKeySetter("");
+    try {
+      await requestAccountPasswordReset(name);
+      const returnTarget = `${location.pathname}${location.search}${location.hash}`;
+      handleUserSettingsClose(0);
+      navigate(buildAccountResetPasswordPath(name, returnTarget));
+    } catch (error) {
+      passwordResetErrorKeySetter(mapCognitoAuthError(error));
+    } finally {
+      passwordResetBusySetter(false);
+    }
+  };
+
   const handleEMailChangeClick = () => {
     emailErrorSetter("");
     emailSetter(sessionEmail ?? "");
@@ -342,6 +373,7 @@ function UserSettingsModal(props) {
         },
       });
       changingCodeSentSetter(true);
+      emailManualCodeOpenSetter(false);
     } catch (error) {
       const errorCode = error?.name ?? error?.code;
       if (errorCode === "AliasExistsException") {
@@ -358,18 +390,17 @@ function UserSettingsModal(props) {
     emailErrorSetter("");
     changingCodeSentSetter(false);
     changingEMailSetter(false);
+    emailManualCodeOpenSetter(false);
   };
 
   const handleEMailChangeCodeSubmitClick = async () => {
     emailErrorSetter("");
     try {
-      await confirmUserAttribute({
-        userAttributeKey: "email",
-        confirmationCode: emailCode,
-      });
+      await confirmEmailAttributeCode(emailCode);
       changingEMailSetter(false);
       changingCodeSentSetter(false);
       emailCodeSetter("");
+      emailManualCodeOpenSetter(false);
       updatedSetter((updated) => updated + 1);
     } catch (error) {
       const errorCode = error?.name ?? error?.code;
@@ -590,6 +621,14 @@ function UserSettingsModal(props) {
               id="user-settings-profile"
               role="tabpanel"
             >
+          {/********************* login name *********************/}
+          <div className="field" key="loginName">
+            <label className="label">{t("LoginNameLabel")}</label>
+            <div className="control">
+              {loginName ?? "—"}
+            </div>
+            <p className="help">{t("LoginNameSettingsHelp")}</p>
+          </div>
           {/********************* Display Name *********************/}
           <div className="field" key="DisplayName">
             <label className="label" htmlFor="user_settings_name">
@@ -724,57 +763,82 @@ function UserSettingsModal(props) {
                 </button>
               )}
             </div>
-            {/********************* e-mail confirmation code *********************/}
+            {/********************* e-mail verification *********************/}
             {changingCodeSent ? (
               <div className="field">
-                <label className="label" htmlFor="user_settings_email_code">
-                  {t("EMailCode")}:
-                </label>
-                <div className="control">
-                  {globalMe === null ? (
-                    <Spinner />
-                  ) : (
-                    <input
-                      className="input is-small"
-                      name="email"
-                      id="user_settings_email_code"
-                      type="text"
-                      value={emailCode}
-                      onChange={(e) => {
-                        emailErrorSetter("");
-                        emailCodeSetter(e.target.value);
-                      }}
-                    />
-                  )}
-                </div>
-                <div className="control">
-                  {globalMe === null ? (
-                    ""
-                  ) : changingEMail ? (
-                    <button
-                      className="button is-small apButton"
-                      onClick={handleEMailChangeCodeSubmitClick}
-                    >
-                      {t("Submit")}
-                    </button>
-                  ) : (
-                    <button
-                      className="button is-small apButton"
-                      onClick={handleEMailChangeClick}
-                    >
-                      {t("Change")}
-                    </button>
-                  )}
-                </div>
+                <p className="notification is-info is-light">
+                  {t("AccountEmailChangeCheckInbox")}
+                </p>
                 {emailError !== "" ? (
                   <p className="help is-danger">{emailError}</p>
+                ) : null}
+                {emailManualCodeOpen ? (
+                  <Fragment>
+                    <label className="label" htmlFor="user_settings_email_code">
+                      {t("EMailCode")}
+                    </label>
+                    <div className="control">
+                      {globalMe === null ? (
+                        <Spinner />
+                      ) : (
+                        <input
+                          className="input is-small"
+                          name="email"
+                          id="user_settings_email_code"
+                          type="text"
+                          value={emailCode}
+                          onChange={(e) => {
+                            emailErrorSetter("");
+                            emailCodeSetter(e.target.value);
+                          }}
+                        />
+                      )}
+                    </div>
+                    <div className="control">
+                      <button
+                        type="button"
+                        className="button is-small apButton"
+                        onClick={handleEMailChangeCodeSubmitClick}
+                      >
+                        {t("Submit")}
+                      </button>
+                    </div>
+                    <p className="help">{t("EMailCodeHelp")}</p>
+                  </Fragment>
                 ) : (
-                  <p className="help is-primary">{t("EMailCodeHelp")}</p>
+                  <button
+                    type="button"
+                    className="button is-small"
+                    onClick={() => emailManualCodeOpenSetter(true)}
+                  >
+                    {t("AccountConfirmEnterCodeInstead")}
+                  </button>
                 )}
               </div>
             ) : (
               ""
             )}
+          </div>
+          <div className="field" key="passwordReset">
+            <label className="label">{t("AccountPageResetPassword")}</label>
+            <div className="control">
+              <button
+                type="button"
+                className="button is-small apButtonNeutral"
+                onClick={handlePasswordResetClick}
+                disabled={passwordResetBusy || !loginName}
+              >
+                {passwordResetBusy
+                  ? t("UserSettingsPasswordResetSending")
+                  : t("AccountPageResetPassword")}
+              </button>
+            </div>
+            {passwordResetErrorKey ? (
+              <p className="help is-danger" role="alert">
+                {t(passwordResetErrorKey)}
+              </p>
+            ) : null}
+            <p className="help">{t("UserSettingsPasswordResetHelp")}</p>
           </div>
           {/********************* country *********************/}
           <div className="field" key="country">

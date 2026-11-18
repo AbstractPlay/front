@@ -27,6 +27,17 @@ describe("formatEogReasonLabel", () => {
     });
     expect(label).toContain("run out of moves");
   });
+
+  it("interpolates player in game-specific EOG copy", () => {
+    const label = formatEogReasonLabel({
+      metaGame: "yonkoma",
+      eogReason: "crosscut",
+      playerName: "Alice",
+      tApresults,
+    });
+    expect(label).toContain("Alice");
+    expect(label).not.toContain("{{player}}");
+  });
 });
 
 describe("formatCompletedGameEnd", () => {
@@ -58,5 +69,23 @@ describe("formatCompletedGameEnd", () => {
         tApresults,
       })
     ).toBe("");
+  });
+
+  it("labels normal yonkoma crosscut with the losing player", () => {
+    const text = formatCompletedGameEnd({
+      metaGame: "yonkoma",
+      gameEndKind: "normal",
+      gameEndPlayer: 1,
+      eogReason: "crosscut",
+      players: [
+        { id: "a", name: "Alice" },
+        { id: "b", name: "Bob" },
+      ],
+      allUsers: [],
+      t,
+      tApresults,
+    });
+    expect(text).toContain("Alice");
+    expect(text).not.toContain("{{player}}");
   });
 });

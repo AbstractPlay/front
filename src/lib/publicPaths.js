@@ -27,5 +27,8 @@ export function isAnonymousFriendlyPath(pathname = window.location.pathname) {
   if (pathname === "/arena" || pathname.startsWith("/arena/")) {
     return true;
   }
+  if (pathname === "/account" || pathname.startsWith("/account/")) {
+    return true;
+  }
   return false;
 }
