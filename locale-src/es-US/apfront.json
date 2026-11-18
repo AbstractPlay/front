@@ -31,6 +31,14 @@
     "src": "Enter the code from your email.",
     "out": "Ingresa el código de tu correo electrónico."
   },
+  "AccountConfirmEmailIntro": {
+    "src": "We are confirming the email address you set in User Settings.",
+    "out": "Estamos confirmando la dirección de correo electrónico que configuraste en la Configuración de usuario."
+  },
+  "AccountConfirmEmailSignInRequired": {
+    "src": "Sign in with your login name and password to finish verifying your new email address.",
+    "out": "Inicia sesión con tu nombre de usuario y contraseña para terminar de verificar tu nueva dirección de correo electrónico."
+  },
   "AccountConfirmEnterCodeInstead": {
     "src": "Enter code instead",
     "out": "Ingresar código en su lugar"
@@ -50,6 +58,10 @@
   "AccountConfirmWorking": {
     "src": "Confirming…",
     "out": "Confirmando…"
+  },
+  "AccountEmailChangeCheckInbox": {
+    "src": "We sent a verification email. Open the message and click the verify link to finish updating your email.",
+    "out": "Enviamos un correo electrónico de verificación. Abre el mensaje y haz clic en el enlace de verificación para terminar de actualizar tu correo electrónico."
   },
   "AccountForgotPasswordIntro": {
     "src": "Enter your login name and we will email a reset link with a code.",
@@ -1236,8 +1248,8 @@
     "out": "Código enviado por correo"
   },
   "EMailCodeHelp": {
-    "src": "The login system just sent a code to the email address you provided. Please enter it here.",
-    "out": "El sistema de inicio de sesión acaba de enviar un código a la dirección de correo electrónico que proporcionaste. Por favor ingrésalo aquí."
+    "src": "Enter the code from the email if the link does not work.",
+    "out": "Ingresa el código del correo electrónico si el enlace no funciona."
   },
   "EMailCodeInvalid": {
     "src": "That code is invalid or has expired. Please try again.",
@@ -2374,6 +2386,10 @@
   "LoginNameNavHint": {
     "src": "Sign in with your Abstract Play login name",
     "out": "Inicia sesión con tu nombre de usuario de Abstract Play"
+  },
+  "LoginNameSettingsHelp": {
+    "src": "Your login name cannot be changed. If you forget it while signed out, use Forgot login name on the sign-in page.",
+    "out": "Tu nombre de usuario no se puede cambiar. Si lo olvidas mientras no tengas la sesión iniciada, usa \"¿Olvidaste tu nombre de usuario?\" en la página de inicio de sesión."
   },
   "MakeMove": {
     "src": "Make a move",

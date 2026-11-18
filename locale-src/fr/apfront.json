@@ -31,6 +31,14 @@
     "src": "Enter the code from your email.",
     "out": "Saisissez le code reçu par e-mail."
   },
+  "AccountConfirmEmailIntro": {
+    "src": "We are confirming the email address you set in User Settings.",
+    "out": "Nous confirmons l'adresse e-mail que vous avez renseignée dans les Paramètres utilisateur."
+  },
+  "AccountConfirmEmailSignInRequired": {
+    "src": "Sign in with your login name and password to finish verifying your new email address.",
+    "out": "Connectez-vous avec votre identifiant et votre mot de passe pour terminer la vérification de votre nouvelle adresse e-mail."
+  },
   "AccountConfirmEnterCodeInstead": {
     "src": "Enter code instead",
     "out": "Saisir un code à la place"
@@ -50,6 +58,10 @@
   "AccountConfirmWorking": {
     "src": "Confirming…",
     "out": "Confirmation en cours…"
+  },
+  "AccountEmailChangeCheckInbox": {
+    "src": "We sent a verification email. Open the message and click the verify link to finish updating your email.",
+    "out": "Nous avons envoyé un e-mail de vérification. Ouvrez le message et cliquez sur le lien de vérification pour terminer la mise à jour de votre adresse e-mail."
   },
   "AccountForgotPasswordIntro": {
     "src": "Enter your login name and we will email a reset link with a code.",
@@ -1236,8 +1248,8 @@
     "out": "Code envoyé par e-mail"
   },
   "EMailCodeHelp": {
-    "src": "The login system just sent a code to the email address you provided. Please enter it here.",
-    "out": "Le système de connexion vient d'envoyer un code à l'adresse e-mail que vous avez fournie. Veuillez le saisir ici."
+    "src": "Enter the code from the email if the link does not work.",
+    "out": "Saisissez le code figurant dans l'e-mail si le lien ne fonctionne pas."
   },
   "EMailCodeInvalid": {
     "src": "That code is invalid or has expired. Please try again.",
@@ -2374,6 +2386,10 @@
   "LoginNameNavHint": {
     "src": "Sign in with your Abstract Play login name",
     "out": "Connectez-vous avec votre identifiant Abstract Play"
+  },
+  "LoginNameSettingsHelp": {
+    "src": "Your login name cannot be changed. If you forget it while signed out, use Forgot login name on the sign-in page.",
+    "out": "Votre identifiant ne peut pas être modifié. Si vous l'oubliez en étant déconnecté, utilisez \"Identifiant oublié\" sur la page de connexion."
   },
   "MakeMove": {
     "src": "Make a move",

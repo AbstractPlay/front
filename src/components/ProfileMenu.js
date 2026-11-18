@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { signOut } from "aws-amplify/auth";
 import { buildAccountLoginPath } from "../lib/accountLoginNavigation";
@@ -10,6 +10,7 @@ import UserAvatar from "./UserAvatar";
 import { useStore } from "../stores";
 import { useAuthSession } from "../hooks/useAuthSession";
 import { fetchProfile } from "../lib/globalMeBootstrap";
+import { shouldOpenUserSettingsProfile } from "../lib/userSettingsDeepLink";
 
 function ProfileMenu({
   closeBurger,
@@ -22,6 +23,7 @@ function ProfileMenu({
 }) {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const { status, userId, username } = useAuthSession();
   const loginPath = buildAccountLoginPath(
     `${location.pathname}${location.search}${location.hash}`,
@@ -42,6 +44,39 @@ function ProfileMenu({
       closeBurger();
     }
   };
+
+  useEffect(() => {
+    if (status !== "ready" || !userId) {
+      return;
+    }
+    if (!shouldOpenUserSettingsProfile(location.search)) {
+      return;
+    }
+    if (!globalMe || globalMe.id === undefined) {
+      setShowNewProfileModal(true);
+    } else {
+      setShowUserSettingsModal(true);
+    }
+    const params = new URLSearchParams(location.search);
+    params.delete("userSettings");
+    const nextSearch = params.toString();
+    navigate(
+      {
+        pathname: location.pathname,
+        hash: location.hash,
+        search: nextSearch ? `?${nextSearch}` : "",
+      },
+      { replace: true },
+    );
+  }, [
+    status,
+    userId,
+    location.pathname,
+    location.search,
+    location.hash,
+    navigate,
+    globalMe,
+  ]);
 
   const handleSettingsClick = () => {
     closeMenu();
@@ -140,6 +175,9 @@ function ProfileMenu({
           <div className="nav-dropdown-panel nav-profile-menu" role="menu">
             {username ? (
               <p className="nav-profile-menu-header" role="presentation">
+                <span className="has-text-grey is-size-7">
+                  {t("LoginNameLabel")}:{" "}
+                </span>
                 {username}
               </p>
             ) : null}
