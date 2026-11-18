@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { signOut } from "aws-amplify/auth";
-import { redirectToSignIn } from "../lib/amplifyAuth";
+import { buildAccountLoginPath } from "../lib/accountLoginNavigation";
 import UserSettingsModal from "./UserSettingsModal";
 import NewProfile from "./NewProfile";
 import NavDropdownPanel from "./NavDropdownPanel";
@@ -21,7 +21,11 @@ function ProfileMenu({
   onVisibilityChange,
 }) {
   const { t } = useTranslation();
+  const location = useLocation();
   const { status, userId, username } = useAuthSession();
+  const loginPath = buildAccountLoginPath(
+    `${location.pathname}${location.search}${location.hash}`,
+  );
   const globalMe = useStore((state) => state.globalMe);
   const connections = useStore((state) => state.connections);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -92,15 +96,21 @@ function ProfileMenu({
   if (status !== "ready" || !userId) {
     return (
       <>
-        <button
-          type="button"
+        <Link
+          to={loginPath}
           className="button is-small apButton"
-          onClick={() => redirectToSignIn()}
           id={loginButtonId}
-          title={t("LogInAliasHint")}
+          title={t("LoginNameNavHint")}
         >
           {t("LogIn")}
-        </button>
+        </Link>
+        <Link
+          to="/account/register"
+          className="button is-small is-light"
+          style={{ marginLeft: "0.35rem" }}
+        >
+          {t("AccountPageRegister")}
+        </Link>
         {settingsModals}
       </>
     );

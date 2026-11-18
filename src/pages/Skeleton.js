@@ -52,6 +52,7 @@ import GameWatch from "../components/GameWatch";
 import ProfileBootstrap from "../components/ProfileBootstrap";
 import { resolveAuthSession } from "../lib/authSession";
 import ErrorBoundary from "../components/ErrorBoundary";
+import AccountOnboardingGate from "../components/Account/AccountOnboardingGate";
 import ChunkLoadRecoveryBoot from "../components/ChunkLoadRecoveryBoot";
 import RecentApUrlRecorder from "../components/Feedback/RecentApUrlRecorder";
 import ArenaLanding from "../components/Arena/ArenaLanding";
@@ -75,6 +76,7 @@ const FeedbackAdmin = lazy(() => import("../components/Feedback/FeedbackAdmin"))
 const AnnouncementAdminList = lazy(() => import("../components/Announcements/AnnouncementAdminList"));
 const AnnouncementEditor = lazy(() => import("../components/Announcements/AnnouncementEditor"));
 const FeedbackHistory = lazy(() => import("../components/Feedback/FeedbackHistory"));
+const AccountRoutes = lazy(() => import("../components/Account/AccountRoutes"));
 
 // Register default English locale; TimeAgoLocaleSync updates on language change
 TimeAgo.addDefaultLocale(getTimeAgoLocaleData("en"));
@@ -211,6 +213,7 @@ function Bones(props) {
           <ArenaTableActivityListener />
           <GameWatch />
           <ProfileBootstrap />
+          <AccountOnboardingGate />
           <Navbar />
           <section className="section" id="main">
             <ErrorBoundary inline>
@@ -306,6 +309,7 @@ function Bones(props) {
                 <Route path="/feedback/history/:tab" element={<FeedbackHistory />} />
                 <Route path="/feedback/new" element={<FeedbackNew />} />
                 <Route path="/feedback/:id" element={<FeedbackDetail />} />
+                <Route path="/account/*" element={<AccountRoutes />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </ErrorBoundary>

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("aws-amplify/auth", () => ({
-  signInWithRedirect: vi.fn(),
+vi.mock("./accountLoginNavigation", () => ({
+  redirectToSignIn: vi.fn(),
 }));
 
 vi.mock("../config", () => ({
@@ -20,7 +20,7 @@ vi.mock("./authSession", async (importOriginal) => {
   };
 });
 
-import { signInWithRedirect } from "aws-amplify/auth";
+import { redirectToSignIn } from "./accountLoginNavigation";
 import { callAuthApi } from "./api";
 
 describe("callAuthApi", () => {
@@ -46,7 +46,7 @@ describe("callAuthApi", () => {
     expect(global.fetch.mock.calls[1][1].headers.Authorization).toBe(
       "Bearer fresh-token"
     );
-    expect(signInWithRedirect).not.toHaveBeenCalled();
+    expect(redirectToSignIn).not.toHaveBeenCalled();
     expect(res.status).toBe(200);
   });
 
@@ -62,7 +62,7 @@ describe("callAuthApi", () => {
 
     expect(mockRefreshAuthSession).toHaveBeenCalledTimes(1);
     expect(global.fetch).toHaveBeenCalledTimes(2);
-    expect(signInWithRedirect).toHaveBeenCalledTimes(1);
+    expect(redirectToSignIn).toHaveBeenCalledTimes(1);
   });
 
   it("returns 401 response without redirect when requireAuth is false", async () => {
@@ -72,7 +72,7 @@ describe("callAuthApi", () => {
     const res = await callAuthApi("me_profile", {}, false);
 
     expect(mockRefreshAuthSession).not.toHaveBeenCalled();
-    expect(signInWithRedirect).not.toHaveBeenCalled();
+    expect(redirectToSignIn).not.toHaveBeenCalled();
     expect(res.status).toBe(401);
   });
 });
