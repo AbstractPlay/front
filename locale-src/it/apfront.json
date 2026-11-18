@@ -19,6 +19,186 @@
     "src": "Accepted!",
     "out": "Accettato!"
   },
+  "AccountBackHome": {
+    "src": "Back to home",
+    "out": "Torna alla home"
+  },
+  "AccountConfirmAutoHint": {
+    "src": "If you opened a verification link, we are confirming automatically.",
+    "out": "Se hai aperto un link di verifica, stiamo confermando automaticamente."
+  },
+  "AccountConfirmCodeRequired": {
+    "src": "Enter the code from your email.",
+    "out": "Inserisci il codice ricevuto via email."
+  },
+  "AccountConfirmEnterCodeInstead": {
+    "src": "Enter code instead",
+    "out": "Inserisci il codice invece"
+  },
+  "AccountConfirmFailed": {
+    "src": "That code could not be confirmed. Try again or request a new code.",
+    "out": "Impossibile confermare il codice. Riprova o richiedi un nuovo codice."
+  },
+  "AccountConfirmSuccess": {
+    "src": "Confirmed.",
+    "out": "Confermato."
+  },
+  "AccountConfirmUsernameRequired": {
+    "src": "Enter your login name.",
+    "out": "Inserisci il tuo nome utente."
+  },
+  "AccountConfirmWorking": {
+    "src": "Confirming…",
+    "out": "Conferma in corso…"
+  },
+  "AccountForgotPasswordIntro": {
+    "src": "Enter your login name and we will email a reset link with a code.",
+    "out": "Inserisci il tuo nome utente e ti invieremo un link di ripristino con un codice via email."
+  },
+  "AccountForgotPasswordSubmitting": {
+    "src": "Sending…",
+    "out": "Invio in corso…"
+  },
+  "AccountForgotPasswordUsernameRequired": {
+    "src": "Enter your login name.",
+    "out": "Inserisci il tuo nome utente."
+  },
+  "AccountForgotUsernameEmailRequired": {
+    "src": "Enter your email address.",
+    "out": "Inserisci il tuo indirizzo email."
+  },
+  "AccountForgotUsernameIntro": {
+    "src": "If your email matches exactly one confirmed account, we will email your login name.",
+    "out": "Se la tua email corrisponde esattamente a un solo account confermato, ti invieremo il tuo nome utente via email."
+  },
+  "AccountForgotUsernameSubmitting": {
+    "src": "Sending…",
+    "out": "Invio in corso…"
+  },
+  "AccountForgotUsernameSuccess": {
+    "src": "If we found a matching account, you will receive an email shortly.",
+    "out": "Se abbiamo trovato un account corrispondente, riceverai a breve un'email."
+  },
+  "AccountLoginFieldsRequired": {
+    "src": "Enter your login name and password.",
+    "out": "Inserisci il tuo nome utente e la password."
+  },
+  "AccountLoginHostedUiFallback": {
+    "src": "Prefer the previous sign-in page?",
+    "out": "Preferisci la pagina di accesso precedente?"
+  },
+  "AccountLoginHostedUiLink": {
+    "src": "Use hosted sign-in",
+    "out": "Usa l'accesso ospitato"
+  },
+  "AccountLoginNameHelp": {
+    "src": "Use the login name you chose when you registered, not your display name on play.",
+    "out": "Usa il nome utente scelto al momento della registrazione, non il tuo nome visualizzato su play."
+  },
+  "AccountLoginPassword": {
+    "src": "Password",
+    "out": "Password"
+  },
+  "AccountLoginSubmitting": {
+    "src": "Signing in…",
+    "out": "Accesso in corso…"
+  },
+  "AccountLoginVerifiedNowSignIn": {
+    "src": "Your email is verified. Sign in with your login name and password.",
+    "out": "La tua email è stata verificata. Accedi con il tuo nome utente e la tua password."
+  },
+  "AccountPageConfirmEmail": {
+    "src": "Confirm email",
+    "out": "Conferma email"
+  },
+  "AccountPageForgotPassword": {
+    "src": "Forgot password",
+    "out": "Password dimenticata"
+  },
+  "AccountPageForgotUsername": {
+    "src": "Forgot login name",
+    "out": "Nome utente dimenticato"
+  },
+  "AccountPageLogin": {
+    "src": "Log in",
+    "out": "Accedi"
+  },
+  "AccountPageRegister": {
+    "src": "Create account",
+    "out": "Crea account"
+  },
+  "AccountPageResetPassword": {
+    "src": "Reset password",
+    "out": "Ripristina password"
+  },
+  "AccountPageVerify": {
+    "src": "Verify email",
+    "out": "Verifica email"
+  },
+  "AccountRegisterFieldsRequired": {
+    "src": "Enter a login name, email, and password.",
+    "out": "Inserisci un nome utente, un'email e una password."
+  },
+  "AccountRegisterHaveAccount": {
+    "src": "Already have an account?",
+    "out": "Hai già un account?"
+  },
+  "AccountRegisterPasswordHint": {
+    "src": "Use at least 8 characters with upper and lower case, a number, and a symbol.",
+    "out": "Usa almeno 8 caratteri con lettere maiuscole e minuscole, un numero e un simbolo."
+  },
+  "AccountRegisterSubmitting": {
+    "src": "Creating account…",
+    "out": "Creazione account in corso…"
+  },
+  "AccountRegisterUsernameHint": {
+    "src": "Your login name is permanent and used to sign in; you will choose a display name next.",
+    "out": "Il tuo nome utente è permanente e viene utilizzato per accedere; al passaggio successivo sceglierai un nome visualizzato."
+  },
+  "AccountResetPasswordCheckEmail": {
+    "src": "Open the reset link in your email or enter the code below with a new password.",
+    "out": "Apri il link di ripristino nella tua email oppure inserisci il codice sottostante con una nuova password."
+  },
+  "AccountResetPasswordFieldsRequired": {
+    "src": "Enter your login name, code, and new password.",
+    "out": "Inserisci il tuo nome utente, il codice e la nuova password."
+  },
+  "AccountResetPasswordIntro": {
+    "src": "Use the login name you chose when you registered.",
+    "out": "Usa il nome utente scelto al momento della registrazione."
+  },
+  "AccountResetPasswordNew": {
+    "src": "New password",
+    "out": "Nuova password"
+  },
+  "AccountResetPasswordSubmitting": {
+    "src": "Updating…",
+    "out": "Aggiornamento in corso…"
+  },
+  "AccountStubPhase0": {
+    "src": "Account sign-in is being upgraded. Full forms arrive in the next rollout phase.",
+    "out": "L'accesso all'account è in fase di aggiornamento. I moduli completi saranno disponibili nella prossima fase di rilascio."
+  },
+  "AccountVerifyCheckEmail": {
+    "src": "We sent a verification email. Open the link or enter the code below.",
+    "out": "Abbiamo inviato un'email di verifica. Apri il link o inserisci il codice sottostante."
+  },
+  "AccountVerifyForUser": {
+    "src": "Verifying account for login name {{username}}.",
+    "out": "Verifica dell'account per il nome utente {{username}}."
+  },
+  "AccountVerifyResend": {
+    "src": "Resend verification email",
+    "out": "Reinvia l'email di verifica"
+  },
+  "AccountVerifyResendSent": {
+    "src": "Another verification email was sent.",
+    "out": "È stata inviata un'altra email di verifica."
+  },
+  "AccountVerifyResendWait": {
+    "src": "Resend available in {{seconds}}s",
+    "out": "Nuovo invio disponibile tra {{seconds}}s"
+  },
   "Active": {
     "src": "Active",
     "out": "Attivo"
@@ -706,6 +886,50 @@
   "Close": {
     "src": "Close",
     "out": "Chiudi"
+  },
+  "CognitoError_CodeExpired": {
+    "src": "That code has expired. Request a new one.",
+    "out": "Quel codice è scaduto. Richiedine uno nuovo."
+  },
+  "CognitoError_CodeMismatch": {
+    "src": "That code is incorrect.",
+    "out": "Quel codice non è corretto."
+  },
+  "CognitoError_Generic": {
+    "src": "Something went wrong. Please try again.",
+    "out": "Si è verificato un errore. Per favore riprova."
+  },
+  "CognitoError_InvalidParameter": {
+    "src": "Check the values you entered and try again.",
+    "out": "Verifica i valori inseriti e riprova."
+  },
+  "CognitoError_InvalidPassword": {
+    "src": "That password does not meet the requirements.",
+    "out": "Quella password non soddisfa i requisiti."
+  },
+  "CognitoError_LimitExceeded": {
+    "src": "Too many attempts. Wait a few minutes and try again.",
+    "out": "Troppi tentativi. Attendi qualche minuto e riprova."
+  },
+  "CognitoError_NotAuthorized": {
+    "src": "Login name or password is incorrect.",
+    "out": "Nome utente o password non corretti."
+  },
+  "CognitoError_TooManyRequests": {
+    "src": "Too many requests. Wait a few minutes and try again.",
+    "out": "Troppe richieste. Attendi qualche minuto e riprova."
+  },
+  "CognitoError_UserNotConfirmed": {
+    "src": "Confirm your email before signing in.",
+    "out": "Conferma la tua email prima di accedere."
+  },
+  "CognitoError_UserNotFound": {
+    "src": "We could not find an account with that login name.",
+    "out": "Impossibile trovare un account con quel nome utente."
+  },
+  "CognitoError_UsernameExists": {
+    "src": "That login name is already taken.",
+    "out": "Quel nome utente è già in uso."
   },
   "Comment": {
     "src": "Comment",
@@ -2142,6 +2366,14 @@
   "LogOut": {
     "src": "Log Out",
     "out": "Disconnettiti"
+  },
+  "LoginNameLabel": {
+    "src": "Login name",
+    "out": "Nome utente"
+  },
+  "LoginNameNavHint": {
+    "src": "Sign in with your Abstract Play login name",
+    "out": "Accedi con il tuo nome utente di Abstract Play"
   },
   "MakeMove": {
     "src": "Make a move",
