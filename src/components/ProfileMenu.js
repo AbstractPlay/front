@@ -139,13 +139,6 @@ function ProfileMenu({
         >
           {t("LogIn")}
         </Link>
-        <Link
-          to="/account/register"
-          className="button is-small is-light"
-          style={{ marginLeft: "0.35rem" }}
-        >
-          {t("AccountPageRegister")}
-        </Link>
         {settingsModals}
       </>
     );

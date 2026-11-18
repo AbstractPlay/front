@@ -5,7 +5,7 @@
   "AccountLoginFieldsRequired": "Inserisci il tuo nome utente e la password.",
   "AccountLoginHostedUiFallback": "Preferisci la pagina di accesso precedente?",
   "AccountLoginHostedUiLink": "Usa l'accesso ospitato",
-  "AccountLoginNameHelp": "Usa il nome utente scelto al momento della registrazione, non il tuo nome visualizzato su play.",
+  "AccountLoginNameHelp": "Usa il nome utente scelto al momento della registrazione, non il tuo nome visualizzato pubblico.",
   "AccountLoginPassword": "Password",
   "AccountLoginSubmitting": "Accesso in corso…",
   "AccountLoginVerifiedNowSignIn": "La tua email è stata verificata. Accedi con il tuo nome utente e la tua password.",
@@ -1214,6 +1214,8 @@
   "UserSettingsTabNotifications": "Notifiche",
   "UserSettingsTabGameplay": "Gameplay",
   "UserSettingsTabVacation": "Vacanze",
+  "UserSettingsPasswordResetHelp": "Ti invieremo un codice via email. La tua password attuale continuerà a funzionare fino a quando non avrai completato il ripristino. Puoi ignorare l'email se decidi di non cambiarla.",
+  "UserSettingsPasswordResetSending": "Invio in corso…",
   "vacation": {
     "intro": "Metti in pausa il tuo orologio di gioco in tutte le partite per corrispondenza attive. La modalità vacanza si applica a ogni tipo di partita (amichevole, torneo, evento, solitaria; orologi rigidi e flessibili).",
     "quotaSummary": "{{remaining}} rimanenti in questo anno di quota UTC ({{year}}) — {{blocks}} di {{maxBlocks}} blocchi da un giorno intero (14×24h all'anno).",
@@ -2579,7 +2581,7 @@
       "save": "Salva avatar",
       "saveSuccess": "Avatar salvato.",
       "saveFailed": "Impossibile salvare l'avatar.",
-      "licenseNote": "Gli avatar sono generati da DiceBear. Alcuni stili richiedono l'attribuzione — vedi",
+      "licenseNote": "Gli avatar sono generati da DiceBear — vedi",
       "style": {
         "blobs": "Blobs",
         "glass": "Vetro",

@@ -133,16 +133,18 @@ export default function AccountLogin() {
             </div>
           </div>
         </form>
-        <p className="account-login-links">
-          <Link to="/account/register">{t("AccountPageRegister")}</Link>
-          {" · "}
-          <Link to="/account/forgot-password">{t("AccountPageForgotPassword")}</Link>
-          {" · "}
-          <Link to="/account/forgot-username">{t("AccountPageForgotUsername")}</Link>
-        </p>
-        <p>
-          <Link to="/">{t("AccountBackHome")}</Link>
-        </p>
+        <div className="account-page-footer">
+          <p className="account-login-links">
+            <Link to="/account/register">{t("AccountPageRegister")}</Link>
+            {" · "}
+            <Link to="/account/forgot-password">{t("AccountPageForgotPassword")}</Link>
+            {" · "}
+            <Link to="/account/forgot-username">{t("AccountPageForgotUsername")}</Link>
+          </p>
+          <p>
+            <Link to="/">{t("AccountBackHome")}</Link>
+          </p>
+        </div>
       </div>
     </Fragment>
   );

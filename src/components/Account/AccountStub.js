@@ -28,11 +28,13 @@ export default function AccountStub(props) {
       <div className="content account-stub">
         <h1 className="title is-4">{t(titleKey)}</h1>
         <p className="subtitle is-6">{t("AccountStubPhase0")}</p>
-        <p>
-          <Link to="/account/login">{t("AccountPageLogin")}</Link>
-          {" · "}
-          <Link to="/">{t("AccountBackHome")}</Link>
-        </p>
+        <div className="account-page-footer">
+          <p>
+            <Link to="/account/login">{t("AccountPageLogin")}</Link>
+            {" · "}
+            <Link to="/">{t("AccountBackHome")}</Link>
+          </p>
+        </div>
       </div>
     </Fragment>
   );

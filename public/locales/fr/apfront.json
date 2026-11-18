@@ -5,7 +5,7 @@
   "AccountLoginFieldsRequired": "Saisissez votre identifiant et votre mot de passe.",
   "AccountLoginHostedUiFallback": "Vous préférez la page de connexion précédente ?",
   "AccountLoginHostedUiLink": "Utiliser la connexion hébergée",
-  "AccountLoginNameHelp": "Utilisez l'identifiant choisi lors de votre inscription, et non votre nom d'affichage de jeu.",
+  "AccountLoginNameHelp": "Utilisez l'identifiant de connexion que vous avez choisi lors de votre inscription, et non votre nom d'affichage public.",
   "AccountLoginPassword": "Mot de passe",
   "AccountLoginSubmitting": "Connexion en cours…",
   "AccountLoginVerifiedNowSignIn": "Votre adresse e-mail est vérifiée. Connectez-vous avec votre identifiant et votre mot de passe.",
@@ -1214,6 +1214,8 @@
   "UserSettingsTabNotifications": "Notifications",
   "UserSettingsTabGameplay": "Jouabilité",
   "UserSettingsTabVacation": "Vacances",
+  "UserSettingsPasswordResetHelp": "Nous vous enverrons un code par e-mail. Votre mot de passe actuel reste fonctionnel jusqu'à ce que vous terminiez la réinitialisation. Vous pouvez ignorer cet e-mail si vous décidez de ne pas le modifier.",
+  "UserSettingsPasswordResetSending": "Envoi en cours…",
   "vacation": {
     "intro": "Mettez en pause votre pendule dans toutes vos parties par correspondance actives. Les vacances s'appliquent à tous les types de parties (amicales, tournois, événements, solo ; pendules strictes et flexibles).",
     "quotaSummary": "{{remaining}} restants pour cette année de quota UTC ({{year}}) — {{blocks}} sur {{maxBlocks}} blocs de journées entières (14×24h par an).",
@@ -2579,7 +2581,7 @@
       "save": "Enregistrer l'avatar",
       "saveSuccess": "Avatar enregistré.",
       "saveFailed": "Impossible d'enregistrer l'avatar.",
-      "licenseNote": "Les avatars sont générés par DiceBear. Certains styles nécessitent une attribution — voir",
+      "licenseNote": "Les avatars sont générés par DiceBear — voir",
       "style": {
         "blobs": "Blobs",
         "glass": "Verre",
