@@ -892,6 +892,33 @@ a.navbar-item,
   color: var(--main-heading-color);
 }
 
+/* Managed auth (/account/*): space between primary actions and footer links */
+.content:is(
+  .account-login,
+  .account-register,
+  .account-forgot-password,
+  .account-reset-password,
+  .account-forgot-username,
+  .account-verify,
+  .account-confirm-email,
+  .account-stub
+) > .account-page-footer {
+  margin-top: 1.25rem;
+}
+
+.content:is(
+  .account-login,
+  .account-register,
+  .account-forgot-password,
+  .account-reset-password,
+  .account-forgot-username,
+  .account-verify,
+  .account-confirm-email,
+  .account-stub
+) .account-page-footer > p + p {
+  margin-top: 0.75rem;
+}
+
 
 .checkbox:hover, .radio:hover {
     color: var(--secondary-font-color);

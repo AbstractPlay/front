@@ -5,7 +5,7 @@
   "AccountLoginFieldsRequired": "Gib deinen Anmeldenamen und dein Passwort ein.",
   "AccountLoginHostedUiFallback": "Bevorzugst du die vorherige Anmeldeseite?",
   "AccountLoginHostedUiLink": "Host-Anmeldung verwenden",
-  "AccountLoginNameHelp": "Verwende den Anmeldenamen, den du bei der Registrierung gewählt hast, nicht deinen Anzeigenamen beim Spielen.",
+  "AccountLoginNameHelp": "Verwende den Anmeldenamen, den du bei der Registrierung gewählt hast, nicht deinen öffentlichen Anzeigenamen.",
   "AccountLoginPassword": "Passwort",
   "AccountLoginSubmitting": "Anmeldung…",
   "AccountLoginVerifiedNowSignIn": "Deine E-Mail-Adresse wurde bestätigt. Melde dich mit deinem Anmeldenamen und Passwort an.",
@@ -1214,6 +1214,8 @@
   "UserSettingsTabNotifications": "Benachrichtigungen",
   "UserSettingsTabGameplay": "Gameplay",
   "UserSettingsTabVacation": "Urlaub",
+  "UserSettingsPasswordResetHelp": "Wir senden dir einen Code per E-Mail. Dein aktuelles Passwort funktioniert weiter, bis du das Zurücksetzen abschließt. Du kannst die E-Mail ignorieren, wenn du dein Passwort nicht ändern möchtest.",
+  "UserSettingsPasswordResetSending": "Wird gesendet…",
   "vacation": {
     "intro": "Pausiere deine Bedenkzeit in allen aktiven Fernpartien. Der Urlaub gilt für jeden Spieltyp (Gelegenheitsspiel, Turnier, Event, Solo; harte und weiche Bedenkzeiten).",
     "quotaSummary": "{{remaining}} verbleibend in diesem UTC-Kontingentjahr ({{year}}) – {{blocks}} von {{maxBlocks}} Ganztagesblöcken (14×24h pro Jahr).",
@@ -2579,7 +2581,7 @@
       "save": "Avatar speichern",
       "saveSuccess": "Avatar gespeichert.",
       "saveFailed": "Avatar konnte nicht gespeichert werden.",
-      "licenseNote": "Avatare werden von DiceBear generiert. Einige Stile erfordern eine Namensnennung — siehe",
+      "licenseNote": "Avatare werden von DiceBear generiert — siehe",
       "style": {
         "blobs": "Blobs",
         "glass": "Glas",

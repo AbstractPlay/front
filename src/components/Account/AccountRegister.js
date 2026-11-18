@@ -116,13 +116,15 @@ export default function AccountRegister() {
             </button>
           </div>
         </form>
-        <p>
-          {t("AccountRegisterHaveAccount")}{" "}
-          <Link to="/account/login">{t("AccountPageLogin")}</Link>
-        </p>
-        <p>
-          <Link to="/">{t("AccountBackHome")}</Link>
-        </p>
+        <div className="account-page-footer">
+          <p>
+            {t("AccountRegisterHaveAccount")}{" "}
+            <Link to="/account/login">{t("AccountPageLogin")}</Link>
+          </p>
+          <p>
+            <Link to="/">{t("AccountBackHome")}</Link>
+          </p>
+        </div>
       </div>
     </Fragment>
   );

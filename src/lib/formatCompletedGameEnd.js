@@ -3,10 +3,11 @@ import { formatPlayerDisplayName } from "../components/Bots/botUtils";
 /**
  * @param {(key: string, params?: object) => string} tApresults
  * @param {string} key
+ * @param {object | undefined} params
  * @returns {string | null}
  */
-function tryApresultsKey(tApresults, key) {
-  const text = tApresults(key);
+function tryApresultsKey(tApresults, key, params) {
+  const text = tApresults(key, params);
   return text === key ? null : text;
 }
 
@@ -14,16 +15,23 @@ function tryApresultsKey(tApresults, key) {
  * @param {object} opts
  * @param {string} opts.metaGame
  * @param {string | undefined} opts.eogReason
+ * @param {string | undefined} [opts.playerName]
  * @param {(key: string, params?: object) => string} opts.tApresults
  * @returns {string}
  */
-export function formatEogReasonLabel({ metaGame, eogReason, tApresults }) {
+export function formatEogReasonLabel({
+  metaGame,
+  eogReason,
+  playerName,
+  tApresults,
+}) {
   if (!eogReason) {
     return "";
   }
+  const params = playerName ? { player: playerName } : undefined;
   return (
-    tryApresultsKey(tApresults, `${metaGame}.EOG.${eogReason}`) ??
-    tryApresultsKey(tApresults, `_general.EOG.${eogReason}`) ??
+    tryApresultsKey(tApresults, `${metaGame}.EOG.${eogReason}`, params) ??
+    tryApresultsKey(tApresults, `_general.EOG.${eogReason}`, params) ??
     eogReason
   );
 }
@@ -74,7 +82,12 @@ export function formatCompletedGameEnd({
       return t("listGames.end.draw");
     case "normal":
       return metaGame
-        ? formatEogReasonLabel({ metaGame, eogReason, tApresults })
+        ? formatEogReasonLabel({
+            metaGame,
+            eogReason,
+            playerName: seatName,
+            tApresults,
+          })
         : eogReason ?? "";
     default:
       return "";

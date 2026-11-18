@@ -130,11 +130,13 @@ export default function AccountVerify() {
             </button>
           </p>
         ) : null}
-        <p>
-          <Link to="/account/login">{t("AccountPageLogin")}</Link>
-          {" · "}
-          <Link to="/">{t("AccountBackHome")}</Link>
-        </p>
+        <div className="account-page-footer">
+          <p>
+            <Link to="/account/login">{t("AccountPageLogin")}</Link>
+            {" · "}
+            <Link to="/">{t("AccountBackHome")}</Link>
+          </p>
+        </div>
       </div>
     </Fragment>
   );

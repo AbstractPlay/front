@@ -73,9 +73,11 @@ export default function AccountConfirmEmail() {
             onManualConfirm={runConfirm}
           />
         )}
-        <p>
-          <Link to="/">{t("AccountBackHome")}</Link>
-        </p>
+        <div className="account-page-footer">
+          <p>
+            <Link to="/">{t("AccountBackHome")}</Link>
+          </p>
+        </div>
       </div>
     </Fragment>
   );

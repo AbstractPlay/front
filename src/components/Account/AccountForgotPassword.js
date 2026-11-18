@@ -1,8 +1,11 @@
 import React, { Fragment, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { resetPassword } from "aws-amplify/auth";
 import { mapCognitoAuthError } from "../../lib/mapCognitoAuthError";
+import {
+  buildAccountResetPasswordPath,
+  requestAccountPasswordReset,
+} from "../../lib/accountPasswordReset";
 
 export default function AccountForgotPassword() {
   const { t } = useTranslation();
@@ -21,11 +24,8 @@ export default function AccountForgotPassword() {
     setBusy(true);
     setErrorKey("");
     try {
-      await resetPassword({ username: loginName });
-      navigate(
-        `/account/reset-password?username=${encodeURIComponent(loginName)}&pending=1`,
-        { replace: true },
-      );
+      await requestAccountPasswordReset(loginName);
+      navigate(buildAccountResetPasswordPath(loginName), { replace: true });
     } catch (error) {
       setErrorKey(mapCognitoAuthError(error));
     } finally {
@@ -64,11 +64,13 @@ export default function AccountForgotPassword() {
             {busy ? t("AccountForgotPasswordSubmitting") : t("Submit")}
           </button>
         </form>
-        <p>
-          <Link to="/account/login">{t("AccountPageLogin")}</Link>
-          {" · "}
-          <Link to="/">{t("AccountBackHome")}</Link>
-        </p>
+        <div className="account-page-footer">
+          <p>
+            <Link to="/account/login">{t("AccountPageLogin")}</Link>
+            {" · "}
+            <Link to="/">{t("AccountBackHome")}</Link>
+          </p>
+        </div>
       </div>
     </Fragment>
   );

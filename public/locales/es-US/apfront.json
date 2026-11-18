@@ -5,7 +5,7 @@
   "AccountLoginFieldsRequired": "Ingresa tu nombre de usuario y contraseña.",
   "AccountLoginHostedUiFallback": "¿Prefieres la página de inicio de sesión anterior?",
   "AccountLoginHostedUiLink": "Usar inicio de sesión alojado",
-  "AccountLoginNameHelp": "Usa el nombre de usuario que elegiste al registrarte, no tu nombre visible para jugar.",
+  "AccountLoginNameHelp": "Usa el nombre de inicio de sesión que elegiste al registrarte, no tu nombre visible al público.",
   "AccountLoginPassword": "Contraseña",
   "AccountLoginSubmitting": "Iniciando sesión…",
   "AccountLoginVerifiedNowSignIn": "Tu correo electrónico ha sido verificado. Inicia sesión con tu nombre de usuario y contraseña.",
@@ -1214,6 +1214,8 @@
   "UserSettingsTabNotifications": "Notificaciones",
   "UserSettingsTabGameplay": "Jugabilidad",
   "UserSettingsTabVacation": "Vacaciones",
+  "UserSettingsPasswordResetHelp": "Te enviaremos un código por correo electrónico. Tu contraseña actual seguirá funcionando hasta que completes el restablecimiento. Puedes ignorar el correo si decides no cambiarla.",
+  "UserSettingsPasswordResetSending": "Enviando…",
   "vacation": {
     "intro": "Pausa el reloj de tu turno en todas las partidas por correspondencia activas. Las vacaciones se aplican a todos los tipos de partida (casual, torneo, evento, en solitario; relojes estrictos y flexibles).",
     "quotaSummary": "{{remaining}} restantes en este año de cuota UTC ({{year}}) — {{blocks}} de {{maxBlocks}} bloques de días completos (14×24 h por año).",
@@ -2579,7 +2581,7 @@
       "save": "Guardar avatar",
       "saveSuccess": "Avatar guardado.",
       "saveFailed": "No se pudo guardar el avatar.",
-      "licenseNote": "Los avatares son generados por DiceBear. Algunos estilos requieren atribución — consulta",
+      "licenseNote": "Los avatares son generados por DiceBear — consulta",
       "style": {
         "blobs": "Manchas",
         "glass": "Cristal",

@@ -136,11 +136,13 @@ export default function AccountResetPassword() {
             {busy ? t("AccountResetPasswordSubmitting") : t("AccountPageResetPassword")}
           </button>
         </form>
-        <p>
-          <Link to="/account/login">{t("AccountPageLogin")}</Link>
-          {" · "}
-          <Link to="/">{t("AccountBackHome")}</Link>
-        </p>
+        <div className="account-page-footer">
+          <p>
+            <Link to="/account/login">{t("AccountPageLogin")}</Link>
+            {" · "}
+            <Link to="/">{t("AccountBackHome")}</Link>
+          </p>
+        </div>
       </div>
     </Fragment>
   );

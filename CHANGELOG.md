@@ -15,6 +15,10 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 - **Managed auth (play):** in-app account routes—login, register/verify, forgot password/reset, forgot login name; settings email change via `/account/confirm-email` (click-to-verify); login name in settings/nav; `/account/login` replaces Hosted UI redirects; **NewProfile** gate when no DDB profile.
 
+### Fixed
+
+- **Completed games:** “How ended” for normal endings interpolates `{{player}}` in `apresults` EOG copy when the index row includes `gameEndPlayer`.
+
 ## [1.0.0-ci] - 2026-11-14
 
 ### Added

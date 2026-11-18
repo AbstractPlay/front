@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { compareStrings } from "../lib/compareStrings";
 import Spinner from "./Spinner";
@@ -15,6 +16,11 @@ import { callAuthApi } from "../lib/api";
 import { fetchProfile } from "../lib/globalMeBootstrap";
 import { confirmEmailAttributeCode } from "../lib/accountConfirmEmailAttribute";
 import { useAuthSession } from "../hooks/useAuthSession";
+import { mapCognitoAuthError } from "../lib/mapCognitoAuthError";
+import {
+  buildAccountResetPasswordPath,
+  requestAccountPasswordReset,
+} from "../lib/accountPasswordReset";
 import ProfileAbout from "./ProfileAbout";
 import {
   ABOUT_MAX_BYTES,
@@ -109,6 +115,8 @@ async function parseNewSettingResponse(res) {
 function UserSettingsModal(props) {
   const handleUserSettingsClose = props.handleClose;
   const show = props.show;
+  const navigate = useNavigate();
+  const location = useLocation();
   const { t, i18n } = useTranslation();
   const [changingName, changingNameSetter] = useState(false);
   const [changingEMail, changingEMailSetter] = useState(false);
@@ -124,6 +132,8 @@ function UserSettingsModal(props) {
   const [bggid, bggidSetter] = useState("");
   const [aboutMe, aboutMeSetter] = useState("");
   const [aboutError, aboutErrorSetter] = useState("");
+  const [passwordResetBusy, passwordResetBusySetter] = useState(false);
+  const [passwordResetErrorKey, passwordResetErrorKeySetter] = useState("");
   const users = useStore((state) => state.users);
   const { email: sessionEmail, username: loginName } = useAuthSession();
   const [updated, updatedSetter] = useState(0);
@@ -157,6 +167,8 @@ function UserSettingsModal(props) {
     emailCodeSetter("");
     emailErrorSetter("");
     emailManualCodeOpenSetter(false);
+    passwordResetBusySetter(false);
+    passwordResetErrorKeySetter("");
   }, [show]);
 
   useEffect(() => {
@@ -324,6 +336,26 @@ function UserSettingsModal(props) {
   const aboutValidation = validateAboutTextClient(aboutMe);
   const aboutCanSave =
     globalMe != null && globalMe.about !== aboutMe && aboutValidation.ok;
+
+  const handlePasswordResetClick = async () => {
+    const name = loginName?.trim();
+    if (!name) {
+      passwordResetErrorKeySetter("AccountForgotPasswordUsernameRequired");
+      return;
+    }
+    passwordResetBusySetter(true);
+    passwordResetErrorKeySetter("");
+    try {
+      await requestAccountPasswordReset(name);
+      const returnTarget = `${location.pathname}${location.search}${location.hash}`;
+      handleUserSettingsClose(0);
+      navigate(buildAccountResetPasswordPath(name, returnTarget));
+    } catch (error) {
+      passwordResetErrorKeySetter(mapCognitoAuthError(error));
+    } finally {
+      passwordResetBusySetter(false);
+    }
+  };
 
   const handleEMailChangeClick = () => {
     emailErrorSetter("");
@@ -786,6 +818,27 @@ function UserSettingsModal(props) {
             ) : (
               ""
             )}
+          </div>
+          <div className="field" key="passwordReset">
+            <label className="label">{t("AccountPageResetPassword")}</label>
+            <div className="control">
+              <button
+                type="button"
+                className="button is-small apButtonNeutral"
+                onClick={handlePasswordResetClick}
+                disabled={passwordResetBusy || !loginName}
+              >
+                {passwordResetBusy
+                  ? t("UserSettingsPasswordResetSending")
+                  : t("AccountPageResetPassword")}
+              </button>
+            </div>
+            {passwordResetErrorKey ? (
+              <p className="help is-danger" role="alert">
+                {t(passwordResetErrorKey)}
+              </p>
+            ) : null}
+            <p className="help">{t("UserSettingsPasswordResetHelp")}</p>
           </div>
           {/********************* country *********************/}
           <div className="field" key="country">
