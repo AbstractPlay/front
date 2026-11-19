@@ -28,12 +28,19 @@ export default function AccountRegister() {
   const [errorKey, setErrorKey] = useState("");
   const [busy, setBusy] = useState(false);
 
+  const loginName = username.trim();
+  const mail = email.trim();
+  const mailConfirm = emailConfirm.trim();
+  const canSubmit =
+    loginName.length > 0
+    && mail.length > 0
+    && mailConfirm.length > 0
+    && password.trim().length > 0
+    && emailsMatchForRegister(mail, mailConfirm);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const loginName = username.trim();
-    const mail = email.trim();
-    const mailConfirm = emailConfirm.trim();
-    if (!loginName || !mail || !mailConfirm || !password) {
+    if (!canSubmit) {
       setErrorKey("AccountRegisterFieldsRequired");
       return;
     }
@@ -162,7 +169,7 @@ export default function AccountRegister() {
             <button
               type="submit"
               className="button apButton"
-              disabled={busy}
+              disabled={busy || !canSubmit}
             >
               {busy ? t("AccountRegisterSubmitting") : t("AccountPageRegister")}
             </button>
