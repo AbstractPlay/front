@@ -3,6 +3,8 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { confirmResetPassword, signIn } from "aws-amplify/auth";
 import { mapCognitoAuthError } from "../../lib/mapCognitoAuthError";
+import { passwordMeetsCognitoPolicy } from "../../lib/cognitoPasswordPolicy";
+import CognitoPasswordPolicyChecklist from "./CognitoPasswordPolicyChecklist";
 import { parseAccountConfirmQuery } from "../../lib/accountQueryParams";
 import { refreshAuthSession } from "../../lib/authSession";
 import { fetchProfile } from "../../lib/globalMeBootstrap";
@@ -28,6 +30,14 @@ export default function AccountResetPassword() {
   const [password, setPassword] = useState("");
   const [errorKey, setErrorKey] = useState("");
   const [busy, setBusy] = useState(false);
+  const [passwordFieldActive, setPasswordFieldActive] = useState(false);
+
+  const loginNameTrimmed = username.trim();
+  const resetCodeTrimmed = code.trim();
+  const canSubmit =
+    loginNameTrimmed.length > 0
+    && resetCodeTrimmed.length > 0
+    && passwordMeetsCognitoPolicy(password);
 
   useEffect(() => {
     setUsername(query.username ?? "");
@@ -36,9 +46,9 @@ export default function AccountResetPassword() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const loginName = username.trim();
-    const resetCode = code.trim();
-    if (!loginName || !resetCode || !password) {
+    const loginName = loginNameTrimmed;
+    const resetCode = resetCodeTrimmed;
+    if (!canSubmit) {
       setErrorKey("AccountResetPasswordFieldsRequired");
       return;
     }
@@ -126,13 +136,21 @@ export default function AccountResetPassword() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onFocus={() => setPasswordFieldActive(true)}
                 autoComplete="new-password"
                 disabled={busy}
+                aria-describedby="account_reset_password_policy"
               />
             </div>
-            <p className="help">{t("AccountRegisterPasswordHint")}</p>
+            <h2 id="account_reset_password_policy" className="is-sr-only">
+              {t("AccountPasswordPolicyLegend")}
+            </h2>
+            <CognitoPasswordPolicyChecklist
+              password={password}
+              active={passwordFieldActive}
+            />
           </div>
-          <button type="submit" className="button apButton" disabled={busy}>
+          <button type="submit" className="button apButton" disabled={busy || !canSubmit}>
             {busy ? t("AccountResetPasswordSubmitting") : t("AccountPageResetPassword")}
           </button>
         </form>
