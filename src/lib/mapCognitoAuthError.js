@@ -25,5 +25,15 @@ export function mapCognitoAuthError(error) {
   if (typeof code === "string" && COGNITO_ERROR_I18N[code]) {
     return COGNITO_ERROR_I18N[code];
   }
+  const message =
+    error && typeof error === "object" && typeof error.message === "string"
+      ? error.message
+      : "";
+  if (message.includes("PreSignUpRejected:DuplicateEmail")) {
+    return "EMailInUse";
+  }
+  if (message.includes("PreSignUpRejected:")) {
+    return "AccountRegisterRejected";
+  }
   return "CognitoError_Generic";
 }

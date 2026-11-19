@@ -1,15 +1,30 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { signUp } from "aws-amplify/auth";
 import { mapCognitoAuthError } from "../../lib/mapCognitoAuthError";
 
+function emailsMatchForRegister(a, b) {
+  const normalize = (raw) => {
+    const trimmed = raw.trim();
+    const at = trimmed.lastIndexOf("@");
+    if (at <= 0) {
+      return trimmed.toLowerCase();
+    }
+    return `${trimmed.slice(0, at).trim()}@${trimmed.slice(at + 1).trim().toLowerCase()}`.toLowerCase();
+  };
+  return normalize(a) === normalize(b);
+}
+
 export default function AccountRegister() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const formStartedAtRef = useRef(String(Date.now()));
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [emailConfirm, setEmailConfirm] = useState("");
   const [password, setPassword] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [errorKey, setErrorKey] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -17,8 +32,13 @@ export default function AccountRegister() {
     event.preventDefault();
     const loginName = username.trim();
     const mail = email.trim();
-    if (!loginName || !mail || !password) {
+    const mailConfirm = emailConfirm.trim();
+    if (!loginName || !mail || !mailConfirm || !password) {
       setErrorKey("AccountRegisterFieldsRequired");
+      return;
+    }
+    if (!emailsMatchForRegister(mail, mailConfirm)) {
+      setErrorKey("AccountRegisterEmailConfirmMismatch");
       return;
     }
     setBusy(true);
@@ -30,6 +50,11 @@ export default function AccountRegister() {
         options: {
           userAttributes: { email: mail },
           autoSignIn: true,
+          clientMetadata: {
+            website: honeypot.trim(),
+            emailConfirm: mailConfirm,
+            formStartedAt: formStartedAtRef.current,
+          },
         },
       });
       navigate(
@@ -90,6 +115,22 @@ export default function AccountRegister() {
             </div>
           </div>
           <div className="field">
+            <label className="label" htmlFor="account_register_email_confirm">
+              {t("AccountRegisterEmailConfirmLabel")}
+            </label>
+            <div className="control">
+              <input
+                id="account_register_email_confirm"
+                className="input"
+                type="email"
+                value={emailConfirm}
+                onChange={(e) => setEmailConfirm(e.target.value)}
+                autoComplete="off"
+                disabled={busy}
+              />
+            </div>
+          </div>
+          <div className="field">
             <label className="label" htmlFor="account_register_password">
               {t("AccountLoginPassword")}
             </label>
@@ -106,6 +147,17 @@ export default function AccountRegister() {
             </div>
             <p className="help">{t("AccountRegisterPasswordHint")}</p>
           </div>
+          <input
+            id="account_register_website"
+            name="website"
+            type="text"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="account-register-honeypot"
+          />
           <div className="field">
             <button
               type="submit"

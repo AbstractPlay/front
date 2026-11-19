@@ -147,9 +147,17 @@
     "src": "Verify email",
     "out": "Vérifier l'e-mail"
   },
+  "AccountRegisterEmailConfirmLabel": {
+    "src": "Confirm email",
+    "out": "Confirmer l'adresse e-mail"
+  },
+  "AccountRegisterEmailConfirmMismatch": {
+    "src": "Email addresses do not match.",
+    "out": "Les adresses e-mail ne correspondent pas."
+  },
   "AccountRegisterFieldsRequired": {
-    "src": "Enter a login name, email, and password.",
-    "out": "Saisissez un identifiant, une adresse e-mail et un mot de passe."
+    "src": "Enter a login name, email, confirm email, and password.",
+    "out": "Saisissez un identifiant, une adresse e-mail, la confirmation de l'adresse e-mail et un mot de passe."
   },
   "AccountRegisterHaveAccount": {
     "src": "Already have an account?",
@@ -158,6 +166,10 @@
   "AccountRegisterPasswordHint": {
     "src": "Use at least 8 characters with upper and lower case, a number, and a symbol.",
     "out": "Utilisez au moins 8 caractères avec des majuscules et minuscules, un chiffre et un symbole."
+  },
+  "AccountRegisterRejected": {
+    "src": "Registration could not be completed. Check your details and try again.",
+    "out": "L'inscription n'a pas pu être effectuée. Vérifiez vos informations et réessayez."
   },
   "AccountRegisterSubmitting": {
     "src": "Creating account…",
