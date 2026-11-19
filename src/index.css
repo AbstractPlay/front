@@ -927,6 +927,23 @@ a.navbar-item,
   overflow: hidden;
 }
 
+.account-password-policy {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.account-password-policy li + li {
+  margin-top: 0.2rem;
+}
+
+.account-password-policy-mark {
+  display: inline-block;
+  min-width: 1.1rem;
+}
+
 
 .checkbox:hover, .radio:hover {
     color: var(--secondary-font-color);

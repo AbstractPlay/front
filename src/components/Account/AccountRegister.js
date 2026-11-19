@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { signUp } from "aws-amplify/auth";
 import { mapCognitoAuthError } from "../../lib/mapCognitoAuthError";
+import { passwordMeetsCognitoPolicy } from "../../lib/cognitoPasswordPolicy";
+import CognitoPasswordPolicyChecklist from "./CognitoPasswordPolicyChecklist";
 
 function emailsMatchForRegister(a, b) {
   const normalize = (raw) => {
@@ -27,6 +29,7 @@ export default function AccountRegister() {
   const [honeypot, setHoneypot] = useState("");
   const [errorKey, setErrorKey] = useState("");
   const [busy, setBusy] = useState(false);
+  const [passwordFieldActive, setPasswordFieldActive] = useState(false);
 
   const loginName = username.trim();
   const mail = email.trim();
@@ -35,7 +38,7 @@ export default function AccountRegister() {
     loginName.length > 0
     && mail.length > 0
     && mailConfirm.length > 0
-    && password.trim().length > 0
+    && passwordMeetsCognitoPolicy(password)
     && emailsMatchForRegister(mail, mailConfirm);
 
   const handleSubmit = async (event) => {
@@ -148,11 +151,19 @@ export default function AccountRegister() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onFocus={() => setPasswordFieldActive(true)}
                 autoComplete="new-password"
                 disabled={busy}
+                aria-describedby="account_register_password_policy"
               />
             </div>
-            <p className="help">{t("AccountRegisterPasswordHint")}</p>
+            <h2 id="account_register_password_policy" className="is-sr-only">
+              {t("AccountPasswordPolicyLegend")}
+            </h2>
+            <CognitoPasswordPolicyChecklist
+              password={password}
+              active={passwordFieldActive}
+            />
           </div>
           <input
             id="account_register_website"
