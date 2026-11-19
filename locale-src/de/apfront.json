@@ -147,6 +147,30 @@
     "src": "Verify email",
     "out": "E-Mail bestätigen"
   },
+  "AccountPasswordPolicyLegend": {
+    "src": "Password requirements",
+    "out": "Passwortanforderungen"
+  },
+  "AccountPasswordRule_lowercase": {
+    "src": "A lowercase letter",
+    "out": "Ein Kleinbuchstabe"
+  },
+  "AccountPasswordRule_minLength": {
+    "src": "At least {{count}} characters",
+    "out": "Mindestens {{count}} Zeichen"
+  },
+  "AccountPasswordRule_number": {
+    "src": "A number",
+    "out": "Eine Zahl"
+  },
+  "AccountPasswordRule_symbol": {
+    "src": "A symbol",
+    "out": "Ein Sonderzeichen"
+  },
+  "AccountPasswordRule_uppercase": {
+    "src": "An uppercase letter",
+    "out": "Ein Großbuchstabe"
+  },
   "AccountRegisterEmailConfirmLabel": {
     "src": "Confirm email",
     "out": "E-Mail-Adresse bestätigen"
