@@ -919,6 +919,14 @@ a.navbar-item,
   margin-top: 0.75rem;
 }
 
+.account-register-honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 
 .checkbox:hover, .radio:hover {
     color: var(--secondary-font-color);
