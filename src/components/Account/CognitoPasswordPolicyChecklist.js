@@ -36,7 +36,7 @@ export default function CognitoPasswordPolicyChecklist({
           className={rule.met ? "has-text-success" : "has-text-danger"}
         >
           <span className="account-password-policy-mark" aria-hidden="true">
-            {rule.met ? "\u2713 " : "\u2013 "}
+            {rule.met ? "\u2713" : "\u00D7"}
           </span>
           {t(`AccountPasswordRule_${rule.id}`, { count })}
         </li>
