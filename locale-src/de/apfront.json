@@ -227,6 +227,22 @@
     "src": "Account sign-in is being upgraded. Full forms arrive in the next rollout phase.",
     "out": "Die Konto-Anmeldung wird derzeit aktualisiert. Vollständige Formulare folgen in der nächsten Phase."
   },
+  "AccountUnsubscribeEmailInvalid": {
+    "src": "This link is invalid or has expired. Sign in and open notification settings to change your email preferences.",
+    "out": "Dieser Link ist ungültig oder abgelaufen. Melde dich an und öffne die Benachrichtigungseinstellungen, um deine E-Mail-Einstellungen zu ändern."
+  },
+  "AccountUnsubscribeEmailSuccess": {
+    "src": "All email notifications from AbstractPlay are turned off. You can turn individual types back on anytime in your account settings after signing in.",
+    "out": "Alle E-Mail-Benachrichtigungen von AbstractPlay wurden deaktiviert. Du kannst einzelne Benachrichtigungsarten nach dem Anmelden jederzeit in deinen Kontoeinstellungen wieder aktivieren."
+  },
+  "AccountUnsubscribeEmailTitle": {
+    "src": "Email notifications",
+    "out": "E-Mail-Benachrichtigungen"
+  },
+  "AccountUnsubscribeEmailWorking": {
+    "src": "Turning off email notifications…",
+    "out": "E-Mail-Benachrichtigungen werden deaktiviert…"
+  },
   "AccountVerifyCheckEmail": {
     "src": "We sent a verification email. Open the link or enter the code below.",
     "out": "Wir haben eine Bestätigungs-E-Mail gesendet. Öffne den Link oder gib den Code unten ein."
