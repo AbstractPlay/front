@@ -927,7 +927,7 @@ a.navbar-item,
   overflow: hidden;
 }
 
-.account-password-policy {
+.content .account-password-policy {
   list-style: none;
   margin: 0.5rem 0 0;
   padding: 0;
@@ -935,13 +935,25 @@ a.navbar-item,
   line-height: 1.45;
 }
 
-.account-password-policy li + li {
+.content .account-password-policy li {
+  list-style: none;
+  padding-left: 0;
+}
+
+.content .account-password-policy li::marker {
+  content: "";
+}
+
+.content .account-password-policy li + li {
   margin-top: 0.2rem;
 }
 
 .account-password-policy-mark {
   display: inline-block;
-  min-width: 1.1rem;
+  min-width: 1.25rem;
+  margin-right: 0.35rem;
+  text-align: center;
+  font-weight: 600;
 }
 
 
