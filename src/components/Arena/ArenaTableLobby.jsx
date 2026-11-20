@@ -34,6 +34,8 @@ import {
   canAbortArenaLaunchSync,
 } from "../../lib/arena/arenaLaunchSync";
 import ArenaLaunchSyncAbort from "./ArenaLaunchSyncAbort";
+import ArenaRealtimeConnectionNotice from "./ArenaRealtimeConnectionNotice";
+import { useRealtimeConnectionReady } from "../../hooks/useRealtimeConnectionReady";
 import "./arena.css";
 
 export default function ArenaTableLobby() {
@@ -43,6 +45,8 @@ export default function ArenaTableLobby() {
   const tableView = searchParams.get("view") === "table";
   const navigate = useNavigate();
   const globalMe = useStore((state) => state.globalMe);
+  const { blockArenaRealtimeActions } = useRealtimeConnectionReady();
+  const realtimeActionDisabled = busy || blockArenaRealtimeActions;
   const allUsers = useStore((state) => state.users);
   const [busy, busySetter] = useState(false);
   const [actionError, actionErrorSetter] = useState("");
@@ -373,6 +377,8 @@ export default function ArenaTableLobby() {
           </p>
         ) : null}
 
+        <ArenaRealtimeConnectionNotice />
+
         {seatedOnAnotherTable && myArenaTable ? (
           <div className="notification is-info is-light arena-active-game">
             <p className="arena-active-game__text">{t("Arena.activeTableBanner")}</p>
@@ -451,7 +457,7 @@ export default function ArenaTableLobby() {
               <button
                 type="button"
                 className="button apButton"
-                disabled={busy}
+                disabled={realtimeActionDisabled}
                 onClick={handleJoin}
               >
                 {t("Arena.joinTable")}
@@ -472,7 +478,7 @@ export default function ArenaTableLobby() {
                     <button
                       type="button"
                       className="button apButton"
-                      disabled={busy || mySeat.ready}
+                      disabled={realtimeActionDisabled || mySeat.ready}
                       onClick={() => handleReady(true)}
                     >
                       {t("Arena.readyUp")}
@@ -481,7 +487,7 @@ export default function ArenaTableLobby() {
                       <button
                         type="button"
                         className="button apButtonNeutral"
-                        disabled={busy}
+                        disabled={realtimeActionDisabled}
                         onClick={() => handleReady(false)}
                       >
                         {t("Arena.unready")}
@@ -505,7 +511,7 @@ export default function ArenaTableLobby() {
               <button
                 type="button"
                 className="button apButtonNeutral"
-                disabled={busy}
+                disabled={realtimeActionDisabled}
                 onClick={handleProposeSwap}
               >
                 {t("Arena.offerSwap")}
@@ -516,7 +522,7 @@ export default function ArenaTableLobby() {
                 <button
                   type="button"
                   className="button apButton"
-                  disabled={busy}
+                  disabled={realtimeActionDisabled}
                   onClick={handleAcceptSwap}
                 >
                   {t("Arena.acceptSwap")}
@@ -524,7 +530,7 @@ export default function ArenaTableLobby() {
                 <button
                   type="button"
                   className="button apButtonNeutral"
-                  disabled={busy}
+                  disabled={realtimeActionDisabled}
                   onClick={handleRejectSwap}
                 >
                   {t("Arena.rejectSwap")}
@@ -532,6 +538,11 @@ export default function ArenaTableLobby() {
               </>
             ) : null}
           </div>
+          {blockArenaRealtimeActions ? (
+            <p className="help has-text-centered" role="status">
+              {t("Arena.realtimeConnection.actionBlockedHint")}
+            </p>
+          ) : null}
           {iOfferedSwap ? (
             <p className="help has-text-centered">{t("Arena.swapWaitingOpponent")}</p>
           ) : null}

@@ -1084,6 +1084,14 @@
       "countdown": "Inizio tra {{count}}…",
       "countdownHint": "L'orologio parte quando questo raggiunge lo zero."
     },
+    "realtimeConnection": {
+      "connecting": "Connessione al servizio di gioco dal vivo in corso…",
+      "reconnecting": "Connessione dal vivo interrotta. L'assegnazione dei posti nell'Arena, lo stato di pronto e la sincronizzazione in partita richiedono una connessione stabile. Riconnessione in corso…",
+      "offline": "Non sei connesso al servizio di gioco dal vivo. Accedi e riconnettiti per usare l'Arena.",
+      "actionBlockedHint": "Disponibile una volta ripristinata la connessione dal vivo.",
+      "reconnectNow": "Riconnetti ora",
+      "signIn": "Accedi"
+    },
     "syncStallNotice": "Il tuo avversario non si è ancora connesso alla plancia di gioco. Puoi tornare alla lobby del tavolo e dare di nuovo il pronto quando sarete entrambi pronti.",
     "abortLaunchSync": "Torna alla lobby",
     "abortLaunchSyncWorking": "Tornando…",

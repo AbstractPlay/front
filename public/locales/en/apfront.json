@@ -1084,6 +1084,14 @@
       "countdown": "Starting in {{count}}…",
       "countdownHint": "The clock starts when this reaches zero."
     },
+    "realtimeConnection": {
+      "connecting": "Connecting to the live game service…",
+      "reconnecting": "Live connection interrupted. Arena seating, ready, and in-game sync need a healthy connection. Reconnecting…",
+      "offline": "You are not connected to the live game service. Sign in and reconnect to use Arena.",
+      "actionBlockedHint": "Available once the live connection is restored.",
+      "reconnectNow": "Reconnect now",
+      "signIn": "Sign in"
+    },
     "syncStallNotice": "Your opponent has not connected to the game board yet. You can return to the table lobby and ready again when you are both set.",
     "abortLaunchSync": "Return to lobby",
     "abortLaunchSyncWorking": "Returning…",
