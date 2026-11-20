@@ -105,6 +105,49 @@
   margin-bottom: 1rem;
 }
 
+.arena-realtime-connection {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--main-bg-color);
+  color: var(--main-font-color);
+  border: 1px solid var(--secondary-color-1);
+  border-radius: 4px;
+}
+
+.arena-realtime-connection__text {
+  margin: 0;
+  text-align: center;
+}
+
+.arena-realtime-connection__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.arena-panel .arena-realtime-connection--in-panel {
+  margin-bottom: 1rem;
+}
+
+.arena-row-action--blocked.button {
+  opacity: 0.55;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.arena-realtime-connection--play {
+  margin: 0.5rem 0.75rem 0;
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .arena-table-layout-picker__intro {
   margin-bottom: 0.75rem;
 }

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { watchGamesForSend } from "../lib/watchGames";
+import { WS_CONNECTION_INITIAL } from "../lib/wsConnection";
 
 export const useStore = create((set, get) => ({
   authSession: {
@@ -174,6 +175,20 @@ export const useStore = create((set, get) => ({
     });
     return gap;
   },
+
+  wsConnection: { ...WS_CONNECTION_INITIAL },
+  setWsConnection: (patch) =>
+    set((state) => {
+      const nextPatch =
+        typeof patch === "function" ? patch(state.wsConnection) : patch;
+      return {
+        wsConnection: {
+          ...state.wsConnection,
+          ...nextPatch,
+          updatedAt: Date.now(),
+        },
+      };
+    }),
 
   wsSend: null,
   setWsSend: (fn) => set({ wsSend: fn }),
