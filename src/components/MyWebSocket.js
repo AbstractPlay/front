@@ -150,7 +150,8 @@ export default function MyWebSocket() {
       isConnectingRef.current = true;
       console.log("WS: Initiating connection...");
 
-      const ws = new WebSocket(WS_ENDPOINT);
+      const connectUrl = `${WS_ENDPOINT}?token=${encodeURIComponent(token)}`;
+      const ws = new WebSocket(connectUrl);
       wsRef.current = ws;
 
       const send = (action, body = {}) => {
