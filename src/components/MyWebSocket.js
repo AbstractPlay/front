@@ -58,7 +58,7 @@ export default function MyWebSocket() {
   const invisible = useStore((state) => state.invisible);
 
   useEffect(() => {
-    const { setConnections, applyPresenceMessage, setWsSend } =
+    const { setConnections, applyPresenceMessage, setWsSend, setWsConnection } =
       useStore.getState();
     isMountedRef.current = true;
     reconnectDelayRef.current = INITIAL_RECONNECT_DELAY;
@@ -90,6 +90,7 @@ export default function MyWebSocket() {
         return;
       }
 
+      setWsConnection({ status: "reconnecting", lastError: reason });
       const delay = reconnectDelayRef.current;
       console.log(`WS: Scheduling reconnect in ${delay / 1000}s (${reason})`);
       reconnectTimeoutRef.current = setTimeout(connect, delay);
@@ -127,12 +128,17 @@ export default function MyWebSocket() {
         token = await getAuthToken();
       } catch (err) {
         console.warn("WS: Error getting auth token", err);
+        setWsConnection({
+          status: "reconnecting",
+          lastError: "token fetch error",
+        });
         scheduleReconnect("token fetch error");
         return;
       }
 
       if (token === null) {
         console.log("WS: No auth token (user not logged in)");
+        setWsConnection({ status: "reconnecting", lastError: "no auth token" });
         scheduleReconnect("no auth token");
         return;
       }
@@ -148,6 +154,7 @@ export default function MyWebSocket() {
       }
 
       isConnectingRef.current = true;
+      setWsConnection({ status: "connecting", lastError: undefined });
       console.log("WS: Initiating connection...");
 
       const connectUrl = `${WS_ENDPOINT}?token=${encodeURIComponent(token)}`;
@@ -188,11 +195,17 @@ export default function MyWebSocket() {
           );
           reconnectDelayRef.current = INITIAL_RECONNECT_DELAY;
           setWsSend(send);
+          setWsConnection({ status: "open", lastError: undefined });
           startPresenceResync(send);
           scheduleWatchGamesSync();
           console.log("WS: Connected and subscribed");
         } catch (ex) {
           console.error(`WS: Error subscribing to channel: ${ex}`);
+          setWsConnection({
+            status: "reconnecting",
+            lastError: String(ex?.message ?? ex),
+          });
+          ws.close();
         }
       };
 
@@ -218,6 +231,7 @@ export default function MyWebSocket() {
             console.log(
               "WS: Idle timeout - will reconnect when tab becomes visible"
             );
+            setWsConnection({ status: "reconnecting", lastError: "idle" });
           } else {
             scheduleReconnect("connection closed");
           }
@@ -343,6 +357,7 @@ export default function MyWebSocket() {
       clearPresenceResync();
       cancelWatchGamesSync();
       setWsSend(null);
+      setWsConnection({ status: "offline", lastError: undefined });
 
       window.removeEventListener("ws-force-reconnect", handleForceReconnect);
 

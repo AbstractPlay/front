@@ -595,6 +595,30 @@
     "src": "Ready",
     "out": "Listo"
   },
+  "Arena.realtimeConnection.actionBlockedHint": {
+    "src": "Available once the live connection is restored.",
+    "out": "Disponible una vez que se restablezca la conexión en vivo."
+  },
+  "Arena.realtimeConnection.connecting": {
+    "src": "Connecting to the live game service…",
+    "out": "Conectando al servicio de juego en vivo…"
+  },
+  "Arena.realtimeConnection.offline": {
+    "src": "You are not connected to the live game service. Sign in and reconnect to use Arena.",
+    "out": "No estás conectado al servicio de juego en vivo. Inicia sesión y reconéctate para usar la Arena."
+  },
+  "Arena.realtimeConnection.reconnectNow": {
+    "src": "Reconnect now",
+    "out": "Reconectar ahora"
+  },
+  "Arena.realtimeConnection.reconnecting": {
+    "src": "Live connection interrupted. Arena seating, ready, and in-game sync need a healthy connection. Reconnecting…",
+    "out": "Se interrumpió la conexión en vivo. La asignación de asientos, la confirmación de listo y la sincronización en la partida de la Arena requieren una conexión estable. Reconectando…"
+  },
+  "Arena.realtimeConnection.signIn": {
+    "src": "Sign in",
+    "out": "Iniciar sesión"
+  },
   "Arena.refresh": {
     "src": "Refresh",
     "out": "Actualizar"

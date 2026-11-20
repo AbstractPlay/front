@@ -28,6 +28,8 @@ import {
 } from "../../lib/arena/arenaRoutes";
 import { readArenaTableLayoutChoice } from "./ArenaTableLayoutPicker";
 import { useArenaPoll } from "../../lib/arena/useArenaPoll";
+import { useRealtimeConnectionReady } from "../../hooks/useRealtimeConnectionReady";
+import ArenaRealtimeConnectionNotice from "./ArenaRealtimeConnectionNotice";
 import { formatVariantsJoined } from "../../lib/expandVariants";
 import { validateChallengeVariantSelection } from "../../lib/variantChallengeValidation";
 import { useVariantSelectionValidity } from "../../hooks/useVariantSelectionValidity";
@@ -63,6 +65,7 @@ export default function ArenaLanding() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const globalMe = useStore((state) => state.globalMe);
+  const { realtimeReady, blockArenaRealtimeActions } = useRealtimeConnectionReady();
   const allUsers = useStore((state) => state.users);
   const summary = useStore((state) => state.summary);
   const summaryRatingsLoadState = useStore(
@@ -244,8 +247,10 @@ export default function ArenaLanding() {
     !selectedControl ||
     !gameChosen ||
     !variantsValid ||
-    hasActiveArenaTable;
-  const tableCreateLocked = hasActiveArenaTable || busy;
+    hasActiveArenaTable ||
+    blockArenaRealtimeActions;
+  const tableCreateLocked =
+    hasActiveArenaTable || busy || blockArenaRealtimeActions;
 
   const liveLayout = readArenaTableLayoutChoice();
 
@@ -262,6 +267,8 @@ export default function ArenaLanding() {
           collapseKey="Arena.introCollapse"
         />
         <p className="help has-text-centered">{t("Arena.clockCopy")}</p>
+
+        <ArenaRealtimeConnectionNotice />
 
         {myArenaTable ? (
           <div className="notification is-info is-light arena-active-game">
@@ -292,6 +299,11 @@ export default function ArenaLanding() {
           {tableCreateLocked && hasActiveArenaTable ? (
             <p className="help arena-panel__locked-hint" role="status">
               {t("Arena.createSectionLockedHint")}
+            </p>
+          ) : null}
+          {blockArenaRealtimeActions && !hasActiveArenaTable ? (
+            <p className="help arena-panel__locked-hint" role="status">
+              {t("Arena.realtimeConnection.actionBlockedHint")}
             </p>
           ) : null}
           <div className="field">
@@ -494,9 +506,19 @@ export default function ArenaLanding() {
                           <td>{seatCount}/2</td>
                           <td>
                             {canJoinRow || row.state === "playing" || seatedOnRow ? (
-                              <Link className="apButton button is-small" to={href}>
-                                {actionLabel}
-                              </Link>
+                              realtimeReady ? (
+                                <Link className="apButton button is-small" to={href}>
+                                  {actionLabel}
+                                </Link>
+                              ) : (
+                                <span
+                                  className="apButton button is-small arena-row-action--blocked"
+                                  title={t("Arena.realtimeConnection.actionBlockedHint")}
+                                  aria-disabled="true"
+                                >
+                                  {actionLabel}
+                                </span>
+                              )
                             ) : (
                               <span className="help">{actionLabel}</span>
                             )}

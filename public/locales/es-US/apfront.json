@@ -1084,6 +1084,14 @@
       "countdown": "Comenzando en {{count}}…",
       "countdownHint": "El reloj comienza cuando esto llegue a cero."
     },
+    "realtimeConnection": {
+      "connecting": "Conectando al servicio de juego en vivo…",
+      "reconnecting": "Se interrumpió la conexión en vivo. La asignación de asientos, la confirmación de listo y la sincronización en la partida de la Arena requieren una conexión estable. Reconectando…",
+      "offline": "No estás conectado al servicio de juego en vivo. Inicia sesión y reconéctate para usar la Arena.",
+      "actionBlockedHint": "Disponible una vez que se restablezca la conexión en vivo.",
+      "reconnectNow": "Reconectar ahora",
+      "signIn": "Iniciar sesión"
+    },
     "syncStallNotice": "Tu oponente aún no se ha conectado al tablero de juego. Puedes volver al lobby de la mesa y confirmar que estás listo de nuevo cuando ambos lo estén.",
     "abortLaunchSync": "Volver al lobby",
     "abortLaunchSyncWorking": "Volviendo…",
