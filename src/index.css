@@ -4805,6 +4805,26 @@ span.hardTime::after {
     align-self: start;
   }
 
+/* Customize output board — not play-page layout (rotation-friendly sizing) */
+.customize-page-preview .customize-board-preview {
+  display: block;
+  width: 100%;
+  max-height: none;
+  min-height: 200px;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  border: 1px solid var(--tag-background-color);
+  overflow: auto;
+  contain: layout paint;
+}
+
+.customize-page-preview .customize-board-preview > svg {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100%;
+  display: block;
+}
+
   .customize-page-custom-css {
     grid-area: css;
   }
