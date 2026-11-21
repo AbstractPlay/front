@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { GameFactory } from "@abstractplay/gameslib";
+import { GameFactory, wireMoveTokenForSeat } from "@abstractplay/gameslib";
+
+const GIPF_MULTI_CAPTURE = "xd3-c3,xf2-f2";
+/** Newer gameslib declines N-part wire split for GIPF capture spans. */
+const gameslibDeclinesGipfCaptureWire =
+  wireMoveTokenForSeat(GIPF_MULTI_CAPTURE, 0, 2) === null;
 import { ENTROPY_DEV_MOVE_TABLE_STATE } from "./fixtures/entropy.js";
 import { effectiveTurnModel } from "./effectiveTurnModel";
 import {
@@ -453,6 +458,59 @@ describe("pathIndexForMoveCell", () => {
       })
     ).toBe("G3@h6-h8,Y1");
   });
+
+  it("sequential stride does not wire-split comma moves on the path", () => {
+    const layout = resolveMoveTableLayout({
+      game: { numPlayers: 2, simultaneous: false },
+      engine: { turnModel: () => "sequential" },
+    });
+    expect(layout.useRoundGrid).to.equal(false);
+    const path = [[{ move: "xd3-c3,xf2-f2" }]];
+    expect(
+      moveTextForCell({
+        layout,
+        rounds: null,
+        rowIdx: 0,
+        seatIdx: 0,
+        path,
+        movenum: 0,
+      })
+    ).toBe("xd3-c3,xf2-f2");
+    expect(
+      moveTextForCell({
+        layout,
+        rounds: null,
+        rowIdx: 0,
+        seatIdx: 1,
+        path,
+        movenum: 1,
+      })
+    ).toBe("");
+  });
+
+  it.skipIf(!gameslibDeclinesGipfCaptureWire)(
+    "sequenced round grid keeps GIPF multi-span capture in one cell",
+    () => {
+      const layout = resolveMoveTableLayout({
+        game: { numPlayers: 2, simultaneous: false },
+        engine: { turnModel: () => "sequenced" },
+        gameRec: { header: { "turn-model": "sequenced" } },
+      });
+      expect(layout.useRoundGrid).to.equal(true);
+      const path = [[{ move: GIPF_MULTI_CAPTURE }]];
+      const rounds = [[null, null]];
+      expect(
+        moveTextForCell({
+          layout,
+          rounds,
+          rowIdx: 0,
+          seatIdx: 0,
+          path,
+          movenum: 0,
+        })
+      ).toBe(GIPF_MULTI_CAPTURE);
+    }
+  );
 
   it("round grid splits comma wire in engine slot text per seat", () => {
     const layout = resolveMoveTableLayout({

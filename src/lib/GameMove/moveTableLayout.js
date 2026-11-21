@@ -378,12 +378,14 @@ export function moveTextForCell({
     return seatIdx === 0 ? String(move) : "";
   }
 
-  // Comma-separated seat wires (simultaneous / sequenced). Sequential games
-  // such as Waldmeister use a comma inside one ply (`slide,placement`).
+  // Comma-separated N-seat wires on the exploration path (not arbitrary commas in one ply).
+  // Simultaneous: always. Sequenced: only in round-grid mode (hex-style `7ML,NL` in path).
+  // Stride sequenced games keep the full lastmove in the owning cell — no wire split.
   if (
     move != null &&
     layout.numcolumns > 1 &&
-    (layout.model === "simultaneous" || layout.model === "sequenced")
+    (layout.model === "simultaneous" ||
+      (layout.model === "sequenced" && layout.useRoundGrid))
   ) {
     const wire = wireMoveTokenForSeat(move, seatIdx, layout.numcolumns);
     if (wire !== null) {
