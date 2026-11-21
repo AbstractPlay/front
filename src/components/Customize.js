@@ -1924,15 +1924,10 @@ function Customize(props) {
             id="renderer-demo-output"
             className={
               metaGame && metaGame !== "_default"
-                ? `board _meta_${metaGame}`
-                : undefined
+                ? `customize-board-preview board _meta_${metaGame}`
+                : "customize-board-preview"
             }
-            style={{
-              border: "1px solid var(--tag-background-color)",
-              minHeight: "200px",
-              backgroundColor: background,
-              padding: "10px",
-            }}
+            style={{ backgroundColor: background }}
           ></div>
         </div>
         <div className="customize-page-settings">
