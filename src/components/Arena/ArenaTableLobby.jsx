@@ -46,9 +46,9 @@ export default function ArenaTableLobby() {
   const navigate = useNavigate();
   const globalMe = useStore((state) => state.globalMe);
   const { blockArenaRealtimeActions } = useRealtimeConnectionReady();
-  const realtimeActionDisabled = busy || blockArenaRealtimeActions;
   const allUsers = useStore((state) => state.users);
   const [busy, busySetter] = useState(false);
+  const realtimeActionDisabled = busy || blockArenaRealtimeActions;
   const [actionError, actionErrorSetter] = useState("");
   const [syncGame, syncGameSetter] = useState(null);
   const tableRef = useRef(null);
