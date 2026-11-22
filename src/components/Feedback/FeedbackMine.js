@@ -14,7 +14,10 @@ import {
   subscribeFeedback,
   voteFeedback,
 } from "../../lib/feedback/feedbackApi";
-import { feedbackDetailPath } from "../../lib/feedback/feedbackConstants";
+import {
+  compareFeedbackItems,
+  feedbackDetailPath,
+} from "../../lib/feedback/feedbackConstants";
 import { isFeedbackUnread } from "../../lib/feedback/feedbackLastSeen";
 import { filterFeedbackItemsByQuery } from "../../lib/feedback/filterFeedbackItemsByQuery";
 import { defaultFeedbackNewKinds } from "../../lib/notificationPrefs";
@@ -81,10 +84,10 @@ function FeedbackMine() {
     loadItems();
   }, [loadItems, status]);
 
-  const displayItems = useMemo(
-    () => filterFeedbackItemsByQuery(items, searchQuery),
-    [items, searchQuery],
-  );
+  const displayItems = useMemo(() => {
+    const ordered = [...items].sort((a, b) => compareFeedbackItems(a, b, "recent"));
+    return filterFeedbackItemsByQuery(ordered, searchQuery);
+  }, [items, searchQuery]);
 
   const handleUnvote = async (item) => {
     setActionError("");
