@@ -9,7 +9,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
-## [1.0.0-ci] - 2026-11-21
+## [1.0.0-ci] - 2026-11-22
 
 ### Added
 
@@ -18,6 +18,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **My feedback:** every kind/scope tab lists posts by newest-first (`createdAt`), so bugs and ideas interleave correctly on **All** instead of following DynamoDB kind-grouped order.
 - **Completed games:** “How ended” for normal endings interpolates `{{player}}` in `apresults` EOG copy when the index row includes `gameEndPlayer`.
 - **Customize:** board preview on game customize pages (e.g. GIPF) stays inside the output frame for rotated boards — SVG scales with `height: auto` instead of play-page `height: 100%`.
 
