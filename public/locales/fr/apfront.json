@@ -1218,7 +1218,26 @@
     "titleVariants": "Échelle {{metaGame}} ({{variants}})",
     "actionFailed": "Impossible d'effectuer cette action.",
     "tabs": {
-      "all": "Toutes les échelles"
+      "all": "Toutes les échelles",
+      "hub": "Sections du hub du classement",
+      "leaderboard": "Classement",
+      "activity": "Activité",
+      "chat": "Discussion"
+    },
+    "activity": {
+      "activeTitle": "Parties en cours",
+      "outcomesTitle": "Résultats récents",
+      "game": "Partie",
+      "lastMove": "Dernier coup",
+      "toMove": "Au trait",
+      "noActiveGames": "Aucune partie de classement en cours sur ce plateau.",
+      "settled": "Terminée",
+      "result": "Résultat",
+      "snapshotPending": "Détails du résultat en attente de mise à jour.",
+      "upset": "exploit",
+      "pointDelta": "+{{gain}} / −{{loss}}",
+      "rankShift": "#{{before}} → #{{after}}",
+      "noOutcomes": "Aucun résultat au cours des {{days}} derniers jours."
     },
     "status": {
       "forming": "En formation",

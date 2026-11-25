@@ -2183,6 +2183,58 @@
     "src": "Active ladders only",
     "out": "Échelles actives uniquement"
   },
+  "Ladder.activity.activeTitle": {
+    "src": "Active games",
+    "out": "Parties en cours"
+  },
+  "Ladder.activity.game": {
+    "src": "Game",
+    "out": "Partie"
+  },
+  "Ladder.activity.lastMove": {
+    "src": "Last move",
+    "out": "Dernier coup"
+  },
+  "Ladder.activity.noActiveGames": {
+    "src": "No active ladder games on this board.",
+    "out": "Aucune partie de classement en cours sur ce plateau."
+  },
+  "Ladder.activity.noOutcomes": {
+    "src": "No outcomes in the last {{days}} days.",
+    "out": "Aucun résultat au cours des {{days}} derniers jours."
+  },
+  "Ladder.activity.outcomesTitle": {
+    "src": "Recent outcomes",
+    "out": "Résultats récents"
+  },
+  "Ladder.activity.pointDelta": {
+    "src": "+{{gain}} / −{{loss}}",
+    "out": "+{{gain}} / −{{loss}}"
+  },
+  "Ladder.activity.rankShift": {
+    "src": "#{{before}} → #{{after}}",
+    "out": "#{{before}} → #{{after}}"
+  },
+  "Ladder.activity.result": {
+    "src": "Result",
+    "out": "Résultat"
+  },
+  "Ladder.activity.settled": {
+    "src": "Settled",
+    "out": "Terminée"
+  },
+  "Ladder.activity.snapshotPending": {
+    "src": "Outcome details pending backfill.",
+    "out": "Détails du résultat en attente de mise à jour."
+  },
+  "Ladder.activity.toMove": {
+    "src": "To move",
+    "out": "Au trait"
+  },
+  "Ladder.activity.upset": {
+    "src": "upset",
+    "out": "exploit"
+  },
   "Ladder.badge": {
     "src": "Ladder",
     "out": "Échelle"
@@ -2391,9 +2443,25 @@
     "src": "Suspended",
     "out": "Suspendue"
   },
+  "Ladder.tabs.activity": {
+    "src": "Activity",
+    "out": "Activité"
+  },
   "Ladder.tabs.all": {
     "src": "All ladders",
     "out": "Toutes les échelles"
+  },
+  "Ladder.tabs.chat": {
+    "src": "Chat",
+    "out": "Discussion"
+  },
+  "Ladder.tabs.hub": {
+    "src": "Ladder hub sections",
+    "out": "Sections du hub du classement"
+  },
+  "Ladder.tabs.leaderboard": {
+    "src": "Leaderboard",
+    "out": "Classement"
   },
   "Ladder.title": {
     "src": "{{metaGame}} ladder",

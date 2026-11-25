@@ -1218,7 +1218,26 @@
     "titleVariants": "Escalera de {{metaGame}} ({{variants}})",
     "actionFailed": "No se pudo completar esa acción.",
     "tabs": {
-      "all": "Todas las escaleras"
+      "all": "Todas las escaleras",
+      "hub": "Secciones de la escalera",
+      "leaderboard": "Tabla de clasificación",
+      "activity": "Actividad",
+      "chat": "Chat"
+    },
+    "activity": {
+      "activeTitle": "Partidas activas",
+      "outcomesTitle": "Resultados recientes",
+      "game": "Partida",
+      "lastMove": "Último movimiento",
+      "toMove": "Turno",
+      "noActiveGames": "No hay partidas de escalera activas en este tablero.",
+      "settled": "Finalizada",
+      "result": "Resultado",
+      "snapshotPending": "Detalles del resultado pendientes de completar.",
+      "upset": "sorpresa",
+      "pointDelta": "+{{gain}} / −{{loss}}",
+      "rankShift": "#{{before}} → #{{after}}",
+      "noOutcomes": "No hay resultados en los últimos {{days}} días."
     },
     "status": {
       "forming": "En formación",

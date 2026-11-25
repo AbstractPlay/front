@@ -1218,7 +1218,26 @@
     "titleVariants": "Scala {{metaGame}} ({{variants}})",
     "actionFailed": "Impossibile completare questa azione.",
     "tabs": {
-      "all": "Tutte le scale"
+      "all": "Tutte le scale",
+      "hub": "Sezioni dell'hub della ladder",
+      "leaderboard": "Classifica",
+      "activity": "Attività",
+      "chat": "Chat"
+    },
+    "activity": {
+      "activeTitle": "Partite attive",
+      "outcomesTitle": "Risultati recenti",
+      "game": "Partita",
+      "lastMove": "Ultima mossa",
+      "toMove": "Tocca a",
+      "noActiveGames": "Nessuna partita ladder attiva su questa plancia.",
+      "settled": "Conclusa",
+      "result": "Risultato",
+      "snapshotPending": "Dettagli del risultato in attesa di integrazione.",
+      "upset": "vittoria a sorpresa",
+      "pointDelta": "+{{gain}} / −{{loss}}",
+      "rankShift": "#{{before}} → #{{after}}",
+      "noOutcomes": "Nessun risultato negli ultimi {{days}} giorni."
     },
     "status": {
       "forming": "In formazione",

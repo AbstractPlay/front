@@ -2901,6 +2901,11 @@ span.hardTime::after {
     margin-bottom: 1.5rem;
   }
 
+  #ladderHub.ladder-hub .ladder-hub-tabs a {
+    text-decoration: none;
+    color: inherit;
+  }
+
   #ladderHub.ladder-hub .ladder-hub-section-body {
     background: var(--secondary-color-3-bg);
     border: 1px solid var(--tag-background-color);
