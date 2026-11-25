@@ -1218,7 +1218,26 @@
     "titleVariants": "{{metaGame}}-Rangliste ({{variants}})",
     "actionFailed": "Aktion konnte nicht ausgeführt werden.",
     "tabs": {
-      "all": "Alle Ranglisten"
+      "all": "Alle Ranglisten",
+      "hub": "Ranglisten-Hub-Bereiche",
+      "leaderboard": "Bestenliste",
+      "activity": "Aktivität",
+      "chat": "Chat"
+    },
+    "activity": {
+      "activeTitle": "Aktive Partien",
+      "outcomesTitle": "Kürzliche Ergebnisse",
+      "game": "Partie",
+      "lastMove": "Letzter Zug",
+      "toMove": "Am Zug",
+      "noActiveGames": "Keine aktiven Ranglistenspiele auf diesem Brett.",
+      "settled": "Abgeschlossen",
+      "result": "Ergebnis",
+      "snapshotPending": "Ergebnisdetails stehen noch aus.",
+      "upset": "Überraschungssieg",
+      "pointDelta": "+{{gain}} / −{{loss}}",
+      "rankShift": "#{{before}} → #{{after}}",
+      "noOutcomes": "Keine Ergebnisse in den letzten {{days}} Tagen."
     },
     "status": {
       "forming": "In Gründung",

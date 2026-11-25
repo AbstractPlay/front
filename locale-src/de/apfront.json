@@ -2183,6 +2183,58 @@
     "src": "Active ladders only",
     "out": "Nur aktive Ranglisten"
   },
+  "Ladder.activity.activeTitle": {
+    "src": "Active games",
+    "out": "Aktive Partien"
+  },
+  "Ladder.activity.game": {
+    "src": "Game",
+    "out": "Partie"
+  },
+  "Ladder.activity.lastMove": {
+    "src": "Last move",
+    "out": "Letzter Zug"
+  },
+  "Ladder.activity.noActiveGames": {
+    "src": "No active ladder games on this board.",
+    "out": "Keine aktiven Ranglistenspiele auf diesem Brett."
+  },
+  "Ladder.activity.noOutcomes": {
+    "src": "No outcomes in the last {{days}} days.",
+    "out": "Keine Ergebnisse in den letzten {{days}} Tagen."
+  },
+  "Ladder.activity.outcomesTitle": {
+    "src": "Recent outcomes",
+    "out": "Kürzliche Ergebnisse"
+  },
+  "Ladder.activity.pointDelta": {
+    "src": "+{{gain}} / −{{loss}}",
+    "out": "+{{gain}} / −{{loss}}"
+  },
+  "Ladder.activity.rankShift": {
+    "src": "#{{before}} → #{{after}}",
+    "out": "#{{before}} → #{{after}}"
+  },
+  "Ladder.activity.result": {
+    "src": "Result",
+    "out": "Ergebnis"
+  },
+  "Ladder.activity.settled": {
+    "src": "Settled",
+    "out": "Abgeschlossen"
+  },
+  "Ladder.activity.snapshotPending": {
+    "src": "Outcome details pending backfill.",
+    "out": "Ergebnisdetails stehen noch aus."
+  },
+  "Ladder.activity.toMove": {
+    "src": "To move",
+    "out": "Am Zug"
+  },
+  "Ladder.activity.upset": {
+    "src": "upset",
+    "out": "Überraschungssieg"
+  },
   "Ladder.badge": {
     "src": "Ladder",
     "out": "Rangliste"
@@ -2391,9 +2443,25 @@
     "src": "Suspended",
     "out": "Ausgesetzt"
   },
+  "Ladder.tabs.activity": {
+    "src": "Activity",
+    "out": "Aktivität"
+  },
   "Ladder.tabs.all": {
     "src": "All ladders",
     "out": "Alle Ranglisten"
+  },
+  "Ladder.tabs.chat": {
+    "src": "Chat",
+    "out": "Chat"
+  },
+  "Ladder.tabs.hub": {
+    "src": "Ladder hub sections",
+    "out": "Ranglisten-Hub-Bereiche"
+  },
+  "Ladder.tabs.leaderboard": {
+    "src": "Leaderboard",
+    "out": "Bestenliste"
   },
   "Ladder.title": {
     "src": "{{metaGame}} ladder",

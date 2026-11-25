@@ -2183,6 +2183,58 @@
     "src": "Active ladders only",
     "out": "Solo ladder attive"
   },
+  "Ladder.activity.activeTitle": {
+    "src": "Active games",
+    "out": "Partite attive"
+  },
+  "Ladder.activity.game": {
+    "src": "Game",
+    "out": "Partita"
+  },
+  "Ladder.activity.lastMove": {
+    "src": "Last move",
+    "out": "Ultima mossa"
+  },
+  "Ladder.activity.noActiveGames": {
+    "src": "No active ladder games on this board.",
+    "out": "Nessuna partita ladder attiva su questa plancia."
+  },
+  "Ladder.activity.noOutcomes": {
+    "src": "No outcomes in the last {{days}} days.",
+    "out": "Nessun risultato negli ultimi {{days}} giorni."
+  },
+  "Ladder.activity.outcomesTitle": {
+    "src": "Recent outcomes",
+    "out": "Risultati recenti"
+  },
+  "Ladder.activity.pointDelta": {
+    "src": "+{{gain}} / −{{loss}}",
+    "out": "+{{gain}} / −{{loss}}"
+  },
+  "Ladder.activity.rankShift": {
+    "src": "#{{before}} → #{{after}}",
+    "out": "#{{before}} → #{{after}}"
+  },
+  "Ladder.activity.result": {
+    "src": "Result",
+    "out": "Risultato"
+  },
+  "Ladder.activity.settled": {
+    "src": "Settled",
+    "out": "Conclusa"
+  },
+  "Ladder.activity.snapshotPending": {
+    "src": "Outcome details pending backfill.",
+    "out": "Dettagli del risultato in attesa di integrazione."
+  },
+  "Ladder.activity.toMove": {
+    "src": "To move",
+    "out": "Tocca a"
+  },
+  "Ladder.activity.upset": {
+    "src": "upset",
+    "out": "vittoria a sorpresa"
+  },
   "Ladder.badge": {
     "src": "Ladder",
     "out": "Scala"
@@ -2391,9 +2443,25 @@
     "src": "Suspended",
     "out": "Sospesa"
   },
+  "Ladder.tabs.activity": {
+    "src": "Activity",
+    "out": "Attività"
+  },
   "Ladder.tabs.all": {
     "src": "All ladders",
     "out": "Tutte le scale"
+  },
+  "Ladder.tabs.chat": {
+    "src": "Chat",
+    "out": "Chat"
+  },
+  "Ladder.tabs.hub": {
+    "src": "Ladder hub sections",
+    "out": "Sezioni dell'hub della ladder"
+  },
+  "Ladder.tabs.leaderboard": {
+    "src": "Leaderboard",
+    "out": "Classifica"
   },
   "Ladder.title": {
     "src": "{{metaGame}} ladder",
