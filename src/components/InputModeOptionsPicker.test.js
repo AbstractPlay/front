@@ -52,5 +52,11 @@ describe("InputModeOptionsPicker", () => {
     );
     expect(advanced).toBeChecked();
     expect(onChange).toHaveBeenCalledTimes(1);
+
+    rerender(
+      <InputModeOptionsPicker metaGame={metaGame} initialUid="basic" onChange={onChange} />,
+    );
+    expect(screen.getByRole("radio", { name: "Basic" })).toBeChecked();
+    expect(onChange).toHaveBeenCalledTimes(1);
   });
 });

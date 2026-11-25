@@ -94,15 +94,17 @@ function InputModeOptionsPicker({
   const [groupVariants, groupVariantsSetter] = useState({});
   const [groupData, groupDataSetter] = useState([]);
   const [allModes, allModesSetter] = useState([]);
+  const initialUidRef = useRef(initialUid);
   const lastEmittedRef = useRef(null);
-  const pendingChangeRef = useRef(false);
+  const initializedGroupDataRef = useRef(null);
   const { t } = useTranslation();
 
   /** @type {[string | undefined, React.Dispatch<React.SetStateAction<string | undefined>>]} */
   const [ungroupedChoice, ungroupedChoiceSetter] = useState(undefined);
 
   useEffect(() => {
-    pendingChangeRef.current = false;
+    initialUidRef.current = initialUid;
+    initializedGroupDataRef.current = null;
     if (metaGame === undefined || metaGame === null || metaGame === "") {
       groupDataSetter([]);
       allModesSetter([]);
@@ -138,10 +140,10 @@ function InputModeOptionsPicker({
     groupDataSetter(builtGroupData);
     const defs = info.inputModes ?? [];
     const incomingInit =
-      initialUid !== undefined &&
-      initialUid !== null &&
-      String(initialUid) !== ""
-        ? [String(initialUid)]
+      initialUidRef.current !== undefined &&
+      initialUidRef.current !== null &&
+      String(initialUidRef.current) !== ""
+        ? [String(initialUidRef.current)]
         : [];
     const sanitized = sanitizeInputModeSelection(defs, incomingInit);
     if (builtGroupData.length === 0) {
@@ -165,20 +167,15 @@ function InputModeOptionsPicker({
         sanitized.find((u) => !u.startsWith("#")) ?? sanitized[0] ?? undefined;
       lastEmittedRef.current = first;
     }
+    initializedGroupDataRef.current = builtGroupData;
   }, [metaGame, initialUid]);
 
   const handleGroupChange = useCallback((group, variant) => {
-    pendingChangeRef.current = true;
     groupVariantsSetter((current) => ({
       ...current,
       [group]: variant,
     }));
   }, []);
-
-  const handleUngroupedChange = (uid) => {
-    pendingChangeRef.current = true;
-    ungroupedChoiceSetter(uid);
-  };
 
   const activeUids = useMemo(() => {
     if (groupData.length === 0 && ungroupedChoice !== undefined) {
@@ -195,9 +192,15 @@ function InputModeOptionsPicker({
   }, [activeUids, allModes, disableFields]);
 
   useEffect(() => {
-    // Initializing from props can leave this render's selection out of date.
-    // Only send changes initiated by a click back to the modal.
-    if (!pendingChangeRef.current || allModes.length === 0) {
+    // This effect can still see the render before initialization queued its state.
+    if (initializedGroupDataRef.current !== groupData) {
+      return;
+    }
+    if (allModes.length === 0) {
+      if (lastEmittedRef.current !== undefined) {
+        lastEmittedRef.current = undefined;
+        onChange?.(undefined);
+      }
       return;
     }
     const defs = gameinfo.get(metaGame)?.inputModes ?? [];
@@ -222,7 +225,6 @@ function InputModeOptionsPicker({
       }
       active = sanitized;
     }
-    pendingChangeRef.current = false;
     const concrete = active.find((u) => !u.startsWith("#"));
     if (concrete === lastEmittedRef.current) {
       return;
@@ -234,7 +236,7 @@ function InputModeOptionsPicker({
     allModes,
     disableFields,
     groupVariants,
-    groupData.length,
+    groupData,
     metaGame,
     onChange,
   ]);
@@ -286,7 +288,7 @@ function InputModeOptionsPicker({
                       value={d.uid}
                       name="inputMode-ungrouped"
                       checked={ungroupedChoice === d.uid}
-                      onChange={() => handleUngroupedChange(d.uid)}
+                      onChange={() => ungroupedChoiceSetter(d.uid)}
                       disabled={isOptionDisabled}
                     />
                     {d.name ?? d.uid}
