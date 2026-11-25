@@ -15,6 +15,10 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 - **Ladder hub:** hash tabs (Leaderboard, Activity, Chat); Activity tab loads `get_ladder_activity` (active games table + 30-day outcome log).
 
+### Fixed
+
+- **Dashboard ladders:** “Your ladders” table shows pagination and page-size controls when you belong to more than 10 ladders (full list still comes from `me_dashboard`; only the first page was visible before).
+
 ## [1.0.0-ci] - 2026-11-22
 
 ### Added
