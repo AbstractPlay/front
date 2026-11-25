@@ -27,7 +27,12 @@ self.addEventListener('push', event => {
               includeUncontrolled: true,
             }).then((windowClients) => {
                 windowClients.forEach((windowClient) => {
-                    windowClient.postMessage({ title, ...options });
+                    windowClient.postMessage({
+                        title,
+                        ...options,
+                        topic: data.topic || options.tag,
+                        collapseKey: data.collapseKey,
+                    });
                 });
             });
         }

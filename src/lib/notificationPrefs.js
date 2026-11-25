@@ -55,6 +55,24 @@ function defaultNotificationMap(keys) {
   return Object.fromEntries(keys.map((key) => [key, true]));
 }
 
+export const PUSH_NOTIFICATION_KEYS = EMAIL_NOTIFICATION_KEYS;
+
+export function defaultPushNotifications(existing) {
+  const settings = {
+    ...defaultNotificationMap(PUSH_NOTIFICATION_KEYS),
+    ...(existing ?? {}),
+  };
+  for (const key of PUSH_NOTIFICATION_KEYS) {
+    if (!Object.prototype.hasOwnProperty.call(settings, key)) {
+      settings[key] = key === "announcements" ? false : true;
+    }
+  }
+  if (!Object.prototype.hasOwnProperty.call(settings, "announcements")) {
+    settings.announcements = false;
+  }
+  return settings;
+}
+
 export function defaultEmailNotifications(existing) {
   const settings = {
     ...defaultNotificationMap(EMAIL_NOTIFICATION_KEYS),
