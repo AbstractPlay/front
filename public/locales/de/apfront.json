@@ -1236,7 +1236,9 @@
       "snapshotPending": "Ergebnisdetails stehen noch aus.",
       "upset": "Überraschungssieg",
       "pointDelta": "+{{gain}} / −{{loss}}",
-      "rankShift": "#{{before}} → #{{after}}",
+      "winnerRank": "Sieger-Rang",
+      "rankShift": "Sieger #{{before}} → #{{after}}",
+      "loserRankShift": "Verlierer #{{before}} → #{{after}}",
       "noOutcomes": "Keine Ergebnisse in den letzten {{days}} Tagen."
     },
     "status": {
