@@ -3,6 +3,28 @@ import { callAuthApi } from "./api";
 import { resolveAuthSession } from "./authSession";
 import { parseAuthResponse } from "./parseAuthResponse";
 
+export async function fetchLadderActivity(ladderId) {
+  const session = await resolveAuthSession();
+  if (session.status === "ready") {
+    const res = await callAuthApi("get_ladder_activity", { ladderId }, false);
+    if (res) {
+      const parsed = await parseAuthResponse(res);
+      if (parsed.ok) {
+        return parsed.data;
+      }
+    }
+  }
+
+  const url = new URL(API_ENDPOINT_OPEN);
+  url.searchParams.append("query", "get_ladder_activity");
+  url.searchParams.append("ladderId", ladderId);
+  const res = await fetch(url);
+  if (res.status !== 200) {
+    return null;
+  }
+  return res.json();
+}
+
 export async function fetchLadderDetail(ladderId) {
   const session = await resolveAuthSession();
   if (session.status === "ready") {

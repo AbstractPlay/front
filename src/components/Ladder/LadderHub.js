@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { gameinfo } from "@abstractplay/gameslib";
 import { useTranslation } from "react-i18next";
 import PageHelmet from "../PageHelmet";
@@ -16,7 +16,14 @@ import {
 import UserChats from "../GameMove/UserChats";
 import { callAuthApi } from "../../lib/api";
 import { parseAuthResponse } from "../../lib/parseAuthResponse";
-import { fetchLadderDetail } from "../../lib/fetchLadder";
+import { fetchLadderActivity, fetchLadderDetail } from "../../lib/fetchLadder";
+import {
+  LADDER_HUB_TABS,
+  ladderHubTabFromHash,
+  ladderHubTabHref,
+} from "../../lib/ladderHubTabs";
+import LadderActiveGamesTable from "./LadderActiveGamesTable";
+import LadderOutcomeLog from "./LadderOutcomeLog";
 import { ladderDetailPathActive } from "../../lib/ladderRoutes";
 import { canCommentLadderChat, ladderChatPlayers } from "../../lib/ladderChat";
 import { fetchDashboard } from "../../lib/globalMeBootstrap";
@@ -39,6 +46,8 @@ function LadderHub() {
   const { t } = useTranslation();
   const { ladderid } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const activeTab = ladderHubTabFromHash(location.hash);
   const allUsers = useStore((state) => state.users);
   const globalMe = useStore((state) => state.globalMe);
   const wsSend = useStore((state) => state.wsSend);
@@ -47,6 +56,8 @@ function LadderHub() {
   const [poolQueued, poolQueuedSetter] = useState(false);
   const [actionError, actionErrorSetter] = useState("");
   const [busy, busySetter] = useState(false);
+  const [activityPayload, activityPayloadSetter] = useState(null);
+  const [activityStatus, activityStatusSetter] = useState("idle");
 
   const canonicalPath = ladderDetailPathActive(ladderid);
 
@@ -100,6 +111,24 @@ function LadderHub() {
     window.addEventListener("refresh-ladder", onRefresh);
     return () => window.removeEventListener("refresh-ladder", onRefresh);
   }, [ladderid, reload]);
+
+  useEffect(() => {
+    if (!ladderid || activeTab !== "activity") {
+      return;
+    }
+    let cancelled = false;
+    activityStatusSetter("loading");
+    (async () => {
+      const data = await fetchLadderActivity(ladderid);
+      if (!cancelled) {
+        activityPayloadSetter(data);
+        activityStatusSetter(data ? "ok" : "error");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [ladderid, activeTab, payload?.ladder?.activeMemberCount]);
 
   const ladder = payload?.ladder;
   const board = payload?.board ?? [];
@@ -473,81 +502,127 @@ function LadderHub() {
           </LadderSection>
         )}
 
-        <section className="ladder-hub-section">
-          <p className="subtitle lined">
-            <span>{t("Ladder.leaderboard")}</span>
-          </p>
-          <div className="table-container ladder-hub-table-wrap">
-          <table className="table apTable is-fullwidth">
-            <thead>
-              <tr>
-                <th>{t("Ladder.rank")}</th>
-                <th>{t("Tournament.Player")}</th>
-                <th>{t("Ladder.points")}</th>
-                <th>{t("Ladder.activeGames")}</th>
-                {isActive ? <th>{t("Ladder.challenge")}</th> : null}
-              </tr>
-            </thead>
-            <tbody>
-              {board.map((row) => (
-                <tr
-                  key={row.userid}
-                  className={row.withinReach ? "ladder-within-reach" : ""}
-                >
-                  <td>{row.rank}</td>
-                  <td>
-                    <BotAwareName
-                      id={row.userid}
-                      users={allUsers}
-                      link
-                    />
-                  </td>
-                  <td>{formatLadderPoints(row.points)}</td>
-                  <td>{row.activeLadderGameCount ?? 0}</td>
-                  {isActive && row.userid !== globalMe?.id ? (
-                    <td>
-                      <button
-                        type="button"
-                        className="button is-small apButton"
-                        disabled={
-                          busy ||
-                          matchmakingDisabled ||
-                          !row.withinReach ||
-                          ladderChallengesIssued.length > 0
-                        }
-                        onClick={() => handleChallenge(row.userid, false)}
-                      >
-                        {t("Ladder.challenge")}
-                      </button>
-                    </td>
-                  ) : isActive ? (
-                    <td />
-                  ) : null}
-                </tr>
+        <nav className="ladder-hub-tabs mb-4" aria-label={t("Ladder.tabs.hub")}>
+          <div className="tabs is-small is-toggle is-toggle-rounded is-centered">
+            <ul>
+              {LADDER_HUB_TABS.map((tab) => (
+                <li key={tab.id} className={activeTab === tab.id ? "is-active" : ""}>
+                  <Link to={ladderHubTabHref(ladderid, tab.id)} replace>
+                    <span>{t(tab.nameKey)}</span>
+                  </Link>
+                </li>
               ))}
-            </tbody>
-          </table>
+            </ul>
           </div>
-        </section>
+        </nav>
 
-        <section className="ladder-hub-section ladder-hub-chat">
-          <div className="card ladder-hub-card">
-            <header className="card-header">
-              <p className="card-header-title">{t("Ladder.chat")}</p>
-            </header>
-            <div className="card-content">
-              <UserChats
-                comments={comments}
-                players={chatPlayers}
-                gameid={ladderid}
-                canComment={canComment}
-                handleSubmit={submitLadderComment}
-                tooMuch={false}
-                commentingCompletedGame={false}
-              />
+        {activeTab === "leaderboard" ? (
+          <section className="ladder-hub-section">
+            <p className="subtitle lined">
+              <span>{t("Ladder.leaderboard")}</span>
+            </p>
+            <div className="table-container ladder-hub-table-wrap">
+            <table className="table apTable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>{t("Ladder.rank")}</th>
+                  <th>{t("Tournament.Player")}</th>
+                  <th>{t("Ladder.points")}</th>
+                  <th>{t("Ladder.activeGames")}</th>
+                  {isActive ? <th>{t("Ladder.challenge")}</th> : null}
+                </tr>
+              </thead>
+              <tbody>
+                {board.map((row) => (
+                  <tr
+                    key={row.userid}
+                    className={row.withinReach ? "ladder-within-reach" : ""}
+                  >
+                    <td>{row.rank}</td>
+                    <td>
+                      <BotAwareName
+                        id={row.userid}
+                        users={allUsers}
+                        link
+                      />
+                    </td>
+                    <td>{formatLadderPoints(row.points)}</td>
+                    <td>{row.activeLadderGameCount ?? 0}</td>
+                    {isActive && row.userid !== globalMe?.id ? (
+                      <td>
+                        <button
+                          type="button"
+                          className="button is-small apButton"
+                          disabled={
+                            busy ||
+                            matchmakingDisabled ||
+                            !row.withinReach ||
+                            ladderChallengesIssued.length > 0
+                          }
+                          onClick={() => handleChallenge(row.userid, false)}
+                        >
+                          {t("Ladder.challenge")}
+                        </button>
+                      </td>
+                    ) : isActive ? (
+                      <td />
+                    ) : null}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
             </div>
-          </div>
-        </section>
+          </section>
+        ) : null}
+
+        {activeTab === "activity" ? (
+          <>
+            <LadderSection title={t("Ladder.activity.activeTitle")}>
+              {activityStatus === "loading" ? (
+                <p className="help">{t("Ladder.loading")}</p>
+              ) : activityStatus === "error" ? (
+                <p className="help">{t("Ladder.actionFailed")}</p>
+              ) : (
+                <LadderActiveGamesTable
+                  games={activityPayload?.activeGames}
+                  metaGame={ladder.metaGame}
+                />
+              )}
+            </LadderSection>
+            <LadderSection title={t("Ladder.activity.outcomesTitle")}>
+              {activityStatus === "loading" ? (
+                <p className="help">{t("Ladder.loading")}</p>
+              ) : (
+                <LadderOutcomeLog
+                  outcomes={activityPayload?.outcomes}
+                  metaGame={ladder.metaGame}
+                  windowDays={activityPayload?.windowDays}
+                />
+              )}
+            </LadderSection>
+          </>
+        ) : null}
+
+        {activeTab === "chat" ? (
+          <section className="ladder-hub-section ladder-hub-chat">
+            <div className="card ladder-hub-card">
+              <header className="card-header">
+                <p className="card-header-title">{t("Ladder.chat")}</p>
+              </header>
+              <div className="card-content">
+                <UserChats
+                  comments={comments}
+                  players={chatPlayers}
+                  gameid={ladderid}
+                  canComment={canComment}
+                  handleSubmit={submitLadderComment}
+                  tooMuch={false}
+                  commentingCompletedGame={false}
+                />
+              </div>
+            </div>
+          </section>
+        ) : null}
           </div>
         </div>
       </article>

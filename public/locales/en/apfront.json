@@ -1218,7 +1218,26 @@
     "titleVariants": "{{metaGame}} ladder ({{variants}})",
     "actionFailed": "Could not complete that action.",
     "tabs": {
-      "all": "All ladders"
+      "all": "All ladders",
+      "hub": "Ladder hub sections",
+      "leaderboard": "Leaderboard",
+      "activity": "Activity",
+      "chat": "Chat"
+    },
+    "activity": {
+      "activeTitle": "Active games",
+      "outcomesTitle": "Recent outcomes",
+      "game": "Game",
+      "lastMove": "Last move",
+      "toMove": "To move",
+      "noActiveGames": "No active ladder games on this board.",
+      "settled": "Settled",
+      "result": "Result",
+      "snapshotPending": "Outcome details pending backfill.",
+      "upset": "upset",
+      "pointDelta": "+{{gain}} / −{{loss}}",
+      "rankShift": "#{{before}} → #{{after}}",
+      "noOutcomes": "No outcomes in the last {{days}} days."
     },
     "status": {
       "forming": "Forming",
