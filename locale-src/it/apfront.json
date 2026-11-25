@@ -2195,6 +2195,10 @@
     "src": "Last move",
     "out": "Ultima mossa"
   },
+  "Ladder.activity.loserRankShift": {
+    "src": "Loser #{{before}} → #{{after}}",
+    "out": "Sconfitto #{{before}} → #{{after}}"
+  },
   "Ladder.activity.noActiveGames": {
     "src": "No active ladder games on this board.",
     "out": "Nessuna partita ladder attiva su questa plancia."
@@ -2212,8 +2216,8 @@
     "out": "+{{gain}} / −{{loss}}"
   },
   "Ladder.activity.rankShift": {
-    "src": "#{{before}} → #{{after}}",
-    "out": "#{{before}} → #{{after}}"
+    "src": "Winner #{{before}} → #{{after}}",
+    "out": "Vincitore #{{before}} → #{{after}}"
   },
   "Ladder.activity.result": {
     "src": "Result",
@@ -2234,6 +2238,10 @@
   "Ladder.activity.upset": {
     "src": "upset",
     "out": "vittoria a sorpresa"
+  },
+  "Ladder.activity.winnerRank": {
+    "src": "Winner rank",
+    "out": "Posizione del vincitore"
   },
   "Ladder.badge": {
     "src": "Ladder",

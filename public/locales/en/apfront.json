@@ -1236,7 +1236,9 @@
       "snapshotPending": "Outcome details pending backfill.",
       "upset": "upset",
       "pointDelta": "+{{gain}} / −{{loss}}",
-      "rankShift": "#{{before}} → #{{after}}",
+      "winnerRank": "Winner rank",
+      "rankShift": "Winner #{{before}} → #{{after}}",
+      "loserRankShift": "Loser #{{before}} → #{{after}}",
       "noOutcomes": "No outcomes in the last {{days}} days."
     },
     "status": {
