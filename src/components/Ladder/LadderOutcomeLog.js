@@ -88,7 +88,7 @@ function LadderOutcomeLog({ outcomes, metaGame, windowDays }) {
       }),
       columnHelper.display({
         id: "ranks",
-        header: t("Ladder.rank"),
+        header: t("Ladder.activity.winnerRank"),
         cell: ({ row }) => {
           const o = row.original;
           if (!o.snapshotComplete || o.outcome !== "win") {
@@ -100,10 +100,28 @@ function LadderOutcomeLog({ outcomes, metaGame, windowDays }) {
           ) {
             return "—";
           }
-          return t("Ladder.activity.rankShift", {
+          const winnerLine = t("Ladder.activity.rankShift", {
             before: o.winnerRankBefore,
             after: o.winnerRankAfter,
           });
+          const loserMoved =
+            o.loserRankBefore !== undefined &&
+            o.loserRankAfter !== undefined &&
+            o.loserRankBefore !== o.loserRankAfter;
+          if (!loserMoved) {
+            return winnerLine;
+          }
+          const loserLine = t("Ladder.activity.loserRankShift", {
+            before: o.loserRankBefore,
+            after: o.loserRankAfter,
+          });
+          return (
+            <span className="ladder-outcome-ranks">
+              <span>{winnerLine}</span>
+              <br />
+              <span className="help is-size-7">{loserLine}</span>
+            </span>
+          );
         },
       }),
     ],
