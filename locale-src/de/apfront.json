@@ -2691,6 +2691,14 @@
     "src": "Dashboard notification feed on your home page.",
     "out": "Benachrichtigungs-Feed auf deiner Startseite."
   },
+  "NotificationSettingsPush": {
+    "src": "Push (all devices)",
+    "out": "Push (alle Geräte)"
+  },
+  "NotificationSettingsPushHelp": {
+    "src": "Category choices apply on every browser or device where you enable push. Turn on push on this device first to edit them here.",
+    "out": "Die Kategorieauswahl gilt für jeden Browser und jedes Gerät, auf dem du Push-Benachrichtigungen aktivierst. Aktiviere Push zuerst auf diesem Gerät, um sie hier zu bearbeiten."
+  },
   "NotificationSettingsSaveHelp": {
     "src": "Changes save instantly.",
     "out": "Änderungen werden sofort gespeichert."
@@ -2894,6 +2902,38 @@
   "PushEnableFailed": {
     "src": "Failed to enable push notifications on this device.",
     "out": "Push-Benachrichtigungen konnten auf diesem Gerät nicht aktiviert werden."
+  },
+  "PushNotifyLabel-announcements": {
+    "src": "Site announcements",
+    "out": "Website-Ankündigungen"
+  },
+  "PushNotifyLabel-challenges": {
+    "src": "Challenges",
+    "out": "Herausforderungen"
+  },
+  "PushNotifyLabel-eventEnd": {
+    "src": "Organized event end",
+    "out": "Ende organisierter Events"
+  },
+  "PushNotifyLabel-gameEnd": {
+    "src": "Game end",
+    "out": "Spielende"
+  },
+  "PushNotifyLabel-gameStart": {
+    "src": "Game start",
+    "out": "Spielstart"
+  },
+  "PushNotifyLabel-tournamentEnd": {
+    "src": "Tournament end",
+    "out": "Turnierende"
+  },
+  "PushNotifyLabel-tournamentStart": {
+    "src": "Tournament start",
+    "out": "Turnierstart"
+  },
+  "PushNotifyLabel-yourturn": {
+    "src": "Your turn (realtime when a tab is open)",
+    "out": "Du bist am Zug (Echtzeit, wenn ein Tab geöffnet ist)"
   },
   "PushOnThisDevice": {
     "src": "Enable push notifications on this device",

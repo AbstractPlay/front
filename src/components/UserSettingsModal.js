@@ -49,9 +49,11 @@ import {
   defaultEmailNotifications,
   defaultFeedbackNewKinds,
   defaultInAppNotifications,
+  defaultPushNotifications,
   EMAIL_NOTIFICATION_KEYS,
   FEEDBACK_NEW_KIND_KEYS,
   IN_APP_NOTIFICATION_KEYS,
+  PUSH_NOTIFICATION_KEYS,
 } from "../lib/notificationPrefs";
 
 const USER_SETTINGS_TABS = [
@@ -138,6 +140,7 @@ function UserSettingsModal(props) {
   const { email: sessionEmail, username: loginName } = useAuthSession();
   const [updated, updatedSetter] = useState(0);
   const [notifications, notificationsSetter] = useState(null);
+  const [pushNotifications, pushNotificationsSetter] = useState(null);
   const [inAppNotifications, inAppNotificationsSetter] = useState(null);
   const [feedbackNewKinds, feedbackNewKindsSetter] = useState(() => defaultFeedbackNewKinds());
   const [exploration, explorationSetter] = useState(null);
@@ -179,6 +182,13 @@ function UserSettingsModal(props) {
       );
     } else {
       notificationsSetter(defaultEmailNotifications());
+    }
+    if (globalMe?.settings?.all?.pushNotifications) {
+      pushNotificationsSetter(
+        defaultPushNotifications(globalMe.settings.all.pushNotifications),
+      );
+    } else {
+      pushNotificationsSetter(defaultPushNotifications());
     }
     if (globalMe?.settings?.all?.inAppNotifications) {
       inAppNotificationsSetter(
@@ -421,6 +431,15 @@ function UserSettingsModal(props) {
     const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
     if (newSettings.all === undefined) newSettings.all = {};
     newSettings.all.notifications = { ...notifications, [key]: next };
+    handleSettingsChange(newSettings);
+  };
+
+  const handlePushNotifyCheckChange = async (key) => {
+    const next = !pushNotifications[key];
+    pushNotificationsSetter((prev) => ({ ...prev, [key]: next }));
+    const newSettings = JSON.parse(JSON.stringify(globalMe.settings));
+    if (newSettings.all === undefined) newSettings.all = {};
+    newSettings.all.pushNotifications = { ...pushNotifications, [key]: next };
     handleSettingsChange(newSettings);
   };
 
@@ -1065,6 +1084,9 @@ function UserSettingsModal(props) {
           </div>
           {/********************* push notifications *********************/}
           <div className="field" key="pushNotifications">
+            <p className="label is-small mb-1 mt-3">
+              {t("NotificationSettingsPush")}
+            </p>
             <div className="control">
               <label className="checkbox is-small">
                 <input
@@ -1082,10 +1104,32 @@ function UserSettingsModal(props) {
                 type="button"
                 className="button is-small is-danger is-light"
                 onClick={handleUnregisterAllDevices}
+                disabled={!pushOnThisDevice}
               >
                 {t("UnregisterAllDevices")}
               </button>
             </div>
+            <p className="help">{t("NotificationSettingsPushHelp")}</p>
+            {!pushNotifications
+              ? ""
+              : PUSH_NOTIFICATION_KEYS.map((key) => (
+                  <div className="control" key={`push-${key}`}>
+                    <label
+                      className={
+                        pushOnThisDevice ? "checkbox" : "checkbox has-text-grey"
+                      }
+                    >
+                      <input
+                        type="checkbox"
+                        name={`push-${key}`}
+                        checked={pushNotifications[key]}
+                        disabled={!pushOnThisDevice}
+                        onChange={() => handlePushNotifyCheckChange(key)}
+                      />
+                      {t(`PushNotifyLabel-${key}`)}
+                    </label>
+                  </div>
+                ))}
           </div>
             </div>
           ) : null}
