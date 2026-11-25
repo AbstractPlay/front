@@ -35,7 +35,12 @@ if ("serviceWorker" in navigator) {
 
     const message = data.title ? `${data.title}: ${data.body}` : data.body;
     const url = data.data?.url;
+    const topic = data.tag || data.topic || "default";
+    const collapseKey =
+      data.collapseKey ||
+      (url ? `push:${topic}:${url}` : `push:${topic}`);
     toast(message, {
+      toastId: collapseKey,
       onClick: () => {
         if (url) {
           window.location.href = url;
