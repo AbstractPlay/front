@@ -19,6 +19,8 @@ import { formatLadderPoints } from "../../lib/formatLadderPoints";
 import { useSyncTablePageSize } from "../../hooks/useTanstackTableEffects";
 import { usePersistedTableSorting } from "../../hooks/usePersistedTableSorting";
 
+const allSize = Number.MAX_SAFE_INTEGER;
+
 function YourLaddersTable({ memberships, onVacation = false }) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -26,7 +28,10 @@ function YourLaddersTable({ memberships, onVacation = false }) {
     "dashboard-tables-ladders-sort",
     [{ id: "metaGame", desc: false }]
   );
-  const [showState] = useStorageState("dashboard-tables-ladders-show", 10);
+  const [showState, setShowState] = useStorageState(
+    "dashboard-tables-ladders-show",
+    10
+  );
   const [busyLadderId, busyLadderIdSetter] = useState(null);
   const [poolOverrides, poolOverridesSetter] = useState({});
   const [actionError, actionErrorSetter] = useState("");
@@ -238,6 +243,80 @@ function YourLaddersTable({ memberships, onVacation = false }) {
           ))}
         </tbody>
       </table>
+
+      {data.length > 10 ? (
+        <div className="level smallerText tableNav">
+          <div className="level-left">
+            <div className="level-item">
+              <button
+                type="button"
+                className="button is-small"
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-angle-double-left"></i>
+                </span>
+              </button>
+              <button
+                type="button"
+                className="button is-small"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-angle-left"></i>
+                </span>
+              </button>
+              <button
+                type="button"
+                className="button is-small"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-angle-right"></i>
+                </span>
+              </button>
+              <button
+                type="button"
+                className="button is-small"
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={!table.getCanNextPage()}
+              >
+                <span className="icon is-small">
+                  <i className="fa fa-angle-double-right"></i>
+                </span>
+              </button>
+            </div>
+            <div className="level-item">
+              <p>
+                Page{" "}
+                <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
+                <strong>{table.getPageCount()}</strong>
+              </p>
+            </div>
+          </div>
+          <div className="level-right">
+            <div className="level-item">
+              <div className="select is-small">
+                <select
+                  value={table.getState().pagination.pageSize}
+                  onChange={(e) => {
+                    setShowState(Number(e.target.value));
+                  }}
+                >
+                  {[10, 20, 30, 40, 50, allSize].map((pageSize) => (
+                    <option key={pageSize} value={pageSize}>
+                      Show {pageSize === allSize ? "All" : pageSize}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
