@@ -8,6 +8,7 @@ import { sessionExplorationAllowed } from "../../../lib/effectiveGameFlags";
 import { resolveCustomButtonLabel } from "../../../lib/customButtonLabel";
 import TeachingMoveControls from "../TeachingMoveControls";
 import MoveEntryField from "../MoveEntryField";
+import { shouldShowCompleteMoveButton } from "../../../lib/GameMove/completePartialMove";
 
 function CardMovePath(props) {
   const state = useDockMoveEntry(props);
@@ -237,7 +238,7 @@ function CardMovePath(props) {
             {t("ClaimTimeOut")}
           </button>
         ) : null}
-        {move.valid && move.complete === 0 && move.move.length > 0 ? (
+        {shouldShowCompleteMoveButton(move, moveDraft) ? (
           <button
             type="button"
             className="button apButton"

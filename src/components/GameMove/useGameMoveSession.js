@@ -51,6 +51,7 @@ import { toast } from "react-toastify";
 import { nanoid } from "nanoid";
 import { useStore } from "../../stores";
 import { useMoveEntryDraft } from "../../lib/GameMove/useMoveEntryDraft";
+import { completePartialMoveFromDraft } from "../../lib/GameMove/completePartialMove";
 import { appendMovePartToDraft } from "../../lib/GameMove/moveEntryDraft";
 
 // import helpers
@@ -2156,8 +2157,20 @@ export function useGameMoveSession(props) {
 
   // handler when user clicks on "complete move" (for a partial move that could be complete)
   const handleView = () => {
-    const newmove = cloneDeep(move);
-    newmove.complete = 1;
+    const gameEngineTmp = createEngineAtFocus(
+      gameRef.current,
+      explorationRef.current.nodes,
+      focus
+    );
+    const validate = (value) =>
+      gameRef.current.simultaneous
+        ? gameEngineTmp.validateMove(value, gameRef.current.me + 1)
+        : gameEngineTmp.validateMove(value);
+    const newmove = completePartialMoveFromDraft({
+      move,
+      moveDraft: moveDraftRef.current,
+      validate,
+    });
     processNewMove(
       newmove,
       explorer,
