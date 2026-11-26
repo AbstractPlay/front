@@ -96,7 +96,7 @@ function InputModeOptionsPicker({
   const [allModes, allModesSetter] = useState([]);
   const initialUidRef = useRef(initialUid);
   const lastEmittedRef = useRef(null);
-  const initDoneRef = useRef(false);
+  const initializedGroupDataRef = useRef(null);
   const { t } = useTranslation();
 
   /** @type {[string | undefined, React.Dispatch<React.SetStateAction<string | undefined>>]} */
@@ -104,7 +104,7 @@ function InputModeOptionsPicker({
 
   useEffect(() => {
     initialUidRef.current = initialUid;
-    initDoneRef.current = false;
+    initializedGroupDataRef.current = null;
     if (metaGame === undefined || metaGame === null || metaGame === "") {
       groupDataSetter([]);
       allModesSetter([]);
@@ -155,7 +155,6 @@ function InputModeOptionsPicker({
       ungroupedChoiceSetter(pick);
       groupVariantsSetter({});
       lastEmittedRef.current = pick;
-      initDoneRef.current = true;
     } else {
       const applied = applySanitizedInputModeSelection(
         sanitized,
@@ -167,8 +166,8 @@ function InputModeOptionsPicker({
       const first =
         sanitized.find((u) => !u.startsWith("#")) ?? sanitized[0] ?? undefined;
       lastEmittedRef.current = first;
-      initDoneRef.current = true;
     }
+    initializedGroupDataRef.current = builtGroupData;
   }, [metaGame, initialUid]);
 
   const handleGroupChange = useCallback((group, variant) => {
@@ -193,7 +192,8 @@ function InputModeOptionsPicker({
   }, [activeUids, allModes, disableFields]);
 
   useEffect(() => {
-    if (!initDoneRef.current) {
+    // This effect can still see the render before initialization queued its state.
+    if (initializedGroupDataRef.current !== groupData) {
       return;
     }
     if (allModes.length === 0) {
@@ -236,7 +236,7 @@ function InputModeOptionsPicker({
     allModes,
     disableFields,
     groupVariants,
-    groupData.length,
+    groupData,
     metaGame,
     onChange,
   ]);
