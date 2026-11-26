@@ -17,6 +17,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 ### Fixed
 
+- **Input Mode picker:** opening board options keeps the selected mode stable.
 - **Dashboard ladders:** “Your ladders” table shows pagination and page-size controls when you belong to more than 10 ladders (full list still comes from `me_dashboard`; only the first page was visible before).
 
 ## [1.0.0-ci] - 2026-11-22
