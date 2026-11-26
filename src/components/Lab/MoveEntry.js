@@ -12,6 +12,7 @@ import {
   ExplorationPlayerWinMarkButton,
   ExplorationUndecidedMarkButton,
 } from "../GameMove/ExplorationOutcomeIndicator.js";
+import { shouldShowCompleteMoveButton } from "../../lib/GameMove/completePartialMove";
 
 // Safely get buttons from engine, returning empty array if engine isn't ready or throws
 function safeGetButtons(engine) {
@@ -267,7 +268,7 @@ function MoveEntry(props) {
                         </div>
                       ))}
                   </div>
-                  {!Array.isArray(moves) ? null : (
+                  {Array.isArray(moves) && moves.length > 0 ? (
                     <div className="control">
                       <button
                         className="button is-small apButtonNeutral"
@@ -280,7 +281,7 @@ function MoveEntry(props) {
                         Random move
                       </button>
                     </div>
-                  )}
+                  ) : null}
                   <p className="lined">
                     <span>{t("Or")}</span>
                   </p>
@@ -307,7 +308,7 @@ function MoveEntry(props) {
                 t={t}
               />
               <div>
-                {move.valid && move.complete === 0 && move.move.length > 0 ? (
+                {shouldShowCompleteMoveButton(move, moveDraft) ? (
                   <button
                     className="button is-small apButton"
                     onClick={handleView}

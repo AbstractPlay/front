@@ -13,6 +13,7 @@ import PlayerOnlineIcon from "./preview/PlayerOnlineIcon";
 import PlayerVacationPauseIcon from "./preview/PlayerVacationPauseIcon";
 import { isPlayerIndexOnMove } from "./preview/moveEntryUtils";
 import { resolveCustomButtonLabel } from "../../lib/customButtonLabel";
+import { shouldShowCompleteMoveButton } from "../../lib/GameMove/completePartialMove";
 import {
   isPlayerTimedOut,
   tickActivePlayerRemainingMs,
@@ -535,7 +536,7 @@ function MoveEntry(props) {
                 t={t}
               />
               <div>
-                {move.valid && move.complete === 0 && move.move.length > 0 ? (
+                {shouldShowCompleteMoveButton(move, moveDraft) ? (
                   <button
                     className="button is-small apButton"
                     onClick={handleView}
