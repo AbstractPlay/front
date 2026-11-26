@@ -103,6 +103,7 @@ import { buildStartPositionFromLabSession } from "../../lib/challengeStartPositi
 import { isLabSupportedGame } from "../../lib/Lab/buildGame";
 import { getAuthToken } from "../../lib/api";
 import { useMoveEntryDraft } from "../../lib/GameMove/useMoveEntryDraft";
+import { completePartialMoveFromDraft } from "../../lib/GameMove/completePartialMove";
 import { appendMovePartToDraft } from "../../lib/GameMove/moveEntryDraft";
 import { getEffectiveColourContext } from "../../lib/effectiveColourContext";
 import { serializePlaygroundExport } from "../../lib/Lab/export";
@@ -664,8 +665,27 @@ function LabSession({
   };
 
   const handleView = () => {
-    const newmove = cloneDeep(move);
-    newmove.complete = 1;
+    const node = getFocusNode(
+      explorationRef.current.nodes,
+      gameRef.current,
+      focus
+    );
+    const gameEngineTmp = GameFactory(gameRef.current.metaGame, node.state);
+    const validate = (value) =>
+      gameRef.current.simultaneous
+        ? gameEngineTmp.validateMove(
+            value,
+            partialMoveSeat(
+              gameEngineTmp,
+              gameRef.current.labActiveSeat ?? gameRef.current.me + 1
+            )
+          )
+        : gameEngineTmp.validateMove(value);
+    const newmove = completePartialMoveFromDraft({
+      move,
+      moveDraft: moveDraftRef.current,
+      validate,
+    });
     processNewMove(
       newmove,
       focus,

@@ -9,7 +9,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 **Monthly batching (agents):** Use **one** `## [1.0.0-ci] - YYYY-MM-DD` header per calendar month. Before editing, search this file for `- YYYY-MM-` (today’s year-month); if a section exists, append bullets under `### Added` / `### Changed` / `### Fixed` there and set that header’s date to today — do **not** add a second `##` for the same month. A new ship day is not a new section.
 
-## [1.0.0-ci] - 2026-11-25
+## [1.0.0-ci] - 2026-11-26
 
 ### Added
 
@@ -19,6 +19,7 @@ Since the `1.0.0-beta` release, the version in `package.json` has stayed at `1.0
 
 - **Input Mode picker:** opening board options keeps the selected mode stable.
 - **Dashboard ladders:** “Your ladders” table shows pagination and page-size controls when you belong to more than 10 ladders (full list still comes from `me_dashboard`; only the first page was visible before).
+- **Playground / Go:** komi entry works in default single-line move entry (Complete move uses the live draft; random move is hidden when there are no legal clicks); fixes console `validateMove` errors during the komi phase.
 
 ## [1.0.0-ci] - 2026-11-22
 

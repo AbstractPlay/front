@@ -6,6 +6,7 @@ import { NoMoves, safeGetButtons, sortLenAlpha } from "./moveEntryUtils";
 import { resolveCustomButtonLabel } from "../../../lib/customButtonLabel";
 import TeachingMoveControls from "../TeachingMoveControls";
 import { showPieSeatSwapNotice } from "../../../lib/teachingModeChallenge";
+import { shouldShowCompleteMoveButton } from "../../../lib/GameMove/completePartialMove";
 
 function TurnIndicator({ img, mover, isMyTurn, className = "" }) {
   return (
@@ -358,7 +359,7 @@ function DockMoveEntry(props) {
               {t("ClaimTimeOut")}
             </button>
           ) : null}
-          {move.valid && move.complete === 0 && move.move.length > 0 ? (
+          {shouldShowCompleteMoveButton(move, moveDraft) ? (
             <button
               type="button"
               className="button is-small apButton"
