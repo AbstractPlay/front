@@ -1259,10 +1259,7 @@ function Tournaments(props) {
                   </p>
                 ) : (
                   <>
-                    <table
-                      className="table apTable"
-                      style={{ marginLeft: "auto", marginRight: "auto" }}
-                    >
+                    <table className="table apTable is-fullwidth">
                       <thead>
                         {completedTournamentsTable
                           .getHeaderGroups()
@@ -1331,10 +1328,7 @@ function Tournaments(props) {
 
               {activeTab === "open" ? (
                 <>
-                  <table
-                    className="table apTable"
-                    style={{ marginLeft: "auto", marginRight: "auto" }}
-                  >
+                  <table className="table apTable is-fullwidth">
                     <thead>
                       {openTournamentsTable
                         .getHeaderGroups()
@@ -1409,10 +1403,7 @@ function Tournaments(props) {
 
               {activeTab === "current" ? (
                 <>
-                  <table
-                    className="table apTable"
-                    style={{ marginLeft: "auto", marginRight: "auto" }}
-                  >
+                  <table className="table apTable is-fullwidth">
                     <thead>
                       {currentTournamentsTable
                         .getHeaderGroups()

@@ -890,7 +890,9 @@ function ExploreView({ config, viewKey, toggleStar, counts, handleChallenge }) {
       <div className="container">
         {tableNavigation}
         <table
-          className={gridView ? "table apTable gameGrid" : "table apTable"}
+          className={
+            gridView ? "table apTable gameGrid" : "table apTable is-fullwidth"
+          }
         >
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (

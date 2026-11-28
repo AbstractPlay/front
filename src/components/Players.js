@@ -538,10 +538,7 @@ function Players() {
 
         <div className="container">
           {tableNavigation}
-          <table
-            className="table apTable"
-            style={{ marginLeft: "auto", marginRight: "auto" }}
-          >
+          <table className="table apTable is-fullwidth">
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
