@@ -1135,10 +1135,7 @@ function StandingChallenges(props) {
         <div className="container">
           {tableNavigation}
           <div className="table-container">
-            <table
-              className="table apTable"
-              style={{ marginLeft: "auto", marginRight: "auto" }}
-            >
+            <table className="table apTable is-fullwidth">
               <thead>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <tr key={headerGroup.id}>

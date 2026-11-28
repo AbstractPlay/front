@@ -369,7 +369,6 @@ function ListGamesForMeta({ fixedState, metaGame, gameState }) {
           columns={columns}
           columnVisibility={columnVisibility}
           globalFilterFn={gameListGlobalFilterFn}
-          tableStyle={{ marginLeft: "auto", marginRight: "auto" }}
         />
       </article>
     </>

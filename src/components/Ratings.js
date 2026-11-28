@@ -229,7 +229,6 @@ function RatingsTable({ metaGame, metaGameName, globalMe, allUsers, summary }) {
           data={data}
           columns={columns}
           columnVisibility={{ actions: globalMe !== null }}
-          tableStyle={{ marginLeft: "auto", marginRight: "auto" }}
           tableNote={<GlickoDisplayNote />}
         />
       </article>

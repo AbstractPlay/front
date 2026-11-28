@@ -402,7 +402,6 @@ function RecentCompletedGamesList({ metaGame }) {
           columns={columns}
           globalFilterFn={recentGamesGlobalFilterFn}
           navEnd={navEnd}
-          tableStyle={{ marginLeft: "auto", marginRight: "auto" }}
         />
       </article>
     </>
