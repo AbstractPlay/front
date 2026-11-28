@@ -608,7 +608,7 @@ function Table({
       </div>
       <div className="container">
         {tableNavigation}
-        <table className="table apTable">
+        <table className="table apTable is-fullwidth">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="stickyHeader">

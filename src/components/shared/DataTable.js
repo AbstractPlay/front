@@ -133,6 +133,7 @@ export const LIST_TABLE_PROPS = {
   stickyHeader: false,
   showSearch: true,
   searchPlacement: "nav",
+  tableClassName: "table apTable is-fullwidth",
 };
 
 export const PROFILE_FILTER_TABLE_PROPS = {
